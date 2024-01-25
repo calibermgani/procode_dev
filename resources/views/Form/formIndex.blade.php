@@ -28,13 +28,13 @@
                 <div class="row mt-4 mb-2">
                     <label class="col-md-2 col-form-label required">Project</label>
                     @php $projectList = App\Http\Helper\Admin\Helpers::projectList(); @endphp
-                    <fieldset class="form-group mb-1">
+                    <div class="form-group mb-1">
                         {!! Form::select('project_id', $projectList, null, [
                             'class' => 'form-control js-client-name',
                             'id' => 'project_list',
                         ]) !!}
 
-                    </fieldset>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
             <div>
                 <div class="row mt-4 mb-2">
                     <label class="col-md-3 col-form-label required">Sub Project</label>
-                    <fieldset class="form-group mb-1">
+                    <div class="form-group mb-1">
                         @php
                             $subProjectList = [];
 
@@ -51,28 +51,11 @@
                             'class' => 'form-control js-client-name',
                             'id' => 'sub_project_list',
                         ]) !!}
-                        {{-- @if (isset(request()->sub_project_id))
-                            @php $subProjectList = App\Http\Helper\Admin\Helpers::subProjectList(request()->project_id); @endphp
-                            {!! Form::select('sub_project_id', $subProjectList, null, [
-                                'class' => 'form-control js-client-name',
-                                'id' => 'sub_project_list',
-                            ]) !!}
-                        @else
-                            @php
-                                $subProjectList = [];
-
-                            @endphp
-                            {!! Form::select('sub_project_id', $subProjectList, null, [
-                                'class' => 'form-control js-client-name',
-                                'id' => 'sub_project_list',
-                            ]) !!}
-                        @endif --}}
-                    </fieldset>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    @php $date = date("Y-m-d"); @endphp
     <div class="card-body pt-0 pb-2 pl-0">
         <div class="row" id="form_div">
             <div class="col-md-12">
@@ -80,7 +63,7 @@
                     <div class="col-md-12 mb-5"
                         style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; "
                         id="form_append">
-                        <div>
+                        {{-- <div> --}}
                             <div class="col-form-label text-lg-right pt-0 pb-4">
                                 <i class="fa fas fa-plus text-success icon-circle1 ml-1" id="add_more"></i>
                             </div>
@@ -88,35 +71,43 @@
                                 <div class="row form-group">
                                     <div class="col-md-2">
                                         <label class="required">Label</label>
-                                        <fieldset class="form-group mb-1">
+                                        <div class="form-group mb-1">
                                             <input type="text" id="label_name" name="label_name[]"
-                                                class="text-black form-control label_name" value="">
+                                                class="text-black form-control label_name" value=""
+                                                oninput="validateInput(this)">
 
-                                        </fieldset>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label>Input Type</label>
-                                        <fieldset class="form-group mb-1">
-                                            <select id="input_type_id_0" name="input_type[]"
-                                                class="text-black form-control input_type">
-                                                <option value="text_box">Text Box</option>
-                                                <option value="drop_down">Drop Down</option>
-                                                <option value="check_box">CheckBox</option>
-                                                <option value="radio">Radio</option>
-                                                <option value="date">Date</option>
-                                                <option value="text_area">Text Area</option>
-                                            </select>
-                                        </fieldset>
+                                        <div class="form-group mb-1">
+                                            {!! Form::select(
+                                                'input_type[]',
+                                                [
+                                                    'text_box' => 'Text Box',
+                                                    'drop_down' => 'Drop Down',
+                                                    'check_box' => 'CheckBox',
+                                                    'radio' => 'Radio',
+                                                    'date' => 'Date',
+                                                    'text_area' => 'Text Area',
+                                                ],
+                                                null,
+                                                [
+                                                    'class' => 'text-black form-control input_type',
+                                                    'id' => 'input_type_id_0',
+                                                ],
+                                            ) !!}
+                                        </div>
                                     </div>
                                     <div class="col-md-2 options_div" style="display:none" id="options_div_0">
                                         <label class="options_name_label required" id="options_name_label_0"
                                             style="display:none">Options</label>
-                                        <fieldset class="form-group mb-1">
+                                        <div class="form-group mb-1">
                                             <input type="text" id="options_name_0" name="options_name[]"
                                                 class="text-black form-control options_name" value=""
                                                 style="display:none">
 
-                                        </fieldset>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-2">
@@ -154,23 +145,33 @@
                                                 <span></span>Mandatory
                                             </label>
                                             <label class="radio">
-                                                <input type="radio" name="field_type3" value="non-Mandatory"
-                                                    checked />
+                                                <input type="radio" name="field_type3" value="non-mandatory" checked />
                                                 <span></span>Non-Mandatory
                                             </label>
-                                        </fieldset>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Field Type3</label>
+                                        <div class="radio-inline">
+                                            <label class="radio">
+                                                <input type="radio" name="field_type4" value="popup_visible" checked/>
+                                                <span></span>Visible
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" name="field_type4" value="popup_non_visible"  />
+                                                <span></span>Non Visible
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {{-- </div> --}}
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="col-lg-4 mt-5">
-            <button type="submit" class="btn btn-primary font-weight-bold"
-                id="formCreation_save">Submit</button>&nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary font-weight-bold" id="formUpdate_save">Submit</button>&nbsp;&nbsp;
             <button class="btn btn-secondary btn-secondary--icon" id="clear_submit" tabindex="10" type="button">
                 <span>
                     <i class="la la-close"></i>
@@ -184,7 +185,17 @@
 
 @push('view.scripts')
     <script>
+        function validateInput(input) {
+            var regex = /^[a-zA-Z0-9\s\/]*$/;
+            var value = input.value;
+
+            if (!regex.test(value)) {
+                // alert("Only alphanumeric characters, spaces, and slashes are allowed.");
+                input.value = value.replace(/[^a-zA-Z0-9\s\/]/g, '');
+            }
+        }
         $(document).ready(function() {
+
             var j = 0;
 
             $('#add_more').click(function() {
@@ -196,17 +207,17 @@
                     j +
                     '"><div style=""><div class="col-form-label text-lg-right pt-0 pb-4"><i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more" id="' +
                     j + '"></i></div><div id="form_div' + j +
-                    '"><div class="row form-group"><div class="col-md-2"><label class="required">Label</label><fieldset class="form-group mb-1"><input type="text" id="label_name' +
+                    '"><div class="row form-group"><div class="col-md-2"><label class="required">Label</label><div class="form-group mb-1"><input type="text" id="label_name' +
                     j +
-                    '" name="label_name[]" class="text-black form-control label_name"> </fieldset></div><div class="col-md-2"><label>Input Type</label><fieldset class="form-group mb-1"><select  class="text-black form-control input_type" name="input_type[]" id="input_type_id_' +
-                    [j] +
-                    '"><option value="text_box">Text Box</option><option value="drop_down">Drop Down</option><option value="check_box">CheckBox</option><option value="radio">Radio</option><option value="date">Date</option><option value="text_area">Text Area</option></select></fieldset></div> <div class="col-md-2 options_div" style="display:none" id="options_div_' +
+                    '" name="label_name[]" class="text-black form-control label_name"> </div></div><div class="col-md-2"><label>Input Type</label><div class="form-group mb-1"><select  class="text-black form-control input_type" name="input_type[]" id="input_type_id_' +
+                    j +
+                    '"><option value="text_box">Text Box</option><option value="drop_down">Drop Down</option><option value="check_box">CheckBox</option><option value="radio">Radio</option><option value="date">Date</option><option value="text_area">Text Area</option></select></div></div> <div class="col-md-2 options_div" style="display:none" id="options_div_' +
                     j +
                     '"><label class="options_name_label required" style="display:none"  id="options_name_label_' +
                     j +
-                    '">Options</label><fieldset class="form-group mb-1"><input type="text" name="options_name[]" class="text-black form-control options_name" value="" style="display:none"  id="options_name_' +
+                    '">Options</label><div class="form-group mb-1"><input type="text" name="options_name[]" class="text-black form-control options_name" value="" style="display:none"  id="options_name_' +
                     j +
-                    '"></fieldset></div><div class="col-md-2"><label>Field Type</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type1_' +
+                    '"></div></div><div class="col-md-2"><label>Field Type</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type1_' +
                     j + '" value="editable" id="editable' +
                     j +
                     '"><span></span>Editable</label><label class="radio"><input type="radio" name="field_type1_' +
@@ -222,7 +233,11 @@
                     j +
                     '" value="mandatory" /><span></span>Mandatory</label><label class="radio"><input type="radio" name="field_type3_' +
                     j +
-                    '" value="non-Mandatory" checked /><span></span>Non-Mandatory</label></fieldset></div></div></div></div></div></div></div>'
+                    '" value="non-mandatory" checked /><span></span>Non-Mandatory</label></div></div><div class="col-md-2"><label>Field Type3</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type4_' +
+                    j +
+                    '" value="popup_visible" checked/><span></span>Visible</label><label class="radio"><input type="radio" name="field_type4_' +
+                    j +
+                    '" value="popup_non_visible"  /><span></span>Non Visible</label></div></div></div></div></div></div></div></div></div>'
                 );
             });
 
@@ -245,9 +260,14 @@
                         project_id: project_id
                     },
                     success: function(res) {
+
+                        var myArray = res.existingSubProject;
                         var sla_options = '<option value="">-- Select --</option>';
-                        $.each(res, function(key, value) {
-                            sla_options += '<option value="' + key + '">' + value +
+                        $.each(res.subProject, function(key, value) {
+                            sla_options += '<option value="' + key + '" ' +
+                                                (myArray.length >0 && $.inArray(key, myArray) !== -1 ? 'disabled' :
+                                                    '') +
+                                                '>' + value +
                                 '</option>';
                         });
                         $("#sub_project_id").html(sla_options);
@@ -271,7 +291,7 @@
                     $('#options_name_' + lastElement).css('display', 'none');
                 }
             });
-            $(document).on('click', '#formCreation_save', function() {
+            $(document).on('click', '#formUpdate_save', function() {
                 var project_id = $('#project_list');
                 var sub_project_id = $('#sub_project_list');
                 var label_name = $('.label_name');
@@ -304,13 +324,15 @@
                             labelNameValue = 0;
                         }
                     });
-                    console.log(labelNameValue, 'labelNameValue');
+
                     input_type.each(function() {
                         var input_type_id = $(this).attr('id');
                         var splittedValues = $(this).attr('id').split('_');
                         var lastElement = splittedValues[splittedValues.length - 1];
-                        if ($('#' + input_type_id).val() == 'drop_down' && $('#options_name_' +
-                                lastElement).val() == '') {
+                        console.log($('#' + input_type_id).val(), input_type_id);
+                        if (($('#' + input_type_id).val() == 'drop_down' || $('#' + input_type_id)
+                                .val() == 'check_box' || $('#' + input_type_id).val() == "radio") &&
+                            $('#options_name_' + lastElement).val() == '') {
                             $('#options_name_' + lastElement).css('border-color', 'red');
                             inputTypeValue = 1;
                             return false;
@@ -319,6 +341,7 @@
                             inputTypeValue = 0;
                         }
                     });
+                    console.log(labelNameValue, 'labelNameValue', inputTypeValue);
                     var fieldTypes = $('input[name^="field_type1"]:checked').map(function() {
                         return $(this).val();
                     }).get();
@@ -326,6 +349,9 @@
                         return $(this).val();
                     }).get();
                     var fieldTypes_2 = $('input[name^="field_type3"]:checked').map(function() {
+                        return $(this).val();
+                    }).get();
+                    var fieldTypes_3 = $('input[name^="field_type4"]:checked').map(function() {
                         return $(this).val();
                     }).get();
                     for (var i = 0; i < fieldTypes.length; i++) {
@@ -343,6 +369,11 @@
                             type: 'hidden',
                             name: 'field_type_2[]',
                             value: fieldTypes_2[i]
+                        }).appendTo('form#formConfiguration');
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'field_type_3[]',
+                            value: fieldTypes_3[i]
                         }).appendTo('form#formConfiguration');
                     }
                     if (labelNameValue == 0 && inputTypeValue == 0) {

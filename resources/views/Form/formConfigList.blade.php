@@ -58,14 +58,16 @@
                                                         @if (isset($formConfiguration))
                                                             @foreach ($formConfiguration as $data)
                                                                 @php
-                                                                    $project_name_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->project_name);
-                                                                    $sub_project_name_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->sub_project_name);
+                                                                $projectName = App\Models\project::where('id',$data->project_id)->first();
+                                                                $subProjectName = App\Models\subProject::where('project_id',$data->project_id)->where('id',$data->sub_project_id)->first();
+                                                                    $project_id_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->project_id);
+                                                                    $sub_project_id_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->sub_project_id);
                                                                 @endphp
                                                                 {{-- <tr data-href="{{url('form_creation')}}?parent={{request()->parent}}&child={{request()->child}}"> --}}
                                                                 <tr
-                                                                    data-href="{{ route('formEdit', ['parent' => request()->parent, 'child' => request()->child, 'project_name' => $project_name_encode, 'sub_project_name' =>  $sub_project_name_encode]) }}">
-                                                                    <td>{{ $data->project_name }}</td>
-                                                                    <td>{{ $data->sub_project_name }}</td>
+                                                                    data-href="{{ route('formEdit', ['parent' => request()->parent, 'child' => request()->child, 'project_id' => $project_id_encode, 'sub_project_id' =>  $sub_project_id_encode]) }}">
+                                                                    <td>{{ $projectName->project_name }}</td>
+                                                                    <td>{{ $subProjectName->sub_project_name }}</td>
                                                                     <td>{{ $data->label_names }}</td>
                                                                 </tr>
                                                             @endforeach

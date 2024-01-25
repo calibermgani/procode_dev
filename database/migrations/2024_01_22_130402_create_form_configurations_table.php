@@ -15,14 +15,15 @@ class CreateFormConfigurationsTable extends Migration
     {
         Schema::create('form_configurations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('project_name')->nullable();
-            $table->string('sub_project_name')->nullable();
+            $table->string('project_id')->nullable();
+            $table->string('sub_project_id')->nullable();
             $table->string('label_name')->nullable();
             $table->string('input_type')->nullable();
             $table->string('options_name')->nullable();
             $table->string('field_type')->nullable();
             $table->string('field_type_1')->nullable();
             $table->string('field_type_2')->nullable();
+            $table->string('field_type_3')->nullable();
             $table->string('added_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

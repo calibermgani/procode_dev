@@ -45,7 +45,8 @@ Route::any('form_creation', 'App\Http\Controllers\FormController@formCreationInd
 Route::any('form_configuration_store', 'App\Http\Controllers\FormController@formConfigurationStore')->name('formConfigurationStore');
 Route::any('sub_project_list', 'App\Http\Controllers\FormController@getSubProjectList')->name('subProjectList');
 Route::any('form_configuration_list', 'App\Http\Controllers\FormController@formConfigurationList')->name('formConfigurationList');
-Route::any('form_edit/{project_name}/{sub_project_name}', 'App\Http\Controllers\FormController@formEdit')->name('formEdit');
+Route::any('form_edit/{project_id}/{sub_project_id}', 'App\Http\Controllers\FormController@formEdit')->name('formEdit');
+Route::any('form_configuration_update', 'App\Http\Controllers\FormController@formConfigurationUpdate')->name('formConfigurationUpdate');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
