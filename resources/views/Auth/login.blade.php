@@ -210,13 +210,63 @@
 
 
                 })
-                $(document).on('click', '#kt_login_signin_submit', function() {
+                // $(document).on('click', '#kt_login_signin_submit', function() {
 
+                //     var token = "1a32e71a46317b9cc6feb7388238c95d";
+                //     var userId = $('#emp_id').val();
+                //     var userPassword = $('#password').val();
+
+                //     console.log('in login', userId, userPassword);
+                //     $.ajax({
+                //         type: "POST",
+                //         url: "http://dev.aims.officeos.in/api/v1_users/login_authentication",
+                //         data: {
+                //             token: token,
+                //             emp_id: userId,
+                //             password: userPassword
+                //         },
+                //         //dataType: "json",
+                //         success: function(res) {
+                //             console.log('succes', res);
+                //             if (res.code == 200 && res.message == 'success') {
+
+                //                 sessionUserId = res;
+                //                 console.log(sessionUserId, 'll');
+                //                 $.ajaxSetup({
+                //                     headers: {
+                //                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                //                             'content')
+                //                     }
+                //                 });
+
+                //                 $.ajax({
+                //                     url: "{{ url('store-in-session') }}",
+                //                     method: 'POST',
+                //                     data: {
+                //                         value: sessionUserId
+                //                     },
+                //                     success: function(response) {
+                //                         console.log(
+                //                             'Value stored successfully in session');
+                //                          window.location.href = baseUrl + 'dashboard';
+                //                     },
+
+                //                 });
+                //             }
+                //         },
+                //         error: function(jqXHR, exception) {
+
+                //         }
+                //     });
+
+                // })
+                $(document).on('click', '#kt_login_signin_submit', function() {
                     var token = "1a32e71a46317b9cc6feb7388238c95d";
                     var userId = $('#emp_id').val();
                     var userPassword = $('#password').val();
 
                     console.log('in login', userId, userPassword);
+
                     $.ajax({
                         type: "POST",
                         url: "http://dev.aims.officeos.in/api/v1_users/login_authentication",
@@ -225,13 +275,11 @@
                             emp_id: userId,
                             password: userPassword
                         },
-                        //dataType: "json",
                         success: function(res) {
-                            console.log('succes', res);
+                            console.log('success', res);
                             if (res.code == 200 && res.message == 'success') {
+                                var sessionUserId = res;
 
-                                sessionUserId = res;
-                                console.log(sessionUserId, 'll');
                                 $.ajaxSetup({
                                     headers: {
                                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
@@ -240,7 +288,7 @@
                                 });
 
                                 $.ajax({
-                                    url: "{{ url('store-in-session') }}",
+                                    url: "/store-in-session",
                                     method: 'POST',
                                     data: {
                                         value: sessionUserId
@@ -248,18 +296,21 @@
                                     success: function(response) {
                                         console.log(
                                             'Value stored successfully in session');
-                                         window.location.href = baseUrl + 'dashboard';
+                                        window.location.href = baseUrl + 'dashboard';
                                     },
-
+                                    error: function(jqXHR, exception) {
+                                        console.error('Error storing value in session',
+                                            exception);
+                                    }
                                 });
                             }
                         },
                         error: function(jqXHR, exception) {
-
+                            console.error('Login request failed', exception);
                         }
                     });
+                });
 
-                })
 
             });
         </script>
