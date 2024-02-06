@@ -109,12 +109,13 @@
                                                         {!! Form::select(
                                                             'input_type[{{ $key }}]',
                                                             [
-                                                                'text_box' => 'Text Box',
-                                                                'drop_down' => 'Drop Down',
-                                                                'check_box' => 'CheckBox',
+                                                                'text' => 'Text Box',
+                                                                'select' => 'Drop Down',
+                                                                'checkbox' => 'CheckBox',
                                                                 'radio' => 'Radio',
                                                                 'date' => 'Date',
-                                                                'text_area' => 'Text Area',
+                                                                'date_range' => 'Date Range',
+                                                                'textarea' => 'Text Area',
                                                             ],
                                                             $data->input_type ?? '',
                                                             [
@@ -230,11 +231,11 @@
                                                 <i class="fa fas fa-plus text-success icon-circle1 ml-1"
                                                     id="add_more"></i>
                                             </div>
-                                        @else
+                                            {{-- @else
                                             <div class="col-form-label text-lg-right pt-0 pb-4">
                                                 <i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more"
-                                                    id="{{ $key }}"></i>
-                                            </div>
+                                                    id="{{ $key }}" disabled></i>
+                                            </div> --}}
                                         @endif
                                     </div>
                                     <div>
@@ -256,12 +257,13 @@
                                                         {!! Form::select(
                                                             'input_type[{{ $key }}]',
                                                             [
-                                                                'text_box' => 'Text Box',
-                                                                'drop_down' => 'Drop Down',
-                                                                'check_box' => 'CheckBox',
+                                                                'text' => 'Text Box',
+                                                                'select' => 'Drop Down',
+                                                                'checkbox' => 'CheckBox',
                                                                 'radio' => 'Radio',
                                                                 'date' => 'Date',
-                                                                'text_area' => 'Text Area',
+                                                                'date_range' => 'Date Range',
+                                                                'textarea' => 'Text Area',
                                                             ],
                                                             $data->input_type ?? '',
                                                             [
@@ -419,7 +421,7 @@
                     j +
                     ']" id="input_type_id_' +
                     j +
-                    '"><option value="text_box">Text Box</option><option value="drop_down">Drop Down</option><option value="check_box">CheckBox</option><option value="radio">Radio</option><option value="date">Date</option><option value="text_area">Text Area</option></select></div></div> <div class="col-md-2 options_div" style="display:none" id="options_div_' +
+                    '"><option value="text">Text Box</option><option value="select">Drop Down</option><option value="checkbox">CheckBox</option><option value="radio">Radio</option><option value="date">Date</option><option value="date_range">Date Range</option><option value="textarea">Text Area</option></select></div></div> <div class="col-md-2 options_div" style="display:none" id="options_div_' +
                     j +
                     '"><label class="options_name_label required" style="display:none"  id="options_name_label_' +
                     j +
@@ -483,8 +485,8 @@
                 var splittedValues = $(this).attr('id').split('_');
                 var lastElement = splittedValues[splittedValues.length - 1];
                 var input_type = $(this).val();
-                var drop_down_id = ($(this).attr('id'));
-                if (input_type == "drop_down" || input_type == "check_box" || input_type == "radio") {
+                var select_id = ($(this).attr('id'));
+                if (input_type == "select" || input_type == "checkbox" || input_type == "radio") {
                     console.log(input_type, lastElement, 'lastElement');
                     $('#options_div_' + lastElement).css('display', 'block');
                     $('#options_name_label_' + lastElement).css('display', 'block');
@@ -495,7 +497,7 @@
                     $('#options_name_' + lastElement).css('display', 'none');
                 }
             });
-            $(document).on('click', '#formCreation_save', function() {
+            $(document).on('click', '#formCreation_save', function(e) {
                 var project_id = $('#project_list');
                 var sub_project_id = $('#sub_project_list');
                 var label_name = $('.label_name');
@@ -534,8 +536,8 @@
                         var splittedValues = $(this).attr('id').split('_');
                         var lastElement = splittedValues[splittedValues.length - 1];
                         console.log($('#' + input_type_id).val(), input_type_id);
-                        if (($('#' + input_type_id).val() == 'drop_down' || $('#' + input_type_id)
-                                .val() == 'check_box' || $('#' + input_type_id).val() == "radio") &&
+                        if (($('#' + input_type_id).val() == 'select' || $('#' + input_type_id)
+                                .val() == 'checkbox' || $('#' + input_type_id).val() == "radio") &&
                             $('#options_name_' + lastElement).val() == '') {
 
                             $('#options_name_' + lastElement).css('border-color', 'red');
@@ -583,13 +585,33 @@
                         }).appendTo('form#formConfiguration');
                     }
                     if (labelNameValue == 0 && inputTypeValue == 0) {
-                        document.querySelector('#formConfiguration').submit();
+                        e.preventDefault();
+                        swal.fire({
+                            text: "Do you want to update?",
+                            icon: "success",
+                            buttonsStyling: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            customClass: {
+                                confirmButton: "btn font-weight-bold btn-primary",
+                                cancelButton: "btn font-weight-bold btn-danger",
+                            }
+
+                        }).then(function(result) {
+                            if (result.value == true) {
+                                // If the user clicks "OK" in the SweetAlert dialog, submit the form
+                                document.querySelector('#formConfiguration').submit();
+
+                            } else {
+                                location.reload();
+                            }
+                        });
+
                     } else {
                         return false;
                     }
                 }
-                //   $('form#formConfiguration').submit();
-
             })
         });
     </script>

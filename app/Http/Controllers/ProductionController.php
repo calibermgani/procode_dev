@@ -12,7 +12,9 @@ use App\Models\InventoryWound;
 use App\Models\InventoryWoundDuplicate;
 use App\Models\project;
 use App\Models\subproject;
-
+use App\Models\formConfiguration;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
 
 class ProductionController extends Controller
 {
@@ -97,19 +99,48 @@ class ProductionController extends Controller
             try {
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $decodedsubProjectName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $modelClass = "App\\Models\\" . 'Inventory'.ucfirst($decodedsubProjectName);
-                 $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
+                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                // $modelClass = "App\\Models\\" . 'Inventory'.ucfirst($decodedsubProjectName);
+                 //$databaseConnection = Str::lower($decodedClientName);
+               // Config::set('database.connections.mysql.database',$databaseConnection);
+                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+                $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                    return !in_array($column, $columnsToExclude);
+                });
+                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $assignedProjectDetails = collect();
                 if ($loginEmpId && $empDesignation == "Administrator") {
-                    $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
+                    // if (Schema::hasTable($table_name)) {
+                    //    $assignedProjectDetails = DB::table($table_name)->get();
+                    // }
+                    if (class_exists($modelClass)) {
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Inprocess')->orderBy('id','desc')->get();
+                    }
+                    $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                    ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
+                    ->select('project_id', 'sub_project_id')
+                    ->first();
+                    $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
+                    $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
+                    // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
-                    $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+                    // if (Schema::hasTable($table_name)) {
+                    // $assignedProjectDetails = DB::table('aig_wound')->get();
+                    // }
+                    if (class_exists($modelClass)) {
+                    $assignedProjectDetails = $modelClass::where('claim_status','CE_Inprocess')->orderBy('id','desc')->get();
+                    }
+                    // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
                 }
-                return view('productions/clientAssignedTab',compact('assignedProjectDetails','databaseConnection'));
+               // dd($assignedProjectDetails,$assignedProjectDetails[0]->getOriginal()['coders_e_m_cpt']);
+              // dd($modelClass,$decodedClientName,$popUpHeader,$decodedProjectName,$decodedPracticeName,$popupNonEditableFields,$popupEditableFields);
+                return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -118,132 +149,314 @@ class ProductionController extends Controller
             return redirect('/login');
         }
     }
-    public function clientPendingTab($clientName) {
+    public function clientPendingTab($clientName,$subProjectName) {
+
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+           try {
+               $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+               $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                   return !in_array($column, $columnsToExclude);
+               });
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $pendingProjectDetails = collect();
+               if ($loginEmpId && $empDesignation == "Administrator") {
+                   if (class_exists($modelClass)) {
+                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                   }
+                } else if ($loginEmpId) {
+                    if (class_exists($modelClass)) {
+                      $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                   }
+                 }
+                return view('productions/clientPendingTab',compact('pendingProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
-            try {
-                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
-                if ($loginEmpId && $empDesignation == "Administrator") {
-                    $pendingProjectDetails = InventoryWound::where('status','CE_Pending')->orderBy('id','desc')->get();
-                } elseif ($loginEmpId) {
-                    $pendingProjectDetails = InventoryWound::where('status','CE_Pending')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                }
-
-                return view('productions/clientPendingTab',compact('pendingProjectDetails','databaseConnection'));
-
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
-            }
-        } else {
-            return redirect('/login');
-        }
+           } catch (Exception $e) {
+               log::debug($e->getMessage());
+           }
+       } else {
+           return redirect('/login');
+       }
     }
-    public function clientHoldTab($clientName) {
+    public function clientHoldTab($clientName,$subProjectName) {
+
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+           try {
+               $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+               $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                   return !in_array($column, $columnsToExclude);
+               });
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $pendingProjectDetails = collect();
+               if ($loginEmpId && $empDesignation == "Administrator") {
+                   if (class_exists($modelClass)) {
+                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                   }
+                } else if ($loginEmpId) {
+                    if (class_exists($modelClass)) {
+                      $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                   }
+                 }
+                return view('productions/clientOnholdTab',compact('holdProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
-            try {
-                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
-                if ($loginEmpId && $empDesignation == "Administrator") {
-                    $holdProjectDetails = InventoryWound::where('status','CE_Hold')->orderBy('id','desc')->get();
-                } elseif ($loginEmpId) {
-                $holdProjectDetails = InventoryWound::where('status','CE_Hold')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                }
-
-                return view('productions/clientOnholdTab',compact('databaseConnection','holdProjectDetails'));
-
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
-            }
-        } else {
-            return redirect('/login');
-        }
+           } catch (Exception $e) {
+               log::debug($e->getMessage());
+           }
+       } else {
+           return redirect('/login');
+       }
     }
-    public function clientCompletedTab($clientName) {
+    public function clientCompletedTab($clientName,$subProjectName) {
+
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+           try {
+               $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+               $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                   return !in_array($column, $columnsToExclude);
+               });
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $pendingProjectDetails = collect();
+               if ($loginEmpId && $empDesignation == "Administrator") {
+                   if (class_exists($modelClass)) {
+                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                   }
+                } else if ($loginEmpId) {
+                    if (class_exists($modelClass)) {
+                      $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                   }
+                 }
+                return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
-            try {
-                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
-                if ($loginEmpId && $empDesignation == "Administrator") {
-                    $completedProjectDetails = InventoryWound::where('status','CE_Completed')->orderBy('id','desc')->get();
-                } elseif ($loginEmpId) {
-                    $completedProjectDetails = InventoryWound::where('status','CE_Completed')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                }
-                return view('productions/clientCompletedTab',compact('databaseConnection','completedProjectDetails'));
-
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
-            }
-        } else {
-            return redirect('/login');
-        }
+           } catch (Exception $e) {
+               log::debug($e->getMessage());
+           }
+       } else {
+           return redirect('/login');
+       }
     }
-    public function clientReworkTab($clientName) {
+    public function clientReworkTab($clientName,$subProjectName) {
+
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+           try {
+               $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+               $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                   return !in_array($column, $columnsToExclude);
+               });
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $pendingProjectDetails = collect();
+               if ($loginEmpId && $empDesignation == "Administrator") {
+                   if (class_exists($modelClass)) {
+                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                   }
+                } else if ($loginEmpId) {
+                    if (class_exists($modelClass)) {
+                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                   }
+                 }
+                return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
-            try {
-                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
-                if ($loginEmpId && $empDesignation == "Administrator") {
-                    $completedProjectDetails = InventoryWound::where('status','CE_Completed')->orderBy('id','desc')->get();
-                } elseif ($loginEmpId) {
-                $completedProjectDetails = InventoryWound::where('status','CE_Completed')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                }
-
-                return view('productions/clientReworkTab',compact('databaseConnection','completedProjectDetails'));
-
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
-            }
-        } else {
-            return redirect('/login');
-        }
+           } catch (Exception $e) {
+               log::debug($e->getMessage());
+           }
+       } else {
+           return redirect('/login');
+       }
     }
-    public function clientDuplicateTab($clientName) {
+    public function clientDuplicateTab($clientName,$subProjectName) {
+
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+           try {
+               $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+               $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                   return !in_array($column, $columnsToExclude);
+               });
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."_Duplicates";
+               $duplicateProjectDetails = collect();
+               if ($loginEmpId && $empDesignation == "Administrator") {
+                   if (class_exists($modelClass)) {
+                        //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
+                        $duplicateProjectDetails =  $modelClass::orderBy('id','desc')->get();
+                   }
+                } else if ($loginEmpId) {
+                    if (class_exists($modelClass)) {
+                      // $duplicateProjectDetails = [];
+                   }
+                 }
+                return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
-            try {
-                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                $databaseConnection = Str::lower($decodedClientName);
-                Config::set('database.connections.mysql.database',$databaseConnection);
-
-                if ($empDesignation == "Administrator") {
-                    $duplicateProjectDetails = InventoryWoundDuplicate::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
-                } else {
-                    $duplicateProjectDetails = [];
-                }
-                return view('productions/clientDuplicateTab',compact('databaseConnection','duplicateProjectDetails'));
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
-            }
-        } else {
-            return redirect('/login');
-        }
+           } catch (Exception $e) {
+               log::debug($e->getMessage());
+           }
+       } else {
+           return redirect('/login');
+       }
     }
+    // public function clientPendingTab($clientName) {
+    //     if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+    //         try {
+    //             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+    //             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+    //             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
+    //             $databaseConnection = Str::lower($decodedClientName);
+    //             Config::set('database.connections.mysql.database',$databaseConnection);
+
+    //             if ($loginEmpId && $empDesignation == "Administrator") {
+    //                 $pendingProjectDetails = InventoryWound::where('status','CE_Pending')->orderBy('id','desc')->get();
+    //             } elseif ($loginEmpId) {
+    //                 $pendingProjectDetails = InventoryWound::where('status','CE_Pending')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+    //             }
+
+    //             return view('productions/clientPendingTab',compact('pendingProjectDetails','databaseConnection'));
+
+    //         } catch (Exception $e) {
+    //             log::debug($e->getMessage());
+    //         }
+    //     } else {
+    //         return redirect('/login');
+    //     }
+    // }
+    // public function clientHoldTab($clientName) {
+    //     if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+    //         try {
+    //             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+    //             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+    //             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
+    //             $databaseConnection = Str::lower($decodedClientName);
+    //             Config::set('database.connections.mysql.database',$databaseConnection);
+
+    //             if ($loginEmpId && $empDesignation == "Administrator") {
+    //                 $holdProjectDetails = InventoryWound::where('status','CE_Hold')->orderBy('id','desc')->get();
+    //             } elseif ($loginEmpId) {
+    //             $holdProjectDetails = InventoryWound::where('status','CE_Hold')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+    //             }
+
+    //             return view('productions/clientOnholdTab',compact('databaseConnection','holdProjectDetails'));
+
+    //         } catch (Exception $e) {
+    //             log::debug($e->getMessage());
+    //         }
+    //     } else {
+    //         return redirect('/login');
+    //     }
+    // }
+    // public function clientCompletedTab($clientName) {
+    //     if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+    //         try {
+    //             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+    //             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+    //             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
+    //             $databaseConnection = Str::lower($decodedClientName);
+    //             Config::set('database.connections.mysql.database',$databaseConnection);
+
+    //             if ($loginEmpId && $empDesignation == "Administrator") {
+    //                 $completedProjectDetails = InventoryWound::where('status','CE_Completed')->orderBy('id','desc')->get();
+    //             } elseif ($loginEmpId) {
+    //                 $completedProjectDetails = InventoryWound::where('status','CE_Completed')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+    //             }
+    //             return view('productions/clientCompletedTab',compact('databaseConnection','completedProjectDetails'));
+
+    //         } catch (Exception $e) {
+    //             log::debug($e->getMessage());
+    //         }
+    //     } else {
+    //         return redirect('/login');
+    //     }
+    // }
+    // public function clientReworkTab($clientName) {
+    //     if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+    //         try {
+    //             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+    //             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+    //             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
+    //             $databaseConnection = Str::lower($decodedClientName);
+    //             Config::set('database.connections.mysql.database',$databaseConnection);
+
+    //             if ($loginEmpId && $empDesignation == "Administrator") {
+    //                 $completedProjectDetails = InventoryWound::where('status','CE_Completed')->orderBy('id','desc')->get();
+    //             } elseif ($loginEmpId) {
+    //             $completedProjectDetails = InventoryWound::where('status','CE_Completed')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+    //             }
+
+    //             return view('productions/clientReworkTab',compact('databaseConnection','completedProjectDetails'));
+
+    //         } catch (Exception $e) {
+    //             log::debug($e->getMessage());
+    //         }
+    //     } else {
+    //         return redirect('/login');
+    //     }
+    // }
+    // public function clientDuplicateTab($clientName) {
+    //     if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+    //         try {
+    //             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+    //             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+    //             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
+    //             $databaseConnection = Str::lower($decodedClientName);
+    //             Config::set('database.connections.mysql.database',$databaseConnection);
+
+    //             if ($empDesignation == "Administrator") {
+    //                 $duplicateProjectDetails = InventoryWoundDuplicate::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
+    //             } else {
+    //                 $duplicateProjectDetails = [];
+    //             }
+    //             return view('productions/clientDuplicateTab',compact('databaseConnection','duplicateProjectDetails'));
+    //         } catch (Exception $e) {
+    //             log::debug($e->getMessage());
+    //         }
+    //     } else {
+    //         return redirect('/login');
+    //     }
+    // }
     public function clientsDuplicateStatus(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
 
             try {
+                dd($request->all());
                 $status = $request['dropdownStatus'];
                 $databaseConnection = $request['dbConn'];
                 Config::set('database.connections.mysql.database',$databaseConnection);

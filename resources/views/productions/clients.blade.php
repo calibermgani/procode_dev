@@ -52,10 +52,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
+                                    {{-- @php
                                         $encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(1);
                                         $encodeProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID('aig');
-                                    @endphp
+                                    @endphp --}}
                                     @if (isset($projects))
                                         @foreach ($projects as $data)
                                             <tr>
@@ -207,7 +207,7 @@
                     });
                     $.ajax({
                         type: "GET",
-                        url: "{{ url('sub_projects') }}",
+                    url: "{{ url('sub_projects') }}",
                         data: {
                             project_id: client_id,
                         },
@@ -232,8 +232,8 @@
                     console.log(val, 'val');
                     html +=
                         '<tbody><tr class="clickable-row">' +
-                        '<td><input type="hidden" value=' + val.client_name.project_name + '></td>' +
-                        '<td>' + val.sub_project_name + '</td>' +
+                        '<td><input type="hidden" value=' + val.client_name.id + '></td>' +
+                        '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.id + '></td>' +
                         '<td>' + '10' + '</td>' +
                         '<td>' + '20' + '</td>' +
                         '<td>' + '30' + '</td>' +
@@ -251,7 +251,7 @@
                 // var id = $(this).closest('tr').find('td:eq(0)').text();
                 // var encodedId = $(this).closest('tr').find('td:eq(0) input').val();
                 var clientName = $(this).closest('tr').find('td:eq(0) input').val();
-                var subProjectName = $(this).closest('tr').find('td:eq(1)').text();
+                var subProjectName = $(this).closest('tr').find('td:eq(1) input').val();
 
                 if (!clientName) {
                     console.error('encodedclientname is undefined or empty');

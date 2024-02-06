@@ -35,11 +35,11 @@ Route::any('sub_projects', 'App\Http\Controllers\ProductionController@getSubProj
 Route::any('clients/handle_row', 'App\Http\Controllers\ProductionController@handleRowClick')->name('client.handleRow');
 Route::any('projects/{clientName}', 'App\Http\Controllers\ProductionController@clientTabs')->name('client.tabs');
 Route::any('projects_assigned/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientAssignedTab')->name('clientAssigned');
-Route::any('projects_pending/{clientName}', 'App\Http\Controllers\ProductionController@clientPendingTab')->name('clientPending');
-Route::any('projects_hold/{clientName}', 'App\Http\Controllers\ProductionController@clientHoldTab')->name('clientHold');
-Route::any('projects_completed/{clientName}', 'App\Http\Controllers\ProductionController@clientCompletedTab')->name('clientCompleted');
-Route::any('projects_rework/{clientName}', 'App\Http\Controllers\ProductionController@clientReworkTab')->name('clientRework');
-Route::any('projects_duplicate/{clientName}', 'App\Http\Controllers\ProductionController@clientDuplicateTab')->name('clientDuplicate');
+Route::any('projects_pending/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientPendingTab')->name('clientPending');
+Route::any('projects_hold/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientHoldTab')->name('clientHold');
+Route::any('projects_completed/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientCompletedTab')->name('clientCompleted');
+Route::any('projects_rework/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientReworkTab')->name('clientRework');
+Route::any('projects_duplicate/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientDuplicateTab')->name('clientDuplicate');
 Route::any('clients_duplicate_status', 'App\Http\Controllers\ProductionController@clientsDuplicateStatus');
 Route::any('form_creation', 'App\Http\Controllers\FormController@formCreationIndex')->name('formCreationIndex');
 Route::any('form_configuration_store', 'App\Http\Controllers\FormController@formConfigurationStore')->name('formConfigurationStore');
