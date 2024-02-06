@@ -136,11 +136,11 @@
                                                         @endphp
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             {{-- <th style="width:12%"><input type="hideen"
-                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
+                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_else_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
                                                             </th> --}}
                                                             <th style="width:12%"><input type="hidden"
                                                                     value={{ $columnValue }}>
-                                                                {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
+                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                             </th>
                                                         @endif
                                                     @endforeach
@@ -149,7 +149,7 @@
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         <th style="width:12%"><input type="hidden"
                                                                 value={{ $columnValue }}>
-                                                            {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
+                                                            {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                         </th>
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
@@ -214,7 +214,7 @@
                                             <tr>
                                                 @if (isset($assignedProjectDetails))
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        <th style="width:12%">{{ str_replace(['_', '_or_'], [' ', '/'], $columnValue) }}
+                                                        <th style="width:12%">{{ str_replace(['_', '_else_'], [' ', '/'], $columnValue) }}
                                                         </th>
                                                     @endforeach
                                                 @endif
@@ -295,7 +295,7 @@
                                                     @foreach ($popupNonEditableFields as $data)
                                                         @php
                                                             // $columnName = Str::lower(str_replace([' ', '/'], '_', $data->label_name));
-                                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_or_'], $data->label_name));
+                                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
                                                             $inputType = $data->input_type;
                                                             $options = $data->options_name != null ? explode(',', $data->options_name) : null;
                                                         @endphp
@@ -324,13 +324,13 @@
                                         @foreach ($popupEditableFields as $key => $data)
                                             @php
                                                 $labelName = $data->label_name;
-                                                $columnName = Str::lower(str_replace([' ', '/'], ['_', '_or_'], $data->label_name));
+                                                $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
                                                 $inputType = $data->input_type;
                                                 $options = $data->options_name != null ? explode(',', $data->options_name) : null;
                                                 $associativeOptions = [];
                                                 if ($options !== null) {
                                                     foreach ($options as $option) {
-                                                        $associativeOptions[Str::lower($option)] = $option;
+                                                        $associativeOptions[$option] = $option;
                                                     }
                                                     //$associativeOptions =  ['' => '-- Select --'] + $associativeOptions;
                                                 }
@@ -375,7 +375,7 @@
                                                                             <div class="checkbox-inline mt-2">
                                                                                 <label class="checkbox"
                                                                                     style="word-break: break-all;">
-                                                                                    {!! Form::$inputType($columnName . '[]', Str::lower($options[$i]), false) !!}{{ $options[$i] }}
+                                                                                    {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
                                                                                     <span></span>
                                                                                 </label>
                                                                             </div>
@@ -389,7 +389,7 @@
                                                                             <div class="radio-inline mt-2">
                                                                                 <label class="radio"
                                                                                     style="word-break: break-all;">
-                                                                                    {!! Form::$inputType($columnName . '[]', Str::lower($options[$i]), false) !!}{{ $options[$i] }}
+                                                                                    {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
                                                                                     <span></span>
                                                                                 </label>
                                                                             </div>
@@ -553,8 +553,14 @@
                 var newElement;
                 if (optionsArray == null) {
                     if (inputType !== 'date_range') {
-                        newElement = '<input type="' + inputType + '" name="' + columnName +
-                            '[]" class="text-black form-control">';
+                        if (inputType == 'textarea') {
+                            newElement = '<textarea name="' + columnName +
+                                '[]" class="text-black form-control" rows="3"></textarea>';
+
+                        } else {
+                            newElement = '<input type="' + inputType + '" name="' + columnName +
+                                '[]" class="text-black form-control">';
+                        }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
                             '[]" class="form-control date_range" style="background-color: #fff !important;cursor:pointer" autocomplete="none">';
@@ -616,25 +622,25 @@
                     '</div>' +
                     '</div>' +
                     '</div>';
-                    var modalBody = $(this).closest('.modal-content').find('.modal-body');
-        // modalBody.css({
-        //     'max-height': '500px', // Set your desired max height
-        //     'overflow-y': 'auto'
-        // });
+                var modalBody = $(this).closest('.modal-content').find('.modal-body');
+                // modalBody.css({
+                //     'max-height': '500px', // Set your desired max height
+                //     'overflow-y': 'auto'
+                // });
 
-       $(this).closest('.form-group').after(newRow);
-        // Reinitialize date range picker for the new element
-        if (inputType === 'date_range') {
-            var newDateRangePicker = modalBody.find('#' + newElementId).find('.date_range');
-            newDateRangePicker.daterangepicker({
-                showOn: 'both',
-                startDate: start,
-                endDate: end,
-                showDropdowns: true,
-                ranges: {}
-            });
-            newDateRangePicker.val('');
-        }
+                $(this).closest('.form-group').after(newRow);
+                // Reinitialize date range picker for the new element
+                if (inputType === 'date_range') {
+                    var newDateRangePicker = modalBody.find('#' + newElementId).find('.date_range');
+                    newDateRangePicker.daterangepicker({
+                        showOn: 'both',
+                        startDate: start,
+                        endDate: end,
+                        showDropdowns: true,
+                        ranges: {}
+                    });
+                    newDateRangePicker.val('');
+                }
 
 
             });
@@ -682,6 +688,8 @@
                     var value = $(this).text().trim();
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                         var checkboxValues = value.split(',');
+                        console.log(checkboxValues, $(this).val(), checkboxValues.includes($(this)
+                            .val()), 'rr');
                         $('input[name="' + header + '[]"]').each(function() {
                             $(this).prop('checked', checkboxValues.includes($(this).val()));
                         });

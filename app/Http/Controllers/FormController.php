@@ -75,18 +75,20 @@ class FormController extends Controller
                     $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                     formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
-                    $columnName = Str::lower(str_replace([' ', '/'], ['_', '_or_'], $data['label_name'][$i]));
+                    $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                     if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
                         $columns[$columnName] = 'VARCHAR(255)';
                     } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                         // Set ENUM with possible values (note the single quotes)
-                        $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
+                        // $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
+                        $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                         $columns[$columnName] = "ENUM($enumValues)";
                     } else if ($data['input_type'][$i] == 'date') {
                         $columns[$columnName] = 'DATE';
                     }
                 }
                 $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
+                $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
                 $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
@@ -98,7 +100,7 @@ class FormController extends Controller
                         $createTableSQL .= ", invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Inprocess','CE_Pending','CE_Completed','CE_Hold','QA_Inprocess','QA_Pending','QA_Completed','QA_Hold','Revoke') DEFAULT 'CE_Inprocess',
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -138,7 +140,7 @@ class FormController extends Controller
                         $createDuplicateTableSQL .= ", invoke_date DATE NULL,
                                                     CE_emp_id VARCHAR(255) NULL,
                                                     QA_emp_id VARCHAR(255) NULL,
-                                                    claim_status ENUM('CE_Inprocess','CE_Pending','CE_Completed','CE_Hold','QA_Inprocess','QA_Pending','QA_Completed','QA_Hold','Revoke') DEFAULT 'CE_Inprocess',
+                                                    claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
@@ -162,6 +164,45 @@ class FormController extends Controller
                                 DB::statement("ALTER TABLE $duplicateTableName ADD COLUMN $columnName $columnType AFTER $afterColumn");
                                 $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
                                 $dynamicDuplicateModel->refreshFillableFromTable();
+                            }
+                        }
+                    }
+
+                    $tableDatasExists = DB::select("SHOW TABLES LIKE '$tableDataName'");
+                    if (empty($tableDatasExists)) {
+                        $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
+                        foreach ($columns as $columnName => $columnType) {
+                            $createTableSQL .= ", $columnName $columnType";
+                        }
+
+                        $createTableSQL .= ", invoke_date DATE NULL,
+                                            CE_emp_id VARCHAR(255) NULL,
+                                            QA_emp_id VARCHAR(255) NULL,
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                            deleted_at TIMESTAMP NULL)";
+                        DB::statement($createTableSQL);
+                        $dynamicModel = new DynamicModel($tableDataName);
+                            // foreach ($columns as $columnName => $columnType) {
+                            //     $dynamicModel->$columnName = ''; // Set default values if needed
+                            // }
+
+                            //     $dynamicModel->save();
+                    } else {
+                        $afterColumn = 'created_at';
+                        foreach ($columns as $columnName => $columnType) {
+                            $columnExists = DB::select("
+                                SELECT COLUMN_NAME
+                                FROM INFORMATION_SCHEMA.COLUMNS
+                                WHERE TABLE_NAME = '$tableDataName'
+                                AND COLUMN_NAME = '$columnName'
+                            ");
+                            if (empty($columnExists)) {
+
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName $columnType AFTER $afterColumn");
+                                $dynamicModel = new DynamicModel($tableDataName);
+                                $dynamicModel->refreshFillableFromTable();
                             }
                         }
                     }
@@ -228,12 +269,13 @@ class FormController extends Controller
                         $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                         formConfiguration::create($requiredData);
                        // $columnName = Str::lower(str_replace([' ', '/'], '_', $data['label_name'][$i]));
-                        $columnName = Str::lower(str_replace([' ', '/'], ['_', '_or_'], $data['label_name'][$i]));
+                        $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                         if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
                             $columns[$columnName] = 'VARCHAR(255)';
                         } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                             // Set ENUM with possible values (note the single quotes)
-                            $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
+                            // $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
+                            $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                             $columns[$columnName] = "ENUM($enumValues)";
                         } else if ($data['input_type'][$i] == 'date') {
                             $columns[$columnName] = 'DATE';
@@ -270,6 +312,7 @@ class FormController extends Controller
                 //         }
                 //     }
                 $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
+                $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
                 $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
 
@@ -283,7 +326,7 @@ class FormController extends Controller
                         $createTableSQL .= ", invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Inprocess','CE_Pending','CE_Completed','CE_Hold','QA_Inprocess','QA_Pending','QA_Completed','QA_Hold','Revoke') DEFAULT 'CE_Inprocess',
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -322,7 +365,7 @@ class FormController extends Controller
                         $createDuplicateTableSQL .= ", invoke_date DATE NULL,
                                                     CE_emp_id VARCHAR(255) NULL,
                                                     QA_emp_id VARCHAR(255) NULL,
-                                                    claim_status ENUM('CE_Inprocess','CE_Pending','CE_Completed','CE_Hold','QA_Inprocess','QA_Pending','QA_Completed','QA_Hold','Revoke') DEFAULT 'CE_Inprocess',
+                                                    claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
@@ -346,6 +389,45 @@ class FormController extends Controller
                                 DB::statement("ALTER TABLE $duplicateTableName ADD COLUMN $columnName $columnType AFTER $afterColumn");
                                 $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
                                 $dynamicDuplicateModel->refreshFillableFromTable();
+                            }
+                        }
+                    }
+
+                    $tableDatasExists = DB::select("SHOW TABLES LIKE '$tableDataName'");
+                    if (empty($tableDatasExists)) {
+                        $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
+                        foreach ($columns as $columnName => $columnType) {
+                            $createTableSQL .= ", $columnName $columnType";
+                        }
+
+                        $createTableSQL .= ", invoke_date DATE NULL,
+                                            CE_emp_id VARCHAR(255) NULL,
+                                            QA_emp_id VARCHAR(255) NULL,
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                            deleted_at TIMESTAMP NULL)";
+                        DB::statement($createTableSQL);
+                        $dynamicModel = new DynamicModel($tableDataName);
+                            // foreach ($columns as $columnName => $columnType) {
+                            //     $dynamicModel->$columnName = ''; // Set default values if needed
+                            // }
+
+                            //     $dynamicModel->save();
+                    } else {
+                        $afterColumn = 'created_at';
+                        foreach ($columns as $columnName => $columnType) {
+                            $columnExists = DB::select("
+                                SELECT COLUMN_NAME
+                                FROM INFORMATION_SCHEMA.COLUMNS
+                                WHERE TABLE_NAME = '$tableDataName'
+                                AND COLUMN_NAME = '$columnName'
+                            ");
+                            if (empty($columnExists)) {
+
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName $columnType AFTER $afterColumn");
+                                $dynamicModel = new DynamicModel($tableDataName);
+                                $dynamicModel->refreshFillableFromTable();
                             }
                         }
                     }

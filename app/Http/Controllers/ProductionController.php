@@ -119,7 +119,7 @@ class ProductionController extends Controller
                     //    $assignedProjectDetails = DB::table($table_name)->get();
                     // }
                     if (class_exists($modelClass)) {
-                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Inprocess')->orderBy('id','desc')->get();
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
@@ -134,7 +134,7 @@ class ProductionController extends Controller
                     // $assignedProjectDetails = DB::table('aig_wound')->get();
                     // }
                     if (class_exists($modelClass)) {
-                    $assignedProjectDetails = $modelClass::where('claim_status','CE_Inprocess')->orderBy('id','desc')->get();
+                    $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
                 }
