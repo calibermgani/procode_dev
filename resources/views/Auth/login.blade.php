@@ -278,31 +278,32 @@
                         success: function(res) {
                             console.log('success', res);
                             if (res.code == 200 && res.message == 'success') {
-                                var sessionUserId = res;
+                                window.location.href = baseUrl + 'dashboard';
+                                // var sessionUserId = res;
 
-                                $.ajaxSetup({
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                            'content')
-                                    }
-                                });
+                                // $.ajaxSetup({
+                                //     headers: {
+                                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                //             'content')
+                                //     }
+                                // });
 
-                                $.ajax({
-                                    url: "/store-in-session",
-                                    method: 'POST',
-                                    data: {
-                                        value: sessionUserId
-                                    },
-                                    success: function(response) {
-                                        console.log(
-                                            'Value stored successfully in session');
-                                        window.location.href = baseUrl + 'dashboard';
-                                    },
-                                    error: function(jqXHR, exception) {
-                                        console.error('Error storing value in session',
-                                            exception);
-                                    }
-                                });
+                                // $.ajax({
+                                //     url: "/store-in-session",
+                                //     method: 'POST',
+                                //     data: {
+                                //         value: sessionUserId
+                                //     },
+                                //     success: function(response) {
+                                //         console.log(
+                                //             'Value stored successfully in session');
+                                //         window.location.href = baseUrl + 'dashboard';
+                                //     },
+                                //     error: function(jqXHR, exception) {
+                                //         console.error('Error storing value in session',
+                                //             exception);
+                                //     }
+                                // });
                             }
                         },
                         error: function(jqXHR, exception) {
