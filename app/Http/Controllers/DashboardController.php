@@ -18,4 +18,7 @@ class DashboardController extends Controller
             return redirect('/login');
         }
     }
+    public function procodeTesting() {
+        return view('Dashboard/procodeTesting');
+    }
 }
