@@ -175,7 +175,7 @@ class FormController extends Controller
                             $createTableSQL .= ", $columnName $columnType";
                         }
 
-                        $createTableSQL .= ", invoke_date DATE NULL,
+                        $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
@@ -323,7 +323,7 @@ class FormController extends Controller
                             $createTableSQL .= ", $columnName $columnType";
                         }
 
-                        $createTableSQL .= ", invoke_date DATE NULL,
+                        $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',

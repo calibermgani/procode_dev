@@ -62,7 +62,6 @@ class LoginController extends Controller
     }
     public function storeInSession(Request $request) {
         try {
-            dd('hi');
             /* user login Details in below */
             $value = $request->input('value');
             Session::put('loginDetails', $value);
