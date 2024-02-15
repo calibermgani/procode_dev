@@ -10,27 +10,27 @@
                 }
                @endphp
                 <ul class="menu-nav">
+                   @if(isset($permission_menu))
+                        @forelse($permission_menu as $main_menu)
+                            @php
+                            $menu_id = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(request()->parent,'decode');
+                            //dd($menu_id);
+                            $main_menu_id = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($main_menu->id,'encode');
+                            @endphp
+                            {{-- @if($main_menu->id == 1) --}}
+                                <li class="menu-item menu-item-open menu-item-submenu menu-item-rel menu-item-open {{ ($menu_id == $main_menu->id) ? 'menu-item-active' : '' }}" id="active{{$main_menu->id}}" data-menu-toggle="click" aria-haspopup="true">
+                                    {{-- <a href="{{ url($main_menu->menu_url) }}/{{$menu_encode_id}}" class="menu-link"> --}}
+                                        <a href="{{ url($main_menu->menu_url) }}" class="menu-link main_menu" id="{{$main_menu->id}}">
 
-                    @forelse($permission_menu as $main_menu)
-                   @php
-                   $menu_id = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(request()->parent,'decode');
-                   //dd($menu_id);
-                   $main_menu_id = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($main_menu->id,'encode');
-                   @endphp
-                   {{-- @if($main_menu->id == 1) --}}
-                    <li class="menu-item menu-item-open menu-item-submenu menu-item-rel menu-item-open {{ ($menu_id == $main_menu->id) ? 'menu-item-active' : '' }}" id="active{{$main_menu->id}}" data-menu-toggle="click" aria-haspopup="true">
-                        {{-- <a href="{{ url($main_menu->menu_url) }}/{{$menu_encode_id}}" class="menu-link"> --}}
-                            <a href="{{ url($main_menu->menu_url) }}" class="menu-link main_menu" id="{{$main_menu->id}}">
-
-                            <span class="menu-text"> {{ ucwords($main_menu->menu_name) }}</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                    </li>
-                    {{-- @endif --}}
-                    @empty
-                    <li></li>
-                    @endforelse
-
+                                        <span class="menu-text"> {{ ucwords($main_menu->menu_name) }}</span>
+                                        <i class="menu-arrow"></i>
+                                    </a>
+                                </li>
+                                {{-- @endif --}}
+                                @empty
+                                <li></li>
+                        @endforelse
+                   @endif
                 </ul>
             </div>
         </div>
