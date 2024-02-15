@@ -1,18 +1,4 @@
 @extends('layouts.app3')
-
-{{-- @section('subheader')
-    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Client Information</h5>
-            </div>
-        </div>
-        <div class="d-flex align-items-start">
-            <a class="btn btn-light-primary font-weight-bolder btn-sm mr-5"
-                href="{{ url('clients') }}?parent={{ request()->parent }}&child={{ request()->child }}">List</a>
-        </div>
-    </div>
-@endsection --}}
 @include('productions.subheader')
 @section('content')
     <div class="content d-flex flex-column flex-column-fluid">
@@ -28,7 +14,6 @@
                             data-wizard-clickable="true">
                             <div class="wizard-nav">
                                 <div class="wizard-steps">
-                                    <!--begin:: Tab Menu View -->
                                     <div class="wizard-step mb-0 one" data-wizard-type="step">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
@@ -138,19 +123,33 @@
                                                             {{-- <th style="width:12%"><input type="hideen"
                                                                     value={{ $columnValue }}>{{ str_replace(['_', '_else_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
                                                             </th> --}}
-                                                            <th style="width:12%"><input type="hidden"
-                                                                    value={{ $columnValue }}>
-                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                            </th>
+                                                            @if ($columnValue != 'id')
+                                                                <th style="width:12%"><input type="hidden"
+                                                                        value={{ $columnValue }}>
+                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                </th>
+                                                            @else
+                                                                <th style="width:12%;display:none"><input type="hidden"
+                                                                        value={{ $columnValue }}>
+                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                </th>
+                                                            @endif
                                                         @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
                                                 @else
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        <th style="width:12%"><input type="hidden"
-                                                                value={{ $columnValue }}>
-                                                            {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                        </th>
+                                                        @if ($columnValue != 'id')
+                                                            <th style="width:12%"><input type="hidden"
+                                                                    value={{ $columnValue }}>
+                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                            </th>
+                                                        @else
+                                                            <th style="width:12%;display:none"><input type="hidden"
+                                                                    value={{ $columnValue }}>
+                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                            </th>
+                                                        @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
                                                 @endif
@@ -165,17 +164,26 @@
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
-                                                                <td
-                                                                    style="{{ $data->invoke_date == 125 ? 'color: #fff;' : '' }}">
-                                                                    @if (strtotime($columnValue))
-                                                                        {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                    @else
-                                                                        {{ $columnValue }}
-                                                                    @endif
-                                                                </td>
+                                                                @if ($columnName != 'id')
+                                                                    <td>
+                                                                        @if (strtotime($columnValue))
+                                                                            {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                        @else
+                                                                            {{ $columnValue }}
+                                                                        @endif
+                                                                    </td>
+                                                                @else
+                                                                    <td style="display:none">
+                                                                        @if (strtotime($columnValue))
+                                                                            {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                        @else
+                                                                            {{ $columnValue }}
+                                                                        @endif
+                                                                    </td>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                         <td
@@ -209,78 +217,37 @@
                                                 @endforeach
                                             @endif
                                         </tbody>
-                                        {{-- <thead>
-
-                                            <tr>
-                                                @if (isset($assignedProjectDetails))
-                                                    @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        <th style="width:12%">{{ str_replace(['_', '_else_'], [' ', '/'], $columnValue) }}
-                                                        </th>
-                                                    @endforeach
-                                                @endif
-                                                <th style="width:16%">Action</th>
-                                            </tr>
-
-
-                                        </thead>
-                                        <tbody>
-                                            @if (isset($assignedProjectDetails) && $assignedProjectDetails != '')
-                                                @php
-                                                    $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
-                                                @endphp
-                                                @foreach ($assignedProjectDetails as $data)
-                                                    <tr class="clickable-row"
-                                                        style="{{ $data->test1 == 125 ? 'background-color: #f77a7a;' : '' }}">
-                                                        @foreach ($data as $columnName => $columnValue)
-                                                            @if (!in_array($columnName, $columnsToExclude))
-                                                                <td
-                                                                    style="{{ $data->test1 == 125 ? 'color: #fff;' : '' }}">
-                                                                    {{ $columnValue }}</td>
-                                                            @endif
-                                                        @endforeach
-                                                        <td style="{{ $data->test1 == 125 ? 'color: #fff;' : '' }}">
-                                                            @if ($data->test1 == 125)
-                                                            @else
-                                                                <span class="svg-icon svg-icon-success mr-2 question_play"
-                                                                    title="play">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                        width="24px" height="24px" viewBox="0 0 24 24"
-                                                                        version="1.1">
-                                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                                            fill-rule="evenodd">
-                                                                            <rect x="0" y="0" width="24"
-                                                                                height="24" />
-                                                                            <circle fill="#000000" opacity="0.3"
-                                                                                cx="12" cy="12" r="9" />
-                                                                            <path
-                                                                                d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
-                                                                                fill="#000000" />
-                                                                        </g>
-                                                                    </svg>
-                                                                </span>
-                                                                <a class="pt-1" data-toggle="tooltip" title="View"
-                                                                    href=""><i
-                                                                        class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="myModal_status" tabindex="-1" role="dialog"
                                 aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    @if ($popUpHeader != null)
+                                @if ($popUpHeader != null)
+                                    <div class="modal-dialog">
+                                        @php
+                                            $clientName = App\Http\Helper\Admin\Helpers::projectName($popUpHeader->project_id);
+                                            $practiceName = App\Http\Helper\Admin\Helpers::subProjectName($popUpHeader->project_id, $popUpHeader->sub_project_id);
+                                            $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($popUpHeader->project_id, 'encode');
+                                            $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($popUpHeader->project_id, 'encode');
+
+                                        @endphp
+                                        {!! Form::open([
+                                            'url' =>
+                                                url('project_store/' . $projectName . '/' . $subProjectName) .
+                                                '?parent=' .
+                                                request()->parent .
+                                                '&child=' .
+                                                request()->child,
+                                            'class' => 'form',
+                                            'id' => 'formConfiguration',
+                                            'enctype' => 'multipart/form-data',
+                                        ]) !!}
+                                        @csrf
+
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                @php
-                                                    $clientName = App\Http\Helper\Admin\Helpers::projectName($popUpHeader->project_id);
-                                                    $practiceName = App\Http\Helper\Admin\Helpers::subProjectName($popUpHeader->project_id, $popUpHeader->sub_project_id);
-                                                @endphp
+
                                                 <h4 class="modal-title" id="myModalLabel">
                                                     {{ $clientName->project_name }}-{{ $practiceName->sub_project_name }}
                                                 </h4>
@@ -292,6 +259,7 @@
                                             <div class="modal-body">
                                                 @if (count($popupNonEditableFields) > 0)
                                                     @php $count = 0; @endphp
+                                                    <input type="hidden" name="idValue">
                                                     @foreach ($popupNonEditableFields as $data)
                                                         @php
                                                             // $columnName = Str::lower(str_replace([' ', '/'], '_', $data->label_name));
@@ -307,6 +275,8 @@
                                                                 <label
                                                                     class="col-md-7 col-form-label">{{ $data->label_name }}
                                                                 </label>
+                                                                <input type="hidden" name="{{ $columnName }}[]">
+
                                                                 <label class="col-md-5 col-form-label"
                                                                     id={{ $columnName }}>
                                                                 </label>
@@ -315,131 +285,137 @@
                                                         @php $count++; @endphp
                                                         @if ($count % 2 == 0 || $loop->last)
                                             </div>
-                                    @endif
-                                    @endforeach
-                                    <hr>
-                                    @endif
-                                    @if (count($popupEditableFields) > 0)
-                                        @php $count = 0; @endphp
-                                        @foreach ($popupEditableFields as $key => $data)
-                                            @php
-                                                $labelName = $data->label_name;
-                                                $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
-                                                $inputType = $data->input_type;
-                                                $options = $data->options_name != null ? explode(',', $data->options_name) : null;
-                                                $associativeOptions = [];
-                                                if ($options !== null) {
-                                                    foreach ($options as $option) {
-                                                        $associativeOptions[$option] = $option;
-                                                    }
-                                                    //$associativeOptions =  ['' => '-- Select --'] + $associativeOptions;
-                                                }
-                                            @endphp
-                                            @if ($count % 2 == 0)
-                                                <div class="row" id={{ $columnName }}>
-                                            @endif
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-md-5 col-form-label {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
-                                                        {{ $labelName }}
-                                                    </label>
-                                                    <div class="col-md-6">
-                                                        @if ($options == null)
-                                                            @if ($inputType != 'date_range')
-                                                                {!! Form::$inputType($columnName . '[]', null, [
-                                                                    'class' => 'form-control',
-                                                                    'autocomplete' => 'none',
-                                                                    'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                    'rows' => 3,
-                                                                ]) !!}
-                                                            @else
-                                                                {!! Form::text($columnName . '[]', null, [
-                                                                    'class' => 'form-control date_range daterange_' . $columnName,
-                                                                    'autocomplete' => 'none',
-                                                                    'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                    'id' => 'date_range',
-                                                                ]) !!}
-                                                            @endif
-                                                        @else
-                                                            @if ($inputType == 'select')
-                                                                {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                    'class' => 'form-control',
-                                                                    'autocomplete' => 'none',
-                                                                    'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                ]) !!}
-                                                            @elseif ($inputType == 'checkbox')
-                                                                <div class="form-group row">
-                                                                    @for ($i = 0; $i < count($options); $i++)
-                                                                        <div class="col-md-6">
-                                                                            <div class="checkbox-inline mt-2">
-                                                                                <label class="checkbox"
-                                                                                    style="word-break: break-all;">
-                                                                                    {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
-                                                                                    <span></span>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endfor
-                                                                </div>
-                                                            @elseif ($inputType == 'radio')
-                                                                <div class="form-group row">
-                                                                    @for ($i = 0; $i < count($options); $i++)
-                                                                        <div class="col-md-6">
-                                                                            <div class="radio-inline mt-2">
-                                                                                <label class="radio"
-                                                                                    style="word-break: break-all;">
-                                                                                    {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
-                                                                                    <span></span>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endfor
-                                                                </div>
-                                                            @endif
-                                                        @endif
-                                                    </div>
-                                                    <div class="col-form-label text-lg-right pt-0 pb-4">
-                                                        <input type="hidden"
-                                                            value="{{ $associativeOptions != null ? json_encode($associativeOptions) : null }}"
-                                                            class="add_options">
-
-                                                        @if ($data->field_type_1 == 'multiple')
-                                                            <input type="hidden"
-                                                                value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
-                                                                class="add_labelName">
-                                                            <input type="hidden"
-                                                                value="{{ $data->field_type_1 == 'multiple' ? $columnName : '' }}"
-                                                                class="add_columnName">
-                                                            <input type="hidden"
-                                                                value="{{ $data->field_type_1 == 'multiple' ? $inputType : '' }}"
-                                                                class="add_inputtype">
-                                                            <i class="fa fa-plus text-success icon-circle1 ml-1 add_more"
-                                                                id="add_more_{{ $columnName }}"
-                                                                style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @php $count++; @endphp
-                                            @if ($count % 2 == 0 || $loop->last)
-                                </div>
                                 @endif
                                 @endforeach
+                                <hr>
                                 @endif
+                                @if (count($popupEditableFields) > 0)
+                                    @php $count = 0; @endphp
+                                    @foreach ($popupEditableFields as $key => $data)
+                                        @php
+                                            $labelName = $data->label_name;
+                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
+                                            $inputType = $data->input_type;
+                                            $options = $data->options_name != null ? explode(',', $data->options_name) : null;
+                                            $associativeOptions = [];
+                                            if ($options !== null) {
+                                                foreach ($options as $option) {
+                                                    $associativeOptions[$option] = $option;
+                                                }
+                                                //$associativeOptions =  ['' => '-- Select --'] + $associativeOptions;
+                                            }
+                                        @endphp
+                                        @if ($count % 2 == 0)
+                                            <div class="row" id={{ $columnName }}>
+                                        @endif
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label
+                                                    class="col-md-5 col-form-label {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
+                                                    {{ $labelName }}
+                                                </label>
+                                                <div class="col-md-6">
+                                                    @if ($options == null)
+                                                        @if ($inputType != 'date_range')
+                                                            {!! Form::$inputType($columnName . '[]', null, [
+                                                                'class' => 'form-control',
+                                                                'autocomplete' => 'none',
+                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                'rows' => 3,
+                                                            ]) !!}
+                                                        @else
+                                                            {!! Form::text($columnName . '[]', null, [
+                                                                'class' => 'form-control date_range daterange_' . $columnName,
+                                                                'autocomplete' => 'none',
+                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                'id' => 'date_range',
+                                                            ]) !!}
+                                                        @endif
+                                                    @else
+                                                        @if ($inputType == 'select')
+                                                            {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
+                                                                'class' => 'form-control',
+                                                                'autocomplete' => 'none',
+                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                            ]) !!}
+                                                        @elseif ($inputType == 'checkbox')
+                                                            <div class="form-group row">
+                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                    <div class="col-md-6">
+                                                                        <div class="checkbox-inline mt-2">
+                                                                            <label class="checkbox"
+                                                                                style="word-break: break-all;">
+                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endfor
+                                                            </div>
+                                                        @elseif ($inputType == 'radio')
+                                                            <div class="form-group row">
+                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                    <div class="col-md-6">
+                                                                        <div class="radio-inline mt-2">
+                                                                            <label class="radio"
+                                                                                style="word-break: break-all;">
+                                                                                {!! Form::$inputType($columnName, $options[$i], false, [
+                                                                                    'class' => $columnName,
+                                                                                ]) !!}{{ $options[$i] }}
+                                                                                <span></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endfor
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                                <div class="col-form-label text-lg-right pt-0 pb-4">
+                                                    <input type="hidden"
+                                                        value="{{ $associativeOptions != null ? json_encode($associativeOptions) : null }}"
+                                                        class="add_options">
+
+                                                    @if ($data->field_type_1 == 'multiple')
+                                                        <input type="hidden"
+                                                            value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
+                                                            class="add_labelName">
+                                                        <input type="hidden"
+                                                            value="{{ $data->field_type_1 == 'multiple' ? $columnName : '' }}"
+                                                            class="add_columnName">
+                                                        <input type="hidden"
+                                                            value="{{ $data->field_type_1 == 'multiple' ? $inputType : '' }}"
+                                                            class="add_inputtype">
+                                                        <input type="hidden"
+                                                            value="{{ $data->field_type_1 == 'multiple' ? ($data->field_type_2 == 'mandatory' ? 'required' : '') : '' }}"
+                                                            class="add_mandatory">
+                                                        <i class="fa fa-plus text-success icon-circle1 ml-1 add_more"
+                                                            id="add_more_{{ $columnName }}"
+                                                            style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @php $count++; @endphp
+                                        @if ($count % 2 == 0 || $loop->last)
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default comment_close"
-                                    data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary"
-                                    id="evidence_status_update">Submit</button>
-                            </div>
+                            @endif
+                            @endforeach
+                            @endif
                         </div>
-                        @endif
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default comment_close"
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
+                        </div>
                     </div>
+
+                    {!! Form::close() !!}
                 </div>
+                @endif
             </div>
         </div>
+    </div>
     </div>
     </div>
     </div>
@@ -497,57 +473,18 @@
         });
         $('.date_range').val('');
         $(document).ready(function() {
-            // var j = 0;
-            // $('.add_more').click(function() {
-            //     j++;
-            //     var labelName = $('.add_labelName').val();
-            //     var columnName = $('.add_columnName').val();
-            //     var inputType = $('.add_inputtype').val();
-            //     console.log(inputType, 'inputType', columnName);
-
-            //     var newRow = '<div class="row"  id="' + columnName + "_" + j + '">' +
-            //         '<div class="col-md-6">' +
-            //         '<div class="form-group row">' +
-            //         '<label class="col-md-5 col-form-label ' + (inputType == 'mandatory' ? 'required' :
-            //             '') + '">' + labelName + '</label><div class="col-md-6">';
-            //     if (inputType !== "date_range") {
-            //         newRow +=
-            //             '<input type="' + inputType + '" name="' + columnName +
-            //             '[]" class="text-black form-control">';
-            //     } else {
-            //         newRow +=
-            //             '<input type="text" name="' + columnName +
-            //             '[]" class="text-black form-control date_range" style="background-color: #fff !important;cursor:pointer">';
-            //     }
-            //     newRow += '</div><div class="col-form-label text-lg-right pt-0 pb-4">' +
-            //         '<i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more" id="' + j +
-            //         '"></i>' +
-            //         '</div>' +
-            //         '</div>' +
-            //         '</div>' +
-            //         '</div>';
-            //     $('.modal-body').append(newRow);
-            //     // $('#' + columnName).append(newRow);
-            // });
-            // $(document).on('click', '.remove_more', function() {
-            //     var rowId = $(this).attr('id');
-            //     var columnName = $('.add_columnName').val();
-            //     console.log(columnName + "_" + rowId, 'rowId');
-            //      $('#' + columnName + "_" + rowId).remove();
-            // });
-
             var uniqueId = 0;
-
             $('.modal-body').on('click', '.add_more', function() {
                 uniqueId++;
 
                 var labelName = $(this).closest('.form-group').find('.add_labelName').val();
                 var columnName = $(this).closest('.form-group').find('.add_columnName').val();
                 var inputType = $(this).closest('.form-group').find('.add_inputtype').val();
+                var addMandatory = $(this).closest('.form-group').find('.add_mandatory').val();
                 var optionsJson = $(this).closest('.form-group').find('.add_options').val();
                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                 var optionsArray = optionsObject ? Object.values(optionsObject) : null;
-
+                console.log(labelName, columnName, inputType, addMandatory, 'inputType');
 
                 var newElementId = 'dynamicElement_' + uniqueId;
                 var newElement;
@@ -582,7 +519,8 @@
                         newElement +=
                             '<div class="col-md-6">' +
                             '<div class="checkbox-inline mt-2">' +
-                            '<label class="checkbox" style="word-break: break-all;">' +
+                            '<label class="checkbox" style="word-break: break-all;" ' +
+                            addMandatory + '>' +
                             '<input type="checkbox" name="' + columnName + '[]" value="' + option +
                             '">' + option +
                             '<span></span>' +
@@ -598,9 +536,10 @@
                         newElement +=
                             '<div class="col-md-6">' +
                             '<div class="radio-inline mt-2">' +
-                            '<label class="radio" style="word-break: break-all;">' +
+                            '<label class="radio" style="word-break: break-all;" ' + addMandatory +
+                            '>' +
                             '<input type="radio" name="' + columnName + '_' + uniqueId +
-                            '" value="' + option + '">' + option +
+                            '" value="' + option + '" class="' + columnName + '">' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -609,10 +548,10 @@
 
                     newElement += '</div>';
                 }
-                // Create the HTML for the new row
+
                 var newRow = '<div class="row mt-2" id="' + newElementId + '">' +
                     '<div class="col-md-5">' +
-                    '<label class="col-form-label ' + (inputType == 'mandatory' ? 'required' : '') + '">' +
+                    '<label class="col-form-label ' + addMandatory + '">' +
                     labelName + '</label>' +
                     '</div>' +
                     '<div class="col-md-6">' + newElement + '</div>' +
@@ -623,13 +562,9 @@
                     '</div>' +
                     '</div>';
                 var modalBody = $(this).closest('.modal-content').find('.modal-body');
-                // modalBody.css({
-                //     'max-height': '500px', // Set your desired max height
-                //     'overflow-y': 'auto'
-                // });
+
 
                 $(this).closest('.form-group').after(newRow);
-                // Reinitialize date range picker for the new element
                 if (inputType === 'date_range') {
                     var newDateRangePicker = modalBody.find('#' + newElementId).find('.date_range');
                     newDateRangePicker.daterangepicker({
@@ -641,8 +576,6 @@
                     });
                     newDateRangePicker.val('');
                 }
-
-
             });
 
             $(document).on('click', '.remove_more', function() {
@@ -686,16 +619,17 @@
                 $row.find('td:not(:eq(' + thCount + '))').each(function(index) {
                     var header = headers[index];
                     var value = $(this).text().trim();
+                    if (header == 'id') {
+                        $('input[name="idValue"]').val(value);
+                    }
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                         var checkboxValues = value.split(',');
-                        console.log(checkboxValues, $(this).val(), checkboxValues.includes($(this)
-                            .val()), 'rr');
                         $('input[name="' + header + '[]"]').each(function() {
                             $(this).prop('checked', checkboxValues.includes($(this).val()));
                         });
-                    } else if ($('input[name="' + header + '[]"]').is(':radio') && value !== '' &&
+                    } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' &&
                         value.length > 0) {
-                        $('input[name="' + header + '[]"]').filter('[value="' + value + '"]').prop(
+                        $('input[name="' + header + '"]').filter('[value="' + value + '"]').prop(
                             'checked', true);
                     } else if ($('select[name="' + header + '[]"]').length) {
                         $('select[name="' + header + '[]"]').val(value).trigger('change');
@@ -709,7 +643,6 @@
                                     month: '2-digit',
                                     day: '2-digit'
                                 });
-                                console.log(header, value, 'date if');
                                 customDate = moment(value, 'MM/DD/YYYY').format('YYYY-MM-DD');
                                 $('label[id="' + header + '"]').text(formattedDate);
                                 $('input[name="' + header + '[]"]').val(customDate);
@@ -719,21 +652,101 @@
                                     dateRangePicker.setEndDate(moment(customDate));
                                 }
                             } else {
-                                console.log(header, value, 'date else');
                                 $('input[name="' + header + '[]"]').val(value);
                                 $('label[id="' + header + '"]').text(value);
+
                             }
                         } else {
-                            console.log(header, value, 'elseeeeee');
                             $('input[name="' + header + '[]"]').val(value);
                             $('label[id="' + header + '"]').text(value);
+
                         }
 
                     }
 
                 });
             });
-            //var encodedProjectId = $('#encodeddbConnection').val();
+
+            $(document).on('click', '#project_assign_save', function(e) {
+                e.preventDefault();
+
+                // var fieldTypes = $('input[type^="radio"]:checked').map(function() {
+
+                //     return $(this).val();
+                // }).get();
+                // var fieldNames = $('input[type="radio"]:checked').map(function() {
+                //     return $(this).attr('name');
+                // }).get();
+                // console.log('fieldTypes',fieldTypes,fieldTypes.length,fieldNames);
+                //     for (var i = 0; i < fieldTypes.length; i++) {
+                //         $('<input>').attr({
+                //             type: 'hidden',
+                //             name: fieldNames[0]+'[]',
+                //             value: fieldTypes[i]
+                //         }).appendTo('form#formConfiguration');
+
+                //     }
+                var fieldValuesByFieldName = {};
+
+                $('input[type="radio"]:checked').each(function() {
+                    var fieldName = $(this).attr('class');
+                    var fieldValue = $(this).val();
+                    console.log(fieldName, 'fieldName');
+                    if (!fieldValuesByFieldName[fieldName]) {
+                        fieldValuesByFieldName[fieldName] = [];
+                    }
+
+                    fieldValuesByFieldName[fieldName].push(fieldValue);
+                });
+                var groupedData = {};
+                Object.keys(fieldValuesByFieldName).forEach(function(key) {
+                    var columnName = key;
+                    if (!groupedData[columnName]) {
+                        groupedData[columnName] = [];
+                    }
+                    groupedData[columnName] = groupedData[columnName].concat(fieldValuesByFieldName[
+                        key]);
+                });
+                console.log(groupedData, 'fieldValuesByFieldName', fieldValuesByFieldName);
+                $.each(fieldValuesByFieldName, function(fieldName, fieldValues) {
+                    $.each(fieldValues, function(index, value) {
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: fieldName + '[]',
+                            value: value
+                        }).appendTo('form#formConfiguration');
+                    });
+                });
+
+                var inputTypeValue = 0;
+
+                if (inputTypeValue == 0) {
+
+                    swal.fire({
+                        text: "Do you want to update?",
+                        icon: "success",
+                        buttonsStyling: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-primary",
+                            cancelButton: "btn font-weight-bold btn-danger",
+                        }
+
+                    }).then(function(result) {
+                        if (result.value == true) {
+                            document.querySelector('#formConfiguration').submit();
+
+                        } else {
+                            location.reload();
+                        }
+                    });
+
+                } else {
+                    return false;
+                }
+            });
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
 

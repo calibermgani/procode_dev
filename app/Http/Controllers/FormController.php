@@ -58,7 +58,7 @@ class FormController extends Controller
     public static function formConfigurationStore(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
             try {
-                $data = $request->all();//dd($data);
+                $data = $request->all();
                 $projectName = project::where('id',$data['project_id'])->first();
                 $subProjectName = subProject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
                 $columns = [];
@@ -79,8 +79,6 @@ class FormController extends Controller
                     if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
                         $columns[$columnName] = 'VARCHAR(255)';
                     } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
-                        // Set ENUM with possible values (note the single quotes)
-                        // $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
                         $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                         $columns[$columnName] = "ENUM($enumValues)";
                     } else if ($data['input_type'][$i] == 'date') {
@@ -106,11 +104,6 @@ class FormController extends Controller
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
-                            // foreach ($columns as $columnName => $columnType) {
-                            //     $dynamicModel->$columnName = ''; // Set default values if needed
-                            // }
-
-                            //     $dynamicModel->save();
                     } else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -146,10 +139,6 @@ class FormController extends Controller
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
-                        // foreach ($columns as $columnName => $columnType) {
-                        //     $dynamicDuplicateModel->$columnName = ''; // Set default values if needed
-                        // }
-                        //$dynamicDuplicateModel->save();
                     }  else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -172,7 +161,7 @@ class FormController extends Controller
                     if (empty($tableDatasExists)) {
                         $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName $columnType";
+                            $createTableSQL .= ", $columnName VARCHAR(255)";
                         }
 
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
@@ -184,11 +173,6 @@ class FormController extends Controller
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
-                            // foreach ($columns as $columnName => $columnType) {
-                            //     $dynamicModel->$columnName = ''; // Set default values if needed
-                            // }
-
-                            //     $dynamicModel->save();
                     } else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -200,7 +184,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName $columnType AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableDataName);
                                 $dynamicModel->refreshFillableFromTable();
                             }
@@ -248,7 +232,6 @@ class FormController extends Controller
                         $requiredData['project_id'] = $data['project_id_val'];
                         $requiredData['sub_project_id'] = $data['sub_project_id_val'];
                         $requiredData['label_name'] = $data['label_name'][$i];
-                        //$requiredData['input_type'] = $data['input_type'][$i];
                         $requiredData['options_name'] = $data['options_name'][$i];
                         $requiredData['field_type'] = $data['field_type'][$i];
                         $requiredData['field_type_1'] = $data['field_type_1'][$i];
@@ -273,9 +256,7 @@ class FormController extends Controller
                         if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
                             $columns[$columnName] = 'VARCHAR(255)';
                         } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
-                            // Set ENUM with possible values (note the single quotes)
-                            // $enumValues = "'" . implode("','", explode(',',Str::lower(str_replace([' ', '/'], '_', $data['options_name'][$i])))) . "'";
-                            $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
+                              $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                             $columns[$columnName] = "ENUM($enumValues)";
                         } else if ($data['input_type'][$i] == 'date') {
                             $columns[$columnName] = 'DATE';
@@ -283,40 +264,10 @@ class FormController extends Controller
                     }
 
                 }
-                // $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
-                // $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
-
-
-                //     if (empty($tableExists)) {
-                //         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
-                //         foreach ($columns as $columnName => $columnType) {
-                //             $createTableSQL .= ", $columnName $columnType";
-                //         }
-
-                //         $createTableSQL .= ", created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                //                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                //                 deleted_at TIMESTAMP NULL)";
-                //         DB::statement($createTableSQL);
-                //     } else {
-                //         $afterColumn = 'created_at';
-                //         foreach ($columns as $columnName => $columnType) {
-                //             $columnExists = DB::select("
-                //                 SELECT COLUMN_NAME
-                //                 FROM INFORMATION_SCHEMA.COLUMNS
-                //                 WHERE TABLE_NAME = '$tableName'
-                //                 AND COLUMN_NAME = '$columnName'
-                //             ");
-                //             if (empty($columnExists)) {
-                //                 DB::statement("ALTER TABLE $tableName ADD COLUMN $columnName $columnType AFTER $afterColumn");
-                //             }
-                //         }
-                //     }
                 $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
                 $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
                 $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
-
-
                     if (empty($tableExists)) {
                         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
@@ -332,11 +283,6 @@ class FormController extends Controller
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
-                        // foreach ($columns as $columnName => $columnType) {
-                        //     $dynamicModel->$columnName = ''; // Set default values if needed
-                        // }
-                        // $dynamicModel->save();
-
                     } else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -371,11 +317,6 @@ class FormController extends Controller
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
-                        // foreach ($columns as $columnName => $columnType) {
-                        //     $dynamicDuplicateModel->$columnName = ''; // Set default values if needed
-                        // }
-                        // $dynamicDuplicateModel->save();
-
                     }  else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -397,7 +338,7 @@ class FormController extends Controller
                     if (empty($tableDatasExists)) {
                         $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName $columnType";
+                            $createTableSQL .= ", $columnName VARCHAR(255)";
                         }
 
                         $createTableSQL .= ", invoke_date DATE NULL,
@@ -409,11 +350,6 @@ class FormController extends Controller
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
-                            // foreach ($columns as $columnName => $columnType) {
-                            //     $dynamicModel->$columnName = ''; // Set default values if needed
-                            // }
-
-                            //     $dynamicModel->save();
                     } else {
                         $afterColumn = 'created_at';
                         foreach ($columns as $columnName => $columnType) {
@@ -425,7 +361,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName $columnType AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableDataName);
                                 $dynamicModel->refreshFillableFromTable();
                             }

@@ -108,19 +108,25 @@ class ProductionController extends Controller
                // Config::set('database.connections.mysql.database',$databaseConnection);
                 $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                 $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-                $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+                $columnsToExclude = ['updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
                 $assignedProjectDetails = collect();
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
                     // }
-                    if (class_exists($modelClass)) {
+                    if (class_exists($modelClassDatas) && class_exists($modelClass)) {
+                        // $assignedProjectDetails = $modelClassDatas::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
+                        // if(count($assignedProjectDetails) == 0) {
+                        //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
+                        // }
                         $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
+
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
                     ->select('project_id', 'sub_project_id')
@@ -130,17 +136,11 @@ class ProductionController extends Controller
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
-                    // if (Schema::hasTable($table_name)) {
-                    // $assignedProjectDetails = DB::table('aig_wound')->get();
-                    // }
-                    if (class_exists($modelClass)) {
-                    $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
+                   if (class_exists($modelClass)) {
+                       $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
-                    // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
                 }
-               // dd($assignedProjectDetails,$assignedProjectDetails[0]->getOriginal()['coders_e_m_cpt']);
-              // dd($modelClass,$decodedClientName,$popUpHeader,$decodedProjectName,$decodedPracticeName,$popupNonEditableFields,$popupEditableFields);
-                return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
+                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -465,6 +465,34 @@ class ProductionController extends Controller
                     $ticketNumber->update(['status' => $status]);
                 }
                 return response()->json(['success' => true]);
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function clientsStore(Request $request,$clientName,$subProjectName) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                $data = $request->all();
+                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
+                $data = [];
+                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
+                      if (is_array($value)) {
+                         $data[$key] = implode(',', $value);
+                    } else {
+                          $data[$key] = $value;
+                    }
+                }
+                $data['parent_id'] = $data['idValue'];
+                $modelClass::create($data);
+                dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
