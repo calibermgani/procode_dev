@@ -109,115 +109,57 @@
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
 
                                 <div class="table-responsive pt-5">
-                                    <table class="table table-separate table-head-custom no-footer dtr-column "
-                                        id="client_assigned_list">
+                                    <table class="table table-separate table-head-custom no-footer dtr-column" id="client_assigned_list">
                                         <thead>
-
                                             <tr>
-                                                @if ($assignedProjectDetails->contains('key', 'value'))
-                                                    @foreach ($assignedProjectDetails[0]->getAttributes() as $columnName => $columnValue)
-                                                        @php
-                                                            $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
-                                                        @endphp
-                                                        @if (!in_array($columnName, $columnsToExclude))
-                                                            {{-- <th style="width:12%"><input type="hideen"
-                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_else_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
-                                                            </th> --}}
-                                                            @if ($columnValue != 'id')
-                                                                <th style="width:12%"><input type="hidden"
-                                                                        value={{ $columnValue }}>
-                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                                </th>
-                                                            @else
-                                                                <th style="width:12%;display:none"><input type="hidden"
-                                                                        value={{ $columnValue }}>
-                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                                </th>
-                                                            @endif
-                                                        @endif
-                                                    @endforeach
-                                                    <th style="width:16%">Action</th>
-                                                @else
-                                                    @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        @if ($columnValue != 'id')
-                                                            <th style="width:12%"><input type="hidden"
-                                                                    value={{ $columnValue }}>
-                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                            </th>
-                                                        @else
-                                                            <th style="width:12%;display:none"><input type="hidden"
-                                                                    value={{ $columnValue }}>
-                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                            </th>
-                                                        @endif
-                                                    @endforeach
-                                                    <th style="width:16%">Action</th>
-                                                @endif
+                                                @foreach ($assignedProjectDetails->first()->getAttributes() as $columnName => $columnValue)
+                                                    <th>{{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnName)) }}</th>
+                                                @endforeach
+                                                <th>Action</th>
                                             </tr>
-
-
                                         </thead>
                                         <tbody>
-                                            @if (isset($assignedProjectDetails))
-                                                @foreach ($assignedProjectDetails as $data)
-                                                    <tr class="clickable-row"
-                                                        style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
-                                                        @foreach ($data->getAttributes() as $columnName => $columnValue)
-                                                            @php
-                                                                $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
-                                                            @endphp
-                                                            @if (!in_array($columnName, $columnsToExclude))
-                                                                @if ($columnName != 'id')
-                                                                    <td>
-                                                                        @if (str_contains($columnValue, '-') && strtotime($columnValue))
-                                                                            {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                        @else
-                                                                            {{ $columnValue }}
-                                                                        @endif
-                                                                    </td>
-                                                                @else
-                                                                    <td style="display:none">
-                                                                        @if (str_contains($columnValue, '-') && strtotime($columnValue))
-                                                                            {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                        @else
-                                                                            {{ $columnValue }}
-                                                                        @endif
-                                                                    </td>
-                                                                @endif
-                                                            @endif
-                                                        @endforeach
-                                                        <td
-                                                            style="{{ $data->ticket_number == 125 ? 'color: #fff;' : '' }}">
-                                                            @if ($data->ticket_number == 125)
+                                            @foreach ($assignedProjectDetails as $data)
+                                                <tr>
+                                                    @foreach ($data->getAttributes() as $columnName => $columnValue)
+                                                        <td>
+                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
                                                             @else
-                                                                <span class="svg-icon svg-icon-success mr-2 question_play"
-                                                                    title="play">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                        width="24px" height="24px" viewBox="0 0 24 24"
-                                                                        version="1.1">
-                                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                                            fill-rule="evenodd">
-                                                                            <rect x="0" y="0" width="24"
-                                                                                height="24" />
-                                                                            <circle fill="#000000" opacity="0.3"
-                                                                                cx="12" cy="12" r="9" />
-                                                                            <path
-                                                                                d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
-                                                                                fill="#000000" />
-                                                                        </g>
-                                                                    </svg>
-                                                                </span>
-                                                                <a class="pt-1" data-toggle="tooltip" title="View"
-                                                                    href=""><i
-                                                                        class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>
+                                                                {{ $columnValue }}
                                                             @endif
                                                         </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                                    @endforeach
+                                                    <td>
+                                                        @if ($data->ticket_number != 125)
+                                                        <span class="svg-icon svg-icon-success mr-2 question_play"
+                                                        title="play">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                            width="24px" height="24px" viewBox="0 0 24 24"
+                                                            version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24"
+                                                                    height="24" />
+                                                                <circle fill="#000000" opacity="0.3"
+                                                                    cx="12" cy="12" r="9" />
+                                                                <path
+                                                                    d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
+                                                                    fill="#000000" />
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    <a class="pt-1" data-toggle="tooltip" title="View"
+                                                        href=""><i
+                                                            class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
+
                                 </div>
                             </div>
 
@@ -618,25 +560,35 @@
                 $('#' + elementId).remove();
             });
 
+            // var table = $("#client_assigned_list").DataTable({
+            //     processing: true,
+            //     //serverSide: true,
+            //     lengthChange: false,
+            //     searching: true,
+            //     pageLength: 20,
+            //     scrollCollapse: true,
+            //     scrollX: true,
+            //     buttons: [{
+            //         "extend": 'excel',
+            //         "text": '<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export"> <i class="fas fa-file-excel" style="font-size:14px;color: white"></i> Export</span>',
+            //         "className": 'btn btn-primary  btn-primary--icon text-white',
+            //         "title": 'PROCODE',
+            //         "filename": 'procode_report_',
+            //     }],
+            //     dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
+            // })
+            // table.buttons().container()
+            //     .appendTo('.outside');
             var table = $("#client_assigned_list").DataTable({
-                processing: true,
-                //serverSide: true,
-                lengthChange: false,
-                searching: true,
-                pageLength: 20,
-                scrollCollapse: true,
-                scrollX: true,
-                buttons: [{
-                    "extend": 'excel',
-                    "text": '<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export"> <i class="fas fa-file-excel" style="font-size:14px;color: white"></i> Export</span>',
-                    "className": 'btn btn-primary  btn-primary--icon text-white',
-                    "title": 'PROCODE',
-                    "filename": 'procode_report_',
-                }],
-                dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
-            })
-            table.buttons().container()
-                .appendTo('.outside');
+    processing: true,
+    lengthChange: false,
+    searching: true,
+    pageLength: 20,
+    scrollCollapse: true,
+    scrollX: true,
+    dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
+});
+
 
             $(document).on('click', '.clickable-row', function(e) {
                 $('#myModal_status').modal('show');
