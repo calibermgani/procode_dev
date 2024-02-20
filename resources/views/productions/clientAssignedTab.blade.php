@@ -161,9 +161,6 @@
                                             @if (isset($assignedProjectDetails))
                                                 {{-- @foreach ($assignedProjectDetails as $data) --}}
                                                 @foreach($assignedProjectDetails->chunk(500) as $chunk)
-                                                @php
-                                                    dd($chunk);
-                                                @endphp
                                                 @foreach($chunk as $data)
                                                     <tr class="clickable-row"
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
