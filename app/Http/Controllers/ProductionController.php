@@ -501,7 +501,7 @@ class ProductionController extends Controller
                 $modelClass::create($data);
                 $originalModelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
-                $record->update( ['claim_status' => 'CE_Completed'] );
+                $record->update( ['claim_status' => $data['claim_status']] );
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
                // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
             } catch (Exception $e) {

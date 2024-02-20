@@ -169,7 +169,7 @@
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 @if ($columnName != 'id')
                                                                     <td>
-                                                                        @if (strtotime($columnValue))
+                                                                        @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
                                                                             {{ $columnValue }}
@@ -177,7 +177,7 @@
                                                                     </td>
                                                                 @else
                                                                     <td style="display:none">
-                                                                        @if (strtotime($columnValue))
+                                                                        @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
                                                                             {{ $columnValue }}
@@ -654,7 +654,7 @@
                 $row.find('td:not(:eq(' + thCount + '))').each(function(index) {
                     var header = headers[index];
                     var value = $(this).text().trim();
-                    if (header == 'id') {
+                    if (header == 'id') {console.log(value,'id');
                         $('input[name="idValue"]').val(value);
                     }
                     if (header == 'claim_status') {console.log(value,'val');
