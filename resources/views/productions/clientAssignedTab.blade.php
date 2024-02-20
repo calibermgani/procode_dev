@@ -114,6 +114,9 @@
                                         <thead>
 
                                             <tr>
+                                                @php
+                                                    dd($assignedProjectDetails);
+                                                @endphp
                                                 @if ($assignedProjectDetails->contains('key', 'value'))
                                                     @foreach ($assignedProjectDetails[0]->getAttributes() as $columnName => $columnValue)
                                                         @php
