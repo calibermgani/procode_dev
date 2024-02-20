@@ -124,7 +124,7 @@ class ProductionController extends Controller
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
-                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
 
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -139,7 +139,7 @@ class ProductionController extends Controller
                    if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
-                }
+                }dd( $assignedProjectDetails);
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
             } catch (Exception $e) {
