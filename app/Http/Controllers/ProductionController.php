@@ -124,7 +124,7 @@ class ProductionController extends Controller
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
-                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(1000)->get();
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
                     }
 
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
