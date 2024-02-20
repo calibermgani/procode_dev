@@ -95,7 +95,7 @@ class ProductionController extends Controller
     }
     public function clientAssignedTab($clientName,$subProjectName) {
 
-         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+        //  if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
@@ -152,9 +152,9 @@ class ProductionController extends Controller
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
-        } else {
-            return redirect('/login');
-        }
+        // } else {
+        //     return redirect('/login');
+        // }
     }
     public function clientPendingTab($clientName,$subProjectName) {
 
