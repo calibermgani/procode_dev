@@ -136,9 +136,16 @@ class ProductionController extends Controller
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
-                   if (class_exists($modelClass)) {
-                       $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
+                    if (class_exists($modelClassDatas) && class_exists($modelClass)) {
+                       $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
                     }
+                    $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                    ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
+                    ->select('project_id', 'sub_project_id')
+                    ->first();
+                    $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
+                    $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
+
                 }
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
