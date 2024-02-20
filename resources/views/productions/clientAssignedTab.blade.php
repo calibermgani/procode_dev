@@ -111,7 +111,7 @@
                                 <div class="table-responsive pt-5">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_assigned_list">
-                                        <thead>
+                                        {{-- <thead>
 
                                             <tr>
                                                 @if ($assignedProjectDetails->contains('key', 'value'))
@@ -153,12 +153,32 @@
                                             </tr>
 
 
+                                        </thead> --}}
+                                        <thead>
+                                            @if (!empty($columnsHeader))
+                                                <tr>
+                                                    @foreach ($columnsHeader as $columnName => $columnValue)
+                                                        @if ($columnValue != 'id')
+                                                            <th style="width:12%"><input type="hidden"
+                                                                    value={{ $columnValue }}>
+                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                            </th>
+                                                        @else
+                                                            <th style="width:12%;display:none"><input type="hidden"
+                                                                    value={{ $columnValue }}>
+                                                                {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                            </th>
+                                                        @endif
+                                                    @endforeach
+                                                    <th style="width:16%">Action</th>
+                                                </tr>
+                                            @endif
+
                                         </thead>
                                         <tbody>
                                             @if (isset($assignedProjectDetails))
                                                 @foreach ($assignedProjectDetails as $data)
-                                                    <tr class="clickable-row"
-                                                        style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
+                                                    <tr class="clickable-row">
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
                                                                 $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
@@ -183,32 +203,27 @@
                                                                 @endif
                                                             @endif
                                                         @endforeach
-                                                        <td
-                                                            style="{{ $data->ticket_number == 125 ? 'color: #fff;' : '' }}">
-                                                            @if ($data->ticket_number == 125)
-                                                            @else
-                                                                <span class="svg-icon svg-icon-success mr-2 question_play"
-                                                                    title="play">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                        width="24px" height="24px" viewBox="0 0 24 24"
-                                                                        version="1.1">
-                                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                                            fill-rule="evenodd">
-                                                                            <rect x="0" y="0" width="24"
-                                                                                height="24" />
-                                                                            <circle fill="#000000" opacity="0.3"
-                                                                                cx="12" cy="12" r="9" />
-                                                                            <path
-                                                                                d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
-                                                                                fill="#000000" />
-                                                                        </g>
-                                                                    </svg>
-                                                                </span>
-                                                                <a class="pt-1" data-toggle="tooltip" title="View"
-                                                                    href=""><i
-                                                                        class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>
-                                                            @endif
+                                                        <td>
+                                                            <span class="svg-icon svg-icon-success mr-2 question_play"
+                                                                title="play">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                                    version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <rect x="0" y="0" width="24" height="24" />
+                                                                        <circle fill="#000000" opacity="0.3"
+                                                                            cx="12" cy="12" r="9" />
+                                                                        <path
+                                                                            d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
+                                                                            fill="#000000" />
+                                                                    </g>
+                                                                </svg>
+                                                            </span>
+                                                            <a class="pt-1" data-toggle="tooltip" title="View"
+                                                                href=""><i
+                                                                    class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -412,20 +427,25 @@
                                         Status
                                     </label>
                                     <div class="col-md-6">
-                                        {!! Form::Select('claim_status',  [
-                                            '' => '--Select--',
-                                            'CE_Assigned' => 'CE Assigned',
-                                            'CE_Inprocess' => 'CE Inprocess',
-                                            'CE_Pending' => 'CE Pending',
-                                            'CE_Completed' => 'CE Completed',
-                                            'CE_Clarification' => 'CE Clarification',
-                                            'CE_Hold' => 'CE Hold',
-                                        ], null, [
-                                            'class' => 'form-control ',
-                                            'autocomplete' => 'none',
-                                            'id' => 'claim_status',
-                                            'style' => 'background-color: #fff !important;cursor:pointer',
-                                        ]) !!}
+                                        {!! Form::Select(
+                                            'claim_status',
+                                            [
+                                                '' => '--Select--',
+                                                'CE_Assigned' => 'CE Assigned',
+                                                'CE_Inprocess' => 'CE Inprocess',
+                                                'CE_Pending' => 'CE Pending',
+                                                'CE_Completed' => 'CE Completed',
+                                                'CE_Clarification' => 'CE Clarification',
+                                                'CE_Hold' => 'CE Hold',
+                                            ],
+                                            null,
+                                            [
+                                                'class' => 'form-control ',
+                                                'autocomplete' => 'none',
+                                                'id' => 'claim_status',
+                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                            ],
+                                        ) !!}
                                     </div>
                                 </div>
                             </div>
@@ -650,10 +670,12 @@
                 $row.find('td:not(:eq(' + thCount + '))').each(function(index) {
                     var header = headers[index];
                     var value = $(this).text().trim();
-                    if (header == 'id') {console.log(value,'id');
+                    if (header == 'id') {
+                        console.log(value, 'id');
                         $('input[name="idValue"]').val(value);
                     }
-                    if (header == 'claim_status') {console.log(value,'val');
+                    if (header == 'claim_status') {
+                        console.log(value, 'val');
                         $('select[name="claim_status"]').val(value).trigger('change');
                     }
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
@@ -777,7 +799,7 @@
                     }
                 });
 
-               // console.log(fieldNames, 'fieldNames', requiredFields, requiredFieldsType);
+                // console.log(fieldNames, 'fieldNames', requiredFields, requiredFieldsType);
                 // requiredFields.forEach(function(fieldName) {
                 //     var fieldValue = $('#' + fieldName).val();console.log(fieldName,'fieldName');
                 //     if (fieldValue === '') {
@@ -830,7 +852,7 @@
                                 inputclass.push($('.' + classes[1]));
 
                                 inclass = $('.' + classes[1]);
-                                console.log(inputclass, 'inputClass', inclass,'testt',inclass[0]);
+                                console.log(inputclass, 'inputClass', inclass, 'testt', inclass[0]);
                                 // inclass[1].each(function() {
                                 //     console.log('inclass');
                                 //     var label_id = $(this).attr('id');
