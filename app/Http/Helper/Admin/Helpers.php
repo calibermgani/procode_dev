@@ -20,8 +20,8 @@ use App\Models\SubMenuPermission;
 use App\Models\MainMenuPermission;
 use App\Models\SubMenu;
 use App\Models\Menu;
-use App\Models\Project;
-use App\Models\subProject;
+use App\Models\project;
+use App\Models\subproject;
 use App\Models\formConfiguration;
 use Illuminate\Support\Facades\Session;
 
