@@ -112,9 +112,9 @@
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_assigned_list">
                                         <thead>
-                                            @if (!empty($columnsHeader))
+
                                             <tr>
-                                                {{-- @if ($assignedProjectDetails->contains('key', 'value'))
+                                                @if ($assignedProjectDetails->contains('key', 'value'))
                                                     @foreach ($assignedProjectDetails[0]->getAttributes() as $columnName => $columnValue)
                                                         @php
                                                             $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
@@ -134,9 +134,7 @@
                                                         @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
-                                                @else --}}
-
-
+                                                @else
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th style="width:12%"><input type="hidden"
@@ -151,10 +149,10 @@
                                                         @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
-
+                                                @endif
                                             </tr>
 
-                                            @endif
+
                                         </thead>
                                         <tbody>
                                             @if (isset($assignedProjectDetails))
