@@ -117,6 +117,7 @@
                                                         @php
                                                             $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
+                                                          <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             <th style="width:12%"><input type="hideen"
                                                                     value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
@@ -124,6 +125,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
+                                                <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         <th style="width:12%"><input type="hidden"
                                                                 value={{ $columnValue }}>
@@ -140,11 +142,14 @@
                                                 @foreach ($duplicateProjectDetails as $data)
                                                     <tr class="clickable-row"
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
+                                                        <td><input type="checkbox" class="checkBoxClass" name='check[]' value="{{$data->invoke_date}}">
+                                                        </td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
                                                                 $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
+
                                                                 <td
                                                                     style="{{ $data->invoke_date == 125 ? 'color: #fff;' : '' }}">
                                                                     @if (strtotime($columnValue))

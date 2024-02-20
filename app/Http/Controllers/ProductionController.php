@@ -309,7 +309,7 @@ class ProductionController extends Controller
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."_Duplicates";
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
                $duplicateProjectDetails = collect();
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
@@ -476,7 +476,7 @@ class ProductionController extends Controller
     public function clientsStore(Request $request,$clientName,$subProjectName) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data = $request->all();
+                $data = $request->all(); //dd($request->all());
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -492,7 +492,11 @@ class ProductionController extends Controller
                 }
                 $data['parent_id'] = $data['idValue'];
                 $modelClass::create($data);
-                dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
+                $originalModelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
+                $record->update( ['claim_status' => 'CE_Completed'] );
+                return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
+               // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }

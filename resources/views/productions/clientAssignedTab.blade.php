@@ -318,10 +318,12 @@
                                                     @if ($options == null)
                                                         @if ($inputType != 'date_range')
                                                             {!! Form::$inputType($columnName . '[]', null, [
-                                                                'class' => 'form-control',
+                                                                'class' => 'form-control ' . $columnName,
                                                                 'autocomplete' => 'none',
                                                                 'style' => 'background-color: #fff !important;cursor:pointer',
                                                                 'rows' => 3,
+                                                                'id' => $columnName,
+                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                             ]) !!}
                                                         @else
                                                             {!! Form::text($columnName . '[]', null, [
@@ -329,14 +331,17 @@
                                                                 'autocomplete' => 'none',
                                                                 'style' => 'background-color: #fff !important;cursor:pointer',
                                                                 'id' => 'date_range',
+                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                             ]) !!}
                                                         @endif
                                                     @else
                                                         @if ($inputType == 'select')
                                                             {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                'class' => 'form-control',
+                                                                'class' => 'form-control ' . $columnName,
                                                                 'autocomplete' => 'none',
                                                                 'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                'id' => $columnName,
+                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                             ]) !!}
                                                         @elseif ($inputType == 'checkbox')
                                                             <div class="form-group row">
@@ -345,7 +350,9 @@
                                                                         <div class="checkbox-inline mt-2">
                                                                             <label class="checkbox"
                                                                                 style="word-break: break-all;">
-                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false) !!}{{ $options[$i] }}
+                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false, [
+                                                                                    'class' => $columnName,
+                                                                                ]) !!}{{ $options[$i] }}
                                                                                 <span></span>
                                                                             </label>
                                                                         </div>
@@ -402,20 +409,42 @@
                             @endif
                             @endforeach
                             @endif
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-5 col-form-label required">
+                                        Status
+                                    </label>
+                                    <div class="col-md-6">
+                                        {!! Form::Select('claim_status',  [
+                                            '' => '--Select--',
+                                            'CE_Assigned' => 'CE Assigned',
+                                            'CE_Inprocess' => 'CE Inprocess',
+                                            'CE_Pending' => 'CE Pending',
+                                            'CE_Completed' => 'CE Completed',
+                                            'CE_Clarification' => 'CE Clarification',
+                                            'CE_Hold' => 'CE Hold',
+                                        ], null, [
+                                            'class' => 'form-control ',
+                                            'autocomplete' => 'none',
+                                            'id' => 'claim_status',
+                                            'style' => 'background-color: #fff !important;cursor:pointer',
+                                        ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default comment_close"
+                                    data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default comment_close"
-                                data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
-                        </div>
-                    </div>
 
-                    {!! Form::close() !!}
+                        {!! Form::close() !!}
+                    </div>
+                    @endif
                 </div>
-                @endif
             </div>
         </div>
-    </div>
     </div>
     </div>
     </div>
@@ -484,7 +513,7 @@
                 var optionsJson = $(this).closest('.form-group').find('.add_options').val();
                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                 var optionsArray = optionsObject ? Object.values(optionsObject) : null;
-                console.log(labelName, columnName, inputType, addMandatory, 'inputType');
+                // console.log(labelName, columnName, inputType, addMandatory, 'inputType');
 
                 var newElementId = 'dynamicElement_' + uniqueId;
                 var newElement;
@@ -492,19 +521,24 @@
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]" class="text-black form-control" rows="3"></textarea>';
+                                '[]"  class="text-black form-control ' + columnName + '" rows="3" id="' +
+                                columnName +
+                                uniqueId +
+                                '"></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
-                                '[]" class="text-black form-control">';
+                                '[]"  class="text-black form-control ' + columnName + '" >';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
-                            '[]" class="form-control date_range" style="background-color: #fff !important;cursor:pointer" autocomplete="none">';
+                            '[]" class="form-control date_range "' + columnName +
+                            '  style="background-color: #fff !important;cursor:pointer" autocomplete="none">';
                     }
                 } else if (inputType === 'select') {
 
-                    newElement = '<select name="' + columnName + '[]" class="text-black form-control">';
+                    newElement = '<select name="' + columnName + '[]"  class="text-black form-control ' +
+                        columnName + '" >';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -622,6 +656,9 @@
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
                     }
+                    if (header == 'claim_status') {console.log(value,'val');
+                        $('select[name="claim_status"]').val(value).trigger('change');
+                    }
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                         var checkboxValues = value.split(',');
                         $('input[name="' + header + '[]"]').each(function() {
@@ -686,12 +723,151 @@
                 //         }).appendTo('form#formConfiguration');
 
                 //     }
+                var fieldNames = $('#formConfiguration').serializeArray().map(function(input) {
+                    return input.name;
+                });
+                // var requiredFields = [];
+                // var requiredFieldsType = [];
+                // // $('#formConfiguration').find(':input[required]').each(function() {
+                //     requiredFields.push($(this).attr('name'));
+                //     requiredFieldsType.push($(this).attr('type'));
+                // });
+
+                // $('#formConfiguration').find(':input[required], select[required], textarea[required]').each(
+                //     function() {
+                //         requiredFields.push($(this).attr('name'));
+                //         requiredFieldsType.push($(this).attr('type') || $(this).prop('tagName')
+                //             .toLowerCase());
+                //     });
+
+                // $('input[type="checkbox"][required], input[type="radio"][required]').each(function() {
+                //     if ($(this).prop('checked')) {
+                //         requiredFields.push($(this).attr('name'));
+                //         requiredFieldsType.push($(this).attr('type'));
+                //     }
+                // });
+                var requiredFields = {};
+                var requiredFieldsType = {};
+                var inputclass = [];
+                // Iterate over input, select, and textarea elements with the required attribute
+                $('#formConfiguration').find(':input[required], select[required], textarea[required]').each(
+                    function() {
+                        var fieldName = $(this).attr('name');
+                        var fieldType = $(this).attr('type') || $(this).prop('tagName').toLowerCase();
+
+                        // Check if the field type already exists in the object
+                        if (!requiredFields[fieldType]) {
+                            requiredFields[fieldType] = [];
+                        }
+
+                        // Add the field name to the corresponding field type
+                        requiredFields[fieldType].push(fieldName);
+                    });
+
+                // Iterate over checkboxes and radios with the required attribute
+                $('input[type="checkbox"][required], input[type="radio"][required]').each(function() {
+                    if ($(this).prop('checked')) {
+                        var fieldName = $(this).attr('name');
+                        var fieldType = $(this).attr('type');
+
+                        // Check if the field type already exists in the object
+                        if (!requiredFields[fieldType]) {
+                            requiredFields[fieldType] = [];
+                        }
+
+                        // Add the field name to the corresponding field type
+                        requiredFields[fieldType].push(fieldName);
+                    }
+                });
+
+               // console.log(fieldNames, 'fieldNames', requiredFields, requiredFieldsType);
+                // requiredFields.forEach(function(fieldName) {
+                //     var fieldValue = $('#' + fieldName).val();console.log(fieldName,'fieldName');
+                //     if (fieldValue === '') {
+                //         $('#' + fieldName).css('border-color', 'red');
+                //         labelNameValue = 1;
+                //     } else {
+                //         $('#' + fieldName).css('border-color', '');
+                //         labelNameValue = 0;
+                //     }
+                // });
+                // requiredFields.forEach(function() {
+                //     var fieldName = 'coder_comment[]'; // Example field name
+                //     var label_id = $('textarea[name="' + fieldName + '"]').attr('id');
+                //     console.log($('#coder_comment').val(), $('#coder_comment1').val(), label_id,
+                //         'label_id');
+
+                //     if ($('#coder_comment1').val() == '') {
+                //         $('#coder_comment1').css('border-color', 'red');
+                //         labelNameValue = 1;
+                //         return false;
+                //     } else {
+                //         $('#coder_comment1').css('border-color', '');
+                //         labelNameValue = 0;
+                //     }
+                //     if ($('#coder_comment').val() == '') {
+                //         $('#coder_comment').css('border-color', 'red');
+                //         labelNameValue = 1;
+                //         return false;
+                //     } else {
+                //         $('#coder_comment').css('border-color', '');
+                //         labelNameValue = 0;
+                //     }
+                // });
+
+                for (var fieldType in requiredFields) {
+                    if (requiredFields.hasOwnProperty(fieldType)) {
+                        var fieldNames = requiredFields[fieldType];
+                        fieldNames.forEach(function(fieldName) {
+                            var label_id = $('' + fieldType + '[name="' + fieldName + '"]').attr(
+                                'class');
+                            var classValue = $('' + fieldType + '[name="' + fieldName + '"]').attr(
+                                'class');
+                            if (classValue !== undefined) {
+                                var classes = classValue.split(' ');
+                                // Rest of your code using the classes array
+
+
+                                console.log(classValue, 'classValue', classes[
+                                    1]);
+                                inputclass.push($('.' + classes[1]));
+
+                                inclass = $('.' + classes[1]);
+                                console.log(inputclass, 'inputClass', inclass,'testt',inclass[0]);
+                                // inclass[1].each(function() {
+                                //     console.log('inclass');
+                                //     var label_id = $(this).attr('id');
+                                //     console.log(label_id, 'label_id');
+                                //     if ($('#' + label_id).val() == '') {
+                                //         $('#' + label_id).css('border-color', 'red');
+                                //         labelNameValue = 1;
+                                //         return false;
+                                //     } else {
+                                //         $('#' + label_id).css('border-color', '');
+                                //         labelNameValue = 0;
+                                //     }
+                                // });
+
+                                if ($('.' + classes[1]).val() == '') {
+                                    $('.' + classes[1]).css('border-color', 'red');
+                                    labelNameValue = 1;
+                                    return false; // This will exit the forEach loop, not the entire function
+                                } else {
+                                    $('.' + classes[1]).css('border-color', '');
+                                    labelNameValue = 0;
+                                }
+                            }
+                        });
+
+                    }
+                }
+
                 var fieldValuesByFieldName = {};
 
                 $('input[type="radio"]:checked').each(function() {
                     var fieldName = $(this).attr('class');
                     var fieldValue = $(this).val();
-                    console.log(fieldName, 'fieldName');
+                    //console.log(fieldName, 'fieldName');
                     if (!fieldValuesByFieldName[fieldName]) {
                         fieldValuesByFieldName[fieldName] = [];
                     }
@@ -707,7 +883,7 @@
                     groupedData[columnName] = groupedData[columnName].concat(fieldValuesByFieldName[
                         key]);
                 });
-                console.log(groupedData, 'fieldValuesByFieldName', fieldValuesByFieldName);
+                //console.log(groupedData, 'fieldValuesByFieldName', fieldValuesByFieldName);
                 $.each(fieldValuesByFieldName, function(fieldName, fieldValues) {
                     $.each(fieldValues, function(index, value) {
                         $('<input>').attr({
