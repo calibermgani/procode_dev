@@ -620,7 +620,6 @@
 
             var table = $("#client_assigned_list").DataTable({
                 processing: true,
-                serverSide: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
