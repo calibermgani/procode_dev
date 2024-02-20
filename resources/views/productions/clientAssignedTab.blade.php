@@ -119,6 +119,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @php
+                                                dd($assignedProjectDetails);
+                                            @endphp
                                             @foreach ($assignedProjectDetails as $data)
                                                 <tr>
                                                     @foreach ($data->getAttributes() as $columnName => $columnValue)
