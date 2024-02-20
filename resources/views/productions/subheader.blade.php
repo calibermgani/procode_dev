@@ -7,7 +7,7 @@
         </div>
         <div class="d-flex align-items-start">
             <a class="btn btn-light-primary font-weight-bolder btn-sm mr-5"
-                href="{{ url('clients') }}?parent={{ request()->parent }}&child={{ request()->child }}">List</a>
+                href="{{ url('clients') }}">List</a>
         </div>
     </div>
 @endsection
