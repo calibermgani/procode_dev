@@ -508,7 +508,7 @@ class Helpers
 
     public static function subProjectList($project_id)
 	{
-		$data = subProject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
+		$data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
 		return $data;
 	}
     public static function projectName($id)
@@ -518,7 +518,7 @@ class Helpers
 	}
     public static function subProjectName($projectId,$subProjectId)
 	{
-		$data = subProject::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
+		$data = subproject::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
 		return $data;
 	}
     public static function formConfig($projectId,$subProjectId)

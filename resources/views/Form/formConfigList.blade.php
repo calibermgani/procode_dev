@@ -59,7 +59,7 @@
                                                             @foreach ($formConfiguration as $data)
                                                                 @php
                                                                 $projectName = App\Models\project::where('id',$data->project_id)->first();
-                                                                $subProjectName = App\Models\subProject::where('project_id',$data->project_id)->where('id',$data->sub_project_id)->first();
+                                                                $subProjectName = App\Models\subproject::where('project_id',$data->project_id)->where('id',$data->sub_project_id)->first();
                                                                     $project_id_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->project_id);
                                                                     $sub_project_id_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID($data->sub_project_id);
                                                                 @endphp
