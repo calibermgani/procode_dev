@@ -92,7 +92,29 @@
                             </div>
                         </div>
 
-                        <div class="card card-custom card-shadowless rounded-top-0">
+                        <div class="card card-custom">
+                            <div class="card-header border-0 px-4">
+                                <div class="card-title">
+                                    <span class="text-muted font-weight-bold font-size-lg flex-grow-1">
+                                        <span class="svg-icon svg-icon-primary svg-icon-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                                    <path
+                                                        d="M8,4 L16,4 C17.1045695,4 18,4.8954305 18,6 L18,17.726765 C18,18.2790497 17.5522847,18.726765 17,18.726765 C16.7498083,18.726765 16.5087052,18.6329798 16.3242754,18.4639191 L12.6757246,15.1194142 C12.2934034,14.7689531 11.7065966,14.7689531 11.3242754,15.1194142 L7.67572463,18.4639191 C7.26860564,18.8371115 6.63603827,18.8096086 6.26284586,18.4024896 C6.09378519,18.2180598 6,17.9769566 6,17.726765 L6,6 C6,4.8954305 6.8954305,4 8,4 Z"
+                                                        fill="#000000"></path>
+                                                </g>
+                                            </svg>
+                                        </span>
+                                        <span style="color:#0e969c">Client Information</span>
+                                    </span>
+                                </div>
+                                <div class="card-toolbar d-inline float-right mt-3">
+                                    <div class="outside" href="javascript:void(0);"></div>
+                                </div>
+                            </div>
                             <div class="card-body py-0 px-7">
                                 {{-- <input type="hidden" value={{ $databaseConnection }} id="dbConnection"> --}}
                                 {{-- <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
@@ -201,24 +223,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
-            $("#client_pending_list").DataTable({
+            var table =  $("#client_pending_list").DataTable({
+                // processing: true,
+                // lengthChange: false,
+                // searching: true,
+                // pageLength: 20,
+                // scrollCollapse: true,
+                // scrollX: true,
+                // columnDefs: [{
+                //     targets: [4, 5, 6],
+                //     visible: false
+                // }],
+                // dom: '<"top"lfB>rt<"bottom"ip><"clear">',
+                // buttons: [{
+                //     extend: 'colvis',
+                //     className: 'btn-colvis',
+                //     text: 'Column Visibility'
+                // }]
                 processing: true,
+                //serverSide: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
                 scrollCollapse: true,
                 scrollX: true,
-                columnDefs: [{
-                    targets: [4, 5, 6],
-                    visible: false
-                }],
-                dom: '<"top"lfB>rt<"bottom"ip><"clear">',
                 buttons: [{
-                    extend: 'colvis',
-                    className: 'btn-colvis',
-                    text: 'Column Visibility'
-                }]
+                    "extend": 'excel',
+                    "text": '<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export"> <i class="fas fa-file-excel" style="font-size:14px;color: white"></i> Export</span>',
+                    "className": 'btn btn-primary  btn-primary--icon text-white',
+                    "title": 'PROCODE',
+                    "filename": 'procode_report_',
+                }],
+                dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
             })
+            table.buttons().container()
+                .appendTo('.outside');
             $(document).on('click', '.clickable-row', function(e) {
                 $('#myModal_status').modal('show');
             });
