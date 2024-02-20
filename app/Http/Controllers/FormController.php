@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\subProject;
+use App\Models\subproject;
 use App\Models\project;
 use App\Models\formConfiguration;
 use Illuminate\Support\Facades\Session;
@@ -60,7 +60,7 @@ class FormController extends Controller
             try {
                 $data = $request->all();
                 $projectName = project::where('id',$data['project_id'])->first();
-                $subProjectName = subProject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
+                $subProjectName = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
                     $requiredData['project_id'] = $data['project_id'];
@@ -223,7 +223,7 @@ class FormController extends Controller
             try {
                 $data = $request->all();
                 $projectName = project::where('id',$data['project_id_val'])->first();
-                $subProjectName = subProject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
+                $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
                     $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();//dd($existingRecord);
