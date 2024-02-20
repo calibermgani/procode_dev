@@ -139,7 +139,7 @@ class ProductionController extends Controller
                    if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                     }
-                }dd( $assignedProjectDetails);
+                }
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
             } catch (Exception $e) {
