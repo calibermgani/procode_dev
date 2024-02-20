@@ -112,17 +112,14 @@
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_assigned_list">
                                         <thead>
-
+                                            @if (!empty($columnsHeader))
                                             <tr>
-                                                @if ($assignedProjectDetails->contains('key', 'value'))
+                                                {{-- @if ($assignedProjectDetails->contains('key', 'value'))
                                                     @foreach ($assignedProjectDetails[0]->getAttributes() as $columnName => $columnValue)
                                                         @php
                                                             $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
                                                         @if (!in_array($columnName, $columnsToExclude))
-                                                            {{-- <th style="width:12%"><input type="hideen"
-                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_else_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
-                                                            </th> --}}
                                                             @if ($columnValue != 'id')
                                                                 <th style="width:12%"><input type="hidden"
                                                                         value={{ $columnValue }}>
@@ -137,7 +134,9 @@
                                                         @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
-                                                @else
+                                                @else --}}
+
+
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th style="width:12%"><input type="hidden"
@@ -152,10 +151,10 @@
                                                         @endif
                                                     @endforeach
                                                     <th style="width:16%">Action</th>
-                                                @endif
+
                                             </tr>
 
-
+                                            @endif
                                         </thead>
                                         <tbody>
                                             @if (isset($assignedProjectDetails))
