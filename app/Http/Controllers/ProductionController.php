@@ -114,7 +114,7 @@ class ProductionController extends Controller
                 });
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
-                $assignedProjectDetails = collect();dd($modelClass);
+                $assignedProjectDetails = collect();
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
@@ -124,7 +124,7 @@ class ProductionController extends Controller
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
-                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(10)->get();
                     }
 
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
