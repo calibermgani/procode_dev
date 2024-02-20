@@ -114,7 +114,7 @@ class ProductionController extends Controller
                 });
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
-                $assignedProjectDetails = collect(); $records = [];
+                $assignedProjectDetails = collect();
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
@@ -124,20 +124,7 @@ class ProductionController extends Controller
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
-                       // $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
-
-
-                        $modelClass::where('claim_status', 'CE_Assigned')
-                        ->orderBy('id', 'desc')
-                        ->chunk(10, function ($assignedProjectDetails) use (&$records) {
-                            // Process each chunk of records
-                            foreach ($assignedProjectDetails as $record) {
-                                // Process each record and add to the $records array
-                                $records[] = $record;
-                            }
-                        });
-                        $assignedProjectDetails =collect($records);
-
+                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
                     }
 
                     $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
