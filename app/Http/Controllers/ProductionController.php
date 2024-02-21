@@ -15,31 +15,32 @@ use App\Models\subproject;
 use App\Models\formConfiguration;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
 
 class ProductionController extends Controller
 {
     public function dashboard() {
-    //    if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+       if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
             return view('productions/dashboard');
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
-        // } else {
-        //     return redirect('/login');
-        // }
+        } else {
+            return redirect('/login');
+        }
     }
     public function clients() {
-        // if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $projects = project::where('status','Active')->get();
                 return view('productions/clients',compact('projects'));
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
-        // } else {
-        //     return redirect('/login');
-        // }
+        } else {
+            return redirect('/login');
+        }
     }
     public function getSubProjects(Request $request) {
         try {
@@ -51,7 +52,7 @@ class ProductionController extends Controller
     }
 
     public function handleRowClick(Request $request) {
-        // if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $databaseConnection = Str::lower($request->client_name);
                 Config::set('database.connections.mysql.database', $databaseConnection);
@@ -60,9 +61,9 @@ class ProductionController extends Controller
                 } catch (Exception $e) {
                     log::debug($e->getMessage());
                 }
-        // } else {
-        //     return redirect('/login');
-        // }
+        } else {
+            return redirect('/login');
+        }
     }
     public function clientTabs($clientName) {
         try {
@@ -95,7 +96,7 @@ class ProductionController extends Controller
     }
     public function clientAssignedTab($clientName,$subProjectName) {
 
-        //  if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
@@ -126,35 +127,28 @@ class ProductionController extends Controller
                         // }
                         $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
                     }
-
-                    $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
-                    ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
-                    ->select('project_id', 'sub_project_id')
-                    ->first();
-                    $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
-                    $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClassDatas) && class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
                     }
-                    $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
-                    ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
-                    ->select('project_id', 'sub_project_id')
-                    ->first();
-                    $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
-                    $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
-
                 }
+                $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
+                ->select('project_id', 'sub_project_id')
+                ->first();
+                $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
+
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
-        // } else {
-        //     return redirect('/login');
-        // }
+        } else {
+            return redirect('/login');
+        }
     }
     public function clientPendingTab($clientName,$subProjectName) {
 

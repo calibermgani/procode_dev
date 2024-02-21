@@ -466,6 +466,7 @@
     </div>
     </div>
     </div>
+    </div>
 @endsection
 
 <style>
@@ -609,7 +610,6 @@
                     '<div  class="col-form-label text-lg-right pt-0 pb-4">' +
                     '<i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more" id="' + uniqueId +
                     '"></i>' +
-                    '</div>' +
                     '</div>' +
                     '</div>';
                 var modalBody = $(this).closest('.modal-content').find('.modal-body');
