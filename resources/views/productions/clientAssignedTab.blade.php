@@ -676,7 +676,8 @@
                     }
                     if (header == 'claim_status') {
                         console.log(value, 'val');
-                        $('select[name="claim_status"]').val(value).trigger('change');
+                        // $('select[name="claim_status"]').val(value).trigger('change');
+                        $('select[name="claim_status"]').val('CE_Inprocess').trigger('change');
                     }
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                         var checkboxValues = value.split(',');
