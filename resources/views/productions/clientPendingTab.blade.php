@@ -161,10 +161,14 @@
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 <td
                                                                     style="{{ $data->invoke_date == 125 ? 'color: #fff;' : '' }}">
-                                                                    @if (strtotime($columnValue))
+                                                                    @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        {{ $columnValue }}
+                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                            {{ str_replace('CE_', '', $columnValue) }}
+                                                                        @else
+                                                                            {{ $columnValue }}
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                             @endif
