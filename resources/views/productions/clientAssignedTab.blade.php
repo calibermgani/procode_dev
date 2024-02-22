@@ -431,12 +431,12 @@
                                             'claim_status',
                                             [
                                                 '' => '--Select--',
-                                                'CE_Assigned' => 'CE Assigned',
-                                                'CE_Inprocess' => 'CE Inprocess',
-                                                'CE_Pending' => 'CE Pending',
-                                                'CE_Completed' => 'CE Completed',
-                                                'CE_Clarification' => 'CE Clarification',
-                                                'CE_Hold' => 'CE Hold',
+                                                'CE_Assigned' => 'Assigned',
+                                                'CE_Inprocess' => 'Inprocess',
+                                                'CE_Pending' => 'Pending',
+                                                'CE_Completed' => 'Completed',
+                                                'CE_Clarification' => 'Clarification',
+                                                'CE_Hold' => 'Hold',
                                             ],
                                             null,
                                             [
