@@ -47,7 +47,6 @@ class LoginController extends Controller
     }
     public function login() {
         try {
-            dd('hi');
             return view('Auth.login');
         } catch (Exception $e) {
             log::debug($e->getMessage());
