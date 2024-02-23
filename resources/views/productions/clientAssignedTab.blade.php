@@ -435,7 +435,6 @@
                                             'claim_status',
                                             [
                                                 '' => '--Select--',
-                                                'CE_Assigned' => 'Assigned',
                                                 'CE_Inprocess' => 'Inprocess',
                                                 'CE_Pending' => 'Pending',
                                                 'CE_Completed' => 'Completed',
