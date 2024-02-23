@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
  Route::get('/', ['as' => 'login', 'uses' => 'App\Http\Controllers\Auth\LoginController@login']);
 //Route::get('login', 'App\Http\Controllers\Auth\LoginController@login')->name('login');
 Route::get('logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
-Route::post('login', 'App\Http\Controllers\Auth\LoginController@postLogin')->name('login');
+//Route::post('login', 'App\Http\Controllers\Auth\LoginController@postLogin')->name('login');
 Route::get('check_user_password', 'App\Http\Controllers\Auth\LoginController@CheckUserPassword');
 // Route::post('change_user_password', 'App\Http\Controllers\Auth\LoginController@ChangeUserPassword');
 Route::any('/store-in-session', 'App\Http\Controllers\Auth\LoginController@storeInSession');
