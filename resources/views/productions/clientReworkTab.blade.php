@@ -106,7 +106,7 @@
                                                 @if ($revokeProjectDetails->contains('key', 'value'))
                                                     @foreach ($revokeProjectDetails[0]->getAttributes() as $columnName => $columnValue)
                                                         @php
-                                                            $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
+                                                            $columnsToExclude = ['id','QA_emp_id','created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             <th style="width:12%"><input type="hideen"
@@ -133,7 +133,7 @@
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['id', 'created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['id','QA_emp_id','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 <td

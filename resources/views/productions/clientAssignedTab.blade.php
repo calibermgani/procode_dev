@@ -203,11 +203,11 @@
                                                         @endif
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['QA_emp_id','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 @if ($columnName != 'id')
-                                                                    <td class="clickable-row">
+                                                                    <td>
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
@@ -230,7 +230,8 @@
                                                             @endif
                                                         @endforeach
                                                         <td>
-                                                            <span class="svg-icon svg-icon-success mr-2 question_play"
+                                                            @if (empty($assignedDropDown))
+                                                            <span class="svg-icon svg-icon-success mr-2 question_play clickable-row"
                                                                 title="play">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -247,6 +248,7 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
+                                                            @endif
                                                             <a class="pt-1" data-toggle="tooltip" title="View"
                                                                 href=""><i
                                                                     class="fa far fa-eye text-success icon-circle1 mt-0"></i></a>

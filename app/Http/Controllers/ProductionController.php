@@ -111,7 +111,7 @@ class ProductionController extends Controller
                // Config::set('database.connections.mysql.database',$databaseConnection);
                 $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                 $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-                $columnsToExclude = ['updated_at','created_at', 'deleted_at'];
+                $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -186,7 +186,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -222,7 +222,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -258,7 +258,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -294,7 +294,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -330,7 +330,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -412,7 +412,6 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
 
             try {
-                dd($request->all());
                 $assigneeId = $request['assigneeId'];
                 $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
@@ -426,7 +425,7 @@ class ProductionController extends Controller
                     $historyRecord['parent_id']= $historyRecord['id'];
                     unset($historyRecord['id']);
                     $modelHistory::create($historyRecord);
-                    // $existingRecord->update(['CE_emp_id' => $assigneeId]);
+                    $existingRecord->update(['CE_emp_id' => $assigneeId]);
                 }
                 return response()->json(['success' => true]);
             } catch (Exception $e) {
