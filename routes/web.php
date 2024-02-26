@@ -49,6 +49,7 @@ Route::any('form_edit/{project_id}/{sub_project_id}', 'App\Http\Controllers\Form
 Route::any('form_configuration_update', 'App\Http\Controllers\FormController@formConfigurationUpdate')->name('formConfigurationUpdate');
 Route::any('project_store/{projectName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientsStore');
 Route::any('procode_testing','App\Http\Controllers\DashboardController@procodeTesting');
+Route::any('assignee_change', 'App\Http\Controllers\ProductionController@assigneeChange');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

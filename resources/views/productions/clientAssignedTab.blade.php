@@ -107,7 +107,20 @@
                                 {{-- <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
+                                @if(isset($assignedDropDown))
+                                    <div class="col-lg-2 mb-lg-0 mb-6">
+                                        <label>Assignee</label>
+                                        <fieldset class="form-group mb-1">
 
+                                            {!! Form::select('assignee_name', [''=>'--Select--']+$assignedDropDown,null, [
+                                                'class' => 'form-control select2',
+                                                'id'=>"assigneeDropdown",
+                                                'style' => 'width: 100%;',
+                                                'disabled',
+                                            ]) !!}
+                                        </fieldset>
+                                    </div>
+                                @endif
                                 <div class="table-responsive pt-5">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_assigned_list">
@@ -157,6 +170,7 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
+                                                    <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th style="width:12%"><input type="hidden"
@@ -178,14 +192,16 @@
                                         <tbody>
                                             @if (isset($assignedProjectDetails))
                                                 @foreach ($assignedProjectDetails as $data)
-                                                    <tr class="clickable-row">
+                                                    <tr>
+                                                        <td><input type="checkbox" class="checkBoxClass" name='check[]' value="{{$data->id}}">
+                                                        </td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
                                                                 $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 @if ($columnName != 'id')
-                                                                    <td>
+                                                                    <td  class="clickable-row">
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
@@ -946,9 +962,110 @@
                     return false;
                 }
             });
+            $("#ckbCheckAll").click(function() {
+                var isChecked = $(this).prop('checked');
+                $(".checkBoxClass").prop('checked', isChecked);
+
+                // Iterate over all DataTable pages
+                var table = $('#client_assigned_list').DataTable();
+                for (var i = 0; i < table.page.info().pages; i++) {
+                    table.page(i).draw(false); // Switch to page i
+                    $(".checkBoxClass").prop('checked', isChecked); // Select checkboxes on the current page
+                }
+                if ($(this).prop('checked') == true && $('.checkBoxClass:checked').length > 0) {
+                    $('#assigneeDropdown').prop('disabled', false);
+                } else {
+                    $('#assigneeDropdown').prop('disabled', true);
+
+                }
+            });
+
+            //per page
+            // $("#ckbCheckAll").click(function() {
+            //     $(".checkBoxClass").prop('checked', $(this).prop('checked'));
+            //     console.log($(this).prop('checked'), $(".checkBoxClass").length, 'log');
+            //     if ($(this).prop('checked') == true && $('.checkBoxClass:checked').length > 0) {
+            //         $('#assigneeDropdown').prop('disabled', false);
+            //     } else {
+            //         $('#assigneeDropdown').prop('disabled', true);
+
+            //     }
+            // });
+            $('.checkBoxClass').change(function() {
+                var anyCheckboxChecked = $('.checkBoxClass:checked').length > 0;
+                var allCheckboxesChecked = $('.checkBoxClass:checked').length === $('.checkBoxClass')
+                    .length;
+                if (allCheckboxesChecked) {
+                    $("#ckbCheckAll").prop('checked', $(this).prop('checked'));
+                } else {
+                    $("#ckbCheckAll").prop('checked', false);
+                }console.log(allCheckboxesChecked,'allCheckboxesChecked',anyCheckboxChecked);
+                $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
+            });
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
 
+            $('#assigneeDropdown').change(function() {
+                assigneeId = $(this).val();
+               // checkedRowValues = $("input[name='check[]']").serializeArray();//per page
+
+                var checkedRowValues = [];
+                 $('#client_assigned_list').DataTable().$('input[name="check[]"]:checked').each(function() {
+                       var rowData = {
+                            name: 'check[]',
+                            value: $(this).val()
+                        };
+                        checkedRowValues.push(rowData);
+                });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content')
+                    }
+                });
+                swal.fire({
+                        text: "Do you want to change assignee?",
+                        icon: "success",
+                        buttonsStyling: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-primary",
+                            cancelButton: "btn font-weight-bold btn-danger",
+                        }
+
+                    }).then(function(result) {
+                        if (result.value == true) {
+                            $.ajax({
+                                url: "{{ url('assignee_change') }}",
+                                method: 'POST',
+                                data: {
+                                    assigneeId: assigneeId,
+                                    checkedRowValues: checkedRowValues,
+                                    clientName: clientName,
+                                    subProjectName: subProjectName
+                                },
+                                success: function(response) {
+                                    console.log(response,'response',response.success);
+                                    if (response.success == true) {
+                                        js_notification('success','Assignee Updated Successfully');
+                                    } else {
+                                        js_notification('error','Something went wrong');
+                                    }
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 2000);
+                                },
+                         });
+
+                        } else {
+                            location.reload();
+                        }
+                    });
+            })
+
+            //tab redirect in below
             $(document).on('click', '.one', function() {
                 window.location.href = "{{ url('#') }}";
             })

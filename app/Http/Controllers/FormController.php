@@ -88,6 +88,7 @@ class FormController extends Controller
                 $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
                 $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
                 $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
+                $tableHistoryName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_history';
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
                         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
@@ -190,6 +191,41 @@ class FormController extends Controller
                             }
                         }
                     }
+
+                    $tableHistoryExists = DB::select("SHOW TABLES LIKE '$tableHistoryName'");
+                    if (empty($tableHistoryExists)) {
+                        $createTableSQL = "CREATE TABLE $tableHistoryName (id INT AUTO_INCREMENT PRIMARY KEY";
+                        foreach ($columns as $columnName => $columnType) {
+                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                        }
+
+                        $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
+                                            CE_emp_id VARCHAR(255) NULL,
+                                            QA_emp_id VARCHAR(255) NULL,
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                            deleted_at TIMESTAMP NULL)";
+                        DB::statement($createTableSQL);
+                        $dynamicModel = new DynamicModel($tableHistoryName);
+                    } else {
+                        $afterColumn = 'created_at';
+                        foreach ($columns as $columnName => $columnType) {
+                            $columnExists = DB::select("
+                                SELECT COLUMN_NAME
+                                FROM INFORMATION_SCHEMA.COLUMNS
+                                WHERE TABLE_NAME = '$tableHistoryName'
+                                AND COLUMN_NAME = '$columnName'
+                            ");
+                            if (empty($columnExists)) {
+
+                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                $dynamicModel = new DynamicModel($tableHistoryName);
+                                $dynamicModel->refreshFillableFromTable();
+                            }
+                        }
+                    }
+
                     return redirect('/form_configuration_list' . '?parent=' . request()->parent . '&child=' . request()->child);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -267,6 +303,8 @@ class FormController extends Controller
                 $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
                 $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
                 $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
+                $tableHistoryName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_history';
+
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
                         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
@@ -341,7 +379,7 @@ class FormController extends Controller
                             $createTableSQL .= ", $columnName VARCHAR(255)";
                         }
 
-                        $createTableSQL .= ", invoke_date DATE NULL,
+                        $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
@@ -363,6 +401,40 @@ class FormController extends Controller
 
                                 DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableDataName);
+                                $dynamicModel->refreshFillableFromTable();
+                            }
+                        }
+                    }
+
+                    $tableHistoryExists = DB::select("SHOW TABLES LIKE '$tableHistoryName'");
+                    if (empty($tableHistoryExists)) {
+                        $createTableSQL = "CREATE TABLE $tableHistoryName (id INT AUTO_INCREMENT PRIMARY KEY";
+                        foreach ($columns as $columnName => $columnType) {
+                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                        }
+
+                        $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
+                                            CE_emp_id VARCHAR(255) NULL,
+                                            QA_emp_id VARCHAR(255) NULL,
+                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                            deleted_at TIMESTAMP NULL)";
+                        DB::statement($createTableSQL);
+                        $dynamicModel = new DynamicModel($tableHistoryName);
+                    } else {
+                        $afterColumn = 'created_at';
+                        foreach ($columns as $columnName => $columnType) {
+                            $columnExists = DB::select("
+                                SELECT COLUMN_NAME
+                                FROM INFORMATION_SCHEMA.COLUMNS
+                                WHERE TABLE_NAME = '$tableHistoryName'
+                                AND COLUMN_NAME = '$columnName'
+                            ");
+                            if (empty($columnExists)) {
+
+                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                $dynamicModel = new DynamicModel($tableHistoryName);
                                 $dynamicModel->refreshFillableFromTable();
                             }
                         }

@@ -16,6 +16,7 @@ use App\Models\formConfiguration;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 
 class ProductionController extends Controller
 {
@@ -97,6 +98,7 @@ class ProductionController extends Controller
     public function clientAssignedTab($clientName,$subProjectName) {
 
          if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            $client = new Client();
             try {
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
@@ -126,6 +128,28 @@ class ProductionController extends Controller
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
                         $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
+                        $assignedDropDownIds = $modelClass::where('claim_status','CE_Assigned')->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
+                        $payload = [
+                            'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                            'client_id' => $decodedProjectName
+                        ];
+
+                        // Make a POST request to the API endpoint with JSON payload
+                        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_resource_name', [
+                            'json' => $payload
+                        ]);
+                        if ($response->getStatusCode() == 200) {
+                            // Get response body
+                            $data = json_decode($response->getBody(), true);
+
+                            // Now you have the data from the API response
+                            // You can pass this data to your view or process it further
+                          //  return $data;
+                        } else {
+                            // Handle unsuccessful response
+                            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                        }
+                        $assignedDropDown = $data['userDetail'];
                     }
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
@@ -141,7 +165,7 @@ class ProductionController extends Controller
                 $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
-                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName'));
+                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -315,13 +339,13 @@ class ProductionController extends Controller
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
-                        $duplicateProjectDetails =  $modelClass::orderBy('id','desc')->get();
+                        $duplicateProjectDetails =  $modelClass::orderBy('id','desc')->limit(10)->get();
                    }
-                } else if ($loginEmpId) {
+                } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      // $duplicateProjectDetails = [];
-                   }
-                 }
+                       $duplicateProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
+                    }
+                }
                 return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
 
            } catch (Exception $e) {
@@ -376,6 +400,35 @@ class ProductionController extends Controller
                 $record->update( ['claim_status' => $data['claim_status']] );
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
                // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function assigneeChange(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+
+            try {
+                dd($request->all());
+                $assigneeId = $request['assigneeId'];
+                $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
+                $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $modelHistory = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'History';
+                foreach($request['checkedRowValues'] as $data) {
+                    $existingRecord = $modelClass::where('id',$data['value'])->first();
+                    $historyRecord = $existingRecord->toArray();
+                    $historyRecord['parent_id']= $historyRecord['id'];
+                    unset($historyRecord['id']);
+                    $modelHistory::create($historyRecord);
+                    // $existingRecord->update(['CE_emp_id' => $assigneeId]);
+                }
+                return response()->json(['success' => true]);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
