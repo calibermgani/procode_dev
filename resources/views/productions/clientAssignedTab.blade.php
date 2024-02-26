@@ -107,7 +107,7 @@
                                 {{-- <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
-                                @if(isset($assignedDropDown))
+                                @if(isset($assignedDropDown) && !empty($assignedDropDown))
                                     <div class="col-lg-2 mb-lg-0 mb-6">
                                         <label>Assignee</label>
                                         <fieldset class="form-group mb-1">
@@ -170,7 +170,9 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
-                                                    <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
+                                                    @if(isset($assignedDropDown) && !empty($assignedDropDown))
+                                                        <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
+                                                    @endif
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th style="width:12%"><input type="hidden"
@@ -193,8 +195,10 @@
                                             @if (isset($assignedProjectDetails))
                                                 @foreach ($assignedProjectDetails as $data)
                                                     <tr>
-                                                        <td><input type="checkbox" class="checkBoxClass" name='check[]' value="{{$data->id}}">
-                                                        </td>
+                                                        @if(isset($assignedDropDown) && !empty($assignedDropDown))
+                                                            <td><input type="checkbox" class="checkBoxClass" name='check[]' value="{{$data->id}}">
+                                                            </td>
+                                                        @endif
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
                                                                 $columnsToExclude = ['created_at', 'updated_at', 'deleted_at'];
