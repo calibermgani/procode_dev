@@ -107,14 +107,14 @@
                                 {{-- <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
-                                @if(isset($assignedDropDown) && !empty($assignedDropDown))
+                                @if (isset($assignedDropDown) && !empty($assignedDropDown))
                                     <div class="col-lg-2 mb-lg-0 mb-6">
                                         <label>Assignee</label>
                                         <fieldset class="form-group mb-1">
 
-                                            {!! Form::select('assignee_name', [''=>'--Select--']+$assignedDropDown,null, [
+                                            {!! Form::select('assignee_name', ['' => '--Select--'] + $assignedDropDown, null, [
                                                 'class' => 'form-control select2',
-                                                'id'=>"assigneeDropdown",
+                                                'id' => 'assigneeDropdown',
                                                 'style' => 'width: 100%;',
                                                 'disabled',
                                             ]) !!}
@@ -170,8 +170,9 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
-                                                    @if(isset($assignedDropDown) && !empty($assignedDropDown))
-                                                        <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
+                                                    @if (isset($assignedDropDown) && !empty($assignedDropDown))
+                                                        <th style="width: 10px"><input type="checkbox" id="ckbCheckAll">
+                                                        </th>
                                                     @endif
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
@@ -195,8 +196,9 @@
                                             @if (isset($assignedProjectDetails))
                                                 @foreach ($assignedProjectDetails as $data)
                                                     <tr>
-                                                        @if(isset($assignedDropDown) && !empty($assignedDropDown))
-                                                            <td><input type="checkbox" class="checkBoxClass" name='check[]' value="{{$data->id}}">
+                                                        @if (isset($assignedDropDown) && !empty($assignedDropDown))
+                                                            <td><input type="checkbox" class="checkBoxClass" name='check[]'
+                                                                    value="{{ $data->id }}">
                                                             </td>
                                                         @endif
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
@@ -205,14 +207,14 @@
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 @if ($columnName != 'id')
-                                                                    <td  class="clickable-row">
+                                                                    <td class="clickable-row">
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
-                                                                           @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
-                                                                           {{ str_replace('CE_', '', $columnValue) }}
+                                                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                                {{ str_replace('CE_', '', $columnValue) }}
                                                                             @else
-                                                                              {{ $columnValue }}
+                                                                                {{ $columnValue }}
                                                                             @endif
                                                                         @endif
                                                                     </td>
@@ -320,176 +322,175 @@
                                                         </div>
                                                         @php $count++; @endphp
                                                         @if ($count % 2 == 0 || $loop->last)
-                                            </div>
-                                @endif
-                                @endforeach
-                                <hr>
-                                @endif
-                                @if (count($popupEditableFields) > 0)
-                                    @php $count = 0; @endphp
-                                    @foreach ($popupEditableFields as $key => $data)
-                                        @php
-                                            $labelName = $data->label_name;
-                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
-                                            $inputType = $data->input_type;
-                                            $options = $data->options_name != null ? explode(',', $data->options_name) : null;
-                                            $associativeOptions = [];
-                                            if ($options !== null) {
-                                                foreach ($options as $option) {
-                                                    $associativeOptions[$option] = $option;
-                                                }
-                                                //$associativeOptions =  ['' => '-- Select --'] + $associativeOptions;
-                                            }
-                                        @endphp
-                                        @if ($count % 2 == 0)
-                                            <div class="row" id={{ $columnName }}>
-                                        @endif
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label
-                                                    class="col-md-5 col-form-label {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
-                                                    {{ $labelName }}
-                                                </label>
-                                                <div class="col-md-6">
-                                                    @if ($options == null)
-                                                        @if ($inputType != 'date_range')
-                                                            {!! Form::$inputType($columnName . '[]', null, [
-                                                                'class' => 'form-control ' . $columnName,
-                                                                'autocomplete' => 'none',
-                                                                'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                'rows' => 3,
-                                                                'id' => $columnName,
-                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
-                                                            ]) !!}
-                                                        @else
-                                                            {!! Form::text($columnName . '[]', null, [
-                                                                'class' => 'form-control date_range daterange_' . $columnName,
-                                                                'autocomplete' => 'none',
-                                                                'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                'id' => 'date_range',
-                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
-                                                            ]) !!}
+                                                             </div>
                                                         @endif
-                                                    @else
-                                                        @if ($inputType == 'select')
-                                                            {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                'class' => 'form-control ' . $columnName,
-                                                                'autocomplete' => 'none',
-                                                                'style' => 'background-color: #fff !important;cursor:pointer',
-                                                                'id' => $columnName,
-                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
-                                                            ]) !!}
-                                                        @elseif ($inputType == 'checkbox')
-                                                            <div class="form-group row">
-                                                                @for ($i = 0; $i < count($options); $i++)
-                                                                    <div class="col-md-6">
-                                                                        <div class="checkbox-inline mt-2">
-                                                                            <label class="checkbox"
-                                                                                style="word-break: break-all;">
-                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false, [
-                                                                                    'class' => $columnName,
-                                                                                ]) !!}{{ $options[$i] }}
-                                                                                <span></span>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                @endfor
-                                                            </div>
-                                                        @elseif ($inputType == 'radio')
-                                                            <div class="form-group row">
-                                                                @for ($i = 0; $i < count($options); $i++)
-                                                                    <div class="col-md-6">
-                                                                        <div class="radio-inline mt-2">
-                                                                            <label class="radio"
-                                                                                style="word-break: break-all;">
-                                                                                {!! Form::$inputType($columnName, $options[$i], false, [
-                                                                                    'class' => $columnName,
-                                                                                ]) !!}{{ $options[$i] }}
-                                                                                <span></span>
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                @endfor
-                                                            </div>
+                                                    @endforeach
+                                                  <hr>
+                                                @endif
+                                                @if (count($popupEditableFields) > 0)
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($popupEditableFields as $key => $data)
+                                                        @php
+                                                            $labelName = $data->label_name;
+                                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
+                                                            $inputType = $data->input_type;
+                                                            $options = $data->options_name != null ? explode(',', $data->options_name) : null;
+                                                            $associativeOptions = [];
+                                                            if ($options !== null) {
+                                                                foreach ($options as $option) {
+                                                                    $associativeOptions[$option] = $option;
+                                                                }
+                                                                //$associativeOptions =  ['' => '-- Select --'] + $associativeOptions;
+                                                            }
+                                                        @endphp
+                                                        @if ($count % 2 == 0)
+                                                            <div class="row" id={{ $columnName }}>
                                                         @endif
-                                                    @endif
-                                                </div>
-                                                <div class="col-form-label text-lg-right pt-0 pb-4">
-                                                    <input type="hidden"
-                                                        value="{{ $associativeOptions != null ? json_encode($associativeOptions) : null }}"
-                                                        class="add_options">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group row">
+                                                                <label
+                                                                    class="col-md-5 col-form-label {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
+                                                                    {{ $labelName }}
+                                                                </label>
+                                                                <div class="col-md-6">
+                                                                    @if ($options == null)
+                                                                        @if ($inputType != 'date_range')
+                                                                            {!! Form::$inputType($columnName . '[]', null, [
+                                                                                'class' => 'form-control ' . $columnName,
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                                'rows' => 3,
+                                                                                'id' => $columnName,
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @else
+                                                                            {!! Form::text($columnName . '[]', null, [
+                                                                                'class' => 'form-control date_range daterange_' . $columnName,
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                                'id' => 'date_range',
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @endif
+                                                                    @else
+                                                                        @if ($inputType == 'select')
+                                                                            {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
+                                                                                'class' => 'form-control ' . $columnName,
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                                'id' => $columnName,
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @elseif ($inputType == 'checkbox')
+                                                                            <div class="form-group row">
+                                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="checkbox-inline mt-2">
+                                                                                            <label class="checkbox"
+                                                                                                style="word-break: break-all;">
+                                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false, [
+                                                                                                    'class' => $columnName,
+                                                                                                ]) !!}{{ $options[$i] }}
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endfor
+                                                                            </div>
+                                                                        @elseif ($inputType == 'radio')
+                                                                            <div class="form-group row">
+                                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="radio-inline mt-2">
+                                                                                            <label class="radio"
+                                                                                                style="word-break: break-all;">
+                                                                                                {!! Form::$inputType($columnName, $options[$i], false, [
+                                                                                                    'class' => $columnName,
+                                                                                                ]) !!}{{ $options[$i] }}
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endfor
+                                                                            </div>
+                                                                        @endif
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-form-label text-lg-right pt-0 pb-4">
+                                                                    <input type="hidden"
+                                                                        value="{{ $associativeOptions != null ? json_encode($associativeOptions) : null }}"
+                                                                        class="add_options">
 
-                                                    @if ($data->field_type_1 == 'multiple')
-                                                        <input type="hidden"
-                                                            value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
-                                                            class="add_labelName">
-                                                        <input type="hidden"
-                                                            value="{{ $data->field_type_1 == 'multiple' ? $columnName : '' }}"
-                                                            class="add_columnName">
-                                                        <input type="hidden"
-                                                            value="{{ $data->field_type_1 == 'multiple' ? $inputType : '' }}"
-                                                            class="add_inputtype">
-                                                        <input type="hidden"
-                                                            value="{{ $data->field_type_1 == 'multiple' ? ($data->field_type_2 == 'mandatory' ? 'required' : '') : '' }}"
-                                                            class="add_mandatory">
-                                                        <i class="fa fa-plus text-success icon-circle1 ml-1 add_more"
-                                                            id="add_more_{{ $columnName }}"
-                                                            style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
-                                                    @endif
+                                                                    @if ($data->field_type_1 == 'multiple')
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
+                                                                            class="add_labelName">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $columnName : '' }}"
+                                                                            class="add_columnName">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $inputType : '' }}"
+                                                                            class="add_inputtype">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? ($data->field_type_2 == 'mandatory' ? 'required' : '') : '' }}"
+                                                                            class="add_mandatory">
+                                                                        <i class="fa fa-plus text-success icon-circle1 ml-1 add_more"
+                                                                            id="add_more_{{ $columnName }}"
+                                                                            style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @php $count++; @endphp
+                                                        @if ($count % 2 == 0 || $loop->last)
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-5 col-form-label required">
+                                                            Status
+                                                        </label>
+                                                        <div class="col-md-6">
+                                                            {!! Form::Select(
+                                                                'claim_status',
+                                                                [
+                                                                    '' => '--Select--',
+                                                                    'CE_Inprocess' => 'Inprocess',
+                                                                    'CE_Pending' => 'Pending',
+                                                                    'CE_Completed' => 'Completed',
+                                                                    'CE_Clarification' => 'Clarification',
+                                                                    'CE_Hold' => 'Hold',
+                                                                ],
+                                                                null,
+                                                                [
+                                                                    'class' => 'form-control ',
+                                                                    'autocomplete' => 'none',
+                                                                    'id' => 'claim_status',
+                                                                    'style' => 'background-color: #fff !important;cursor:pointer',
+                                                                ],
+                                                            ) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default comment_close"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        @php $count++; @endphp
-                                        @if ($count % 2 == 0 || $loop->last)
+                                        {!! Form::close() !!}
+                                   </div>
+                                @endif
                             </div>
-                            @endif
-                            @endforeach
-                            @endif
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <label class="col-md-5 col-form-label required">
-                                        Status
-                                    </label>
-                                    <div class="col-md-6">
-                                        {!! Form::Select(
-                                            'claim_status',
-                                            [
-                                                '' => '--Select--',
-                                                'CE_Inprocess' => 'Inprocess',
-                                                'CE_Pending' => 'Pending',
-                                                'CE_Completed' => 'Completed',
-                                                'CE_Clarification' => 'Clarification',
-                                                'CE_Hold' => 'Hold',
-                                            ],
-                                            null,
-                                            [
-                                                'class' => 'form-control ',
-                                                'autocomplete' => 'none',
-                                                'id' => 'claim_status',
-                                                'style' => 'background-color: #fff !important;cursor:pointer',
-                                            ],
-                                        ) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default comment_close"
-                                    data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
-                            </div>
-                        </div>
-
-                        {!! Form::close() !!}
                     </div>
-                    @endif
                 </div>
             </div>
-        </div>
+         </div>
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
+
 @endsection
 
 <style>
@@ -1003,7 +1004,8 @@
                     $("#ckbCheckAll").prop('checked', $(this).prop('checked'));
                 } else {
                     $("#ckbCheckAll").prop('checked', false);
-                }console.log(allCheckboxesChecked,'allCheckboxesChecked',anyCheckboxChecked);
+                }
+                console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
                 $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
             });
             var clientName = $('#clientName').val();
@@ -1011,15 +1013,15 @@
 
             $('#assigneeDropdown').change(function() {
                 assigneeId = $(this).val();
-               // checkedRowValues = $("input[name='check[]']").serializeArray();//per page
+                // checkedRowValues = $("input[name='check[]']").serializeArray();//per page
 
                 var checkedRowValues = [];
-                 $('#client_assigned_list').DataTable().$('input[name="check[]"]:checked').each(function() {
-                       var rowData = {
-                            name: 'check[]',
-                            value: $(this).val()
-                        };
-                        checkedRowValues.push(rowData);
+                $('#client_assigned_list').DataTable().$('input[name="check[]"]:checked').each(function() {
+                    var rowData = {
+                        name: 'check[]',
+                        value: $(this).val()
+                    };
+                    checkedRowValues.push(rowData);
                 });
                 $.ajaxSetup({
                     headers: {
@@ -1028,45 +1030,46 @@
                     }
                 });
                 swal.fire({
-                        text: "Do you want to change assignee?",
-                        icon: "success",
-                        buttonsStyling: false,
-                        showCancelButton: true,
-                        confirmButtonText: "Yes",
-                        cancelButtonText: "No",
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-primary",
-                            cancelButton: "btn font-weight-bold btn-danger",
-                        }
+                    text: "Do you want to change assignee?",
+                    icon: "success",
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    customClass: {
+                        confirmButton: "btn font-weight-bold btn-primary",
+                        cancelButton: "btn font-weight-bold btn-danger",
+                    }
 
-                    }).then(function(result) {
-                        if (result.value == true) {
-                            $.ajax({
-                                url: "{{ url('assignee_change') }}",
-                                method: 'POST',
-                                data: {
-                                    assigneeId: assigneeId,
-                                    checkedRowValues: checkedRowValues,
-                                    clientName: clientName,
-                                    subProjectName: subProjectName
-                                },
-                                success: function(response) {
-                                    console.log(response,'response',response.success);
-                                    if (response.success == true) {
-                                        js_notification('success','Assignee Updated Successfully');
-                                    } else {
-                                        js_notification('error','Something went wrong');
-                                    }
-                                    setTimeout(function() {
-                                        location.reload();
-                                    }, 2000);
-                                },
-                         });
+                }).then(function(result) {
+                    if (result.value == true) {
+                        $.ajax({
+                            url: "{{ url('assignee_change') }}",
+                            method: 'POST',
+                            data: {
+                                assigneeId: assigneeId,
+                                checkedRowValues: checkedRowValues,
+                                clientName: clientName,
+                                subProjectName: subProjectName
+                            },
+                            success: function(response) {
+                                console.log(response, 'response', response.success);
+                                if (response.success == true) {
+                                    js_notification('success',
+                                        'Assignee Updated Successfully');
+                                } else {
+                                    js_notification('error', 'Something went wrong');
+                                }
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+                            },
+                        });
 
-                        } else {
-                            location.reload();
-                        }
-                    });
+                    } else {
+                        location.reload();
+                    }
+                });
             })
 
             //tab redirect in below
