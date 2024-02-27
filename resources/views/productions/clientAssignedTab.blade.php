@@ -908,8 +908,8 @@
                 for (var fieldType in requiredFields) {
                     if (requiredFields.hasOwnProperty(fieldType)) {
                         var fieldNames = requiredFields[fieldType];
-                        fieldNames.forEach(function(fieldName) {
-                            var label_id = $('' + fieldType + '[name="' + fieldName + '"]').attr(
+                        fieldNames.forEach(function(fieldNameVal) {
+                            var label_id = $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
                                 'class');
                             var classValue = fieldType == 'text' ? $('input' +  '[name="' + fieldNameVal + '"]').attr(
                                 'class') : $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
