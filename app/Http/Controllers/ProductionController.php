@@ -17,6 +17,9 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use App\Models\CallerChartsWorkLogs;
 
 class ProductionController extends Controller
 {
@@ -117,7 +120,7 @@ class ProductionController extends Controller
                 });
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
-                $assignedProjectDetails = collect();$assignedDropDown=[];
+                $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
@@ -162,8 +165,8 @@ class ProductionController extends Controller
                 ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
                 ->select('project_id', 'sub_project_id')
                 ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('field_type','editable')->where('field_type_3','popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown'));
 
@@ -398,6 +401,12 @@ class ProductionController extends Controller
                 $originalModelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
                 $record->update( ['claim_status' => $data['claim_status']] );
+                $currentTime = Carbon::now();
+                $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
+                ->where('project_id', $decodedProjectName)
+                ->where('sub_project_id', $decodedPracticeName)
+                ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->first();
+                $callChartWorkLogExistingRecord->update( ['end_time' => $currentTime->format('Y-m-d H:i:s')] );
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
                // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
             } catch (Exception $e) {
@@ -428,6 +437,30 @@ class ProductionController extends Controller
                     $existingRecord->update(['CE_emp_id' => $assigneeId]);
                 }
                 return response()->json(['success' => true]);
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function callerChartWorkLogs(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                $data =  $request->all();
+                $currentTime = Carbon::now();
+                $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
+                $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
+                $data['sub_project_id'] = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
+                $save_flag = CallerChartsWorkLogs::create($data);
+             //   dd($data);
+                if($save_flag) {
+                   return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }

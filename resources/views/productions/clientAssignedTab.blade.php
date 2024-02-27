@@ -292,8 +292,8 @@
                                                     {{ $clientName->project_name }}-{{ $practiceName->sub_project_name }}
                                                 </h4>
                                                 <a href="" style="margin-left: 40rem;">SOP</a>
-                                                <button type="button" class="close comment_close" data-dismiss="modal"
-                                                    aria-hidden="true">&times;</button>
+                                                {{-- <button type="button" class="close comment_close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button> --}}
 
                                             </div>
                                             <div class="modal-body">
@@ -477,8 +477,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default comment_close"
-                                                        data-dismiss="modal">Close</button>
+                                                    {{-- <button type="button" class="btn btn-default comment_close"
+                                                        data-dismiss="modal">Close</button> --}}
                                                     <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
                                                 </div>
                                             </div>
@@ -680,8 +680,37 @@
             table.buttons().container()
                 .appendTo('.outside');
 
+            var clientName = $('#clientName').val();
+            var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-row', function(e) {
-                $('#myModal_status').modal('show');
+                var record_id =  $(this).closest('tr').find('td:eq(0)').text();console.log(record_id,'record_id');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content')
+                    }
+                });
+
+                        $.ajax({
+                            url: "{{ url('caller_chart_work_logs') }}",
+                            method: 'POST',
+                            data: {
+                                record_id: record_id,
+                                clientName: clientName,
+                                subProjectName: subProjectName
+                            },
+                            success: function(response) {
+                                console.log(response, 'response', response.success);
+                                if (response.success == true) {
+                                    $('#myModal_status').modal('show');
+                                } else {
+                                    $('#myModal_status').modal('hide');
+                                    js_notification('error', 'Something went wrong');
+                                }
+                            },
+                        });
+
+               // $('#myModal_status').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
                 var thCount = tdCount - 1;
@@ -871,37 +900,37 @@
                                 'class');
                             if (classValue !== undefined) {
                                 var classes = classValue.split(' ');
-                                // Rest of your code using the classes array
-
-
-                                console.log(classValue, 'classValue', classes[
-                                    1]);
+                                // console.log(classValue, 'classValue', classes[
+                                //     1]);
                                 inputclass.push($('.' + classes[1]));
 
                                 inclass = $('.' + classes[1]);
-                                console.log(inputclass, 'inputClass', inclass, 'testt', inclass[0]);
-                                // inclass[1].each(function() {
-                                //     console.log('inclass');
-                                //     var label_id = $(this).attr('id');
-                                //     console.log(label_id, 'label_id');
-                                //     if ($('#' + label_id).val() == '') {
-                                //         $('#' + label_id).css('border-color', 'red');
-                                //         labelNameValue = 1;
-                                //         return false;
-                                //     } else {
-                                //         $('#' + label_id).css('border-color', '');
-                                //         labelNameValue = 0;
-                                //     }
-                                // });
+                             //   console.log(inputclass, 'inputClass', inclass, 'testt', inclass[0],inclass[1]);
+                         console.log(inclass,'inclass',inputclass[0]);
+                         inclass.each(function(element) {
 
-                                if ($('.' + classes[1]).val() == '') {
-                                    $('.' + classes[1]).css('border-color', 'red');
-                                    labelNameValue = 1;
-                                    return false; // This will exit the forEach loop, not the entire function
-                                } else {
-                                    $('.' + classes[1]).css('border-color', '');
-                                    labelNameValue = 0;
-                                }
+                                    var label_id = $(this).attr('id');
+                                    console.log(label_id, 'label_id',$('#' + label_id).val());
+                                    if ($('#' + label_id).val() == '') {
+                                        alert(1);
+                                        $('#' + label_id).css('border-color', 'red');
+                                        // labelNameValue = 1;
+                                        // return false;
+                                    } else {
+                                        alert(2);
+                                        $('#' + label_id).css('border-color', '');
+                                        // labelNameValue = 0;
+                                    }
+                                });
+
+                                // if ($('.' + classes[1]).val() == '') {
+                                //     $('.' + classes[1]).css('border-color', 'red');
+                                //     labelNameValue = 1;
+                                //     return false; // This will exit the forEach loop, not the entire function
+                                // } else {
+                                //     $('.' + classes[1]).css('border-color', '');
+                                //     labelNameValue = 0;
+                                // }
                             }
                         });
 
@@ -1010,8 +1039,7 @@
                 console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
                 $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
             });
-            var clientName = $('#clientName').val();
-            var subProjectName = $('#subProjectName').val();
+
 
             $('#assigneeDropdown').change(function() {
                 assigneeId = $(this).val();

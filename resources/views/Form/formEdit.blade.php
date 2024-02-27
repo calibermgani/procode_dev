@@ -217,6 +217,24 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-2">
+                                                    <label>User Type</label>
+                                                    <div class="form-group mb-1">
+                                                        {!! Form::select(
+                                                            'user_type[]',
+                                                            [
+                                                                3 => 'Both',
+                                                                2 => 'Coder',
+                                                                10 => 'QA',
+                                                            ],
+                                                            $data->user_type ?? '',
+                                                            [
+                                                                'class' => 'text-black form-control user_type',
+                                                                'id' => 'user_type_id_' . $key,
+                                                            ],
+                                                        ) !!}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -367,6 +385,24 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-2">
+                                                    <label>Visible User</label>
+                                                    <div class="form-group mb-1">
+                                                        {!! Form::select(
+                                                            'user_type[]',
+                                                            [
+                                                                3 => 'Both',
+                                                                2 => 'Coder',
+                                                                10 => 'QA',
+                                                            ],
+                                                            $data->user_type ?? '',
+                                                            [
+                                                                'class' => 'text-black form-control user_type',
+                                                                'id' => 'user_type_id_' . $key,
+                                                            ],
+                                                        ) !!}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -447,7 +483,11 @@
                     j +
                     '" value="popup_visible" checked/><span></span>Visible</label><label class="radio"><input type="radio" name="field_type4_' +
                     j +
-                    '" value="popup_non_visible" /><span></span>Non Visible</label></div></div></div></div></div></div></div></div>'
+                    '" value="popup_non_visible" /><span></span>Non Visible</label></div></div><div class="col-md-2"><label>User Type</label><div class="form-group mb-1"><select  class="text-black form-control user_type" name="user_type[' +
+                    j +
+                    ']" id="user_type_id_' +
+                    j +
+                    '"><option value="3">Both</option><option value="2">Coder</option><option value="10">QA</option></select></div></div></div></div></div></div></div></div>'
                 );
             });
 

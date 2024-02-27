@@ -58,7 +58,7 @@ class FormController extends Controller
     public static function formConfigurationStore(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
             try {
-                $data = $request->all();
+                $data = $request->all();dd($data);
                 $projectName = project::where('id',$data['project_id'])->first();
                 $subProjectName = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
                 $columns = [];
@@ -73,6 +73,7 @@ class FormController extends Controller
                     $requiredData['field_type_2'] = $data['field_type_2'][$i];
                     $requiredData['field_type_3'] = $data['field_type_3'][$i];
                     $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
+                    $requiredData['user_type'] = $data['user_type'][$i];
                     formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
@@ -274,6 +275,7 @@ class FormController extends Controller
                         $requiredData['field_type_2'] = $data['field_type_2'][$i];
                         $requiredData['field_type_3'] = $data['field_type_3'][$i];
                         $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];//dd($existingRecord,$requiredData);
+                        $requiredData['user_type'] = $data['user_type'][$i];
                         $existingRecord->update($requiredData);
                     } else {
                         $requiredData['project_id'] = $data['project_id_val'];
@@ -286,6 +288,7 @@ class FormController extends Controller
                         $requiredData['field_type_2'] = $data['field_type_2'][$i];
                         $requiredData['field_type_3'] = $data['field_type_3'][$i];
                         $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
+                        $requiredData['user_type'] = $data['user_type'][$i];
                         formConfiguration::create($requiredData);
                        // $columnName = Str::lower(str_replace([' ', '/'], '_', $data['label_name'][$i]));
                         $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
