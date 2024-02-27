@@ -912,13 +912,11 @@
                                     var label_id = $(this).attr('id');
                                     console.log(label_id, 'label_id',$('#' + label_id).val());
                                     if ($('#' + label_id).val() == '') {
-                                        alert(1);
                                         $('#' + label_id).css('border-color', 'red');
                                         // labelNameValue = 1;
                                         // return false;
                                     } else {
-                                        alert(2);
-                                        $('#' + label_id).css('border-color', '');
+                                         $('#' + label_id).css('border-color', '');
                                         // labelNameValue = 0;
                                     }
                                 });
