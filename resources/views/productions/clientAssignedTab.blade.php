@@ -572,17 +572,26 @@
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
-                                '[]"  class="text-black form-control ' + columnName + '" >';
+                                '[]"  class="text-black form-control ' + columnName + '"  id="' +
+                                columnName +
+                                uniqueId +
+                                '">';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
                             '[]" class="form-control date_range "' + columnName +
-                            '  style="background-color: #fff !important;cursor:pointer" autocomplete="none">';
+                            '  style="background-color: #fff !important;cursor:pointer" autocomplete="none" id="' +
+                                columnName +
+                                uniqueId +
+                                '">';
                     }
                 } else if (inputType === 'select') {
 
                     newElement = '<select name="' + columnName + '[]"  class="text-black form-control ' +
-                        columnName + '" >';
+                        columnName + '" id="' +
+                                columnName +
+                                uniqueId +
+                                '">';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -600,7 +609,10 @@
                             '<label class="checkbox" style="word-break: break-all;" ' +
                             addMandatory + '>' +
                             '<input type="checkbox" name="' + columnName + '[]" value="' + option +
-                            '">' + option +
+                            '" id="' +
+                                columnName +
+                                uniqueId +
+                                '">' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -617,7 +629,10 @@
                             '<label class="radio" style="word-break: break-all;" ' + addMandatory +
                             '>' +
                             '<input type="radio" name="' + columnName + '_' + uniqueId +
-                            '" value="' + option + '" class="' + columnName + '">' + option +
+                            '" value="' + option + '" class="' + columnName + '" id="' +
+                                columnName +
+                                uniqueId +
+                                '">' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
