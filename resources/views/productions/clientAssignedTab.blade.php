@@ -683,7 +683,7 @@
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-row', function(e) {
-                var record_id =  $(this).closest('tr').find('td:eq(0)').text();console.log(record_id,'record_id');
+                var record_id =  $(this).closest('tr').find('td:eq(0)').text();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
