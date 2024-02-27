@@ -911,7 +911,8 @@
                         fieldNames.forEach(function(fieldName) {
                             var label_id = $('' + fieldType + '[name="' + fieldName + '"]').attr(
                                 'class');
-                            var classValue = $('' + fieldType + '[name="' + fieldName + '"]').attr(
+                            var classValue = fieldType == 'text' ? $('input' +  '[name="' + fieldNameVal + '"]').attr(
+                                'class') : $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
                                 'class');
                             if (classValue !== undefined) {
                                 var classes = classValue.split(' ');
