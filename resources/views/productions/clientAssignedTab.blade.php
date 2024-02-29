@@ -655,7 +655,7 @@
                 var modalBody = $(this).closest('.modal-content').find('.modal-body');
 
 
-                $(this).closest('.form-group').after(newRow);
+                $(this).closest('.col-md-6').append(newRow);
                 if (inputType === 'date_range') {
                     var newDateRangePicker = modalBody.find('#' + newElementId).find('.date_range');
                     newDateRangePicker.daterangepicker({
