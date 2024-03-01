@@ -120,7 +120,7 @@ class ProductionController extends Controller
                 });
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
-                $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];
+                $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
@@ -159,6 +159,7 @@ class ProductionController extends Controller
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClassDatas) && class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
+                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('end_time',NULL)->pluck('record_id')->toArray();
                     }
                 }
                 $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -168,7 +169,7 @@ class ProductionController extends Controller
                 $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
-                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown'));
+                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -454,10 +455,19 @@ class ProductionController extends Controller
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
-                $save_flag = CallerChartsWorkLogs::create($data);
+                $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->first();
+
+                if(empty($existingRecordId)) {
+                    $startTimeVal = $data['start_time'];
+                    $save_flag = CallerChartsWorkLogs::create($data);
+                } else {
+                    $startTimeVal = $existingRecordId->start_time;
+                    $save_flag = 1;
+                }
+
              //   dd($data);
                 if($save_flag) {
-                   return response()->json(['success' => true]);
+                   return response()->json(['success' => true,'startTimeVal'=>$startTimeVal]);
                 } else {
                     return response()->json(['success' => false]);
                 }

@@ -231,23 +231,43 @@
                                                         @endforeach
                                                         <td>
                                                             @if (empty($assignedDropDown))
-                                                            <span class="svg-icon svg-icon-success mr-2 question_play clickable-row"
-                                                                title="play">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                    width="24px" height="24px" viewBox="0 0 24 24"
-                                                                    version="1.1">
-                                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                                        fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                        <circle fill="#000000" opacity="0.3"
-                                                                            cx="12" cy="12" r="9" />
-                                                                        <path
-                                                                            d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
-                                                                            fill="#000000" />
-                                                                    </g>
-                                                                </svg>
-                                                            </span>
+                                                               @if(empty($existingCallerChartsWorkLogs))
+                                                                    <span class="svg-icon svg-icon-success mr-2 question_play clickable-row"
+                                                                        title="play">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                            width="24px" height="24px" viewBox="0 0 24 24"
+                                                                            version="1.1">
+                                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                                fill-rule="evenodd">
+                                                                                <rect x="0" y="0" width="24" height="24" />
+                                                                                <circle fill="#000000" opacity="0.3"
+                                                                                    cx="12" cy="12" r="9" />
+                                                                                <path
+                                                                                    d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
+                                                                                    fill="#000000" />
+                                                                            </g>
+                                                                        </svg>
+                                                                    </span>
+                                                                    @elseif(in_array( $data->id,$existingCallerChartsWorkLogs))
+                                                                    <span class="svg-icon svg-icon-success mr-2 question_play clickable-row"
+                                                                    title="play">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
+                                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                                            fill-rule="evenodd">
+                                                                            <rect x="0" y="0" width="24" height="24" />
+                                                                            <circle fill="#000000" opacity="0.3"
+                                                                                cx="12" cy="12" r="9" />
+                                                                            <path
+                                                                                d="M11.1582329,15.8732969 L15.1507272,12.3908445 C15.3588289,12.2093278 15.3803803,11.8934798 15.1988637,11.6853781 C15.1842721,11.6686494 15.1685826,11.652911 15.1518994,11.6382673 L11.1594051,8.13385466 C10.9518699,7.95169059 10.6359562,7.97225796 10.4537922,8.17979317 C10.3737213,8.27101604 10.3295679,8.388251 10.3295679,8.5096304 L10.3295679,15.4964955 C10.3295679,15.7726378 10.5534255,15.9964955 10.8295679,15.9964955 C10.950411,15.9964955 11.0671652,15.9527307 11.1582329,15.8732969 Z"
+                                                                                fill="#000000" />
+                                                                        </g>
+                                                                    </svg>
+                                                                </span>
+                                                                @endif
                                                             @endif
                                                             <a class="pt-1" data-toggle="tooltip" title="View"
                                                                 href=""><i
@@ -384,6 +404,7 @@
                                                                                 $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                             ]) !!}
                                                                         @elseif ($inputType == 'checkbox')
+                                                                        <p id="check_p1" style="display:none;color:red; margin-left: 3px;">Checkbox is mandatory</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -392,6 +413,7 @@
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                     'class' => $columnName,
+                                                                                                    'id'=>$columnName,
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
@@ -400,6 +422,7 @@
                                                                                 @endfor
                                                                             </div>
                                                                         @elseif ($inputType == 'radio')
+                                                                        <p id="radio_p1" style="display: none; color: red; margin-left: 3px;">Radio is mandatory</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -412,8 +435,10 @@
                                                                                                 <span></span>
                                                                                             </label>
                                                                                         </div>
+
                                                                                     </div>
                                                                                 @endfor
+
                                                                             </div>
                                                                         @endif
                                                                     @endif
@@ -476,10 +501,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
+                                                <div class="modal-footer" style="justify-content: space-between;" >
                                                     {{-- <button type="button" class="btn btn-default comment_close"
                                                         data-dismiss="modal">Close</button> --}}
-                                                    <button type="submit" class="btn btn-primary" id="project_assign_save">Submit</button>
+
+                                                        <p class="timer_1" aria-haspopup="true"
+                                                        aria-expanded="false" data-toggle="modal" data-target="#exampleModalCustomScrollable">
+                                                         {{-- Time : <span id="time">00:00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --}}
+                                                         <span  title="Total hours">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22" fill="currentColor" class="bi bi-stopwatch" viewBox="0 0 16 16">
+                                                                <path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5z"/>
+                                                                <path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3"/>
+                                                              </svg>
+                                                        </span><span id="elapsedTime" class="timer_2"></span>
+                                                     </p>
+
+                                                    <button type="submit" class="btn1" id="project_assign_save">Submit</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -528,6 +565,48 @@
         text-decoration: none;
         background-color: #888a91;
     }
+    .timer_1 {
+        color: #FFFFFF;
+        background-color: #191C24;
+        border-radius: 4px;
+        padding: 11px 10px 4px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border:none;
+        width:112px;
+        height:42px;
+    }
+    .timer_2 {
+        color: #FFFFFF;
+        background-color: #3C4253;
+        border-radius: 3px;
+        padding: 4px 10px 4px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border:none;
+        width:78px;
+        height:26px;
+        top: 28px;
+        left: 56px;
+
+    }
+    .btn1 {
+        background-color: #FFFFFF;
+        color: #191C24;
+        border-radius: 6px;
+        padding: 4px 10px 4px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border:none;
+        width:97px;
+        height:39px;
+    }
+
+    /* Define button hover style */
+    .btn1:hover {
+        background-color: #191C24; /* Button background color on hover */
+        color: #FFFFFF;
+    }
 </style>
 
 @push('view.scripts')
@@ -545,6 +624,7 @@
             ranges: {}
         });
         $('.date_range').val('');
+        var startTime_db;
         $(document).ready(function() {
             var uniqueId = 0;
             $('.modal-body').on('click', '.add_more', function() {
@@ -696,6 +776,7 @@
 
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
+
             $(document).on('click', '.clickable-row', function(e) {
                 var record_id =  $(this).closest('tr').find('td:eq(0)').text();
                 $.ajaxSetup({
@@ -716,6 +797,7 @@
                             success: function(response) {
                                  if (response.success == true) {
                                     $('#myModal_status').modal('show');
+                                    startTime_db = response.startTimeVal;console.log(startTime_db,'startTime_db');
                                 } else {
                                     $('#myModal_status').modal('hide');
                                     js_notification('error', 'Something went wrong');
@@ -768,12 +850,16 @@
                                 });
                                 customDate = moment(value, 'MM/DD/YYYY').format('YYYY-MM-DD');
                                 $('label[id="' + header + '"]').text(formattedDate);
-                                $('input[name="' + header + '[]"]').val(customDate);
-                                var dateRangePicker = $('.date_range').data('daterangepicker');
-                                if (dateRangePicker) {
-                                    dateRangePicker.setStartDate(moment(customDate));
-                                    dateRangePicker.setEndDate(moment(customDate));
+                                if ($('input[name="' + header + '[]"]').attr('type') === 'date') {
+                                     $('input[name="' + header + '[]"]').val(customDate)
+                                } else {
+                                    $('input[name="' + header + '[]"]').val(value);
                                 }
+                                // var dateRangePicker = $('.date_range').data('daterangepicker');
+                                // if (dateRangePicker) {
+                                //     dateRangePicker.setStartDate(moment(customDate));
+                                //     dateRangePicker.setEndDate(moment(customDate));
+                                // }
                             } else {
                                 $('input[name="' + header + '[]"]').val(value);
                                 $('label[id="' + header + '"]').text(value);
@@ -810,63 +896,94 @@
                         }
 
                         // Add the field name to the corresponding field type
-                        requiredFields[fieldType].push(fieldName);console.log(requiredFields,'inpu');
+                        requiredFields[fieldType].push(fieldName);
                     });
 
-                // Iterate over checkboxes and radios with the required attribute
-                $('input[type="checkbox"]:not(:checked), input[type="radio"]:not(:checked)').each(function () {
-                    var fieldName = $(this).attr("class");
-                    var fieldType = $(this).attr("type");
+                    //  $('input[type="checkbox"]:not(:checked), input[type="radio"]:not(:checked)').each(function () {
+                    //     var fieldName = $(this).attr("class");
+                    //     var fieldType = $(this).attr("type");
 
-                    if (fieldType === "checkbox") {console.log('checkbox',fieldType,fieldName);
-                        $(this).parent().css("border-color", "red"); // Highlight the checkbox label or container
-                    } else if (fieldType === "radio") {console.log('radio',fieldType,fieldName);
-                        // Highlight all radio buttons with the same name (group)
-                        $('input[type="radio"][name="' + fieldName + '"]').parent().css("border-color", "red");
-                    }
-                });
+                    //     if (fieldType === "checkbox") {//console.log('checkbox',fieldType,fieldName,$(this).attr("id"),$(this).val());
+                    //         $(this).parent().css("border-color", "red"); // Highlight the checkbox label or container
+                    //     } else if (fieldType === "radio") {//console.log('radio',fieldType,fieldName,$(this).attr("id"),$(this).val());
+                    //         // Highlight all radio buttons with the same name (group)
+                    //         $('input[type="radio"][name="' + fieldName + '"]').parent().css("border-color", "red");
+                    //     }
+                    // });
 
-                for (var fieldType in requiredFields) {
-                    if (requiredFields.hasOwnProperty(fieldType)) {console.log(requiredFields,'requiredFields');
-                        var fieldNames = requiredFields[fieldType];
-                        fieldNames.forEach(function(fieldNameVal) {
-                            var label_id = $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
-                                'class');
-                            var classValue = (fieldType == 'text' || fieldType == 'date') ? $('input' +  '[name="' + fieldNameVal + '"]').attr(
-                                'class') : $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
-                                'class');
-                            if (classValue !== undefined) {
-                                var classes = classValue.split(' ');
-                                    inputclass.push($('.' + classes[1]));
-                                    inclass = $('.' + classes[1]);
-                           console.log(inclass,'inclass',inputclass[0]);
-                           inclass.each(function(element) {
-
-                                    var label_id = $(this).attr('id');
-                                    console.log(label_id, 'label_id',$('#' + label_id).val());
-                                    if ($('#' + label_id).val() == '') {
-                                        $('#' + label_id).css('border-color', 'red');
-                                        // inputTypeValue = 1;
-                                        // return false;
-                                    } else {
-                                         $('#' + label_id).css('border-color', '');
-                                       //  inputTypeValue = 0;
-                                    }
-                                });
-
-                                // if ($('.' + classes[1]).val() == '') {
-                                //     $('.' + classes[1]).css('border-color', 'red');
-                                //     labelNameValue = 1;
-                                //     return false; // This will exit the forEach loop, not the entire function
-                                // } else {
-                                //     $('.' + classes[1]).css('border-color', '');
-                                //     labelNameValue = 0;
-                                // }
+                    $('input[type="radio"]').each(function () {
+                        var groupName = $(this).attr("name");
+                        // if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                            if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                                $('#radio_p1').css('display','block');
+                                inputTypeValue = 1;
+                            } else {
+                                $('#radio_p1').css('display','none');
+                                inputTypeValue = 0;
                             }
-                        });
+                        //     return false;
+                        // }
+                    });
 
+
+                    $('input[type="checkbox"]').each(function () {
+                        var groupName = $(this).attr("id");console.log(groupName,'chckkkkkkkk');
+                        if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
+                            if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
+                                $('#check_p1').css('display','block');
+                                inputTypeValue = 1;
+                            } else {
+                                $('#check_p1').css('display','none');
+                                inputTypeValue = 0;
+                            }
+                            return false;
+                        }
+                    });
+
+                    for (var fieldType in requiredFields) {
+                        if (requiredFields.hasOwnProperty(fieldType)) {//console.log(requiredFields,'requiredFields');
+                            var fieldNames = requiredFields[fieldType];
+                            fieldNames.forEach(function(fieldNameVal) {
+                                var label_id = $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
+                                    'class');
+                                var classValue = (fieldType == 'text' || fieldType == 'date') ? $('input' +  '[name="' + fieldNameVal + '"]').attr(
+                                    'class') : $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
+                                    'class');
+                                if (classValue !== undefined) {
+                                    var classes = classValue.split(' ');
+                                        inputclass.push($('.' + classes[1]));
+                                        inclass = $('.' + classes[1]);
+                            // console.log(inclass,'inclass',inputclass[0]);
+                            inclass.each(function(element) {
+
+                                        var label_id = $(this).attr('id');
+                                    //  console.log(label_id, 'label_id',$('#' + label_id).val(),$(this).serialize(),$(this).val());
+                                    if ($(this).val() == '') {
+                                            if ($(this).val() == '') {//alert(label_id);
+                                                e.preventDefault();
+                                                $(this).css('border-color', 'red');
+                                                inputTypeValue = 1; // console.log('inside',inputTypeValue);
+                                            } else {
+                                                $(this).css('border-color', '');
+                                                inputTypeValue = 0; //console.log('else',inputTypeValue);
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+                                    // if ($('.' + classes[1]).val() == '') {
+                                    //     $('.' + classes[1]).css('border-color', 'red');
+                                    //     labelNameValue = 1;
+                                    //     return false; // This will exit the forEach loop, not the entire function
+                                    // } else {
+                                    //     $('.' + classes[1]).css('border-color', '');
+                                    //     labelNameValue = 0;
+                                    // }
+                                }
+                            });
+
+                        }
                     }
-                }
 
                 var fieldValuesByFieldName = {};
 
@@ -899,7 +1016,7 @@
                 });
 
 
-console.log(inputTypeValue,'inputTypeValue');
+
                 if (inputTypeValue == 0) {
 
                     swal.fire({
@@ -1067,5 +1184,29 @@ console.log(inputTypeValue,'inputTypeValue');
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
         })
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var startTime = new Date(startTime_db).getTime();
+
+            // Current time clock
+            // hours = (hours < 10 ? "0" : "") + hours;
+            // minutes = (minutes < 10 ? "0" : "") + minutes;
+            // seconds = (seconds < 10 ? "0" : "") + seconds;
+            // document.getElementById("time").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+            // var elapsedTime = Math.floor((new Date().getTime() - startTime) / 1000 / 60);
+            var elapsedTimeMs = new Date().getTime() - startTime;
+            var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
+            var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+            elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
+            remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
+            document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes ;
+            setTimeout(updateTime, 1000);
+        }
+        updateTime();
+
     </script>
 @endpush
