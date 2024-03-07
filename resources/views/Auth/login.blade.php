@@ -2,7 +2,7 @@
 @section('content')
     {{-- <form  id="loginForm kt_login_signin_form" action="" class="form pt-3 loginForm"> --}}
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <div class="form-group">
+    <div class="form-group ml-8 mr-8">
         <label for="exampleInputEmail" class="login-username">{{ __('Employee ID') }}</label>
         <div class="input-group">
 
@@ -19,7 +19,7 @@
     </div>
 
 
-    <div class="form-group">
+    <div class="form-group ml-8 mr-8">
         <label for="exampleInputPassword" class="login-username">{{ __('Password') }}</label>
         <div class="input-group">
 
@@ -27,7 +27,7 @@
 
 
             <input id="password" type="password" placeholder="Password"
-                class="form-control login-textbox form-control-solid h-auto py-5 px-6 border-left-0 @error('password') is-invalid @enderror"
+                class="form-control login-textbox form-control-solid h-auto py-5 px-6 @error('password') is-invalid @enderror"
                 name="password" required autocomplete="current-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">
@@ -45,10 +45,10 @@
         </div>
     @endif
 
-    <div class="form-group">
-        <div class="my-3">
+    <div class="form-group  mb-8 ml-8 mr-8 mt-14 mt-lg-14">
+        <div class="my-4">
             <button type="submit" id="kt_login_signin_submit"
-            class="btn btn-login  btn-block font-weight-bold px-9 py-4 my-3 auth-form-btn">
+            class="btn btn-login  btn-block font-weight-bold px-5 py-5 my-3 auth-form-btn">
                 {{ __('LOGIN') }}
             </button>
 
@@ -75,7 +75,7 @@
             background: 000;
             outline: 0;
             border-width: 0 0 2px;
-            border-color: blue
+            border-color: blue;
         }
     </style>
 

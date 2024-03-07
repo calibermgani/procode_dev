@@ -494,7 +494,7 @@ div.dataTables_wrapper div.dataTables_info {
 
 .login-subtext {
     color: #ffffff !important;
-    font-size: 12px;
+    font-size: 14px;
 }
 .login-username {
     font-family: "Poppins";
@@ -512,7 +512,13 @@ color: #ffffff !important;
 border-radius: 4px !important;
 Padding:0px, 16px, 0px, 16px !important;
 background-color: #2B3142 !important;
+border-color:#2B3142 !important;
+color: #ffffff !important;
+}
+.login-textbox:focus {
 
+background-color: #2B3142 !important;
+border-color:#2B3142 !important;
 }
 .footer-text{
     font-family: Poppins;

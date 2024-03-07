@@ -38,7 +38,8 @@
     max-width: 850px; }
   .login.login-3 .login-form {
     width: 100%;
-    max-width: 401px;
+    max-width: 500px;
+    max-height: 500px;
         max-height: fit-content;
         padding: 31px;
         border-radius: 21px;

@@ -1,11 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <?php
 $currentURL = URL::current();
 $routex = explode('/', Route::current()->uri());
-$current_page = Route::getFacadeRoot()
-    ->current()
-    ->uri();
+$current_page = Route::getFacadeRoot()->current()->uri();
 $url_segment = Request::segment(1);
 ?>
 
@@ -13,107 +11,184 @@ $url_segment = Request::segment(1);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
     <title>{{ config('app.name', 'Annexmed Product Tool') }}</title>
     @include('layouts/header_script')
+    <style>
+        /* Additional styling for the page */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+            background-color: #191C24;
+            background-image: url("assets/media/bg/login_background.svg");
+            background-size: cover;
+            background-position: bottom !important;
+            color: white;
+            position: relative;
+            /* Position relative for absolute positioning of bottom elements */
+        }
+
+        .left-side,
+        .right-side {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left-side img {
+            width: 100%;
+            max-width: 200px;
+            /* Adjust as needed */
+            height: auto;
+            /* Maintain aspect ratio */
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            position: absolute;
+            top: 20px;
+            /* Adjust as needed */
+            left: 20px;
+            /* Adjust as needed */
+            width: 80px;
+            /* Decreased width */
+        }
+
+        .login-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .right-side {
+            position: relative;
+            /* Position relative for absolute positioning of .login-card */
+            padding: 20px;
+            /* Added padding */
+        }
+
+        .login-card {
+            max-width: 550px;
+            width: 100%;
+            background-color: #000000;
+            /* Black background color */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0px;
+            color: white;
+            /* Text color */
+            position: absolute;
+            right: 12rem;
+        }
+
+
+        .login-card form {
+            margin-bottom: 0;
+        }
+
+        .company-logo {
+            position: absolute;
+            bottom: 20px;
+            /* Adjust as needed */
+            right: 35px;
+            /* Adjust as needed */
+            width: 170px;
+        }
+
+        /* .copyright-container {
+            margin-top: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid white;
+            padding-top: 10px;
+            width: calc(100% - 40px);
+            padding-left: 20px;
+        } */
+
+        .copyright-container {
+            position: absolute;
+            bottom: 10px;
+            /* Adjust as needed */
+            left: 50px;
+            /* Adjust as needed */
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            /* Distribute items evenly */
+            align-items: center;
+            /* Vertically center items */
+            border-top: 1px solid white;
+            /* White separation line */
+            padding-top: 10px;
+            /* Adjust spacing between line and text */
+            width: calc(100% - 60%);
+        }
+
+        .copyright-container p {
+            margin-right: 10px;
+            /* Adjust spacing between items */
+        }
+
+        .copyright-container p:first-child {
+            margin-right: auto;
+            /* Push the first item to the left */
+        }
+
+
+
+        @media (min-width: 768px) {
+            .login-container {
+                flex-direction: row;
+            }
+
+            .right-side {
+                padding: 20px 40px;
+                /* Adjust padding for larger screens */
+            }
+        }
+    </style>
 </head>
-<style>
-    .con {
-        width: 250px;
-        height: 200px;
-    }
-
-    .cle {
-        width: 260px;
-        height: 260px;
-    }
-
-    .vp {
-        width: 150px;
-        height: 150px;
-        position: absolute;
-        bottom: 10%;
-        left: 22%;
-    }
-
-    .header_2 {
-        position: absolute;
-        top: 0%;
-    }
-</style>
 
 <body>
-    <div class="d-flex flex-column flex-root">
-        <div class="login login-3 login-signin-on d-flex flex-column flex-lg-row flex-row-fluid  auth auth-img-bg"
-            id="kt_login" style="background-color: #191C24  !important;">
-            <div class="login login-3 login-signin-on d-flex flex-column flex-lg-row flex-row-fluid  auth auth-img-bg"
-            id="kt_login" style="background-image: url(assets/media/bg/background_lines.svg);">
-            <div class="login-aside d-flex  bgi-size-cover bgi-no-repeat p-5 p-lg-10">
-                <div class="d-flex flex-row-fluid flex-column justify-content-between">
-                    <a href="#" class="flex-column-auto">
-                    </a>
-                    <div class="login-aside d-flex  bgi-size-cover bgi-no-repeat m-10" style="background-image: url(assets/media/bg/bg-12.svg); width: 100%; height: 100%"></div>
-                                   <span  style="border-bottom:1px solid #726b6b  !important"></span>
-                    <div class="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
-                        <div class="opacity-40 font-weight-bold footer-text">© {{ date('Y') }} Pro coding</div>
-                        <div class="d-flex">
-                            <p href="#" class="opacity-40 footer-text">Privacy</p>
-                            <p href="#" class="opacity-40 footer-text ml-10">Legal</p>
-                            <p href="#" class="opacity-40 footer-text ml-10">Contact</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="flex-row-fluid d-flex flex-column position-relative p-7 overflow-hidden">
-                <div class="d-flex flex-column-fluid flex-center mt-5 mt-lg-0">
-                    <div class="login-form login-signin auth-form-transparent" style="box-shadow: 0px -25px 20px -20px rgba(12, 19, 83, 0.45),
-                    25px 0px 20px -20px rgba(12, 19, 83, 0.45),
-                    0px 25px 20px -20px rgba(12, 19, 83, 0.45),
-                    -25px 0px 20px -20px rgba(12, 19, 83, 0.45);">
-                        <div class="text-left  mb-10 mb-lg-10">
-                            <h3 class="font-size-h1">Welcome Sign In</h3>
-                            <p class="login-subtext">Enter your username and password</p>
-                        </div>
-                        @yield('content')
-                    </div>
-                    <div class="login-form login-forgot">
-                        <div class="text-center mb-10 mb-lg-20">
-                            <h3 class="font-size-h1">Forgotten Password?</h3>
-                            <p class="text-muted font-weight-bold">Enter your email to reset your password</p>
-                        </div>
-                        <form class="form" novalidate="novalidate" id="kt_login_forgot_form">
-                            <div class="form-group">
-                                <input class="form-control form-control-solid h-auto py-5 px-6" type="email"
-                                    placeholder="Email" name="email" autocomplete="off" />
-                            </div>
-                            <div class="form-group d-flex flex-wrap flex-center">
-                                <button type="button" id="kt_login_forgot_submit"
-                                    class="btn btn-primary font-weight-bold px-9 py-4 my-3 mx-4">Submit</button>
-                                <button type="button" id="kt_login_forgot_cancel"
-                                    class="btn btn-light-primary font-weight-bold px-9 py-4 my-3 mx-4">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+    <div class="login-container">
+        <div class="left-side">
+            <img src="assets/media/bg/procode_logo.svg" alt="Header Logo" class="header-logo">
+            {{-- <img src="{{ asset('/assets/media/bg/collegue_Image.svg') }}" alt="Logo"
+                style="width: 100%; max-width: 700px; height: auto; margin-bottom: 20px;"> --}}
+                <img src="{{ asset('/assets/media/bg/login_product_Image_default.svg') }}" alt="Logo"
+                style="width: 100%; max-width: 700px; height: auto; margin-bottom: 20px;">
+            <div class="copyright-container">
+                <p>&copy; {{ date('Y') }} Pro coding</p>
+                <p href="#">Privacy</p>
+                <p href="#">Legal</p>
+                <p href="#">Contact</p>
             </div>
         </div>
+        <div class="right-side">
+            <div class="login-card">
+                <div class="text-left  mt-8 mb-12 mb-lg-12 ml-8 mr-8">
+                    <h3 class="font-size-h1">Welcome Sign In! <img src="{{ asset('/assets/media/bg/hand.svg') }}"></h3>
+                    <p class="login-subtext mt-4">Enter your username and password</p>
+                </div>
+                @yield('content')
+            </div>
         </div>
+        <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo">
     </div>
-    <div class="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center p-5"
-        style="background-image: url(assets/media/bg/bg-11.jpg);">
-        <div class="text-white font-weight-bold order-2 order-sm-1 my-2">© 2022 Annexmed</div>
-        <div class="d-flex order-1 order-sm-2 my-2">
-            <a href="#" class="text-dark-75 text-hover-primary">Privacy</a>
-            <a href="#" class="text-dark-75 text-hover-primary ml-4">Legal</a>
-            <a href="#" class="text-dark-75 text-hover-primary ml-4">Contact</a>
-        </div>
-    </div>
+
 </body>
-
 @include('layouts/footer_script_login')
 @include('layouts/flashMessage')
 
