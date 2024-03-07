@@ -22,9 +22,9 @@ function js_notification(type, msg) {
 
 //Right Click Disable
 
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-},true);
+// document.addEventListener('contextmenu', function(e) {
+//     e.preventDefault();
+// },true);
 
 
 /** Developer : Zuhail

@@ -258,12 +258,12 @@ class FormController extends Controller
     public static function formConfigurationUpdate(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
             try {
-                $data = $request->all();
+                $data = $request->all();dd($data);
                 $projectName = project::where('id',$data['project_id_val'])->first();
                 $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
-                    $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();//dd($existingRecord);
+                    $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();dd($existingRecord);
                     if($existingRecord)
                     {
                         $requiredData['project_id'] = $data['project_id_val'];

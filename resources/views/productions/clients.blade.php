@@ -1,112 +1,94 @@
 @extends('layouts.app3')
-@section('subheader')
-    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Clients</h5>
-
-            </div>
-        </div>
-    </div>
-@endsection
-
 @section('content')
-    <div class="card card-custom" style="">
-        <div class="card-header border-0 px-4">
-            <div class="card-title">
-                <span class="text-muted font-weight-bold font-size-lg flex-grow-1">
-                    <span class="svg-icon svg-icon-primary svg-icon-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                            height="24px" viewBox="0 0 24 24" version="1.1">
-                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                <rect x="0" y="0" width="24" height="24"></rect>
-                                <path
-                                    d="M8,4 L16,4 C17.1045695,4 18,4.8954305 18,6 L18,17.726765 C18,18.2790497 17.5522847,18.726765 17,18.726765 C16.7498083,18.726765 16.5087052,18.6329798 16.3242754,18.4639191 L12.6757246,15.1194142 C12.2934034,14.7689531 11.7065966,14.7689531 11.3242754,15.1194142 L7.67572463,18.4639191 C7.26860564,18.8371115 6.63603827,18.8096086 6.26284586,18.4024896 C6.09378519,18.2180598 6,17.9769566 6,17.726765 L6,6 C6,4.8954305 6.8954305,4 8,4 Z"
-                                    fill="#000000"></path>
-                            </g>
-                        </svg>
-                    </span>
-                    <span style="color:#0e969c">Client List</span>
-                </span>
+    <div class="card card-custom custom-card">
+        <div class="card-body pt-4 pb-0 px-2">
+            <div class="my-div">
+                {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
+                        class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
+                        style="width: 1.05rem !important;color: #000000 !important;margin-left: 4px !important;">
+                        <path fill-rule="evenodd"
+                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                    </svg>
+                </span> --}}
+                <span class="project_header" style="margin-left: 4px !important">Client List</span>
             </div>
-            <div class="card-toolbar d-inline float-right mt-3">
-                <div class="outside" href="javascript:void(0);"></div>
-            </div>
-        </div>
 
-        <div class="card-body mt-0 pt-0 pb-0 px-0">
-
-            <div class="card card-custom" style="border-radius:0px 0px 10px 10px" id="page-loader">
-                <div class="card-body pt-4 pb-0 px-5">
-                    <div class="mb-0">
-                        <div class="table-responsive pb-4">
-                            <table class="table table-separate table-head-custom no-footer dtr-column " id="clients_list">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Client Name</th>
-                                        <th>Assigned</th>
-                                        <th>Completed</th>
-                                        <th>Pending</th>
-                                        <th>On Hold</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{-- @php
+            <div class="table-responsive pb-4">
+                <table class="table table-separate table-head-custom no-footer dtr-column " id="clients_list">
+                    <thead>
+                        <tr>
+                            <th width="15px"></th>
+                            <th>Client Name</th>
+                            <th>Assigned</th>
+                            <th>Completed</th>
+                            <th>Pending</th>
+                            <th>On Hold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{-- @php
                                         $encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(1);
                                         $encodeProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID('aig');
                                     @endphp --}}
-                                    @if (isset($projects))
-                                        @foreach ($projects as $data)
-                                            <tr>
-                                                <td class="details-control"></td>
-                                                <td>{{ $data->project_name }} <input type="hidden"
-                                                        value={{ $data->id }}></td>
-                                                <td>10</td>
-                                                <td>20</td>
-                                                <td>30</td>
-                                                <td>40</td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                    {{-- <tr class="clickable-row">
-                                         <td class="details-control"><input type="hidden" value={{ $encodedId }}></td>
-                                        <td>AIG <input type="hidden" value={{ $encodeProjectName }}></td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr class="clickable-row">
-                                        <td class="details-control"></td>
-                                        <td>Ssioux <input type="hidden" value = ""></td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr class="clickable-row">
-                                        <td class="details-control"></td>
-                                        <td>Eureka <input type="hidden" value = ""></td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                    </tr>
-                                    <tr class="clickable-row">
-                                        <td class="details-control"></td>
-                                        <td>MEC <input type="hidden" value = ""></td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                        <td>0</td>
-                                    </tr> --}}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                        @if (isset($projects))
+                            @foreach ($projects as $data)
+                            @php
+                                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+                                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+                                    $projectName = $data->project_name;
+                                    $subproject_name = App\Models\subproject::where('project_id',$data->id)->pluck('sub_project_name')->toArray();
+                                     $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
+                                                return ucfirst($projectName) . ucfirst($item);
+                                            })->all();
+                                            $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
+                                            foreach($model_name as $model) {
+                                                $modelClass = "App\\Models\\" .  $model;
+                                                if ($loginEmpId && $empDesignation == "Administrator") {
+                                                    if (class_exists($modelClass)) {
+                                                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                                                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                                                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                                                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                                                    } else {
+                                                        $assignedCount = 0;
+                                                        $completedCount = 0;
+                                                        $pendingCount = 0;
+                                                        $holdCount = 0;
+                                                    }
+                                                } else if($loginEmpId) {
+                                                    if (class_exists($modelClass)) {
+                                                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                                                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                                                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                                                        $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                                                    } else {
+                                                        $assignedCount = 0;
+                                                        $completedCount = 0;
+                                                        $pendingCount = 0;
+                                                        $holdCount = 0;
+                                                    }
+                                                }
+                                                $assignedTotalCount += $assignedCount;
+                                                $completedTotalCount += $completedCount;
+                                                $pendingTotalCount += $pendingCount;
+                                                $holdTotalCount += $holdCount;
+                                            }
+                            @endphp
+                                <tr>
+                                    <td class="details-control"></td>
+                                    <td>{{ $data->project_name }} <input type="hidden" value={{ $data->id }}></td>
+                                    <td>{{$assignedTotalCount}}</td>
+                                    <td>{{$completedTotalCount}}</td>
+                                    <td>{{$pendingTotalCount}}</td>
+                                    <td>{{$holdTotalCount}}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
             </div>
+
         </div>
     </div>
 @endsection
@@ -116,14 +98,7 @@
         padding-bottom: 0.5rem !important;
     }
 
-    td.details-control {
-        background: url('https://cdn.rawgit.com/DataTables/DataTables/6c7ada53ebc228ea9bc28b1b216e793b1825d188/examples/resources/details_open.png') no-repeat center center;
-        cursor: pointer;
-    }
 
-    tr.shown td.details-control {
-        background: url('https://cdn.rawgit.com/DataTables/DataTables/6c7ada53ebc228ea9bc28b1b216e793b1825d188/examples/resources/details_close.png') no-repeat center center;
-    }
 
     .leave_color {
         background: #ff00000f;
@@ -149,20 +124,6 @@
         white-space: nowrap;
     }
 
-    .inv_head tr th {
-        background: #d6edee;
-        color: #0e96a9 !important;
-        font-size: 12px !important;
-        padding: 9 !important;
-    }
-
-    .inv_head tr {
-        border: 1px solid #ECF0F3
-    }
-
-    .inv_head tr {
-        border-bottom: 1px solid #ECF0F3;
-    }
 
     .table.table-separate .inv_lft th:last-child,
     .table.table-separate td:last-child {
@@ -179,16 +140,21 @@
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
-                columnDefs: [{
-                    className: 'details-control',
-                    targets: [0],
-                    orderable: false,
-                }, ],
+                    columnDefs: [{
+                        className: 'details-control',
+                        targets: [0],
+                        orderable: false,
+                    }, ],
+                language: {
+                    "search": '',
+                    "searchPlaceholder": "   Search",
+                },
                 responsive: true
 
             })
             table.buttons().container()
                 .appendTo('.outside');
+            //   $('#clients_list_filter input').attr("placeholder", "Search");
 
             $('#clients_list tbody').on('click', 'td.details-control', function() {
                 var client_id = $(this).closest('tr').find('td:eq(1) input').val();
@@ -207,7 +173,7 @@
                     });
                     $.ajax({
                         type: "GET",
-                    url: "{{ url('sub_projects') }}",
+                        url: "{{ url('sub_projects') }}",
                         data: {
                             project_id: client_id,
                         },
@@ -226,18 +192,18 @@
 
             function format(data, subProjects) {
                 var html =
-                    '<table class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:100%" id="production_entry_sub" class="production_entry_sub">' +
+                    '<table class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;" id="production_entry_sub" class="production_entry_sub">' +
                     '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Pending</th> <th>On Hold</th><th>Completed</th> </tr>';
                 $.each(subProjects, function(index, val) {
-                    console.log(val, 'val');
+                    console.log(val, 'val',val.client_name.id,val.sub_project_name, val.id );
                     html +=
                         '<tbody><tr class="clickable-row">' +
-                        '<td><input type="hidden" value=' + val.client_name.id + '></td>' +
-                        '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.id + '></td>' +
-                        '<td>' + '10' + '</td>' +
-                        '<td>' + '20' + '</td>' +
-                        '<td>' + '30' + '</td>' +
-                        '<td>' + '50' + '</td>' +
+                        '<td><input type="hidden" value=' + val.client_id + '></td>' +
+                        '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.sub_project_id + '></td>' +
+                        '<td>' + val.assignedCount + '</td>' +
+                        '<td>' + val.CompletedCount + '</td>' +
+                        '<td>' + val.PendingCount + '</td>' +
+                        '<td>' + val.holdCount + '</td>' +
                         '</tr></tbody>';
                 });
                 html += '</table>';
@@ -260,7 +226,8 @@
 
                 // window.location.href = baseUrl + 'projects/' + encodedId + '/' + clientName + "?parent=" +
                 //     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-                window.location.href = baseUrl + 'projects_assigned/' + btoa(clientName) +'/'+btoa(subProjectName)+ "?parent=" +
+                window.location.href = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(
+                        subProjectName) + "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
 
             })

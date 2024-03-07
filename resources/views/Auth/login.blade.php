@@ -3,12 +3,12 @@
     {{-- <form  id="loginForm kt_login_signin_form" action="" class="form pt-3 loginForm"> --}}
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="form-group">
-        <label for="exampleInputEmail">{{ __('Employee ID') }}</label>
+        <label for="exampleInputEmail" class="login-username">{{ __('Employee ID') }}</label>
         <div class="input-group">
 
 
             <input id="emp_id" type="text" placeholder="Username"
-                class="form-control form-control-solid h-auto py-5 px-6 @error('emp_id') is-invalid @enderror" name="emp_id"
+                class="form-control login-textbox form-control-solid h-auto py-5 px-6 @error('emp_id') is-invalid @enderror" name="emp_id"
                 value="{{ old('emp_id') }}" required autocomplete="emp_id" autofocus>
             @error('email')
                 <span class="invalid-feedback" role="alert">
@@ -20,14 +20,14 @@
 
 
     <div class="form-group">
-        <label for="exampleInputPassword">{{ __('Password') }}</label>
+        <label for="exampleInputPassword" class="login-username">{{ __('Password') }}</label>
         <div class="input-group">
 
 
 
 
             <input id="password" type="password" placeholder="Password"
-                class="form-control form-control-solid h-auto py-5 px-6 border-left-0 @error('password') is-invalid @enderror"
+                class="form-control login-textbox form-control-solid h-auto py-5 px-6 border-left-0 @error('password') is-invalid @enderror"
                 name="password" required autocomplete="current-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">
@@ -48,7 +48,7 @@
     <div class="form-group">
         <div class="my-3">
             <button type="submit" id="kt_login_signin_submit"
-                class="btn btn-info btn-lg btn-block font-weight-bold px-9 py-4 my-3 auth-form-btn">
+            class="btn btn-login  btn-block font-weight-bold px-9 py-4 my-3 auth-form-btn">
                 {{ __('LOGIN') }}
             </button>
 
@@ -61,10 +61,10 @@
 			*/
             ?>
         </div>
-        <div class="form-check text-dark-50 text-center text-hover-primary my-8 mr-2">
+        {{-- <div class="form-check text-dark-50 text-center text-hover-primary my-8 mr-2">
             <a class="text-dark-50  text-hover-primary my-3 mr-2" id="kt_login_forgot">Are you forgot your password ? <a
                     href="#" class="text-dark font-weight">Reset</a> </a>
-        </div>
+        </div> --}}
 
     </div>
 

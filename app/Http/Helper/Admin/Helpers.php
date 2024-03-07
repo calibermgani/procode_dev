@@ -502,13 +502,13 @@ class Helpers
 	}
     public static function projectList()
 	{
-		$data = project::where('status', 'Active')->pluck('project_name', 'id')->prepend(trans('Select'), '')->toArray();
+		$data = project::where('status', 'Active')->pluck('project_name', 'id')->prepend(trans('Select Project'), '')->toArray();
 		return $data;
 	}
 
     public static function subProjectList($project_id)
 	{
-		$data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
+		$data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select Sub Project'), '')->toArray();
 		return $data;
 	}
     public static function projectName($id)

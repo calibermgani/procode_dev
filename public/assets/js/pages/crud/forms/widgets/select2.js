@@ -35,6 +35,12 @@ var KTSelect2 = function() {
             placeholder: "-- Select --",
             allowClear: true
         });
+        $('.kt_select2_project').select2({
+            placeholder: "Select Project"
+        });
+        $('.kt_select2_sub_project').select2({
+            placeholder: "Select Project"
+        });
 
         // loading data from array
         // var data = [{

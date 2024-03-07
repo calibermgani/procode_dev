@@ -1,6 +1,6 @@
 @extends('layouts.app3')
 
-@section('subheader')
+{{-- @section('subheader')
     <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
             <div class="d-flex align-items-center flex-wrap mr-2">
@@ -12,22 +12,86 @@
                 href="{{ url('form_configuration_list') }}?parent={{ request()->parent }}&child={{ request()->child }}">List</a>
         </div>
     </div>
-@endsection
+@endsection --}}
 
 @section('content')
     {!! Form::open([
-        'url' => route('formConfigurationUpdate', ['parent' => request()->parent, 'child' => request()->child]),
+        // 'url' => route('formConfigurationUpdate', ['parent' => request()->parent, 'child' => request()->child]),
+        'url' => url('form_configuration_update') . '?parent=' .request()->parent .'&child=' .request()->child,
         'method' => 'POST',
         'id' => 'formConfiguration',
         'enctype' => 'multipart/form-data',
     ]) !!}
     @csrf
-    @if (isset($projectDetails))
-        <div class="row">
-            <div class="col-md-4">
+    <div class="card card-custom  mb-5 custom-card">
+        <div class="card-body pt-0 pb-2 pl-0" style="background-color: #ffffff !important">
+            @if (isset($projectDetails))
+                <div class="row">
+                    <div class="col-6 mt-4">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="project_header"
+                            href="{{ url('form_configuration_list') }}?parent={{ request()->parent }}&child={{ request()->child }}">
+                            <span class="svg-icon svg-icon-primary svg-icon-lg mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
+                                    class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
+                                    style="width: 1.05rem !important;color: #000000 !important;">
+                                    <path fill-rule="evenodd"
+                                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                </svg>
+                            </span>
+                            Form Edit</a>
+                    </div>
+
+                    <div class="col-6 mt-4 pr-0">
+                        <div class="row">
+                            <div class="col-6"></div>
+                            <div class="col-3 pr-1">
+                                @php $projectList = App\Http\Helper\Admin\Helpers::projectList(); @endphp
+                                <div class="form-group mb-0 white-smoke-disabled">
+                                    {!! Form::select('project_id', $projectList, $projectDetails->project_id ?? null, [
+                                        'class' => 'form-control  kt_select2_project',
+                                        'id' => 'project_list',
+                                        'disabled',
+                                    ]) !!}
+                                    <input type="hidden" name="project_id_val"
+                                        value="{{ $projectDetails->project_id ?? '' }}">
+                                </div>
+                            </div>
+                            <div class="col-3 pl-1">
+                                <div class="form-group mb-0 white-smoke-disabled">
+                                    @if (isset(request()->sub_project_id))
+                                        @php
+                                            $subProjectList = App\Http\Helper\Admin\Helpers::subProjectList(
+                                                $projectDetails->project_id,
+                                            );
+                                        @endphp
+                                        {!! Form::select('sub_project_id', $subProjectList, $projectDetails->sub_project_id, [
+                                            'class' => 'form-control kt_select2_sub_project',
+                                            'id' => 'sub_project_list',
+                                            'disabled',
+                                        ]) !!}
+                                        <input type="hidden" name="sub_project_id_val"
+                                            value="{{ $projectDetails->sub_project_id ?? '' }}">
+                                    @else
+                                        @php
+                                            $subProjectList = [];
+
+                                        @endphp
+                                        {!! Form::select('sub_project_id', $subProjectList, null, [
+                                            'class' => 'form-control kt_select2_sub_project',
+                                            'id' => 'sub_project_list',
+                                            'disabled',
+                                        ]) !!}
+                                        <input type="hidden" value="{{ $projectDetails->sub_project_id ?? '' }}">
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <div class="col-md-4">
                 <div>
                     <div class="row mt-4 mb-2">
-                        <label class="col-md-2 col-form-label required">Project</label>
+
                         @php
                         $projectList = App\Http\Helper\Admin\Helpers::projectList(); @endphp
                         <div class="form-group mb-1">
@@ -44,7 +108,7 @@
             <div class="col-md-4">
                 <div>
                     <div class="row mt-4 mb-2">
-                        <label class="col-md-3 col-form-label required">Sub Project</label>
+
                         <div class="form-group mb-1">
                             @if (isset(request()->sub_project_id))
                                 @php
@@ -72,356 +136,381 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    @endif
+            </div> --}}
+                </div>
+            @endif
+            <div class="row mt-4 ml-1" id="form_div">
+                <div class="col-md-12">
+                    <div id="form_field" style="width:101% !important">
+                        @if (isset($formDetails) && $formDetails->isNotEmpty())
+                            <input type="hidden" id="row_count" value="{{ $formDetails->count() - 1 }}">
+                            @foreach ($formDetails as $key => $data)
+                                @if ($loop->first)
+                                    <div class="col-md-12 mb-5 box-border"
+                                        id="form_append">
 
-    <div class="card-body pt-0 pb-2 pl-0">
-        <div class="row" id="form_div">
-            <div class="col-md-12">
-                <div id="form_field">
-                    @if (isset($formDetails) && $formDetails->isNotEmpty())
-                        <input type="hidden" id="row_count" value="{{ $formDetails->count() - 1 }}">
-                        @foreach ($formDetails as $key => $data)
-                            @if ($loop->first)
-                                <div class="col-md-12 mb-5"
-                                    style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; "
-                                    id="form_append">
-                                    <div>
-                                        <div class="col-form-label text-lg-right pt-0 pb-4">
-                                            <i class="fa fas fa-plus text-success icon-circle1 ml-1" id="add_more"></i>
-                                        </div>
-                                        <div>
-                                            <div class="row form-group">
-                                                <div class="col-md-2">
-                                                    <label class="required">Label</label>
-                                                    <div class="form-group mb-1">
-                                                        <input type="text" id="label_name{{ $key }}"
-                                                            name="label_name[]" class="text-black form-control label_name"
-                                                            value="{{ $data->label_name ?? '' }}"
-                                                            oninput="validateInput(this)" readonly>
+                                            {{-- <div class="col-form-label text-lg-right pt-0 pb-4">
+                                                <i class="fa fas fa-plus icon-circle2 ml-1" id="add_more"></i>
+                                            </div> --}}
+                                            <div class="row">
+                                                <div class="col-md-11 pt-5">
+                                                    <div class="row form-group pl-5">
+                                                        <div class="col-md-2">
+                                                            <label class="required">Label</label>
+                                                            <div class="form-group mb-1">
+                                                                <input type="text" id="label_name{{ $key }}"
+                                                                    name="label_name[]"
+                                                                    class="white-smoke-disabled form-control label_name"
+                                                                    value="{{ $data->label_name ?? '' }}"
+                                                                    oninput="validateInput(this)" readonly>
 
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Input Type</label>
-                                                    <div class="form-group mb-1">
-                                                        {!! Form::select(
-                                                            'input_type[{{ $key }}]',
-                                                            [
-                                                                'text' => 'Text Box',
-                                                                'select' => 'Drop Down',
-                                                                'checkbox' => 'CheckBox',
-                                                                'radio' => 'Radio',
-                                                                'date' => 'Date',
-                                                                'date_range' => 'Date Range',
-                                                                'textarea' => 'Text Area',
-                                                            ],
-                                                            $data->input_type ?? '',
-                                                            [
-                                                                'class' => 'text-black form-control input_type',
-                                                                'id' => 'input_type_id_' . $key,
-                                                                'disabled',
-                                                            ],
-                                                        ) !!}
-                                                    </div>
-                                                </div>
-                                                @if ($data->options_name)
-                                                    <div class="col-md-2 options_div" style="display:block"
-                                                        id="options_div_{{ $key }}">
-                                                        <label class="options_name_label required"
-                                                            id="options_name_label_{{ $key }}"
-                                                            style="display:block">Options</label>
-                                                        <div class="form-group mb-1">
-                                                            <input type="text" id="options_name_{{ $key }}"
-                                                                name="options_name[]"
-                                                                class="text-black form-control options_name"
-                                                                style="display:block"value="{{ $data->options_name ?? '' }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Input Type</label>
+                                                            <div class="form-group mb-1">
+                                                                {!! Form::select(
+                                                                    'input_type[{{ $key }}]',
+                                                                    [
+                                                                        'text' => 'Text Box',
+                                                                        'select' => 'Drop Down',
+                                                                        'checkbox' => 'CheckBox',
+                                                                        'radio' => 'Radio',
+                                                                        'date' => 'Date',
+                                                                        'date_range' => 'Date Range',
+                                                                        'textarea' => 'Text Area',
+                                                                    ],
+                                                                    $data->input_type ?? '',
+                                                                    [
+                                                                        'class' => 'white-smoke-disabled form-control input_type',
+                                                                        'id' => 'input_type_id_' . $key,
+                                                                        'disabled',
+                                                                    ],
+                                                                ) !!}
+                                                            </div>
+                                                        </div>
+                                                        @if ($data->options_name)
+                                                            <div class="col-md-2 options_div" style="display:block"
+                                                                id="options_div_{{ $key }}">
+                                                                <label class="options_name_label required"
+                                                                    id="options_name_label_{{ $key }}"
+                                                                    style="display:block">Options</label>
+                                                                <div class="form-group mb-1">
+                                                                    <input type="text" id="options_name_{{ $key }}"
+                                                                        name="options_name[]"
+                                                                        class="white-smoke form-control options_name"
+                                                                        style="display:block"value="{{ $data->options_name ?? '' }}">
 
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="col-md-2 options_div" style="display:none"
+                                                                id="options_div_{{ $key }}">
+                                                                <label class="options_name_label required"
+                                                                    id="options_name_label_{{ $key }}"
+                                                                    style="display:none">Options</label>
+                                                                <div class="form-group mb-1">
+                                                                    <input type="text" id="options_name_{{ $key }}"
+                                                                        name="options_name[]"
+                                                                        class="white-smoke form-control options_name"
+                                                                        value="" style="display:none">
+
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        <div class="col-md-2">
+                                                            <label>Field Type</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type1[{{ $key }}]"
+                                                                        value="editable"
+                                                                        @php echo ($data->field_type === "editable" ) ? "checked" : ""; @endphp>
+                                                                    <span></span>Editable</label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type1[{{ $key }}]"
+                                                                        value="non_editable"@php echo ($data->field_type === "non_editable" ) ? "checked" : ""; @endphp>
+                                                                    <span></span>Non-Editable</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type1</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type2[{{ $key }}]"
+                                                                        value="multiple"
+                                                                        @php echo ($data->field_type_1 === "multiple" ) ? "checked" : ""; @endphp /><span></span>
+                                                                    Multiple
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type2[{{ $key }}]" value="single"
+                                                                        @php echo ($data->field_type_1 === "single" ) ? "checked" : ""; @endphp /><span></span>Single
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type2</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type3[{{ $key }}]"
+                                                                        value="mandatory"
+                                                                        @php echo ($data->field_type_2 === "mandatory" ) ? "checked" : ""; @endphp /><span></span>Mandatory
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type3[{{ $key }}]"
+                                                                        value="non-mandatory"
+                                                                        @php echo ($data->field_type_2 === "non-mandatory" ) ? "checked" : ""; @endphp /><span></span>Non-Mandatory
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type3</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type4[{{ $key }}]"
+                                                                        value="popup_visible"
+                                                                        @php echo ($data->field_type_3 === "popup_visible" ) ? "checked" : ""; @endphp />
+                                                                    <span></span>Visible
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type4[{{ $key }}]"
+                                                                        value="popup_non_visible"
+                                                                        @php echo ($data->field_type_3 === "popup_non_visible" ) ? "checked" : ""; @endphp />
+                                                                    <span></span>Non Visible
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Visible User</label>
+                                                            <div class="form-group mb-1">
+                                                                {!! Form::select(
+                                                                    'user_type[]',
+                                                                    [
+                                                                        3 => 'Both',
+                                                                        2 => 'Coder',
+                                                                        10 => 'QA',
+                                                                    ],
+                                                                    $data->user_type ?? '',
+                                                                    [
+                                                                        'class' => 'white-smoke form-control user_type',
+                                                                        'id' => 'user_type_id_' . $key,
+                                                                    ],
+                                                                ) !!}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <div class="col-md-2 options_div" style="display:none"
-                                                        id="options_div_{{ $key }}">
-                                                        <label class="options_name_label required"
-                                                            id="options_name_label_{{ $key }}"
-                                                            style="display:none">Options</label>
-                                                        <div class="form-group mb-1">
-                                                            <input type="text" id="options_name_{{ $key }}"
-                                                                name="options_name[]"
-                                                                class="text-black form-control options_name" value=""
-                                                                style="display:none">
-
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                                <div class="col-md-2">
-                                                    <label>Field Type</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type1[{{ $key }}]"
-                                                                value="editable"
-                                                                @php echo ($data->field_type === "editable" ) ? "checked" : ""; @endphp>
-                                                            <span></span>Editable</label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type1[{{ $key }}]"
-                                                                value="non_editable"@php echo ($data->field_type === "non_editable" ) ? "checked" : ""; @endphp>
-                                                            <span></span>Non-Editable</label>
-                                                    </div>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type1</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type2[{{ $key }}]"
-                                                                value="multiple"
-                                                                @php echo ($data->field_type_1 === "multiple" ) ? "checked" : ""; @endphp /><span></span>
-                                                            Multiple
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type2[{{ $key }}]"
-                                                                value="single"
-                                                                @php echo ($data->field_type_1 === "single" ) ? "checked" : ""; @endphp /><span></span>Single
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type2</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type3[{{ $key }}]"
-                                                                value="mandatory"
-                                                                @php echo ($data->field_type_2 === "mandatory" ) ? "checked" : ""; @endphp /><span></span>Mandatory
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type3[{{ $key }}]"
-                                                                value="non-mandatory"
-                                                                @php echo ($data->field_type_2 === "non-mandatory" ) ? "checked" : ""; @endphp /><span></span>Non-Mandatory
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type3</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type4[{{ $key }}]"
-                                                                value="popup_visible"
-                                                                @php echo ($data->field_type_3 === "popup_visible" ) ? "checked" : ""; @endphp />
-                                                            <span></span>Visible
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type4[{{ $key }}]"
-                                                                value="popup_non_visible"
-                                                                @php echo ($data->field_type_3 === "popup_non_visible" ) ? "checked" : ""; @endphp />
-                                                            <span></span>Non Visible
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>User Type</label>
-                                                    <div class="form-group mb-1">
-                                                        {!! Form::select(
-                                                            'user_type[]',
-                                                            [
-                                                                3 => 'Both',
-                                                                2 => 'Coder',
-                                                                10 => 'QA',
-                                                            ],
-                                                            $data->user_type ?? '',
-                                                            [
-                                                                'class' => 'text-black form-control user_type',
-                                                                'id' => 'user_type_id_' . $key,
-                                                            ],
-                                                        ) !!}
-                                                    </div>
+                                                <div class="col-md-1 pt-2 text-lg-right">
+                                                    <i class="fa fas fa-plus icon-circle2 ml-1" id="add_more"></i>
                                                 </div>
                                             </div>
-                                        </div>
+
                                     </div>
-                                </div>
-                            @else
-                                <div class="col-md-12 mb-5"
-                                    style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; "
-                                    id="form_append{{ $key }}">
-                                    <div>
-                                        @if ($key == 0)
-                                            <div class="col-form-label text-lg-right pt-0 pb-4">
-                                                <i class="fa fas fa-plus text-success icon-circle1 ml-1"
-                                                    id="add_more"></i>
-                                            </div>
-                                            {{-- @else
+                                @else
+                                    <div class="col-md-12 mb-5 box-border"
+                                        id="form_append{{ $key }}">
+                                        {{-- <div> --}}
+                                            {{-- @if ($key == 0) --}}
+                                                {{-- <div class="col-form-label text-lg-right pt-0 pb-4">
+                                                    <i class="fa fas fa-plus icon-circle2 ml-1" id="add_more"></i>
+                                                </div> --}}
+                                                {{-- @else
                                             <div class="col-form-label text-lg-right pt-0 pb-4">
                                                 <i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more"
                                                     id="{{ $key }}" disabled></i>
                                             </div> --}}
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <div class="row form-group">
-                                                <div class="col-md-2">
-                                                    <label class="required">Label</label>
-                                                    <div class="form-group mb-1">
-                                                        <input type="text" id="label_name{{ $key }}"
-                                                            name="label_name[]" class="text-black form-control label_name"
-                                                            value="{{ $data->label_name ?? '' }}"
-                                                            oninput="validateInput(this)" readonly>
+                                            {{-- @endif --}}
+                                        {{-- </div> --}}
+                                            <div class="row">
+                                                <div class="col-md-11 pt-5">
+                                                    <div class="row form-group pl-5">
+                                                        <div class="col-md-2">
+                                                            <label class="required">Label</label>
+                                                            <div class="form-group mb-1">
+                                                                <input type="text" id="label_name{{ $key }}"
+                                                                    name="label_name[]"
+                                                                    class="white-smoke-disabled form-control label_name"
+                                                                    value="{{ $data->label_name ?? '' }}"
+                                                                    oninput="validateInput(this)" readonly>
 
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Input Type</label>
-                                                    <div class="form-group mb-1">
-                                                        {!! Form::select(
-                                                            'input_type[{{ $key }}]',
-                                                            [
-                                                                'text' => 'Text Box',
-                                                                'select' => 'Drop Down',
-                                                                'checkbox' => 'CheckBox',
-                                                                'radio' => 'Radio',
-                                                                'date' => 'Date',
-                                                                'date_range' => 'Date Range',
-                                                                'textarea' => 'Text Area',
-                                                            ],
-                                                            $data->input_type ?? '',
-                                                            [
-                                                                'class' => 'text-black form-control input_type',
-                                                                'id' => 'input_type_id_' . $key,
-                                                                'disabled',
-                                                            ],
-                                                        ) !!}
-                                                    </div>
-                                                </div>
-                                                @if ($data->options_name)
-                                                    <div class="col-md-2 options_div" style="display:block"
-                                                        id="options_div_{{ $key }}">
-                                                        <label class="options_name_label required"
-                                                            id="options_name_label_{{ $key }}"
-                                                            style="display:block">Options</label>
-                                                        <div class="form-group mb-1">
-                                                            <input type="text" id="options_name_{{ $key }}"
-                                                                name="options_name[]"
-                                                                class="text-black form-control options_name"
-                                                                style="display:block"value="{{ $data->options_name ?? '' }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Input Type</label>
+                                                            <div class="form-group mb-1">
+                                                                {!! Form::select(
+                                                                    'input_type[{{ $key }}]',
+                                                                    [
+                                                                        'text' => 'Text Box',
+                                                                        'select' => 'Drop Down',
+                                                                        'checkbox' => 'CheckBox',
+                                                                        'radio' => 'Radio',
+                                                                        'date' => 'Date',
+                                                                        'date_range' => 'Date Range',
+                                                                        'textarea' => 'Text Area',
+                                                                    ],
+                                                                    $data->input_type ?? '',
+                                                                    [
+                                                                        'class' => 'white-smoke-disabled form-control input_type',
+                                                                        'id' => 'input_type_id_' . $key,
+                                                                        'disabled',
+                                                                    ],
+                                                                ) !!}
+                                                            </div>
+                                                        </div>
+                                                        @if ($data->options_name)
+                                                            <div class="col-md-2 options_div" style="display:block"
+                                                                id="options_div_{{ $key }}">
+                                                                <label class="options_name_label required"
+                                                                    id="options_name_label_{{ $key }}"
+                                                                    style="display:block">Options</label>
+                                                                <div class="form-group mb-1">
+                                                                    <input type="text"
+                                                                        id="options_name_{{ $key }}"
+                                                                        name="options_name[]"
+                                                                        class="white-smoke form-control options_name"
+                                                                        style="display:block"value="{{ $data->options_name ?? '' }}">
 
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="col-md-2 options_div" style="display:none"
+                                                                id="options_div_{{ $key }}">
+                                                                <label class="options_name_label required"
+                                                                    id="options_name_label_{{ $key }}"
+                                                                    style="display:none">Options</label>
+                                                                <div class="form-group mb-1">
+                                                                    <input type="text"
+                                                                        id="options_name_{{ $key }}"
+                                                                        name="options_name[]"
+                                                                        class="white-smoke form-control options_name"
+                                                                        value="" style="display:none">
+
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        <div class="col-md-2">
+                                                            <label>Field Type</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type1[{{ $key }}]"
+                                                                        value="editable"
+                                                                        @php echo ($data->field_type === "editable" ) ? "checked" : ""; @endphp>
+                                                                    <span></span>Editable</label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type1[{{ $key }}]"
+                                                                        value="non_editable"
+                                                                        @php echo ($data->field_type === "non_editable" ) ? "checked" : ""; @endphp>
+                                                                    <span></span>Non-Editable</label>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type1</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type2[{{ $key }}]"
+                                                                        value="multiple"
+                                                                        @php echo ($data->field_type_1 === "multiple" ) ? "checked" : ""; @endphp />
+                                                                    <span></span>Multiple
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type2[{{ $key }}]"
+                                                                        value="single"
+                                                                        @php echo ($data->field_type_1 === "single" ) ? "checked" : ""; @endphp /><span></span>Single
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type2</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type3[{{ $key }}]"
+                                                                        value="mandatory"
+                                                                        @php echo ($data->field_type_2 === "mandatory" ) ? "checked" : ""; @endphp /><span></span>Mandatory
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type3[{{ $key }}]"
+                                                                        value="non-mandatory"
+                                                                        @php echo ($data->field_type_2 === "non-mandatory" ) ? "checked" : ""; @endphp /><span></span>Non-Mandatory
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Field Type3</label>
+                                                            <div class="radio-inline">
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type4[{{ $key }}]"
+                                                                        value="popup_visible"
+                                                                        @php echo ($data->field_type_3 === "popup_visible" ) ? "checked" : ""; @endphp />
+                                                                    <span></span>Visible
+                                                                </label>
+                                                                <label class="radio">
+                                                                    <input type="radio"
+                                                                        name="field_type4[{{ $key }}]"
+                                                                        value="popup_non_visible"
+                                                                        @php echo ($data->field_type_3 === "popup_non_visible" ) ? "checked" : ""; @endphp />
+                                                                    <span></span>Non Visible
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Visible User</label>
+                                                            <div class="form-group mb-1">
+                                                                {!! Form::select(
+                                                                    'user_type[]',
+                                                                    [
+                                                                        3 => 'Both',
+                                                                        2 => 'Coder',
+                                                                        10 => 'QA',
+                                                                    ],
+                                                                    $data->user_type ?? '',
+                                                                    [
+                                                                        'class' => 'white-smoke form-control user_type',
+                                                                        'id' => 'user_type_id_' . $key,
+                                                                    ],
+                                                                ) !!}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                @else
-                                                    <div class="col-md-2 options_div" style="display:none"
-                                                        id="options_div_{{ $key }}">
-                                                        <label class="options_name_label required"
-                                                            id="options_name_label_{{ $key }}"
-                                                            style="display:none">Options</label>
-                                                        <div class="form-group mb-1">
-                                                            <input type="text" id="options_name_{{ $key }}"
-                                                                name="options_name[]"
-                                                                class="text-black form-control options_name"
-                                                                value="" style="display:none">
-
-                                                        </div>
-                                                    </div>
+                                                </div>
+                                                @if ($key == 0)
+                                                <div class="col-md-1 pt-2 text-lg-right">
+                                                    <i class="fa fas fa-plus icon-circle2 ml-1" id="add_more"></i>
+                                                </div>
                                                 @endif
-                                                <div class="col-md-2">
-                                                    <label>Field Type</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type1[{{ $key }}]"
-                                                                value="editable"
-                                                                @php echo ($data->field_type === "editable" ) ? "checked" : ""; @endphp>
-                                                            <span></span>Editable</label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type1[{{ $key }}]"
-                                                                value="non_editable"
-                                                                @php echo ($data->field_type === "non_editable" ) ? "checked" : ""; @endphp>
-                                                            <span></span>Non-Editable</label>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type1</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type2[{{ $key }}]"
-                                                                value="multiple"
-                                                                @php echo ($data->field_type_1 === "multiple" ) ? "checked" : ""; @endphp />
-                                                            <span></span>Multiple
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type2[{{ $key }}]"
-                                                                value="single"
-                                                                @php echo ($data->field_type_1 === "single" ) ? "checked" : ""; @endphp /><span></span>Single
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type2</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type3[{{ $key }}]"
-                                                                value="mandatory"
-                                                                @php echo ($data->field_type_2 === "mandatory" ) ? "checked" : ""; @endphp /><span></span>Mandatory
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type3[{{ $key }}]"
-                                                                value="non-mandatory"
-                                                                @php echo ($data->field_type_2 === "non-mandatory" ) ? "checked" : ""; @endphp /><span></span>Non-Mandatory
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Field Type3</label>
-                                                    <div class="radio-inline">
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type4[{{ $key }}]"
-                                                                value="popup_visible"
-                                                                @php echo ($data->field_type_3 === "popup_visible" ) ? "checked" : ""; @endphp />
-                                                            <span></span>Visible
-                                                        </label>
-                                                        <label class="radio">
-                                                            <input type="radio" name="field_type4[{{ $key }}]"
-                                                                value="popup_non_visible"
-                                                                @php echo ($data->field_type_3 === "popup_non_visible" ) ? "checked" : ""; @endphp />
-                                                            <span></span>Non Visible
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label>Visible User</label>
-                                                    <div class="form-group mb-1">
-                                                        {!! Form::select(
-                                                            'user_type[]',
-                                                            [
-                                                                3 => 'Both',
-                                                                2 => 'Coder',
-                                                                10 => 'QA',
-                                                            ],
-                                                            $data->user_type ?? '',
-                                                            [
-                                                                'class' => 'text-black form-control user_type',
-                                                                'id' => 'user_type_id_' . $key,
-                                                            ],
-                                                        ) !!}
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
-                    @endif
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4 mt-5">
-            <button type="submit" class="btn btn-primary font-weight-bold"
-                id="formCreation_save">Submit</button>&nbsp;&nbsp;
-            <button class="btn btn-secondary btn-secondary--icon" id="clear_submit" tabindex="10" type="button">
-                <span>
-                    <i class="la la-close"></i>
-                    <span>Clear</span>
-                </span>
-            </button>
+            <div class="form-footer">
+                <button class="btn btn-light-danger" id="clear_submit" tabindex="10" type="button">
+                    <span>
+                        <span>Clear</span>
+                    </span>
+                </button>&nbsp;&nbsp;
+                <button type="submit" class="btn  btn-white-black font-weight-bold"
+                    id="formCreation_save">Submit</button>
+
+            </div>
         </div>
     </div>
     {!! Form::close() !!}
@@ -447,13 +536,12 @@
                 var date = moment().format('YYYY-MM-DD');
                 var min_date = moment().format('YYYY-MM-DD');
                 $('#form_div').append(
-                    '<div class="col-md-12"><div id="form_field"> <div class="col-md-12 mb-5" style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; " id="form_append' +
+                    '<div class="col-md-12"><div id="form_field" style="width:101% !important"> <div class="col-md-12 mb-5 box-border" id="form_append' +
                     j +
-                    '"><div style=""><div class="col-form-label text-lg-right pt-0 pb-4"><i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more" id="' +
-                    j + '"></i></div><div id="form_div' + j +
-                    '"><div class="row form-group"><div class="col-md-2"><label class="required">Label</label><div class="form-group mb-1"><input type="text" id="label_name' +
+                    '"><div class="row"><div class="col-md-11 pt-5" id="form_div' + j +
+                    '"><div class="row form-group pl-5"><div class="col-md-2"><label class="required">Label</label><div class="form-group mb-1"><input type="text" id="label_name' +
                     j +
-                    '" name="label_name[]" class="text-black form-control label_name" oninput="validateInput(this)"> </div></div><div class="col-md-2"><label>Input Type</label><div class="form-group mb-1"><select  class="text-black form-control input_type" name="input_type[' +
+                    '" name="label_name[]" class="white-smoke form-control label_name" oninput="validateInput(this)"> </div></div><div class="col-md-2"><label>Input Type</label><div class="form-group mb-1"><select  class="white-smoke form-control input_type" name="input_type[' +
                     j +
                     ']" id="input_type_id_' +
                     j +
@@ -461,7 +549,7 @@
                     j +
                     '"><label class="options_name_label required" style="display:none"  id="options_name_label_' +
                     j +
-                    '">Options</label><div class="form-group mb-1"><input type="text" name="options_name[]" class="text-black form-control options_name" value="" style="display:none"  id="options_name_' +
+                    '">Options</label><div class="form-group mb-1"><input type="text" name="options_name[]" class="white-smoke form-control options_name" value="" style="display:none"  id="options_name_' +
                     j +
                     '"></div></div><div class="col-md-2"><label>Field Type</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type1_' +
                     j + '" value="editable" id="editable' +
@@ -472,10 +560,10 @@
                     '" checked><span></span>Non-Editable</label></div></div><div class="col-md-2"><label>Field Type1</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type2_' +
                     j + '" value="multiple" id="multiple' +
                     j +
-                    '" class="text-black form-control"><span></span>Multiple</label><label class="radio"><input type="radio" name="field_type2_' +
+                    '" class="white-smoke form-control"><span></span>Multiple</label><label class="radio"><input type="radio" name="field_type2_' +
                     j + '" value="single" id="single' +
                     j +
-                    '" class="text-black form-control" checked><span></span>Single</label></div></div><div class="col-md-2"><label>Field Type2</label><div class="radio-inline"><label class="radio""><input type="radio" name="field_type3_' +
+                    '" class="white-smoke form-control" checked><span></span>Single</label></div></div><div class="col-md-2"><label>Field Type2</label><div class="radio-inline"><label class="radio""><input type="radio" name="field_type3_' +
                     j +
                     '" value="mandatory" /><span></span>Mandatory</label><label class="radio"><input type="radio" name="field_type3_' +
                     j +
@@ -483,11 +571,12 @@
                     j +
                     '" value="popup_visible" checked/><span></span>Visible</label><label class="radio"><input type="radio" name="field_type4_' +
                     j +
-                    '" value="popup_non_visible" /><span></span>Non Visible</label></div></div><div class="col-md-2"><label>User Type</label><div class="form-group mb-1"><select  class="text-black form-control user_type" name="user_type[' +
+                    '" value="popup_non_visible" /><span></span>Non Visible</label></div></div><div class="col-md-2"><label>Visible User</label><div class="form-group mb-1"><select  class="white-smoke form-control user_type" name="user_type[' +
                     j +
                     ']" id="user_type_id_' +
                     j +
-                    '"><option value="3">Both</option><option value="2">Coder</option><option value="10">QA</option></select></div></div></div></div></div></div></div></div>'
+                    '"><option value="3">Both</option><option value="2">Coder</option><option value="10">QA</option></select></div></div></div></div><div class="col-md-1 text-lg-right pt-2"><i class="fa fas fa-minus icon-circle-remove ml-1 remove_more" id="' +
+                    j + '"></i></div></div></div></div></div>'
                 );
             });
 
@@ -625,7 +714,7 @@
                         }).appendTo('form#formConfiguration');
                     }
                     if (labelNameValue == 0 && inputTypeValue == 0) {
-                        e.preventDefault();
+                         e.preventDefault();
                         swal.fire({
                             text: "Do you want to update?",
                             icon: "success",
@@ -633,9 +722,10 @@
                             showCancelButton: true,
                             confirmButtonText: "Yes",
                             cancelButtonText: "No",
+                            reverseButtons: true,
                             customClass: {
-                                confirmButton: "btn font-weight-bold btn-primary",
-                                cancelButton: "btn font-weight-bold btn-danger",
+                                confirmButton: "btn font-weight-bold btn-white-black",
+                                cancelButton: "btn font-weight-bold  btn-light-danger",
                             }
 
                         }).then(function(result) {

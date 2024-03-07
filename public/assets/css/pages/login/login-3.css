@@ -38,7 +38,13 @@
     max-width: 850px; }
   .login.login-3 .login-form {
     width: 100%;
-    max-width: 385px; } }
+    max-width: 401px;
+        max-height: fit-content;
+        padding: 31px;
+        border-radius: 21px;
+    background-color: #191C24 !important;
+
+} }
 
 @media (min-width: 992px) and (max-width: 1399.98px) {
   .login.login-3 .login-aside {

@@ -43,11 +43,11 @@
                 <li class="menu-item menu-item-submenu {{ $sub_menu_decode == $s_id->submenu_id ? 'menu-item-active' : '' }}"
                     aria-haspopup="true" data-menu-toggle="hover" id="15">
                     <a href="{{ url($s_id->sub_menu_name_url) }}?parent={{ request()->parent }}&child={{ $sub_menu }}"
-                        class="menu-link menu-toggle" style='color:#FFF;'>
+                        class="menu-link menu-toggle project_header" style='color:#FFF;' title="{{ $s_id->sub_menu_name }}"  >
                         @php
                             echo $s_id->sub_menu_name_icon;
                         @endphp
-                        <span class="menu-text">{{ $s_id->sub_menu_name }} </span>
+                        {{-- <span class="menu-text">{{ $s_id->sub_menu_name }} </span> --}}
                     </a>
                 </li>
                 <?php } }  }?>

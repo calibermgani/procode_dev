@@ -48,8 +48,50 @@ class ProductionController extends Controller
     }
     public function getSubProjects(Request $request) {
         try {
+            $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+
             $subprojects = subproject::with(['clientName'])->where('project_id',$request->project_id)->where('status','Active')->get();
-            return response()->json(['subprojects' => $subprojects]);
+            $subProjectsWithCount = [];
+            foreach ($subprojects as $key => $data) {
+                $subProjectsWithCount[$key]['client_id'] =$data->clientName->id;
+                $subProjectsWithCount[$key]['client_name'] =$data->clientName->project_name;
+                $subProjectsWithCount[$key]['sub_project_id'] =$data->id;
+                $subProjectsWithCount[$key]['sub_project_name'] = $data->sub_project_name;
+                $projectName = $subProjectsWithCount[$key]['client_name'];
+                $model_name = ucfirst($projectName) . ucfirst($subProjectsWithCount[$key]['sub_project_name']);
+                // dd($model_name);
+
+                    $modelClass = "App\\Models\\" .  $model_name;
+                    if ($loginEmpId && $empDesignation == "Administrator") {
+                        if (class_exists($modelClass)) {
+                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->count();
+                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->count();
+                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->count();
+                        } else {
+                            $subProjectsWithCount[$key]['assignedCount'] ='--';
+                            $subProjectsWithCount[$key]['CompletedCount'] = '--';
+                            $subProjectsWithCount[$key]['PendingCount'] = '--';
+                            $subProjectsWithCount[$key]['holdCount'] = '--';
+                        }
+                    } else if($loginEmpId) {
+                        if (class_exists($modelClass)) {
+                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                        } else {
+                            $subProjectsWithCount[$key]['assignedCount'] ='--';
+                            $subProjectsWithCount[$key]['CompletedCount'] = '--';
+                            $subProjectsWithCount[$key]['PendingCount'] = '--';
+                            $subProjectsWithCount[$key]['holdCount'] = '--';
+                        }
+                     }
+
+            }
+//dd($subProjectsWithCount);
+            return response()->json(['subprojects' => $subProjectsWithCount]);
         } catch (Exception $e) {
             log::debug($e->getMessage());
         }
@@ -121,17 +163,26 @@ class ProductionController extends Controller
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];
+                $duplicateCount = 0;
                 if ($loginEmpId && $empDesignation == "Administrator") {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
                     // }
-                    if (class_exists($modelClassDatas) && class_exists($modelClass)) {
+                    if (class_exists($modelClass)) {
+                        // if (class_exists($modelClassDatas) && class_exists($modelClass)) {
                         // $assignedProjectDetails = $modelClassDatas::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
+                        $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
                         $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
                         $assignedDropDownIds = $modelClass::where('claim_status','CE_Assigned')->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
+                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                        $duplicateCount = $modelClassDuplcates::count();
                         $payload = [
                             'token' => '1a32e71a46317b9cc6feb7388238c95d',
                             'client_id' => $decodedProjectName
@@ -160,6 +211,11 @@ class ProductionController extends Controller
                     if (class_exists($modelClassDatas) && class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('end_time',NULL)->pluck('record_id')->toArray();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                     }
                 }
                 $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -169,7 +225,7 @@ class ProductionController extends Controller
                 $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
-                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs'));
+                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -195,17 +251,30 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();
+               $pendingProjectDetails = collect(); $duplicateCount = 0;
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
                        $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                      $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                    }
                  }
-                return view('productions/clientPendingTab',compact('pendingProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
+
+                return view('productions/clientPendingTab',compact('pendingProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -231,17 +300,30 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();
+               $pendingProjectDetails = collect();$duplicateCount = 0;
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
                        $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                      $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                    }
                  }
-                return view('productions/clientOnholdTab',compact('holdProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
+
+                return view('productions/clientOnholdTab',compact('holdProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -267,17 +349,30 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();
+               $pendingProjectDetails = collect();$duplicateCount = 0;
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
                        $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                      $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                    }
                  }
-                return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
+
+                return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -303,17 +398,30 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();
+               $pendingProjectDetails = collect();$duplicateCount = 0;
                if ($loginEmpId && $empDesignation == "Administrator") {
                    if (class_exists($modelClass)) {
                        $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                      $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                    }
                  }
-                return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
+
+                return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -338,19 +446,32 @@ class ProductionController extends Controller
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
-               $duplicateProjectDetails = collect();
+               $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
+               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $duplicateProjectDetails = collect();$duplicateCount = 0;
                if ($loginEmpId && $empDesignation == "Administrator") {
-                   if (class_exists($modelClass)) {
+                   if (class_exists($modelClassDuplcates)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
-                        $duplicateProjectDetails =  $modelClass::orderBy('id','desc')->limit(10)->get();
+                        $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','desc')->limit(10)->get();
+                        $assignedCount =  $modelClass::where('claim_status','CE_Assigned')->count();
+                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                        $pendingCount =   $modelClass::where('claim_status','CE_Pending')->count();
+                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } elseif ($loginEmpId) {
-                    if (class_exists($modelClass)) {
-                       $duplicateProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
+                    if (class_exists($modelClassDuplcates)) {
+                       $duplicateProjectDetails = $modelClassDuplcates::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
+                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                     }
                 }
-                return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass'));
+
+                return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -383,7 +504,7 @@ class ProductionController extends Controller
     public function clientsStore(Request $request,$clientName,$subProjectName) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data = $request->all(); //dd($request->all());
+                $data = $request->all(); dd($request->all());
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;

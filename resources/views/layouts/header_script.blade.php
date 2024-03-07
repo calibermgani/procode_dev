@@ -14,6 +14,7 @@
 <link href="{{ asset('/assets/css/pages/wizard/wizard-1.css') }}" rel="stylesheet">
 <link rel="shortcut icon" href="{{ asset('/assets/media/logos/aims_fav.png') }}" />
 <link href="{{ asset('/assets/css/pages/login/login-3.css') }}" rel="stylesheet">
+<link href="{{ asset('css/developertheme.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
 

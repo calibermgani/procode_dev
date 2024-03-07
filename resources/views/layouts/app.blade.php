@@ -47,30 +47,36 @@ $url_segment = Request::segment(1);
 
 <body>
     <div class="d-flex flex-column flex-root">
-        <div class="login login-3 login-signin-on d-flex flex-column flex-lg-row flex-row-fluid bg-white auth auth-img-bg"
-            id="kt_login">
-            <div class="login-aside d-flex flex-row-auto bgi-size-cover bgi-no-repeat p-5 p-lg-10"
-                style="background-image: url(assets/media/bg/bg-11.jpg);">
+        <div class="login login-3 login-signin-on d-flex flex-column flex-lg-row flex-row-fluid  auth auth-img-bg"
+            id="kt_login" style="background-color: #191C24  !important;">
+            <div class="login login-3 login-signin-on d-flex flex-column flex-lg-row flex-row-fluid  auth auth-img-bg"
+            id="kt_login" style="background-image: url(assets/media/bg/background_lines.svg);">
+            <div class="login-aside d-flex  bgi-size-cover bgi-no-repeat p-5 p-lg-10">
                 <div class="d-flex flex-row-fluid flex-column justify-content-between">
                     <a href="#" class="flex-column-auto">
-                        {{-- <img src="assets/media/logos/logo-white.png" class="max-h-80px" alt="" /> //need to change logo --}}
                     </a>
+                    <div class="login-aside d-flex  bgi-size-cover bgi-no-repeat m-10" style="background-image: url(assets/media/bg/bg-12.svg); width: 100%; height: 100%"></div>
+                                   <span  style="border-bottom:1px solid #726b6b  !important"></span>
                     <div class="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
-                        <div class="opacity-40 font-weight-bold text-white">© {{ date('Y') }} AnnexMed</div>
+                        <div class="opacity-40 font-weight-bold footer-text">© {{ date('Y') }} Pro coding</div>
                         <div class="d-flex">
-                            <p href="#" class="opacity-40 text-white">Privacy</p>
-                            <p href="#" class="opacity-40 text-white ml-10">Legal</p>
-                            <p href="#" class="opacity-40 text-white ml-10">Contact</p>
+                            <p href="#" class="opacity-40 footer-text">Privacy</p>
+                            <p href="#" class="opacity-40 footer-text ml-10">Legal</p>
+                            <p href="#" class="opacity-40 footer-text ml-10">Contact</p>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="flex-row-fluid d-flex flex-column position-relative p-7 overflow-hidden">
                 <div class="d-flex flex-column-fluid flex-center mt-5 mt-lg-0">
-                    <div class="login-form login-signin auth-form-transparent">
+                    <div class="login-form login-signin auth-form-transparent" style="box-shadow: 0px -25px 20px -20px rgba(12, 19, 83, 0.45),
+                    25px 0px 20px -20px rgba(12, 19, 83, 0.45),
+                    0px 25px 20px -20px rgba(12, 19, 83, 0.45),
+                    -25px 0px 20px -20px rgba(12, 19, 83, 0.45);">
                         <div class="text-left  mb-10 mb-lg-10">
-                            <h3 class="font-size-h1">Sign In</h3>
-                            <p class="text-muted font-weight-bold">Enter your username and password</p>
+                            <h3 class="font-size-h1">Welcome Sign In</h3>
+                            <p class="login-subtext">Enter your username and password</p>
                         </div>
                         @yield('content')
                     </div>
@@ -94,7 +100,7 @@ $url_segment = Request::segment(1);
                     </div>
                 </div>
             </div>
-
+        </div>
         </div>
     </div>
     <div class="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center p-5"

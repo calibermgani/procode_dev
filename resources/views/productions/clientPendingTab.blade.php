@@ -1,37 +1,41 @@
 @extends('layouts.app3')
-
-{{-- @section('subheader')
-    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Client Information</h5>
-
-            </div>
-        </div>
-    </div>
-@endsection --}}
-@include('productions.subheader')
 @section('content')
     <div class="content d-flex flex-column flex-column-fluid">
         <div class="d-flex flex-column-fluid">
             <div class="container-fluid p-0">
-                <div class="card card-custom card-transparent">
+                <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
                             $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] != null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : '';
                             // $encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
-                        <div class="wizard wizard-4" id="kt_wizard_v4" data-wizard-state="step-first"
-                            data-wizard-clickable="true">
+                           <div class="card-header border-0 px-4">
+                                <div class="card-title">
+                                    {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
+                                            class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
+                                            style="width: 1.05rem !important;color: #000000 !important;margin-left: 4px !important;">
+                                            <path fill-rule="evenodd"
+                                                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                        </svg>
+                                    </span> --}}
+                                    <span class="project_header" style="margin-left: 4px !important;">Client Information</span>
+                                    <div class="outside float-right" href="javascript:void(0);"></div>
+                                </div>
+                        </div>
+                        <div class="wizard wizard-4 custom-wizard" id="kt_wizard_v4" data-wizard-state="step-first"
+                            data-wizard-clickable="true" style="margin-top:-2rem !important">
                             <div class="wizard-nav">
                                 <div class="wizard-steps">
                                     <!--begin:: Tab Menu View -->
                                     <div class="wizard-step mb-0 one" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
-                                                <div class="wizard-title"
-                                                    style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                    <h6>Assigned</h6>
+                                                <div class="wizard-title" style="display: flex; align-items: center;">
+                                                    <h6 style="margin-right: 5px;">Assigned</h6>
+                                                    <div class="rounded-circle code-badge-tab">
+                                                        {{ $assignedCount }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -39,9 +43,11 @@
                                     <div class="wizard-step mb-0 two" data-wizard-type="step">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
-                                                <div class="wizard-title"
-                                                    style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                    <h6>Pending</h6>
+                                                <div class="wizard-title" style="display: flex; align-items: center;">
+                                                    <h6 style="margin-right: 5px;">Pending</h6>
+                                                    <div class="rounded-circle code-badge-tab-selected">
+                                                        {{ $pendingCount }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -49,9 +55,11 @@
                                     <div class="wizard-step mb-0 three" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
-                                                <div class="wizard-title"
-                                                    style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                    <h6>Hold</h6>
+                                                <div class="wizard-title" style="display: flex; align-items: center;">
+                                                    <h6 style="margin-right: 5px;">Hold</h6>
+                                                    <div class="rounded-circle code-badge-tab">
+                                                        {{ $holdCount }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -59,9 +67,11 @@
                                     <div class="wizard-step mb-0 four" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
-                                                <div class="wizard-title"
-                                                    style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                    <h6>Completed</h6>
+                                                <div class="wizard-title" style="display: flex; align-items: center;">
+                                                    <h6 style="margin-right: 5px;">Completed</h6>
+                                                    <div class="rounded-circle code-badge-tab">
+                                                        {{ $completedCount }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -69,9 +79,11 @@
                                     <div class="wizard-step mb-0 five" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
-                                                <div class="wizard-title"
-                                                    style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                    <h6>Rework</h6>
+                                                <div class="wizard-title" style="display: flex; align-items: center;">
+                                                    <h6 style="margin-right: 5px;">Rework</h6>
+                                                    <div class="rounded-circle code-badge-tab">
+                                                        {{ $reworkCount }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,9 +92,11 @@
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
-                                                    <div class="wizard-title"
-                                                        style="display: inline-block;max-width: 180px; white-space: nowrap;overflow: hidden !important;text-overflow: ellipsis;">
-                                                        <h6>Duplicate</h6>
+                                                    <div class="wizard-title" style="display: flex; align-items: center;">
+                                                        <h6 style="margin-right: 5px;">Duplicate</h6>
+                                                            <div class="rounded-circle code-badge-tab">
+                                                                {{ $duplicateCount }}
+                                                            </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -92,35 +106,13 @@
                             </div>
                         </div>
 
-                        <div class="card card-custom">
-                            <div class="card-header border-0 px-4">
-                                <div class="card-title">
-                                    <span class="text-muted font-weight-bold font-size-lg flex-grow-1">
-                                        <span class="svg-icon svg-icon-primary svg-icon-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24"></rect>
-                                                    <path
-                                                        d="M8,4 L16,4 C17.1045695,4 18,4.8954305 18,6 L18,17.726765 C18,18.2790497 17.5522847,18.726765 17,18.726765 C16.7498083,18.726765 16.5087052,18.6329798 16.3242754,18.4639191 L12.6757246,15.1194142 C12.2934034,14.7689531 11.7065966,14.7689531 11.3242754,15.1194142 L7.67572463,18.4639191 C7.26860564,18.8371115 6.63603827,18.8096086 6.26284586,18.4024896 C6.09378519,18.2180598 6,17.9769566 6,17.726765 L6,6 C6,4.8954305 6.8954305,4 8,4 Z"
-                                                        fill="#000000"></path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                        <span style="color:#0e969c">Client Information</span>
-                                    </span>
-                                </div>
-                                <div class="card-toolbar d-inline float-right mt-3">
-                                    <div class="outside" href="javascript:void(0);"></div>
-                                </div>
-                            </div>
+                        <div class="card card-custom custom-top-border">
                             <div class="card-body py-0 px-7">
                                 {{-- <input type="hidden" value={{ $databaseConnection }} id="dbConnection"> --}}
                                 {{-- <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
-                                <div class="table-responsive pt-5">
+                                <div class="table-responsive pt-5 pb-5 clietnts_table">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_pending_list">
                                         <thead>
@@ -159,8 +151,7 @@
                                                                 $columnsToExclude = ['id','QA_emp_id','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
-                                                                <td
-                                                                    style="{{ $data->invoke_date == 125 ? 'color: #fff;' : '' }}">
+                                                                <td style="max-width: 300px;white-space: normal;">
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
@@ -227,7 +218,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
-            var table =  $("#client_pending_list").DataTable({
+            var table = $("#client_pending_list").DataTable({
                 // processing: true,
                 // lengthChange: false,
                 // searching: true,
@@ -245,16 +236,20 @@
                 //     text: 'Column Visibility'
                 // }]
                 processing: true,
-                //serverSide: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
-                scrollCollapse: true,
-                scrollX: true,
+                // scrollCollapse: true,
+                // scrollX: true,
+                language: {
+                    "search": '',
+                    "searchPlaceholder": "   Search",
+                },
                 buttons: [{
                     "extend": 'excel',
-                    "text": '<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export"> <i class="fas fa-file-excel" style="font-size:14px;color: white"></i> Export</span>',
-                    "className": 'btn btn-primary  btn-primary--icon text-white',
+                    "text": `<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export" style="font-size:13px"> <svg xmlns="http://www.w3.org/2000/svg" width="18" height="16" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+                             </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
+                    "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
                     "filename": 'procode_report_',
                 }],
@@ -262,6 +257,7 @@
             })
             table.buttons().container()
                 .appendTo('.outside');
+                $('.dataTables_filter').addClass('pull-left');
             $(document).on('click', '.clickable-row', function(e) {
                 $('#myModal_status').modal('show');
             });

@@ -1,5 +1,5 @@
 @extends('layouts.app3')
-
+{{--
 @section('subheader')
     <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
@@ -12,7 +12,7 @@
                 href="{{ url('form_configuration_list') }}?parent={{ request()->parent }}&child={{ request()->child }}">List</a>
         </div>
     </div>
-@endsection
+@endsection --}}
 
 @section('content')
     {!! Form::open([
@@ -22,180 +22,185 @@
         'enctype' => 'multipart/form-data',
     ]) !!}
     @csrf
-    <div class="row">
-        <div class="col-2">
-                <div class="d-flex flex-column mt-4 mb-2" style="flex-wrap:wrap">
-
-                    <label class="col-form-label px-3 required">Project</label>
-                    @php $projectList = App\Http\Helper\Admin\Helpers::projectList();
-                    @endphp
-                    <div class="form-group mb-1">
-                        {!! Form::select('project_id', $projectList, null, [
-                            'class' => 'form-control js-client-name',
-                            'id' => 'project_list',
-                        ]) !!}
-
-                    </div>
+    <div class="card card-custom mb-5 custom-card">
+        <div class="card-body pt-0 pb-2 pl-0 mr-2">
+            <div class="row">
+                <div class="col-6 mt-4">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="project_header" href="{{ url('form_configuration_list') }}?parent={{ request()->parent }}&child={{ request()->child }}">
+                            <span class="svg-icon svg-icon-primary svg-icon-lg mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor" class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16" style="width: 1.05rem !important;color: #000000 !important;">
+                                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                                </svg>
+                            </span>Form Creation</a>
                 </div>
-        </div>
-        <div class="col-2">
-                <div class="d-flex flex-column mt-4 mb-2" style="flex-wrap:wrap">
-                    <label class="col-form-label px-3 required">Sub Project</label>
-                    <div class="form-group mb-1">
-                        @php
-                            $subProjectList = [];
 
-                        @endphp
-                        {!! Form::select('sub_project_id', $subProjectList, null, [
-                            'class' => 'form-control js-client-name',
-                            'id' => 'sub_project_list',
-                        ]) !!}
+                <div class="col-6 mt-4 pr-0">
+                    <div class="row">
+                        <div class="col-6"></div>
+                        <div class="col-3 pr-1">
+                            @php $projectList = App\Http\Helper\Admin\Helpers::projectList(); @endphp
+                            <div class="form-group mb-0">
+                                {!! Form::select('project_id', $projectList, null, [
+                                    'class' => 'form-control white-smoke kt_select2_project',
+                                    'id' => 'project_list',
+                                ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-3 pl-1">
+                            <div class="form-group mb-0">
+                                @php $subProjectList = []; @endphp
+                                {!! Form::select('sub_project_id', $subProjectList, null, [
+                                    'class' => 'form-control kt_select2_sub_project',
+                                    'id' => 'sub_project_list',
+                                ]) !!}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-    </div>
-    <div class="card-body pt-0 pb-2 pl-0">
-        <div class="row" id="form_div">
-            <div class="col-md-12">
-                <div id="form_field">
-                    <div class="col-md-12 mb-5"
-                        style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; "
-                        id="form_append">
-                        {{-- <div> --}}
-                            <div class="col-form-label text-lg-right pt-0 pb-4">
-                                <i class="fa fas fa-plus text-success icon-circle1 ml-1" id="add_more"></i>
-                            </div>
-                            <div>
-                                <div class="row form-group">
-                                    <div class="col-md-2">
-                                        <label class="required">Label</label>
-                                        <div class="form-group mb-1">
-                                            <input type="text" id="label_name" name="label_name[]"
-                                                class="text-black form-control label_name" value=""
-                                                oninput="validateInput(this)">
+            <div class="row  mt-4 ml-1" id="form_div">
+                <div class="col-md-12">
+                    <div id="form_field" style="width:101% !important">
+                        <div class="col-md-12 mb-5 box-border"
+                            id="form_append">
+                            <div class="row">
 
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Input Type</label>
-                                        <div class="form-group mb-1">
-                                            {!! Form::select(
-                                                'input_type[]',
-                                                [
-                                                    'text' => 'Text Box',
-                                                    'select' => 'Drop Down',
-                                                    'checkbox' => 'CheckBox',
-                                                    'radio' => 'Radio',
-                                                    'date' => 'Date',
-                                                    'date_range' => 'Date Range',
-                                                    'textarea' => 'Text Area',
-                                                ],
-                                                null,
-                                                [
-                                                    'class' => 'text-black form-control input_type',
-                                                    'id' => 'input_type_id_0',
-                                                ],
-                                            ) !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 options_div" style="display:none" id="options_div_0">
-                                        <label class="options_name_label required" id="options_name_label_0"
-                                            style="display:none">Options</label>
-                                        <div class="form-group mb-1">
-                                            <input type="text" id="options_name_0" name="options_name[]"
-                                                class="text-black form-control options_name" value=""
-                                                style="display:none">
+                                <div class="col-md-11 pt-5">
+                                    <div class="row form-group pl-5">
+                                        <div class="col-md-2">
+                                            <label class="required">Label</label>
+                                            <div class="form-group mb-1">
+                                                <input type="text" id="label_name" name="label_name[]"
+                                                    class="white-smoke form-control label_name" value=""
+                                                    oninput="validateInput(this)">
 
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-2">
-                                        <label>Field Type</label>
-                                        <div class="radio-inline">
-                                            <label class="radio">
-                                                <input type="radio" name="field_type1" value="editable">
-                                                <span></span>Editable</label>
-                                            <label class="radio">
-                                                <input type="radio" name="field_type1" value="non_editable"checked>
-                                                <span></span>Non-Editable</label>
-
+                                        <div class="col-md-2">
+                                            <label>Input Type</label>
+                                            <div class="form-group mb-1">
+                                                {!! Form::select(
+                                                    'input_type[]',
+                                                    [
+                                                        'text' => 'Text Box',
+                                                        'select' => 'Drop Down',
+                                                        'checkbox' => 'CheckBox',
+                                                        'radio' => 'Radio',
+                                                        'date' => 'Date',
+                                                        'date_range' => 'Date Range',
+                                                        'textarea' => 'Text Area',
+                                                    ],
+                                                    null,
+                                                    [
+                                                        'class' => 'form-control white-smoke input_type',
+                                                        'id' => 'input_type_id_0',
+                                                    ],
+                                                ) !!}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Field Type1</label>
-                                        <div class="radio-inline">
-                                            <label class="radio" style="padding-top: 1px;">
-                                                <input type="radio" name="field_type2"
-                                                    value="multiple" /><span></span>Multiple
+                                        <div class="col-md-2 options_div" style="display:none" id="options_div_0">
+                                            <label class="options_name_label required" id="options_name_label_0"
+                                                style="display:none">Options</label>
+                                            <div class="form-group mb-1">
+                                                <input type="text" id="options_name_0" name="options_name[]"
+                                                    class="text-black form-control options_name" value=""
+                                                    style="display:none">
 
-                                            </label>
-                                            <label class="radio" style="padding-top: 1px;">
-                                                <input type="radio" name="field_type2" value="single"
-                                                    checked /><span></span>Single
+                                            </div>
+                                        </div>
 
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Field Type2</label>
-                                        <div class="radio-inline">
-                                            <label class="radio">
-                                                <input type="radio" name="field_type3" value="mandatory" />
-                                                <span></span>Mandatory
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="field_type3" value="non-mandatory" checked />
-                                                <span></span>Non-Mandatory
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Field Type3</label>
-                                        <div class="radio-inline">
-                                            <label class="radio">
-                                                <input type="radio" name="field_type4" value="popup_visible" checked/>
-                                                <span></span>Visible
-                                            </label>
-                                            <label class="radio">
-                                                <input type="radio" name="field_type4" value="popup_non_visible"  />
-                                                <span></span>Non Visible
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>Visible User</label>
-                                        <div class="form-group mb-1">
-                                            {!! Form::select(
-                                                'user_type[]',
-                                                [
-                                                    3 => 'Both',
-                                                    2 => 'Coder',
-                                                    10 => 'QA',
+                                        <div class="col-md-2">
+                                            <label>Field Type</label>
+                                            <div class="radio-inline">
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type1" value="editable">
+                                                    <span></span>Editable</label>
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type1" value="non_editable"checked>
+                                                    <span></span>Non-Editable</label>
 
-                                                ],
-                                                null,
-                                                [
-                                                    'class' => 'text-black form-control user_type',
-                                                    'id' => 'user_type_id_0',
-                                                ],
-                                            ) !!}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Field Type1</label>
+                                            <div class="radio-inline">
+                                                <label class="radio" style="padding-top: 1px;">
+                                                    <input type="radio" name="field_type2"
+                                                        value="multiple" /><span></span>Multiple
+
+                                                </label>
+                                                <label class="radio" style="padding-top: 1px;">
+                                                    <input type="radio" name="field_type2" value="single"
+                                                        checked /><span></span>Single
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Field Type2</label>
+                                            <div class="radio-inline">
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type3" value="mandatory" />
+                                                    <span></span>Mandatory
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type3" value="non-mandatory" checked />
+                                                    <span></span>Non-Mandatory
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Field Type3</label>
+                                            <div class="radio-inline">
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type4" value="popup_visible" checked/>
+                                                    <span></span>Visible
+                                                </label>
+                                                <label class="radio">
+                                                    <input type="radio" name="field_type4" value="popup_non_visible"  />
+                                                    <span></span>Non Visible
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label>Visible User</label>
+                                            <div class="form-group mb-1">
+                                                {!! Form::select(
+                                                    'user_type[]',
+                                                    [
+                                                        3 => 'Both',
+                                                        2 => 'Coder',
+                                                        10 => 'QA',
+
+                                                    ],
+                                                    null,
+                                                    [
+                                                        'class' => 'white-smoke form-control user_type',
+                                                        'id' => 'user_type_id_0',
+                                                    ],
+                                                ) !!}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-1 pt-2 text-lg-right">
+                                    <i class="fa fas fa-plus icon-circle2 ml-1" id="add_more"></i>
+                                </div>
                             </div>
-                        {{-- </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4 mt-5">
-            <button type="submit" class="btn btn-primary font-weight-bold" id="formUpdate_save">Submit</button>&nbsp;&nbsp;
-            <button class="btn btn-secondary btn-secondary--icon" id="clear_submit" tabindex="10" type="button">
-                <span>
-                    <i class="la la-close"></i>
-                    <span>Clear</span>
-                </span>
-            </button>
+            <div class="form-footer">
+                <button class="btn btn-light-danger" id="clear_submit" tabindex="10" type="button">
+                    <span>
+                        <span>Clear</span>
+                    </span>
+                </button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-white-black font-weight-bold" id="formUpdate_save">Submit</button>
+
+            </div>
         </div>
     </div>
     {!! Form::close() !!}
@@ -221,19 +226,18 @@
                 var date = moment().format('YYYY-MM-DD');
                 var min_date = moment().format('YYYY-MM-DD');
                 $('#form_div').append(
-                    '<div class="col-md-12"><div id="form_field"> <div class="col-md-12 mb-5" style="background: #fcfcfc; padding: 5px 10px 1px 10px;border-radius:5px; border: 1px solid #28bb9f2e; " id="form_append' +
+                    '<div class="col-md-12"><div id="form_field" style="width:101% !important"> <div class="col-md-12 mb-5 box-border" id="form_append' +
                     j +
-                    '"><div style=""><div class="col-form-label text-lg-right pt-0 pb-4"><i class="fa fas fa-minus text-danger icon-circle1 ml-1 remove_more" id="' +
-                    j + '"></i></div><div id="form_div' + j +
-                    '"><div class="row form-group"><div class="col-md-2"><label class="required">Label</label><div class="form-group mb-1"><input type="text" id="label_name' +
+                    '"><div class="row"><div class="col-md-11 pt-5" id="form_div' + j +
+                    '"><div class="row form-group pl-5"><div class="col-md-2"><label class="required">Label</label><div class="form-group mb-1"><input type="text" id="label_name' +
                     j +
-                    '" name="label_name[]" class="text-black form-control label_name"> </div></div><div class="col-md-2"><label>Input Type</label><div class="form-group mb-1"><select  class="text-black form-control input_type" name="input_type[]" id="input_type_id_' +
+                    '" name="label_name[]" class="white-smoke form-control label_name"> </div></div><div class="col-md-2"><label>Input Type</label><div class="form-group mb-1"><select  class="white-smoke form-control input_type" name="input_type[]" id="input_type_id_' +
                     j +
                     '"><option value="text">Text Box</option><option value="select">Drop Down</option><option value="checkbox">CheckBox</option><option value="radio">Radio</option><option value="date">Date</option><option value="date_range">Date Range</option><option value="textarea">Text Area</option></select></div></div> <div class="col-md-2 options_div" style="display:none" id="options_div_' +
                     j +
                     '"><label class="options_name_label required" style="display:none"  id="options_name_label_' +
                     j +
-                    '">Options</label><div class="form-group mb-1"><input type="text" name="options_name[]" class="text-black form-control options_name" value="" style="display:none"  id="options_name_' +
+                    '">Options</label><div class="form-group mb-1"><input type="text" name="options_name[]" class="white-smoke form-control options_name" value="" style="display:none"  id="options_name_' +
                     j +
                     '"></div></div><div class="col-md-2"><label>Field Type</label><div class="radio-inline"><label class="radio"><input type="radio" name="field_type1_' +
                     j + '" value="editable" id="editable' +
@@ -255,9 +259,10 @@
                     j +
                     '" value="popup_visible" checked/><span></span>Visible</label><label class="radio"><input type="radio" name="field_type4_' +
                     j +
-                    '" value="popup_non_visible"  /><span></span>Non Visible</label></div></div><div class="col-md-2"><label>User Type</label><div class="form-group mb-1"><select  class="text-black form-control user_type" name="user_type[]" id="user_type_id_' +
+                    '" value="popup_non_visible"  /><span></span>Non Visible</label></div></div><div class="col-md-2"><label>Visible User</label><div class="form-group mb-1"><select  class="white-smoke form-control user_type" name="user_type[]" id="user_type_id_' +
                     j +
-                    '"><option value="3">Both</option><option value="2">Coder</option><option value="10">QA</option></select></div></div> </div></div></div></div></div></div></div>'
+                    '"><option value="3">Both</option><option value="2">Coder</option><option value="10">QA</option></select></div></div> </div></div><div class="col-md-1 text-lg-right pt-2"><i class="fa fas fa-minus  icon-circle-remove ml-1 remove_more" id="' +
+                    j + '"></i></div></div></div></div></div></div>'
                 );
             });
 
@@ -311,7 +316,7 @@
                     $('#options_name_' + lastElement).css('display', 'none');
                 }
             });
-            $(document).on('click', '#formUpdate_save', function() {
+            $(document).on('click', '#formUpdate_save', function(e) {
                 var project_id = $('#project_list');
                 var sub_project_id = $('#sub_project_list');
                 var label_name = $('.label_name');
@@ -399,15 +404,16 @@
                     if (labelNameValue == 0 && inputTypeValue == 0) {
                         e.preventDefault();
                         swal.fire({
-                            text: "Do you want to update?",
+                            text: "Do you want to save?",
                             icon: "success",
                             buttonsStyling: false,
                             showCancelButton: true,
                             confirmButtonText: "Yes",
                             cancelButtonText: "No",
+                            reverseButtons: true,
                             customClass: {
-                                confirmButton: "btn font-weight-bold btn-primary",
-                                cancelButton: "btn font-weight-bold btn-danger",
+                                confirmButton: "btn font-weight-bold btn-white-black",
+                                cancelButton: "btn font-weight-bold  btn-light-danger",
                             }
 
                         }).then(function(result) {
@@ -416,7 +422,7 @@
                                 document.querySelector('#formConfiguration').submit();
 
                             } else {
-                                location.reload();
+                               location.reload();
                             }
                         });
                     } else {
