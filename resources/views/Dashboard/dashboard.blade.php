@@ -1,36 +1,105 @@
 @extends('layouts.app3')
-@section('subheader')
-    <div class="subheader py-2 py-lg-4 subheader-solid" id="kt_subheader">
-        <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-            <div class="d-flex align-items-center flex-wrap mr-2">
-                <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">Dashboard</h5>
-                <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-            </div>
-        </div>
-    </div>
-@endsection
+
 @section('content')
-    <div class="dashboard-head">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-custom card-stretch gutter-b" style="height: 450px">
-                    <div data-scroll="true" data-height="400">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom card-stretch gutter-b" style="height: 450px">
-                    <div data-scroll="true" data-height="400">
-                        <div class="card-body px-5 py-0 mb-2">
+
+
+<div class="container">
+    <div class="row">
+        <!-- First section -->
+        <div class="col-md-6">
+            <!-- First section card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- First section left side -->
+                    <div class="row">
+                        <!-- Five small cards showing status -->
+                        <div class="col-2">
+                            <div class="card bg-primary text-white">Card 1</div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card bg-success text-white">Card 2</div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card bg-warning text-white">Card 3</div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card bg-danger text-white">Card 4</div>
+                        </div>
+                        <div class="col-2">
+                            <div class="card bg-info text-white">Card 5</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card card-custom card-stretch gutter-b" id="kt_todo_view" style="height: 450px">
+        </div>
+        <div class="col-md-6">
+            <!-- First section right side card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Flow chart -->
+                    <img src="flowchart.png" alt="Flow chart" class="img-fluid">
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row mt-4">
+        <!-- Second section -->
+        <div class="col-md-6">
+            <!-- Second section left card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Table 1 -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Header 1</th>
+                                <th>Header 2</th>
+                                <th>Header 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data 1</td>
+                                <td>Data 2</td>
+                                <td>Data 3</td>
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <!-- Second section right card -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Table 2 -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Header 1</th>
+                                <th>Header 2</th>
+                                <th>Header 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data 1</td>
+                                <td>Data 2</td>
+                                <td>Data 3</td>
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
     @endsection
     <style>
         .notice_scroll {
@@ -54,4 +123,3 @@
             /* color of the track */
         }
     </style>
-
