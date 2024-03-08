@@ -175,7 +175,7 @@ class ProductionController extends Controller
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
                         $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
-                        $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->limit(2000)->get();
+                        $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->limit(2000)->get();
                         $assignedDropDownIds = $modelClass::where('claim_status','CE_Assigned')->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
@@ -209,7 +209,7 @@ class ProductionController extends Controller
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClassDatas) && class_exists($modelClass)) {
-                       $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
+                       $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('end_time',NULL)->pluck('record_id')->toArray();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();

@@ -351,7 +351,7 @@
                                     </div>
                                 </div>
 
-                                <div class="modal fade" id="myModal_status" tabindex="-1" role="dialog"
+                                <div class="modal fade modal-first" id="myModal_status" tabindex="-1" role="dialog"
                                     aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">
                                         @if ($popUpHeader != null)
                                             <div class="modal-dialog">
@@ -373,18 +373,7 @@
                                                     );
 
                                                 @endphp
-                                                {!! Form::open([
-                                                    'url' =>
-                                                        url('project_store/' . $projectName . '/' . $subProjectName) .
-                                                        '?parent=' .
-                                                        request()->parent .
-                                                        '&child=' .
-                                                        request()->child,
-                                                    'class' => 'form',
-                                                    'id' => 'formConfiguration',
-                                                    'enctype' => 'multipart/form-data',
-                                                ]) !!}
-                                                @csrf
+
 
                                                     <div class="modal-content" style="margin-top: 7rem">
                                                         <div class="modal-header" style="background-color: #191C24;height: 84px">
@@ -413,7 +402,7 @@
                                                         <div class="col-md-8 d-flex justify-content-end">
                                                             <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
                                                             <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a>
-                                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">SOP</a>
+                                                            <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
                                                             <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a>
                                                         </div>
 
@@ -421,6 +410,18 @@
                                                                 aria-hidden="true">&times;</button> --}}
 
                                                         </div>
+                                                        {!! Form::open([
+                                                            'url' =>
+                                                                url('project_store/' . $projectName . '/' . $subProjectName) .
+                                                                '?parent=' .
+                                                                request()->parent .
+                                                                '&child=' .
+                                                                request()->child,
+                                                            'class' => 'form',
+                                                            'id' => 'formConfiguration',
+                                                            'enctype' => 'multipart/form-data',
+                                                        ]) !!}
+                                                        @csrf
                                                         <div class="modal-body">
                                                             <div class="row">
                                                                 <div class="col-md-3" data-scroll="true" data-height="400">
@@ -746,7 +747,7 @@
                                                                 <button type="submit" class="btn1" id="project_assign_save" style="margin-right: -2rem">Submit</button>
                                                             </div>
                                                         </div>
-
+                                                        {!! Form::close() !!}
                                                         {{-- <div class="modal-body">
                                                                 @if (count($popupNonEditableFields) > 0)
                                                                     @php $count = 0; @endphp
@@ -968,9 +969,28 @@
                                                             </div>
                                                         </div> --}}
                                                     </div>
-                                                {!! Form::close() !!}
+
                                             </div>
                                         @endif
+                                </div>
+                                <div class="modal fade modal-second" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-backdrop="static">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">SOP</h5>
+                                                <button type="button" class="close comment_close" data-dismiss="modal"
+                                                aria-hidden="true">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <iframe src={{ asset('/pdf_folder/sample_1234.pdf') }} style="width: 100%; height: 500px;" frameborder="0" type="application/pdf"></iframe>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a>
+                                                <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
+                                                <!-- Additional buttons can be added here -->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
                     </div>
@@ -998,7 +1018,16 @@
         padding: 8px;
         box-sizing: border-box;
     }
-
+    /* .modal-first {
+      left: 50%  !important;
+      top: 50%  !important;
+      transform: translate(-50%, -50%) !important;
+    }
+    .modal-second {
+      position: absolute !important;
+      left: calc(50% - 50px) !important;
+      top: calc(50% - 50px) !important;
+    } */
     /* .dt-buttons {
     position: absolute;
     top: 0;
@@ -1223,7 +1252,7 @@
                     },
                     success: function(response) {
                         if (response.success == true) {
-                            $('#myModal_status').modal('show');
+                             $('#myModal_status').modal('show');
                             startTime_db = response.startTimeVal;
                             console.log(startTime_db, 'startTime_db');
                         } else {
@@ -1304,7 +1333,10 @@
 
                 });
             });
-
+            $(document).on('click', '#sop_click', function(e) {
+                console.log('sop modal');
+                $('#myModal_sop').modal('show');
+            });
             $(document).on('click', '#project_assign_save', function(e) {
                 e.preventDefault();
                 var fieldNames = $('#formConfiguration').serializeArray().map(function(input) {
