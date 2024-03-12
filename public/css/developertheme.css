@@ -531,3 +531,51 @@ color: #FFFFFF !important;
 
 }
 
+.dash_icon {
+    width: 40px;
+    height: 40px;
+}
+.dash_card {
+    width: 105px;
+    height: 160px;
+    padding: 24px 14px 24px 14px;
+    border-radius: 10px;
+    gap: 17px;
+}
+.bg_assign {
+    background-color: #F0F9FF;
+}
+.bg_comp {
+    background-color: #DFFFEA;
+}
+.bg_pend {
+    background-color: #FDEEEC;
+}
+.bg_hold {
+    background-color: #FBF1FF;
+}
+.bg_rework {
+    background-color: #FEF6E6;
+}
+.table-head-dashboard {
+background-color: #ffffff;
+color: #666666;
+width: 600px;
+height: 20px;
+top: -1px;
+left: 17px;
+margin-left: -1rem;
+
+}
+.table-head-dashboard tbody td {
+    background-color: #ffffff;
+    color: #191C24;
+    font-family: "Poppins";
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: left;
+
+    }
+

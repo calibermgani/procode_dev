@@ -51,6 +51,7 @@ Route::any('project_store/{projectName}/{subProjectName}', 'App\Http\Controllers
 Route::any('procode_testing','App\Http\Controllers\DashboardController@procodeTesting');
 Route::any('assignee_change', 'App\Http\Controllers\ProductionController@assigneeChange');
 Route::any('caller_chart_work_logs', 'App\Http\Controllers\ProductionController@callerChartWorkLogs');
+Route::any('client_completed_datas_details', 'App\Http\Controllers\ProductionController@clientCompletedDatasDetails');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

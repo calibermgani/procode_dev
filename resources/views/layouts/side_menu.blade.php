@@ -2,8 +2,8 @@
     <div class="brand flex-column-auto" id="kt_brand">
         <a href="{{ url('dashboard') }}" class="brand-logo">
 
-            {{-- <img src="{{ URL::asset('/assets/media/logos/logo-white.png') }}" alt="logo"
-                class="logo-default max-h-50px" /> --}}
+            <img src="{{ asset('/assets/media/bg/pc_logo_sm.svg') }}" alt="logo"
+                class="logo-default max-h-50px" />
         </a>
 
         <button class="brand-toggle btn btn-sm px-0" id="kt_aside_toggle">

@@ -208,7 +208,7 @@ class ProductionController extends Controller
                     // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                     //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
-                    if (class_exists($modelClassDatas) && class_exists($modelClass)) {
+                    if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->limit(2000)->get();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('end_time',NULL)->pluck('record_id')->toArray();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
@@ -344,7 +344,7 @@ class ProductionController extends Controller
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
-               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -371,8 +371,15 @@ class ProductionController extends Controller
                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
                    }
                  }
+                 $dept= Session::get('loginDetails')['userInfo']['department']['id'];
+                 $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                 ->where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)
+                 ->select('project_id', 'sub_project_id')
+                 ->first();
+                 $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
+                 $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
-                return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount'));
+                return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','popUpHeader','popupNonEditableFields','popupEditableFields'));
 
            } catch (Exception $e) {
                log::debug($e->getMessage());
@@ -504,7 +511,7 @@ class ProductionController extends Controller
     public function clientsStore(Request $request,$clientName,$subProjectName) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data = $request->all(); dd($request->all());
+                $data = $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -589,6 +596,29 @@ class ProductionController extends Controller
              //   dd($data);
                 if($save_flag) {
                    return response()->json(['success' => true,'startTimeVal'=>$startTimeVal]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/login');
+        }
+    }
+
+    public function clientCompletedDatasDetails(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                $data =  $request->all();
+                $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
+                $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
+                $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->first()->toArray();
+                if(isset($clientData) && !empty($clientData)) {
+                   return response()->json(['success' => true,'clientData'=>$clientData]);
                 } else {
                     return response()->json(['success' => false]);
                 }
