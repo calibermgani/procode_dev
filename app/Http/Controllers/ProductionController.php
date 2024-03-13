@@ -155,9 +155,11 @@ class ProductionController extends Controller
                  //$databaseConnection = Str::lower($decodedClientName);
                // Config::set('database.connections.mysql.database',$databaseConnection);
                 $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-                $column_names = DB::select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'");
-                $columns = array_column($column_names, 'COLUMN_NAME');
+                // $column_names = DB::select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'");
+                // $columns = array_column($column_names, 'COLUMN_NAME');
                 // $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+                $column_names = DB::select("DESCRIBE $table_name");
+                $columns = array_column($column_names, 'Field');
                 $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
