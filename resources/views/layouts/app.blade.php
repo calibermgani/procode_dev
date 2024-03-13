@@ -27,7 +27,7 @@ $url_segment = Request::segment(1);
             flex-direction: column;
             min-height: 100%;
             background-color: #ffffff;
-            background-image: url("assets/media/bg/login_background_1.svg");
+            background-image: url("assets/media/bg/login_background_2.svg");
             background-size: cover;
             background-position: bottom !important;
             color: white;
