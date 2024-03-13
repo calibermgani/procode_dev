@@ -222,7 +222,7 @@
 
                                             </thead> --}}
                                             <thead>
-                                                @if (!empty($columnsHeader)) 
+                                                @if (!empty($columnsHeader))
                                                     <tr>
                                                         @if (isset($assignedDropDown) && !empty($assignedDropDown))
                                                             <th style="width: 10px"><input type="checkbox" id="ckbCheckAll">
@@ -590,7 +590,7 @@
                                                                             </div>
                                                                         </div> --}}
                                                                         <div class="col-md-6">
-                                                                            <div class="form-group row">
+                                                                            <div class="form-group row row_mar_bm">
                                                                                 <label
                                                                                     class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
                                                                                     {{ $labelName }}
@@ -1348,11 +1348,11 @@
                     newElement += '</div>';
                 }
 
-                var newRow = '<div class="row mt-2" id="' + newElementId + '">' +
-                    '<div class="col-md-12">' +
-                    '<label class="col-form-label ' + addMandatory + '">' +
-                    labelName + '</label>' +
-                    '</div>' +
+                var newRow = '<div class="row mt-0" id="' + newElementId + '">' +
+                    // '<div class="col-md-12">' +
+                    // '<label class="col-form-label ' + addMandatory + '">' +
+                    // labelName + '</label>' +
+                    // '</div>' +
                     '<div class="col-md-10">' + newElement + '</div>' +
                     '<div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                     '<i class="fa fa-minus minus_button remove_more" id="' + uniqueId +
