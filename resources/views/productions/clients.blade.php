@@ -2,7 +2,7 @@
 @section('content')
     <div class="card card-custom custom-card">
         <div class="card-body pt-4 pb-0 px-2">
-            <div class="my-div">
+            <div class="my-client-div">
                 {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
                         class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
@@ -138,17 +138,17 @@
             var table = $("#clients_list").DataTable({
                 processing: true,
                 lengthChange: false,
-                searching: true,
+                searching: false,
                 pageLength: 20,
                     columnDefs: [{
                         className: 'details-control',
                         targets: [0],
                         orderable: false,
                     }, ],
-                language: {
-                    "search": '',
-                    "searchPlaceholder": "   Search",
-                },
+                // language: {
+                //     "search": '',
+                //     "searchPlaceholder": "   Search",
+                // },
                 responsive: true
 
             })
@@ -192,7 +192,7 @@
 
             function format(data, subProjects) {
                 var html =
-                    '<table class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;" id="production_entry_sub" class="production_entry_sub">' +
+                    '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
                     '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Pending</th> <th>On Hold</th><th>Completed</th> </tr>';
                 $.each(subProjects, function(index, val) {
                     console.log(val, 'val',val.client_name.id,val.sub_project_name, val.id );
@@ -208,7 +208,6 @@
                 });
                 html += '</table>';
                 return html;
-                return '<div>Details for ' + data[0] + '</div>';
             }
 
             $(document).on('click', '.clickable-row', function(e) {
@@ -232,5 +231,6 @@
 
             })
         })
+
     </script>
 @endpush

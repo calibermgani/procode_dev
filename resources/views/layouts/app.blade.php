@@ -26,8 +26,8 @@ $url_segment = Request::segment(1);
             display: flex;
             flex-direction: column;
             min-height: 100%;
-            background-color: #191C24;
-            background-image: url("assets/media/bg/login_background.svg");
+            background-color: #ffffff;
+            background-image: url("assets/media/bg/login_background_1.svg");
             background-size: cover;
             background-position: bottom !important;
             color: white;
@@ -79,13 +79,13 @@ $url_segment = Request::segment(1);
         .login-card {
             max-width: 550px;
             width: 100%;
-            background-color: #000000;
+            background-color: #ffffff;
             /* Black background color */
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(226, 216, 216, 0.1);
             margin-bottom: 0px;
-            color: white;
+            color: #191C24;
             /* Text color */
             position: absolute;
             right: 12rem;
@@ -98,11 +98,11 @@ $url_segment = Request::segment(1);
 
         .company-logo {
             position: absolute;
-            bottom: 20px;
+            bottom: 16px;
             /* Adjust as needed */
-            right: 35px;
+            /* right: 35px; */
             /* Adjust as needed */
-            width: 170px;
+            width: 100px;
         }
 
         /* .copyright-container {
@@ -120,7 +120,7 @@ $url_segment = Request::segment(1);
             position: absolute;
             bottom: 10px;
             /* Adjust as needed */
-            left: 50px;
+            left: 90px;
             /* Adjust as needed */
             font-size: 12px;
             display: flex;
@@ -128,11 +128,11 @@ $url_segment = Request::segment(1);
             /* Distribute items evenly */
             align-items: center;
             /* Vertically center items */
-            border-top: 1px solid white;
+            /* border-top: 1px solid white; */
             /* White separation line */
             padding-top: 10px;
             /* Adjust spacing between line and text */
-            width: calc(100% - 60%);
+            width: calc(100% - 11%);
         }
 
         .copyright-container p {
@@ -144,7 +144,10 @@ $url_segment = Request::segment(1);
             margin-right: auto;
             /* Push the first item to the left */
         }
-
+        .copyright-container p:not(:first-child) {
+            color:#191C24;
+            font-weight:500;
+        }
 
 
         @media (min-width: 768px) {
@@ -163,31 +166,34 @@ $url_segment = Request::segment(1);
 <body>
 
     <div class="login-container">
-        <div class="left-side">
+        {{-- <div class="left-side">
             <img src="assets/media/bg/procode_logo.svg" alt="Header Logo" class="header-logo">
-            {{-- <img src="{{ asset('/assets/media/bg/collegue_Image.svg') }}" alt="Logo"
-                style="width: 100%; max-width: 700px; height: auto; margin-bottom: 20px;"> --}}
+            <img src="{{ asset('/assets/media/bg/collegue_Image.svg') }}" alt="Logo"
+                style="width: 100%; max-width: 700px; height: auto; margin-bottom: 20px;">
                 <img src="{{ asset('/assets/media/bg/login_product_Image_default.svg') }}" alt="Logo"
                 style="width: 100%; max-width: 700px; height: auto; margin-bottom: 20px;">
-            <div class="copyright-container">
-                <p>&copy; {{ date('Y') }} Pro coding</p>
-                <p href="#">Privacy</p>
-                <p href="#">Legal</p>
-                <p href="#">Contact</p>
-            </div>
-        </div>
+
+        </div> --}}
         <div class="right-side">
             <div class="login-card">
-                <div class="text-left  mt-8 mb-12 mb-lg-12 ml-8 mr-8">
-                    <h3 class="font-size-h1">Welcome Sign In! <img src="{{ asset('/assets/media/bg/hand.svg') }}"></h3>
+                <div class="text-left  mt-0 mb-12 mb-lg-12 ml-8 mr-8">
+                    <h3 class="font-size-h1">Welcome Sign In!</h3>
                     <p class="login-subtext mt-4">Enter your username and password</p>
                 </div>
                 @yield('content')
             </div>
         </div>
-        <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo">
-    </div>
 
+        {{-- <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo"> --}}
+    </div>
+    <div class="copyright-container">
+        <p>&copy; {{ date('Y') }} Pro coding</p>
+        <p href="#">Privacy</p>
+        <p href="#">Legal</p>
+        <p href="#">Contact</p>
+        <p> <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo"></p>
+
+    </div>
 </body>
 @include('layouts/footer_script_login')
 @include('layouts/flashMessage')

@@ -15,7 +15,7 @@
     background-size: 18px;
     background-position: 10px center;
     padding-left: 30px;
-    color: #191C24;
+    color: #0969C3;
     margin-right: 4px;
     margin-bottom: 10px;
 }
@@ -30,7 +30,7 @@
 }
 
 .table {
-    border-radius: 10px !important; /* Adjust the value as needed */
+    /* border-radius: 10px !important; */
     overflow: hidden; /* Ensures rounded corners are applied properly */
 }
 .table.table-head-custom thead tr,
@@ -41,7 +41,7 @@
     font-size: 0.9rem;
     text-transform: capitalize;
     letter-spacing: 0.1rem;
-    background-color: #191c24;
+    background-color: #0969C3;
     width: 287.2px;
     height: 40px;
 }
@@ -85,11 +85,11 @@ tr.shown td.details-control {
 
 
 .inv_head tr th {
-    background: #191c24;
-    color: #ffffff !important;
+    background: #CCE4F9;
+    color: #191C24 !important;
     font-size: 12px !important;
     padding: 9 !important;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
     line-height: 20px;
 }
 
@@ -115,9 +115,21 @@ tr.shown td.details-control {
         margin-bottom: 0rem;
     }
 }
+@media (min-width: 768px) {
+    .my-client-div {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Styles for mobile (max-width: 767px) */
+@media (max-width: 767px) {
+    .my-client-div {
+        margin-bottom: 0rem;
+    }
+}
 
 .btn.btn-primary-export{
-background: linear-gradient(160deg, #191C24 0%, #191C24 100%);
+background: linear-gradient(160deg, #0969C3 0%, #0969C3 100%);
 border: none;
 padding-left: 10px;
 height: 40px;
@@ -134,7 +146,8 @@ width: 8rem;
     background-size: 18px;
     background-position: 10px center;
     padding-left: 30px;
-    color: #000000;
+    color: #191C24;
+    font-weight: 500;
 
 }
 
@@ -152,7 +165,7 @@ width: 8rem;
   margin-left: 5px;
 }
 .icon-circle1 {
-    background: #191C24;
+    background: #0969C3;
     padding: 6px 6px 5px 6px;
     border-radius: 8%;
     font-size: 10px;
@@ -160,11 +173,11 @@ width: 8rem;
     /* transition: 0.5s; */
 }
 .text-eye {
-    background-color: #191C24;
+    background-color: #0969C3;
     color: #ffffff;
 }
 .svg-icon-black-start{
-    background-color: #191C24;
+    background-color: #0969C3;
     color: #ffffff;
 }
 .task-start {
@@ -172,11 +185,11 @@ width: 8rem;
     border-color: 0px;
     background-color: #F3F3F3;
     border: none;
-    color:#191C24 !important;
+    color:#0969C3 !important;
 }
 .custom-wizard {
     background-color: #ffffff;
-    color: #191C24;
+    color: #0969C3;
 }
 .custom-top-border {
     border-top: 1px solid #BFBFBF !important;
@@ -196,6 +209,7 @@ div.dataTables_wrapper div.dataTables_info {
     color: #191C24;
     background-color: #ffffff;
     border-color: #ffffff;
+    font-weight: 500;
 }
 
 .btn1 {
@@ -209,11 +223,12 @@ div.dataTables_wrapper div.dataTables_info {
     width: 97px;
     height: 39px;
     background-color: #F3F3F3;
+    font-weight: 500;
 }
 
 /* Define button hover style */
 .btn1:hover {
-    background-color: #191C24;
+    background-color: #0969C3;
     /* Button background color on hover */
     color: #F3F3F3;
 }
@@ -235,7 +250,7 @@ div.dataTables_wrapper div.dataTables_info {
 
 .icon-circle2 {
     background-color: #F3F3F3;
-    color: #191C24;
+    color: #0969C3;
     padding: 6px 6px 5px 6px;
     border-radius: 8%;
     font-size: 10px;
@@ -243,7 +258,7 @@ div.dataTables_wrapper div.dataTables_info {
     /* transition: 0.5s; */
 }
 .icon-circle2:hover {
-    background: #191C24;
+    background: #0969C3;
     color: #fff !important;
 }
 
@@ -262,8 +277,8 @@ div.dataTables_wrapper div.dataTables_info {
 }
 .btn.btn-white-black {
     color: #ffffff;
-    background-color: #191C24;
-    border-color: #191C24;
+    background-color: #0969C3;
+    border-color: #0969C3;
 }
 #formConfigurationLsit_wrapper
 {
@@ -271,12 +286,12 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .btn.btn-black-white-smoke {
-    color: #191C24;
+    color: #0969C3;
     background-color: #F3F3F3;
     border-color: #F3F3F3;
 }
 .btn-black-white-smoke:hover {
-    background: #191C24;
+    background: #0969C3;
     color: #F3F3F3 !important;
 }
 .white-smoke {
@@ -286,9 +301,9 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .btn.btn-white-black {
-    background-color: #191C24;
+    background-color: #0969C3;
    color: #ffffff;
-    border-color: #191C24;
+    border-color: #0969C3;
 }
 .project_header:hover {
     color: #191C24;
@@ -342,7 +357,7 @@ div.dataTables_wrapper div.dataTables_info {
 .fa-3x-btn {
     font-size: 2.5em !important;
     background-color: #F3F3F3;
-    color: #191C24;
+    color: #0969C3;
 }
 
 .icon-circle-btn {
@@ -383,7 +398,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .add_more:hover {
-    background-color: #191C24;
+    background-color: #0969C3;
     color: #ffffff !important;
 }
 
@@ -427,7 +442,7 @@ div.dataTables_wrapper div.dataTables_info {
     align-items: center;
     background-color: #F3F3F3;
     padding: 5px;
-    color:#191C24;
+    color:#0969C3;
     font-size:10px;
 }
 .code-badge-tab-selected {
@@ -436,7 +451,7 @@ div.dataTables_wrapper div.dataTables_info {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #191C24;
+    background-color: #0969C3;
     padding: 5px;
     color:#F3F3F3;
     font-size:10px;
@@ -444,7 +459,7 @@ div.dataTables_wrapper div.dataTables_info {
 
 .timer_1 {
     color: #FFFFFF;
-    background-color: #191C24;
+    background-color: #0969C3;
     border-radius: 4px;
     padding: 11px 10px 4px 10px;
     cursor: pointer;
@@ -456,7 +471,7 @@ div.dataTables_wrapper div.dataTables_info {
 
 .timer_2 {
     color: #FFFFFF;
-    background-color: #3C4253;
+    background-color: #4589C6;
     border-radius: 3px;
     padding: 4px 10px 4px 10px;
     cursor: pointer;
@@ -469,7 +484,7 @@ div.dataTables_wrapper div.dataTables_info {
 
 }
 .custom-tooltip-style .tooltip-inner {
-    background-color: #191C24; /* Tooltip background color */
+    background-color: #0969C3; /* Tooltip background color */
     color: #FFF; /* Tooltip text color */
     font-size: 14px; /* Tooltip font size */
     border-radius: 8px; /* Tooltip border radius */
@@ -478,22 +493,27 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .custom-tooltip-style .tooltip-arrow {
-    border-top-color: #191C24; /* Tooltip arrow color */
+    border-top-color: #0969C3; /* Tooltip arrow color */
 }
 .dt-wrap {
     white-space: normal !important;
 }
 
 .btn-login{
-    color: #191C24 !important;
-    background-color: #F8FCFF !important;
-    border-color: #F8FCFF !important;
+    color: #ffffff !important;
+    background-color: #000842 !important;
+    border-color: #000842 !important;
     border-radius: 8px !important;
+    padding: 16px !important;
 
 }
-
+.btn-login:hover {
+    background-color: #0C21C1 !important;
+    /* Button background color on hover */
+    color: #F3F3F3 !important;
+}
 .login-subtext {
-    color: #ffffff !important;
+    color: #191C24 !important;
     font-size: 14px;
 }
 .login-username {
@@ -503,7 +523,7 @@ font-weight: 400 !important;
 line-height: 14px !important;
 letter-spacing: 0em !important;
 text-align: left !important;
-color: #ffffff !important;
+color: #191C24 !important;
 
 }
 .login-textbox {
@@ -511,15 +531,15 @@ color: #ffffff !important;
     height:40px !important;
 border-radius: 4px !important;
 Padding:0px, 16px, 0px, 16px !important;
-background-color: #2B3142 !important;
-border-color:#2B3142 !important;
-color: #ffffff !important;
+background-color: #F1F1F1 !important;
+border-color:#F1F1F1 !important;
+color: #191C24 !important;
 }
-.login-textbox:focus {
+/* .login-textbox:focus {
 
 background-color: #2B3142 !important;
 border-color:#2B3142 !important;
-}
+} */
 .footer-text{
     font-family: Poppins;
 font-size: 12px;
@@ -578,4 +598,26 @@ margin-left: -1rem;
     text-align: left;
 
     }
+.even {
+    background-color: #F1F1F1;
+}
+.scrollbar::-webkit-scrollbar
+{
 
+    height: 5px;
+    background-color: #F1F1F1;
+}
+
+.scrollbar::-webkit-scrollbar-thumb
+{
+
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #0969C3;
+}
+
+.date-label {
+    background-color: #EEF0F8;
+    padding: 2px 6px 2px 6px;
+    margin-right: 7px;
+    border-radius: 44px !important;
+}

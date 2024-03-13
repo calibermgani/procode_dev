@@ -8,7 +8,7 @@
 
 
             <input id="emp_id" type="text" placeholder="Username"
-                class="form-control login-textbox form-control-solid h-auto py-5 px-6 @error('emp_id') is-invalid @enderror" name="emp_id"
+                class="form-control white-smoke h-auto py-5 px-6 @error('emp_id') is-invalid @enderror" name="emp_id"
                 value="{{ old('emp_id') }}" required autocomplete="emp_id" autofocus>
             @error('email')
                 <span class="invalid-feedback" role="alert">
@@ -27,7 +27,7 @@
 
 
             <input id="password" type="password" placeholder="Password"
-                class="form-control login-textbox form-control-solid h-auto py-5 px-6 @error('password') is-invalid @enderror"
+                class="form-control white-smoke h-auto py-5 px-6 @error('password') is-invalid @enderror"
                 name="password" required autocomplete="current-password">
             @error('password')
                 <span class="invalid-feedback" role="alert">
@@ -48,7 +48,7 @@
     <div class="form-group  mb-8 ml-8 mr-8 mt-14 mt-lg-14">
         <div class="my-4">
             <button type="submit" id="kt_login_signin_submit"
-            class="btn btn-login  btn-block font-weight-bold px-5 py-5 my-3 auth-form-btn">
+            class="btn btn-login btn-block font-weight-bold px-5 py-5 my-3 auth-form-btn">
                 {{ __('LOGIN') }}
             </button>
 

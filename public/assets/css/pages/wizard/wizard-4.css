@@ -87,12 +87,12 @@
       .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step[data-wizard-state="current"] {
         background-color: #ffffff;
         font-weight: bold !important;
-        border-bottom: 2px solid #191C24; }
+        border-bottom: 2px solid #0969C3; }
         .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step[data-wizard-state="current"] .wizard-wrapper .wizard-number {
             background-color: red !important; }
         .wizard.wizard-4 .wizard-nav .wizard-steps .wizard-step[data-wizard-state="current"] .wizard-wrapper .wizard-label .wizard-title {
 
-            color: #191C24;
+            color: #0969C3;
          }
   .wizard.wizard-4 [data-wizard-type="step-info"] {
     display: none; }
