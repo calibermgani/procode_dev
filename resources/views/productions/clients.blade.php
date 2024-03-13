@@ -197,7 +197,7 @@
                 $.each(subProjects, function(index, val) {
                     console.log(val, 'val',val.client_name.id,val.sub_project_name, val.id );
                     html +=
-                        '<tbody><tr class="clickable-row">' +
+                        '<tbody><tr class="clickable-row cursor_hand">' +
                         '<td><input type="hidden" value=' + val.client_id + '></td>' +
                         '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.sub_project_id + '></td>' +
                         '<td>' + val.assignedCount + '</td>' +

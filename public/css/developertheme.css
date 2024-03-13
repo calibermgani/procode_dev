@@ -626,3 +626,7 @@ margin-left: -1rem;
 .row_mar_bm {
     margin-bottom: 0rem !important;
 }
+
+.cursor_hand {
+   cursor: pointer;
+}

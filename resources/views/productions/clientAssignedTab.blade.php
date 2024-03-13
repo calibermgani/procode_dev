@@ -225,7 +225,7 @@
                                                 @if (!empty($columnsHeader))
                                                     <tr>
                                                         @if (isset($assignedDropDown) && !empty($assignedDropDown))
-                                                            <th style="width: 10px"><input type="checkbox" id="ckbCheckAll">
+                                                            <th style="width: 10px"><input type="checkbox" id="ckbCheckAll" class="cursor_hand ">
                                                             </th>
                                                         @endif
                                                         @foreach ($columnsHeader as $columnName => $columnValue)
@@ -251,7 +251,7 @@
                                                     @foreach ($assignedProjectDetails as $data)
                                                         <tr>
                                                             @if (isset($assignedDropDown) && !empty($assignedDropDown))
-                                                                <td><input type="checkbox" class="checkBoxClass" name='check[]'
+                                                                <td><input type="checkbox" class="checkBoxClass cursor_hand" name='check[]'
                                                                         value="{{ $data->id }}">
                                                                 </td>
                                                             @endif
