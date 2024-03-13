@@ -191,7 +191,7 @@ $url_segment = Request::segment(1);
         <p href="#">Privacy</p>
         <p href="#">Legal</p>
         <p href="#">Contact</p>
-        <p> <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo"></p>
+        <p> <img src="{{ asset('/assets/media/bg/annexmed_logo_1.svg') }}" alt="Company Logo" class="company-logo"></p>
 
     </div>
 </body>
