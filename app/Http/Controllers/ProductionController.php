@@ -37,6 +37,7 @@ class ProductionController extends Controller
     public function clients() {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
+                
                 $projects = project::where('status','Active')->get();
                 return view('productions/clients',compact('projects'));
             } catch (Exception $e) {
