@@ -249,7 +249,8 @@ class ProductionController extends Controller
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $column_names = DB::select("DESCRIBE $table_name");
+               $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
@@ -298,7 +299,8 @@ class ProductionController extends Controller
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $column_names = DB::select("DESCRIBE $table_name");
+               $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
@@ -347,7 +349,8 @@ class ProductionController extends Controller
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $column_names = DB::select("DESCRIBE $table_name");
+               $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
@@ -403,7 +406,8 @@ class ProductionController extends Controller
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $column_names = DB::select("DESCRIBE $table_name");
+               $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
@@ -452,7 +456,8 @@ class ProductionController extends Controller
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
-               $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+               $column_names = DB::select("DESCRIBE $table_name");
+               $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
