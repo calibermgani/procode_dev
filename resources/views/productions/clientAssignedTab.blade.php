@@ -222,10 +222,7 @@
 
                                             </thead> --}}
                                             <thead>
-                                                @if (!empty($columnsHeader))
-                                                @php
-                                                    dd($columnsHeader);
-                                                @endphp
+                                                @if (!empty($columnsHeader)) 
                                                     <tr>
                                                         @if (isset($assignedDropDown) && !empty($assignedDropDown))
                                                             <th style="width: 10px"><input type="checkbox" id="ckbCheckAll">
