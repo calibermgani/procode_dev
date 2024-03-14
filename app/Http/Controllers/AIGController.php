@@ -117,7 +117,9 @@ class AIGController extends Controller {
                 $fileStatus = "The  xxx inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
                 $mailHeader = "xxx File not in Specific folder";
                 $Inventory_wound_data = [];
-                $toMailId = "mgani@caliberfocus.com";
+                // $toMailId = "mgani@caliberfocus.com";
+                $toMailId = 'vithya@caliberfocus.com,mgani@caliberfocus.com';
+                $toMailId = $toMailId != null ? explode(",",$toMailId) : [];
                 Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus, $Inventory_wound_data));
                 return response()->json([
                     "message" => "Data received successfully",
