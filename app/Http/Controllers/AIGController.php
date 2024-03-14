@@ -27,7 +27,7 @@ class AIGController extends Controller {
                         $fileStatus = "The ".Str::upper($project_information['project_name'])." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
                         $mailHeader = Str::upper($project_information['project_name'])." - "."File not in Specific folder";
                         $Inventory_wound_data = [];
-                        $toMailId = "vijayalaxmi@caliberfocus.com";
+                        $toMailId = "mgani@caliberfocus.com";
                         Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus, $Inventory_wound_data));
                         // $mailNotification['clients'] = $project_information['project_name'];
                         // $mailNotification['sub_clients'] = $project_information['project_name'];
@@ -37,7 +37,7 @@ class AIGController extends Controller {
                         // MailNotification::create($mailNotification);
 
                 } else if(empty($project_information['input_value']) && $project_information['project_name']) {
-                    $toMailId = "vijayalaxmi@caliberfocus.com";
+                    $toMailId = "mgani@caliberfocus.com";
                     $fileStatus = "It appears that there are no more records for ".Str::upper($project_information['project_name']).". Could you please verify and replace the files with the correct format";
                     $mailHeader = Str::upper($project_information['project_name'])." - "."Empty Records";
                     $Inventory_wound_data = [];
@@ -52,7 +52,7 @@ class AIGController extends Controller {
                     $propertyCount = count($project_information['input_value'][0]);
 
                     if($propertyCount != 34 || $keysMatchColumns == false) {
-                        $toMailId = "vijayalaxmi@caliberfocus.com";
+                        $toMailId = "mgani@caliberfocus.com";
                         $fileStatus = "The inventory format for ".Str::upper($project_information['project_name'])." does not match our records. Could you please verify and replace the files with the correct format";
                         $mailHeader = Str::upper($project_information['project_name'])." - "."File format not match";
                         $Inventory_wound_data = [];
@@ -83,7 +83,7 @@ class AIGController extends Controller {
                             }
 
                                 $duplicateRecords = InventoryWoundDuplicate::where('inventory_date',$Inventory_wound_data['inventory_date'])->get();
-                                $toMailId = "vijayalaxmi@caliberfocus.com";
+                                $toMailId = "mgani@caliberfocus.com";
                                 $fileStatus = "The ".Str::upper($project_information['project_name'])." has some duplicate inventory records. Please find the list of duplicates below";
                                 $mailHeader = Str::upper($project_information['project_name'])." - "."Duplicate Entries";
                                 Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus, $duplicateRecords));
@@ -171,7 +171,7 @@ class AIGController extends Controller {
             $propertyCount = count($project_information['input_value'][0]);
 
             if($keysMatchColumns == false) {
-                $toMailId = "vijayalaxmi@caliberfocus.com";
+                $toMailId = "mgani@caliberfocus.com";
                 $fileStatus = "The inventory format for ".Str::upper($project_information['project_name'])." does not match our records. Could you please verify and replace the files with the correct format";
                 $mailHeader = Str::upper($project_information['project_name'])." - "."File format not match";
                 $Inventory_wound_data = [];
@@ -203,7 +203,7 @@ class AIGController extends Controller {
             }
 
                 $duplicateRecords = modelClassDuplicate::where('inventory_date',$Inventory_wound_data['inventory_date'])->get();
-                $toMailId = "vijayalaxmi@caliberfocus.com";
+                $toMailId = "mgani@caliberfocus.com";
                 $fileStatus = "The ".Str::upper($project_information['project_name'])." has some duplicate inventory records. Please find the list of duplicates below";
                 $mailHeader = Str::upper($project_information['project_name'])." - "."Duplicate Entries";
                 Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus, $duplicateRecords));
