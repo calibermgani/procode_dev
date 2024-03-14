@@ -44,7 +44,7 @@
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
                                                 $modelClass = "App\\Models\\" .  $model;
-                                                if ($loginEmpId && $empDesignation == "Administrator") {
+                                                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Quality AR Analyst")) {
                                                     if (class_exists($modelClass)) {
                                                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
@@ -193,7 +193,7 @@
             function format(data, subProjects) {
                 var html =
                     '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
-                    '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Pending</th> <th>On Hold</th><th>Completed</th> </tr>';
+                    '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
                 $.each(subProjects, function(index, val) {
                     console.log(val, 'val',val.client_name.id,val.sub_project_name, val.id );
                     html +=
