@@ -111,28 +111,30 @@ class AIGController extends Controller {
     {
         $project_information = $request->all();
       //  if($project_information['input_value'] == "File is not there" && $project_information['project_name']) {
-        if($request->project_name && $request->sub_project_name) {
-                $fileStatus = "The ".Str::upper($request->project_name)." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
-                $mailHeader = Str::upper($request->project_name)." - "."File not in Specific folder";
+        // if($request->project_name && $request->sub_project_name) {
+                // $fileStatus = "The ".Str::upper($request->project_name)." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
+                // $mailHeader = Str::upper($request->project_name)." - "."File not in Specific folder";
+                $fileStatus = "The  xxx inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
+                $mailHeader = "xxx File not in Specific folder";
                 $Inventory_wound_data = [];
                 $toMailId = "mgani@caliberfocus.com";
                 Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus, $Inventory_wound_data));
                 return response()->json([
                     "message" => "Data received successfully",
-                    "input_value"=>$request->project_name,
-                    'Project_name' =>$request->sub_project_name,
+                    // "input_value"=>$request->project_name,
+                    // 'Project_name' =>$request->sub_project_name,
                     'inventory_wond' => 'Testing',
 
                     ]);
-                } else {
-                    return response()->json([
-                        "message" => "Params Not There",
-                        "input_value"=>$request->project_name,
-                        'Project_name' =>$request->sub_project_name,
-                        'inventory_wond' => 'Testing',
+                // } else {
+                //     return response()->json([
+                //         "message" => "Params Not There",
+                //         "input_value"=>$request->project_name,
+                //         'Project_name' =>$request->sub_project_name,
+                //         'inventory_wond' => 'Testing',
 
-                        ]);
-                }
+                //         ]);
+                // }
        // }
     }
     public function emptyRecordMail(Request $request)
