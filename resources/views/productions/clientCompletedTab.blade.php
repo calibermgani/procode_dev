@@ -21,7 +21,9 @@
                                 <span class="project_header" style="margin-left: 4px !important;">Client Information</span>
                                 </div>
                                 <div class="col-md-6">
-                                <div class="outside float-right" style="justify-content: flex-end;" href="javascript:void(0);"></div>
+                                    <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
+                                        <div class="outside float-right"  href="javascript:void(0);"></div>
+                                    </div>
                             </div>
                     </div>
                         <div class="wizard wizard-4 custom-wizard" id="kt_wizard_v4" data-wizard-state="step-first"
