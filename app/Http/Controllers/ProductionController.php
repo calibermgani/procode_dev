@@ -575,7 +575,7 @@ class ProductionController extends Controller
                           $data[$key] = $value;
                     }
                 }
-                $data['parent_id'] = $data['idValue'];
+                $data['parent_id'] = $data['idValue'];dd($data);
                 $modelClass::create($data);
                 $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);

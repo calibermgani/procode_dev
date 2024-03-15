@@ -25,6 +25,7 @@
                                         <div class="outside float-right"  href="javascript:void(0);"></div>
                                     </div>
                             </div>
+                        </div>
                     </div>
                         <div class="wizard wizard-4 custom-wizard" id="kt_wizard_v4" data-wizard-state="step-first"
                             data-wizard-clickable="true" style="margin-top:-2rem !important">

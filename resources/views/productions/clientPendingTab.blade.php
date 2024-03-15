@@ -1,8 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid">
-        <div class="d-flex flex-column-fluid">
-            <div class="container-fluid p-0">
+
                 <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
@@ -10,7 +8,8 @@
                             // $encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
                            <div class="card-header border-0 px-4">
-                                <div class="card-title">
+                            <div class="row">
+                                <div class="col-md-6">
                                     {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
                                             class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
@@ -20,8 +19,13 @@
                                         </svg>
                                     </span> --}}
                                     <span class="project_header" style="margin-left: 4px !important;">Client Information</span>
-                                    <div class="outside float-right" href="javascript:void(0);"></div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
+                                        <div class="outside float-right" href="javascript:void(0);"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="wizard wizard-4 custom-wizard" id="kt_wizard_v4" data-wizard-state="step-first"
                             data-wizard-clickable="true" style="margin-top:-2rem !important">
@@ -175,9 +179,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+
 @endsection
 
 <style>
