@@ -493,7 +493,7 @@ class ProductionController extends Controller
                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','duplicate_status','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -536,11 +536,18 @@ class ProductionController extends Controller
 
             try {
                 $status = $request['dropdownStatus'];
-                $databaseConnection = $request['dbConn'];
-                Config::set('database.connections.mysql.database',$databaseConnection);
+                $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
+                $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
+                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+             //   dd( $request->all(),$decodedClientName,$decodedsubProjectName );
+                // $databaseConnection = $request['dbConn'];
+                // Config::set('database.connections.mysql.database',$databaseConnection);
                 foreach($request['checkedRowValues'] as $data) {
-                    $ticketNumber = InventoryWoundDuplicate::where('ticket_number',$data['value'])->first();
-                    $ticketNumber->update(['status' => $status]);
+                    $duplicateRecord = $modelClassDuplcates::where('id',$data['value'])->first();
+                    $duplicateRecord->update(['duplicate_status' => $status]);
                 }
                 return response()->json(['success' => true]);
             } catch (Exception $e) {

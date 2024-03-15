@@ -148,7 +148,7 @@
                                                 @if ($duplicateProjectDetails->contains('key', 'value'))
                                                     @foreach ($duplicateProjectDetails[0]->getAttributes() as $columnName => $columnValue)
                                                         @php
-                                                            $columnsToExclude = ['id','QA_emp_id', 'created_at', 'updated_at', 'deleted_at'];
+                                                            $columnsToExclude = ['id','QA_emp_id','duplicate_status', 'created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
                                                           <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
@@ -178,7 +178,7 @@
                                                         </td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['id','QA_emp_id', 'created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['id','QA_emp_id','duplicate_status', 'created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
 
@@ -359,7 +359,9 @@
                     url: "{{ url('clients_duplicate_status') }}",
                     method: 'POST',
                     data: {
-                        dbConn: dbConn,
+                        // dbConn: dbConn,
+                        clientName: clientName,
+                        subProjectName: subProjectName,
                         dropdownStatus: dropdownStatus,
                         checkedRowValues: checkedRowValues
                     },
