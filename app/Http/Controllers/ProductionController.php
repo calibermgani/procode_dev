@@ -568,7 +568,7 @@ class ProductionController extends Controller
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $data = [];
-                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
+                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {dd($request->all());
                     if (is_array($value)) {
                         if(count($value) > 1) {
                            $data[$key] = implode(',', $value);
