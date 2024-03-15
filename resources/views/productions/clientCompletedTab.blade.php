@@ -1,8 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-    <div class="content d-flex flex-column flex-column-fluid">
-        <div class="d-flex flex-column-fluid">
-            <div class="container-fluid p-0">
+
                 <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
@@ -10,7 +8,8 @@
                             //$encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
                         <div class="card-header border-0 px-4">
-                            <div class="card-title">
+                            <div class="row">
+                                <div class="col-md-6">
                                 {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
                                         class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
@@ -19,8 +18,10 @@
                                             d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                     </svg>
                                 </span> --}}
-                                <span class="project_header"  style="margin-left: 4px !important;">Client Information</span>
-                                <div class="outside float-right" href="javascript:void(0);"></div>
+                                <span class="project_header" style="margin-left: 4px !important;">Client Information</span>
+                                </div>
+                                <div class="col-md-6">
+                                <div class="outside float-right" style="justify-content: flex-end;" href="javascript:void(0);"></div>
                             </div>
                     </div>
                         <div class="wizard wizard-4 custom-wizard" id="kt_wizard_v4" data-wizard-state="step-first"
@@ -379,9 +380,7 @@
                         @endif
                 </div>
                 </div>
-            </div>
-        </div>
-    </div>
+
 @endsection
 <style>
     /* Increase modal width */
