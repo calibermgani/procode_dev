@@ -222,8 +222,11 @@
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
-                // scrollCollapse: true,
-                // scrollX: true,
+                scrollCollapse: true,
+                scrollX: true,
+                "initComplete": function(settings, json) {
+                    $('body').find('.dataTables_scrollBody').addClass("scrollbar");
+                },
                 language: {
                     "search": '',
                     "searchPlaceholder": "   Search",

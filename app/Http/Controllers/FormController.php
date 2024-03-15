@@ -80,19 +80,22 @@ class FormController extends Controller
                     formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
-                    if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
+                    if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
                         $columns[$columnName] = 'VARCHAR(255)';
                     } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                         $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                         $columns[$columnName] = "ENUM($enumValues)";
                     } else if ($data['input_type'][$i] == 'date') {
                         $columns[$columnName] = 'DATE';
+                    } else if ($data['input_type'][$i] == 'textarea') {
+                        $columns[$columnName] = 'TEXT';
                     }
                 }
-                $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
-                $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
-                $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
-                $tableHistoryName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_history';
+
+                $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name),'_');
+                $tableDataName = Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas'),'_');
+                $duplicateTableName = Str::slug(($projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates'),'_');
+                $tableHistoryName =Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name. '_history'),'_');
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
                         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
@@ -298,13 +301,15 @@ class FormController extends Controller
                         formConfiguration::create($requiredData);
                        // $columnName = Str::lower(str_replace([' ', '/'], '_', $data['label_name'][$i]));
                         $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
-                        if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'textarea' || $data['input_type'][$i] == 'date_range') {
+                        if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
                             $columns[$columnName] = 'VARCHAR(255)';
                         } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                               $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                             $columns[$columnName] = "ENUM($enumValues)";
                         } else if ($data['input_type'][$i] == 'date') {
                             $columns[$columnName] = 'DATE';
+                        } else if ($data['input_type'][$i] == 'textarea') {
+                            $columns[$columnName] = 'TEXT';
                         }
                     }
 

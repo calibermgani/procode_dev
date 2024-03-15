@@ -92,7 +92,7 @@ class ProductionController extends Controller
                 $model_name = ucfirst($projectName) . ucfirst($subProjectsWithCount[$key]['sub_project_name']);
                 // dd($model_name);
 
-                    $modelClass = "App\\Models\\" .  $model_name;
+                    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',$model_name);
                     if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                         if (app()->bound($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -185,7 +185,7 @@ class ProductionController extends Controller
                 // $modelClass = "App\\Models\\" . 'Inventory'.ucfirst($decodedsubProjectName);
                  //$databaseConnection = Str::lower($decodedClientName);
                // Config::set('database.connections.mysql.database',$databaseConnection);
-                $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 // $column_names = DB::select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'");
                 // $columns = array_column($column_names, 'COLUMN_NAME');
                 // $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
@@ -198,8 +198,8 @@ class ProductionController extends Controller
                     return !in_array($column, $columnsToExclude);
                 });
             }
-                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-                $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
+                $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
+                $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];
                 $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                 if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
@@ -212,7 +212,7 @@ class ProductionController extends Controller
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // }
-                        $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                        $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->limit(2000)->get();
                         $assignedDropDownIds = $modelClass::where('claim_status','CE_Assigned')->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -283,14 +283,14 @@ class ProductionController extends Controller
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
@@ -300,7 +300,7 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
-                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
@@ -333,14 +333,14 @@ class ProductionController extends Controller
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {dd(  $modelClass);
                    if (class_exists($modelClass)) {
@@ -350,7 +350,7 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
-                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
@@ -383,14 +383,14 @@ class ProductionController extends Controller
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
@@ -400,7 +400,7 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
-                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
@@ -440,14 +440,14 @@ class ProductionController extends Controller
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $revokeProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
@@ -457,7 +457,7 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
-                       $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Duplicates';
+                       $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
@@ -490,15 +490,15 @@ class ProductionController extends Controller
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-               $table_name= Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName);
+               $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
                $columnsToExclude = ['id','QA_emp_id','duplicate_status','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
-               $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
-               $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+               $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName))."Duplicates";
+               $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $duplicateProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClassDuplcates)) {
@@ -540,8 +540,8 @@ class ProductionController extends Controller
                 $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
-                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName))."Duplicates";
+                $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
              //   dd( $request->all(),$decodedClientName,$decodedsubProjectName );
                 // $databaseConnection = $request['dbConn'];
                 // Config::set('database.connections.mysql.database',$databaseConnection);
@@ -566,7 +566,7 @@ class ProductionController extends Controller
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
+                $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $data = [];
                 foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
                       if (is_array($value)) {
@@ -577,7 +577,7 @@ class ProductionController extends Controller
                 }
                 $data['parent_id'] = $data['idValue'];
                 $modelClass::create($data);
-                $originalModelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
+                $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
                 $record->update( ['claim_status' => $data['claim_status']] );
                 $currentTime = Carbon::now();
@@ -605,8 +605,8 @@ class ProductionController extends Controller
                 $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-                $modelHistory = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'History';
+                $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
+                $modelHistory = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'History';
                 foreach($request['checkedRowValues'] as $data) {
                     $existingRecord = $modelClass::where('id',$data['value'])->first();
                     $historyRecord = $existingRecord->toArray();
@@ -665,7 +665,7 @@ class ProductionController extends Controller
                 $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
+                $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->first()->toArray();
                 if(isset($clientData) && !empty($clientData)) {
                    return response()->json(['success' => true,'clientData'=>$clientData]);
