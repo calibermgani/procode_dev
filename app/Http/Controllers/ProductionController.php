@@ -561,21 +561,21 @@ class ProductionController extends Controller
     public function clientsStore(Request $request,$clientName,$subProjectName) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data = $request->all();
+                // $data = $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $data = [];
-                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
+                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {dd($request->all(),$value);
                       if (is_array($value)) {
                          $data[$key] = implode(',', $value);
                     } else {
                           $data[$key] = $value;
                     }
                 }
-                $data['parent_id'] = $data['idValue'];dd($data);
+                $data['parent_id'] = $data['idValue'];
                 $modelClass::create($data);
                 $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
