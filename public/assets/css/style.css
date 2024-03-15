@@ -88055,8 +88055,8 @@ td>.radio.radio-single {
 
 .dataTables_wrapper .dataTable th,
 .dataTables_wrapper .dataTable td {
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-weight: 400;
+    font-size: 13px;
     vertical-align: middle;
     color: #191C24;
     -webkit-transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, -webkit-box-shadow 0.15s ease;

@@ -15,10 +15,11 @@ class CreateSubprojectsTable extends Migration
     {
         Schema::create('subprojects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('project_id')->nullable();
+            $table->integer('project_id')->nullable();
+            $table->integer('sub_project_id')->nullable();
             $table->string('sub_project_name')->nullable();
             $table->integer('added_by')->nullable();
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            // $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->enum('status',['Active','Inactive'])->nullable();
             $table->timestamps();
             $table->softDeletes();

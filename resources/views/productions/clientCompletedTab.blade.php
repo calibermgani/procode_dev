@@ -6,7 +6,7 @@
                 <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
-                            $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] != null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : '';
+                             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                             //$encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
                         <div class="card-header border-0 px-4">
@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($empDesignation == 'Administrator')
+                                    @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -497,20 +497,20 @@
                         var values = value.split(',');
                         var formattedDatas = [];
                         values.forEach(function(data, index) {
-                            if (data.includes('-')) {
-                                var formattedData = formatDate(data);
-                            } else {
-                                var formattedData = data;
-                            }
-
-                            var span = $('<span>').addClass('date-label').text(formattedData);
+                            // if (data.includes('-')) {
+                            //     var formattedData = formatDate(data);
+                            // } else {
+                            //     var formattedData = data;
+                            // }
+                            // var span = $('<span>').addClass('date-label').text(formattedData);
+                            var span = $('<span>').addClass('date-label').text(data);
                                    formattedDatas.push(span);
                         }); console.log(formattedDatas,'formattedDatas');
                         formattedDatas.forEach(function(span, index) {
 
                             $('label[id="' + header + '"]').append(span);
                             // Add comma after each span except the last one
-                           
+
                         });
                     } else {
                         if (header === 'claim_status' && value.includes('CE_')) {

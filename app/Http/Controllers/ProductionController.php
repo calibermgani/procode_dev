@@ -37,8 +37,22 @@ class ProductionController extends Controller
     public function clients() {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                
-                $projects = project::where('status','Active')->get();
+                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
+                $payload = [
+                    'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                    'user_id' => $userId
+                ];
+                $client = new Client();
+                $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_clients_on_user', [
+                    'json' => $payload
+                ]);
+                if ($response->getStatusCode() == 200) {
+                     $data = json_decode($response->getBody(), true);
+                } else {
+                     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                }
+                $projects = $data['clientList'];
+                //  $projects = project::where('status','Active')->get();dd($projects,$aimsProjects);
                 return view('productions/clients',compact('projects'));
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -50,22 +64,37 @@ class ProductionController extends Controller
     public function getSubProjects(Request $request) {
         try {
             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
+            $payload = [
+                'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                'client_id' => $request->project_id
+            ];
+            $client = new Client();
+            $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_practice_on_client', [
+                'json' => $payload
+            ]);
+            if ($response->getStatusCode() == 200) {
+                 $data = json_decode($response->getBody(), true);
+            } else {
+                 return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+            }
+            $subprojects = $data['practiceList'];
+            $clientDetails = $data['clientInfo'];
 
-            $subprojects = subproject::with(['clientName'])->where('project_id',$request->project_id)->where('status','Active')->get();
+          //  $subprojects = subproject::with(['clientName'])->where('project_id',$request->project_id)->where('status','Active')->get();
             $subProjectsWithCount = [];
             foreach ($subprojects as $key => $data) {
-                $subProjectsWithCount[$key]['client_id'] =$data->clientName->id;
-                $subProjectsWithCount[$key]['client_name'] =$data->clientName->project_name;
-                $subProjectsWithCount[$key]['sub_project_id'] =$data->id;
-                $subProjectsWithCount[$key]['sub_project_name'] = $data->sub_project_name;
+                $subProjectsWithCount[$key]['client_id'] =$clientDetails['id'];
+                $subProjectsWithCount[$key]['client_name'] =$clientDetails['client_name'];
+                $subProjectsWithCount[$key]['sub_project_id'] =$data['id'];
+                $subProjectsWithCount[$key]['sub_project_name'] = $data['name'];
                 $projectName = $subProjectsWithCount[$key]['client_name'];
                 $model_name = ucfirst($projectName) . ucfirst($subProjectsWithCount[$key]['sub_project_name']);
                 // dd($model_name);
 
                     $modelClass = "App\\Models\\" .  $model_name;
-                    if ($loginEmpId && $empDesignation == "Administrator") {
-                        if (class_exists($modelClass)) {
+                    if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
+                        if (app()->bound($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->count();
@@ -77,7 +106,7 @@ class ProductionController extends Controller
                             $subProjectsWithCount[$key]['holdCount'] = '--';
                         }
                     } else if($loginEmpId) {
-                        if (class_exists($modelClass)) {
+                        if (app()->bound($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -115,7 +144,7 @@ class ProductionController extends Controller
     public function clientTabs($clientName) {
         try {
             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
             $decodedClientName = Helpers::encodeAndDecodeID($clientName, 'decode');
             $databaseConnection = Str::lower($decodedClientName);
             Config::set('database.connections.mysql.database',$databaseConnection);
@@ -146,8 +175,9 @@ class ProductionController extends Controller
          if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             $client = new Client();
             try {
+                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -159,22 +189,25 @@ class ProductionController extends Controller
                 // $column_names = DB::select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'");
                 // $columns = array_column($column_names, 'COLUMN_NAME');
                 // $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
+                $columnsHeader=[];
+                if (Schema::hasTable($table_name)) {
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
                 $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
+            }
                 $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
                 $modelClassDatas = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName).'Datas';
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];
                 $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
-                if ($loginEmpId && $empDesignation == "Administrator") {
+                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                     // if (Schema::hasTable($table_name)) {
                     //    $assignedProjectDetails = DB::table($table_name)->get();
                     // }
                     if (class_exists($modelClass)) {
-                        // if (class_exists($modelClassDatas) && class_exists($modelClass)) {
+                        // if (class_exists($modelClassDatas) && app()->bound($modelClass)) {
                         // $assignedProjectDetails = $modelClassDatas::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
@@ -190,7 +223,8 @@ class ProductionController extends Controller
                         $duplicateCount = $modelClassDuplcates::count();
                         $payload = [
                             'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                            'client_id' => $decodedProjectName
+                            'client_id' => $decodedProjectName,
+                            'user_id' => $userId
                         ];
 
                         // Make a POST request to the API endpoint with JSON payload
@@ -244,7 +278,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            try {
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -257,8 +291,8 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect(); $duplicateCount = 0;
-               if ($loginEmpId && $empDesignation == "Administrator") {
+               $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
+               if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
                        $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -294,7 +328,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            try {
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -307,8 +341,8 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();$duplicateCount = 0;
-               if ($loginEmpId && $empDesignation == "Administrator") {
+               $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
+               if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {dd(  $modelClass);
                    if (class_exists($modelClass)) {
                        $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -344,7 +378,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            try {
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -357,8 +391,8 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();$duplicateCount = 0;
-               if ($loginEmpId && $empDesignation == "Administrator") {
+               $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
+               if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
                        $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -401,7 +435,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            try {
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -414,8 +448,8 @@ class ProductionController extends Controller
                    return !in_array($column, $columnsToExclude);
                });
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $pendingProjectDetails = collect();$duplicateCount = 0;
-               if ($loginEmpId && $empDesignation == "Administrator") {
+               $revokeProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
+               if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
                        $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
@@ -451,7 +485,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            try {
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
+               $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -465,8 +499,8 @@ class ProductionController extends Controller
                });
                $modelClassDuplcates = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName)."Duplicates";
                $modelClass = "App\\Models\\" . ucfirst($decodedClientName).ucfirst($decodedsubProjectName);
-               $duplicateProjectDetails = collect();$duplicateCount = 0;
-               if ($loginEmpId && $empDesignation == "Administrator") {
+               $duplicateProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
+               if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClassDuplcates)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
                         $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','desc')->limit(10)->get();
@@ -501,7 +535,6 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
 
             try {
-                dd($request->all());
                 $status = $request['dropdownStatus'];
                 $databaseConnection = $request['dbConn'];
                 Config::set('database.connections.mysql.database',$databaseConnection);

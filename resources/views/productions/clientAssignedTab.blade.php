@@ -4,13 +4,7 @@
                 <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
-                            $empDesignation =
-                                Session::get('loginDetails') &&
-                                Session::get('loginDetails')['userDetail'] &&
-                                Session::get('loginDetails')['userDetail']['designation'] &&
-                                Session::get('loginDetails')['userDetail']['designation']['designation'] != null
-                                    ? Session::get('loginDetails')['userDetail']['designation']['designation']
-                                    : '';
+                            $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                             //$encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
                         <div class="card-header border-0 px-4">
@@ -123,7 +117,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($empDesignation == 'Administrator')
+                                    @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
                                         <div class="wizard-step mb-0 six" data-wizard-type="step">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -371,7 +365,7 @@
                                                         'encode',
                                                     );
                                                     $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
-                                                        $popUpHeader->project_id,
+                                                        $popUpHeader->sub_project_id,
                                                         'encode',
                                                     );
 
@@ -1271,7 +1265,7 @@
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val" rows="3" id="' +
+                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-5" rows="3" id="' +
                                 columnName +
                                 uniqueId +
                                 '"></textarea>';
@@ -1285,8 +1279,8 @@
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
-                            '[]" class="form-control date_range "' + columnName +
-                            ' pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
+                            '[]" class="form-control date_range daterange_' + columnName +
+                            '  white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
                             '">';

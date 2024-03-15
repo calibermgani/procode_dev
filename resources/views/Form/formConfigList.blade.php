@@ -35,9 +35,13 @@
                             @if (isset($formConfiguration))
                                 @foreach ($formConfiguration as $data)
                                     @php
-                                        $projectName = App\Models\project::where('id', $data->project_id)->first();
+                                        // $projectName = App\Models\project::where('id', $data->project_id)->first();
+                                        // $subProjectName = App\Models\subproject::where('project_id', $data->project_id)
+                                        //     ->where('id', $data->sub_project_id)
+                                        //     ->first();
+                                        $projectName = App\Models\project::where('project_id', $data->project_id)->first();
                                         $subProjectName = App\Models\subproject::where('project_id', $data->project_id)
-                                            ->where('id', $data->sub_project_id)
+                                            ->where('sub_project_id', $data->sub_project_id)
                                             ->first();
                                         $project_id_encode = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                             $data->project_id,
@@ -46,12 +50,14 @@
                                             $data->sub_project_id,
                                         );
                                     @endphp
+                                    @if($projectName !== null  && $subProjectName !== null )
                                     <tr
                                         data-href="{{ route('formEdit', ['parent' => request()->parent, 'child' => request()->child, 'project_id' => $project_id_encode, 'sub_project_id' => $sub_project_id_encode]) }}">
                                         <td>{{ $projectName->project_name }}</td>
-                                        <td>{{ $subProjectName->sub_project_name }}</td>
+                                        <td>{{$subProjectName->sub_project_name }}</td>
                                         <td>{{ $data->label_names }}</td>
                                     </tr>
+                                    @endif
                                 @endforeach
                             @endif
                         </tbody>

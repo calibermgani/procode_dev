@@ -35,17 +35,22 @@
                             @foreach ($projects as $data)
                             @php
                                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
-                                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] &&  Session::get('loginDetails')['userDetail']['designation'] && Session::get('loginDetails')['userDetail']['designation']['designation'] !=null ? Session::get('loginDetails')['userDetail']['designation']['designation'] : "";
-                                    $projectName = $data->project_name;
-                                    $subproject_name = App\Models\subproject::where('project_id',$data->id)->pluck('sub_project_name')->toArray();
+                                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
+                                    $projectName = $data["client_name"];
+                                  //   $subproject_name = App\Models\subproject::where('project_id',$data['id'])->pluck('sub_project_name')->toArray();
+                                    $subproject_name = $data["subprject_name"];
                                      $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
                                                 return ucfirst($projectName) . ucfirst($item);
                                             })->all();
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
                                                 $modelClass = "App\\Models\\" .  $model;
-                                                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Quality AR Analyst")) {
-                                                    if (class_exists($modelClass)) {
+                                                $assignedCount = 0;
+                                                        $completedCount = 0;
+                                                        $pendingCount = 0;
+                                                        $holdCount = 0;
+                                                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
+                                                    if (app()->bound($modelClass)) {
                                                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                                                         $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -57,7 +62,7 @@
                                                         $holdCount = 0;
                                                     }
                                                 } else if($loginEmpId) {
-                                                    if (class_exists($modelClass)) {
+                                                    if (app()->bound($modelClass)) {
                                                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                                                         $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -77,7 +82,7 @@
                             @endphp
                                 <tr>
                                     <td class="details-control"></td>
-                                    <td>{{ $data->project_name }} <input type="hidden" value={{ $data->id }}></td>
+                                    <td>{{ $data['client_name'] }} <input type="hidden" value={{ $data['id'] }}></td>
                                     <td>{{$assignedTotalCount}}</td>
                                     <td>{{$completedTotalCount}}</td>
                                     <td>{{$pendingTotalCount}}</td>
@@ -195,7 +200,7 @@
                     '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
                     '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
                 $.each(subProjects, function(index, val) {
-                    console.log(val, 'val',val.client_name.id,val.sub_project_name, val.id );
+                    console.log(val, 'val',val.client_name,val.sub_project_name );
                     html +=
                         '<tbody><tr class="clickable-row cursor_hand">' +
                         '<td><input type="hidden" value=' + val.client_id + '></td>' +
@@ -217,7 +222,7 @@
                 // var encodedId = $(this).closest('tr').find('td:eq(0) input').val();
                 var clientName = $(this).closest('tr').find('td:eq(0) input').val();
                 var subProjectName = $(this).closest('tr').find('td:eq(1) input').val();
-
+console.log(clientName,'clientName',subProjectName);
                 if (!clientName) {
                     console.error('encodedclientname is undefined or empty');
                     return;

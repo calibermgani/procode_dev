@@ -502,23 +502,27 @@ class Helpers
 	}
     public static function projectList()
 	{
-		$data = project::where('status', 'Active')->pluck('project_name', 'id')->prepend(trans('Select Project'), '')->toArray();
+		// $data = project::where('status', 'Active')->pluck('project_name', 'id')->prepend(trans('Select Project'), '')->toArray();
+        $data = project::where('status', 'Active')->pluck('project_name', 'project_id')->prepend(trans('Select Project'), '')->toArray();
 		return $data;
 	}
 
     public static function subProjectList($project_id)
 	{
-		$data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select Sub Project'), '')->toArray();
-		return $data;
+		// $data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select Sub Project'), '')->toArray();
+        $data = subproject::where('project_id', $project_id)->pluck('sub_project_name', 'sub_project_id')->prepend(trans('Select Sub Project'), '')->toArray();
+        return $data;
 	}
     public static function projectName($id)
 	{
-		$data = project::where('status', 'Active')->where('id',$id)->first();
+		// $data = project::where('status', 'Active')->where('id',$id)->first();
+        $data = project::where('status', 'Active')->where('project_id',$id)->first();
 		return $data;
 	}
     public static function subProjectName($projectId,$subProjectId)
 	{
-		$data = subproject::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
+		// $data = subproject::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
+        $data = subproject::where('project_id',$projectId)->where('sub_project_id',$subProjectId)->first();
 		return $data;
 	}
     public static function formConfig($projectId,$subProjectId)

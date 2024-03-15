@@ -45,7 +45,8 @@ class FormController extends Controller
             try {
                 $existingSubProject = formConfiguration::where('project_id', $request->project_id)->groupBy(['project_id', 'sub_project_id'])
                 ->pluck('sub_project_id')->toArray();
-                $data = subProject::where('project_id', $request->project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
+                // $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
+                $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'sub_project_id')->prepend(trans('Select'), '')->toArray();
                 return response()->json(["subProject" => $data, "existingSubProject" => $existingSubProject]);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -58,9 +59,11 @@ class FormController extends Controller
     public static function formConfigurationStore(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
             try {
-                $data = $request->all();dd($data);
-                $projectName = project::where('id',$data['project_id'])->first();
-                $subProjectName = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
+                $data = $request->all();
+                // $projectName = project::where('id',$data['project_id'])->first();
+                // $subProjectName = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
+                $projectName = project::where('project_id',$data['project_id'])->first();
+                $subProjectName = subproject::where('project_id',$data['project_id'])->where('sub_project_id',$data['sub_project_id'])->first();
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
                     $requiredData['project_id'] = $data['project_id'];
@@ -259,11 +262,13 @@ class FormController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
             try {
                 $data = $request->all();dd($data);
-                $projectName = project::where('id',$data['project_id_val'])->first();
-                $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
+                // $projectName = project::where('id',$data['project_id_val'])->first();
+                // $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
+                $projectName = project::where('project_id',$data['project_id_val'])->first();
+                $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('sub_project_id',$data['sub_project_id_val'])->first();
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
-                    $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();dd($existingRecord);
+                    $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();
                     if($existingRecord)
                     {
                         $requiredData['project_id'] = $data['project_id_val'];
