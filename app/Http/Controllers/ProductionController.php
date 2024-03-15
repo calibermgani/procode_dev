@@ -94,7 +94,7 @@ class ProductionController extends Controller
 
                     $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',$model_name);
                     if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
-                        if (app()->bound($modelClass)) {
+                        if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->count();
@@ -106,7 +106,7 @@ class ProductionController extends Controller
                             $subProjectsWithCount[$key]['holdCount'] = '--';
                         }
                     } else if($loginEmpId) {
-                        if (app()->bound($modelClass)) {
+                        if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -207,7 +207,7 @@ class ProductionController extends Controller
                     //    $assignedProjectDetails = DB::table($table_name)->get();
                     // }
                     if (class_exists($modelClass)) {
-                        // if (class_exists($modelClassDatas) && app()->bound($modelClass)) {
+                        // if (class_exists($modelClassDatas) && class_exists($modelClass)) {
                         // $assignedProjectDetails = $modelClassDatas::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
                         // if(count($assignedProjectDetails) == 0) {
                         //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();

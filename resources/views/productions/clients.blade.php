@@ -50,7 +50,7 @@
                                                         $pendingCount = 0;
                                                         $holdCount = 0;
                                                 if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
-                                                    if (app()->bound($modelClass)) {
+                                                    if (class_exists($modelClass)) {
                                                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                                                         $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -62,7 +62,7 @@
                                                         $holdCount = 0;
                                                     }
                                                 } else if($loginEmpId) {
-                                                    if (app()->bound($modelClass)) {
+                                                    if (class_exists($modelClass)) {
                                                         $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                                                         $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();

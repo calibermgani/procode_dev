@@ -506,7 +506,9 @@
                             //     var formattedData = data;
                             // }
                             // var span = $('<span>').addClass('date-label').text(formattedData);
+                            var circle = $('<span>').addClass('circle');
                             var span = $('<span>').addClass('date-label').text(data);
+                                span.prepend(circle);
                                    formattedDatas.push(span);
                         }); console.log(formattedDatas,'formattedDatas');
                         formattedDatas.forEach(function(span, index) {
