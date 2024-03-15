@@ -446,7 +446,7 @@
                                                                         <label
                                                                             class="col-md-12">{{ $data->label_name }}
                                                                         </label>
-                                                                        <input type="hidden" name="{{ $columnName }}">
+                                                                        <input type="hidden" name="{{ $columnName }}[]">
 
                                                                         <label class="col-md-12 pop-non-edt-val"
                                                                             id={{ $columnName }}>
