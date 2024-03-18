@@ -4,7 +4,7 @@
 
 
 {{-- <div class="container" style="background-color: #ffffff;height:760px"> --}}
-    <div class = "mx-4 my-4 px-4 py-4" style="background-color: #ffffff;width:100%;height:100%">
+    <div class = "mx-0 my-4 px-4 py-4" style="background-color: #ffffff;width:100%;height:100%">
     <span class="ml-1"><b>Dashboard</b></span>
     <div class="row" style="height:50%">
 
