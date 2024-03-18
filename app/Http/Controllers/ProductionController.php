@@ -294,7 +294,7 @@ class ProductionController extends Controller
                $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
-                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->limit(2000)->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -305,7 +305,7 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->get();
+                      $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','desc')->limit(2000)->get();
                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -344,7 +344,7 @@ class ProductionController extends Controller
                $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {dd(  $modelClass);
                    if (class_exists($modelClass)) {
-                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->limit(2000)->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -355,7 +355,7 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->get();
+                      $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','desc')->limit(2000)->get();
                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -394,7 +394,7 @@ class ProductionController extends Controller
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
-                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->limit(2000)->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -405,7 +405,7 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->get();
+                      $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->limit(2000)->get();
                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -451,7 +451,7 @@ class ProductionController extends Controller
                $revokeProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
-                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->limit(2000)->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
@@ -462,7 +462,7 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->get();
+                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','desc')->limit(2000)->get();
                       $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -503,7 +503,7 @@ class ProductionController extends Controller
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClassDuplcates)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
-                        $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','desc')->limit(10)->get();
+                        $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','desc')->limit(2000)->get();
                         $assignedCount =  $modelClass::where('claim_status','CE_Assigned')->count();
                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                         $pendingCount =   $modelClass::where('claim_status','CE_Pending')->count();
