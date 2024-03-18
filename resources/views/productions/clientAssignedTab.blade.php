@@ -697,6 +697,8 @@
                                                                         @endforeach
                                                                     @endif
                                                                     <div class="col-md-6">
+                                                                        <input type="hidden" name="invoke_date">
+                                                                        <input type="hidden" name="CE_emp_id">
                                                                         <div class="form-group row" style="margin-left: -2rem">
                                                                             <label class="col-md-12 required">
                                                                                 Claim Status
@@ -1470,6 +1472,12 @@
                     var value = $(this).text().trim();
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
+                    }
+                    if (header == 'invoke_date') {
+                        $('input[name="invoke_date"]').val(value);
+                    }
+                    if (header == 'CE_emp_id') {
+                        $('input[name="CE_emp_id"]').val(value);
                     }
                     if (header == 'claim_status') {
                         // $('select[name="claim_status"]').val(value).trigger('change');
