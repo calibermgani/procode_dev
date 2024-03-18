@@ -394,7 +394,7 @@ class ProductionController extends Controller
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
                    if (class_exists($modelClass)) {
-                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->limit(2000)->get();dd($completedProjectDetails);
+                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','desc')->limit(2000)->get();
                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
