@@ -498,8 +498,8 @@
                     $.each(headers, function(index, header) {
                         value = clientData[header];
                         $('label[id="' + header + '"]').html("");
-                    if (/,/.test(value)) {
-                        var values = value.split(',');
+                    if (/_el_/.test(value)) {
+                        var values = value.split('_el_');
                         var formattedDatas = [];
                         values.forEach(function(data, index) {
                             // if (data.includes('-')) {
