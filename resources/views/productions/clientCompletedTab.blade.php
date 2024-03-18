@@ -499,7 +499,7 @@
                         value = clientData[header];
                         $('label[id="' + header + '"]').html("");
                     if (/,/.test(value)) {
-                        var values = value.split(',');
+                        var values = value.split('_');
                         var formattedDatas = [];
                         values.forEach(function(data, index) {
                             // if (data.includes('-')) {
