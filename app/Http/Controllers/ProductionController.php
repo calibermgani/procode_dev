@@ -570,7 +570,7 @@ class ProductionController extends Controller
                 $data = [];
                 foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
                     if (is_array($value)) {
-                        $data[$key] = implode(',', $value);
+                        $data[$key] = implode('_', $value);
                     } else {
                         $data[$key] = $value;
                     }
