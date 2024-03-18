@@ -222,6 +222,7 @@
                                                             <th style="width: 10px"><input type="checkbox" id="ckbCheckAll" class="cursor_hand ">
                                                             </th>
                                                         @endif
+                                                        <th style="width:16%">Action</th>
                                                         @foreach ($columnsHeader as $columnName => $columnValue)
                                                             @if ($columnValue != 'id')
                                                                 <th style="width:12%"><input type="hidden"
@@ -235,7 +236,7 @@
                                                                 </th>
                                                             @endif
                                                         @endforeach
-                                                        <th style="width:16%">Action</th>
+
                                                     </tr>
                                                 @endif
 
@@ -249,41 +250,6 @@
                                                                         value="{{ $data->id }}">
                                                                 </td>
                                                             @endif
-                                                            @foreach ($data->getAttributes() as $columnName => $columnValue)
-                                                                @php
-                                                                    $columnsToExclude = [
-                                                                        'QA_emp_id',
-                                                                        'created_at',
-                                                                        'updated_at',
-                                                                        'deleted_at',
-                                                                    ];
-                                                                @endphp
-                                                                @if (!in_array($columnName, $columnsToExclude))
-                                                                    @if ($columnName != 'id')
-                                                                        <td style="max-width: 300px;
-                                                                        white-space: normal;">
-                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
-                                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                            @else
-                                                                                @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
-                                                                                    {{ str_replace('CE_', '', $columnValue) }}
-                                                                                @else
-                                                                                    {{ $columnValue }}
-                                                                                @endif
-                                                                            @endif
-                                                                        </td>
-                                                                    @else
-                                                                        <td style="display:none;max-width: 300px;
-                                                                        white-space: normal;">
-                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
-                                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                            @else
-                                                                                {{ $columnValue }}
-                                                                            @endif
-                                                                        </td>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
                                                             <td>
                                                                 @if (empty($assignedDropDown))
                                                                     @if (empty($existingCallerChartsWorkLogs))
@@ -340,6 +306,42 @@
                                                                         title="View"><i
                                                                         class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button>
                                                             </td>
+                                                            @foreach ($data->getAttributes() as $columnName => $columnValue)
+                                                                @php
+                                                                    $columnsToExclude = [
+                                                                        'QA_emp_id',
+                                                                        'created_at',
+                                                                        'updated_at',
+                                                                        'deleted_at',
+                                                                    ];
+                                                                @endphp
+                                                                @if (!in_array($columnName, $columnsToExclude))
+                                                                    @if ($columnName != 'id')
+                                                                        <td style="max-width: 300px;
+                                                                        white-space: normal;">
+                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                            @else
+                                                                                @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                                    {{ str_replace('CE_', '', $columnValue) }}
+                                                                                @else
+                                                                                    {{ $columnValue }}
+                                                                                @endif
+                                                                            @endif
+                                                                        </td>
+                                                                    @else
+                                                                        <td style="display:none;max-width: 300px;
+                                                                        white-space: normal;">
+                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                            @else
+                                                                                {{ $columnValue }}
+                                                                            @endif
+                                                                        </td>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -1420,14 +1422,15 @@
                     }
                 });
 
-                $row.find('td:not(:eq(' + thCount + '))').each(function(index) {
-                    var header = headers[index];
+                $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
+                    var header = headers[index-1];
                     var value = $(this).text().trim();
                     $('label[id="' + header + '"]').text(value);
                 });
             });
             $(document).on('click', '.clickable-row', function(e) {
-                var record_id = $(this).closest('tr').find('td:eq(0)').text();
+                // var record_id = $(this).closest('tr').find('td:eq(0)').text();
+                var record_id = $(this).closest('tr').find('td:eq(1)').text();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
@@ -1458,7 +1461,7 @@
                 // $('#myModal_status').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
-                var thCount = tdCount - 1;
+                // var thCount = tdCount - 1;
 
                 var headers = [];
                 $row.closest('table').find('thead th input').each(function() {
@@ -1467,8 +1470,8 @@
                     }
                 });
 
-                $row.find('td:not(:eq(' + thCount + '))').each(function(index) {
-                    var header = headers[index];
+                $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
+                    var header = headers[index-1];
                     var value = $(this).text().trim();
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);

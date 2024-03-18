@@ -150,6 +150,7 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
+                                                    <th style="width:16%">Action</th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th style="width:12%"><input type="hidden"
@@ -163,7 +164,7 @@
                                                             </th>
                                                         @endif
                                                     @endforeach
-                                                    <th style="width:16%">Action</th>
+
                                                 </tr>
                                             @endif
 
@@ -172,6 +173,9 @@
                                             @if (isset($completedProjectDetails))
                                                 @foreach ($completedProjectDetails as $data)
                                                     <tr>
+                                                        <td>    <button class="task-start clickable-view"
+                                                            title="View"><i
+                                                            class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button></td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
                                                                 $columnsToExclude = ['QA_emp_id', 'created_at', 'updated_at', 'deleted_at'];
@@ -213,9 +217,6 @@
                                                             @endif
                                                             @endif
                                                         @endforeach
-                                                        <td>    <button class="task-start clickable-view"
-                                                            title="View"><i
-                                                            class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button></td>
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -456,10 +457,11 @@
                 var clientName = $('#clientName').val();
                 var subProjectName = $('#subProjectName').val();
                 $(document).on('click', '.clickable-view', function(e) {
-                    var record_id = $(this).closest('tr').find('td:eq(0)').text();
+                    // var record_id = $(this).closest('tr').find('td:eq(0)').text();
+                    var record_id = $(this).closest('tr').find('td:eq(1)').text();
                     var $row = $(this).closest('tr');
-                var tdCount = $row.find('td').length;
-                var thCount = tdCount - 1;
+                    var tdCount = $row.find('td').length;
+                    var thCount = tdCount - 1;
 
                 var headers = [];
                 $row.closest('table').find('thead th input').each(function() {
