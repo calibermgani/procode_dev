@@ -3,14 +3,15 @@
 @section('content')
 
 
-<div class="container" style="background-color: #ffffff;height:760px">
+{{-- <div class="container" style="background-color: #ffffff;height:760px"> --}}
+    <div class = "mx-4 my-4 px-4 py-4" style="background-color: #ffffff;width:100%;height:100%">
     <span class="ml-1"><b>Dashboard</b></span>
-    <div class="row">
+    <div class="row" style="height:50%">
 
         <!-- First section -->
         <div class="col-md-6">
             <!-- Left side: Five small cards showing status -->
-            <div class="card">
+            <div class="card" style="height:100%">
                 <span class="mt-4 ml-4"><b>Today's claims</b></span>
                 <div class="card-body">
 
@@ -51,7 +52,7 @@
         </div>
         <div class="col-md-6">
             <!-- Right side: Flow chart -->
-            <div class="card">
+            <div class="card" style="height:100%">
                 <span class="mt-4 ml-4"><b>MTD progress</b></span>
                 <div class="card-body">
                     <canvas id="myChart"  width="400" height="165"></canvas>
@@ -59,11 +60,11 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4" style="height:45%">
         <!-- Second section -->
         <div class="col-md-6  mb-8">
             <!-- Left card: Table 1 -->
-            <div class="card">
+            <div class="card" style="height:100%">
                 <span class="mt-4 ml-4"><b>Projects</b></span>
                 <div class="card-body"  data-scroll="true" data-height="180">
                     <table class="table table-separate table-head-dashboard no-footer" >
@@ -96,7 +97,7 @@
                             <td>57</td>
                         </tr>
                         <tr>
-                            <td>3</td>
+                            <td>03</td>
                             <td>Aig</td>
                             <td>32</td>
                             <td>53</td>
@@ -104,7 +105,7 @@
                             <td>55</td>
                         </tr>
                         <tr>
-                            <td>4</td>
+                            <td>04</td>
                             <td>AMBC</td>
                             <td>32</td>
                             <td>53</td>
@@ -112,7 +113,7 @@
                             <td>55</td>
                         </tr>
                         <tr>
-                            <td>5</td>
+                            <td>05</td>
                             <td>Rebound</td>
                             <td>32</td>
                             <td>53</td>
@@ -126,7 +127,7 @@
         </div>
         <div class="col-md-6  mb-8">
             <!-- Right card: Table 2 -->
-            <div class="card">
+            <div class="card"  style="height:100%">
                 <span class="mt-4 ml-4"><b>On hold</b></span>
                 <div class="card-body" data-scroll="true" data-height="180">
                     <table class="table table-separate table-head-dashboard no-footer">
@@ -182,6 +183,7 @@
         </div>
     </div>
 </div>
+{{-- </div> --}}
 
 
 
@@ -238,7 +240,7 @@
                     }
                 }]
             },
-           
+
             responsive: true,
             maintainAspectRatio: false
         };

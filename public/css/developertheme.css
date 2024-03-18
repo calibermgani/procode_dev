@@ -581,7 +581,7 @@ color: #FFFFFF !important;
 .table-head-dashboard {
 background-color: #ffffff;
 color: #666666;
-width: 600px;
+/* width: 600px; */
 height: 20px;
 top: -1px;
 left: 17px;
