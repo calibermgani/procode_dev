@@ -12,32 +12,32 @@
         <div class="col-md-6">
             <!-- Left side: Five small cards showing status -->
             <div class="card" style="height:100%">
-                <span class="mt-4 ml-4"><b>Today's claims</b></span>
-                <div class="card-body">
+                <span class="mt-8 ml-4"><b>Today's claims</b></span>
+                <div class="card-body mt-10">
 
                     <div class="row" style="gap:28px">
                         <div class="col-2" style="margin-left:-1.5rem">
                             <div class="card bg_assign text-black dash_card mt-2">
                                 <img src="{{ asset('/assets/media/bg/assign_dash.svg') }}" class="dash_icon">
-                                <span>300000</span>
+                                <span>30</span>
                                 Assigned</div>
                         </div>
                         <div class="col-2">
                             <div class="card bg-comp text-black dash_card  mt-2">
                                 <img src="{{ asset('/assets/media/bg/complete_dash.svg') }}" class="dash_icon">
-                                <span>200000</span>
+                                <span>20</span>
                                 Complete</div>
                         </div>
                         <div class="col-2">
                             <div class="card bg_pend text-black dash_card mt-2">
                                 <img src="{{ asset('/assets/media/bg/pending_dash.svg') }}" class="dash_icon">
-                                <span>500000</span>
+                                <span>50</span>
                                 Pending</div>
                         </div>
                         <div class="col-2">
                             <div class="card bg_hold text-black dash_card mt-2">
                                 <img src="{{ asset('/assets/media/bg/hold_dash.svg') }}" class="dash_icon">
-                                <span>600000</span>
+                                <span>60</span>
                                 On hold</div>
                         </div>
                         <div class="col-2">
