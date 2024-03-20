@@ -1130,19 +1130,23 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div class="modal fade modal-second" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-backdrop="static">
+                                <div class="modal fade modal-second modal-left" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">SOP</h5>
-                                                <button type="button" class="close comment_close" data-dismiss="modal"
-                                                aria-hidden="true">&times;</button>
+                                            <div class="modal-header" style="background-color: #0969C3;height: 84px">
+                                                <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
+                                                    <a href= {{ asset('/pdf_folder/sample_1234.pdf') }}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16" style="color: #ffffff; margin-left: 365px;">
+                                                            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 8.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"/>
+                                                        </svg>
+                                                    </a>
+                                                <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <iframe src={{ asset('/pdf_folder/sample_1234.pdf') }} style="width: 100%; height: 500px;" frameborder="0" type="application/pdf"></iframe>
+                                                <iframe src={{ asset('/pdf_folder/sample_1234.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
                                             </div>
                                             <div class="modal-footer">
-                                                <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a>
+                                                {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
                                                 <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
                                                 <!-- Additional buttons can be added here -->
                                             </div>
@@ -1209,6 +1213,26 @@
         color: #ffffff;
         text-decoration: none;
         background-color: #888a91;
+    }
+
+    .modal-left .modal-dialog {
+        margin-top: 90px;
+        margin-left: 320px;
+        margin-right: auto;
+    }
+
+    .modal-left .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-right .modal-dialog {
+        margin-left: auto;
+        margin-right: 220px;
+        transition: margin 5s ease-in-out; 
+    }
+
+    .modal-right .modal-content {
+        border-radius: 5px;
     }
 
 
@@ -1536,6 +1560,17 @@
                 console.log('sop modal');
                 $('#myModal_sop').modal('show');
             });
+
+            $(document).ready(function () {
+                $('#myModal_sop').on('shown.bs.modal', function () {
+                    $('#myModal_status').addClass('modal-right');
+                });
+
+                $('#myModal_sop').on('hidden.bs.modal', function () {
+                    $('#myModal_status').removeClass('modal-right');
+                });
+            });
+
             $(document).on('click', '#project_assign_save', function(e) {
                 e.preventDefault();
                 var fieldNames = $('#formConfiguration').serializeArray().map(function(input) {
