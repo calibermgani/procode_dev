@@ -1175,23 +1175,18 @@
         padding: 8px;
         box-sizing: border-box;
     }
-    #myModal_view .modal-dialog {
+    /* #myModal_view .modal-dialog {
         max-width: 1000px;
         max-Height: 1200px;
-        /* Adjust the width as needed */
     }
-
-    /* Style for labels */
     #myModal_view .modal-body label {
         margin-bottom: 5px;
     }
-
-    /* Style for textboxes */
     #myModal_view .modal-body input[type="text"] {
         width: 100%;
         padding: 8px;
         box-sizing: border-box;
-    }
+    } */
     /* .modal-first {
       left: 50%  !important;
       top: 50%  !important;
@@ -1269,7 +1264,7 @@
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-5" rows="3" id="' +
+                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
                                 '"></textarea>';
