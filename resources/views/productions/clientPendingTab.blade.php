@@ -230,7 +230,7 @@
                                                         </h4>
                                                         <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
                                                     </div>&nbsp;&nbsp;
-                                                   <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#5D84FF;">
+                                                   <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
                                                         <span id="title_status"></span>
                                                     </div>
                                                 </div>
@@ -527,7 +527,7 @@
                                                         <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
                                                     </div>&nbsp;&nbsp;
                                                     <!-- Oval background for project status -->
-                                                    <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#5D84FF;">
+                                                    <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
                                                         <span id="title_status"></span>
                                                     </div>
                                                 </div>
