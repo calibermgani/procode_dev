@@ -388,22 +388,17 @@
 @endsection
 <style>
     /* Increase modal width */
-    #myModal_view .modal-dialog {
+    /* #myModal_view .modal-dialog {
         max-width: 800px;
-        /* Adjust the width as needed */
     }
-
-    /* Style for labels */
     #myModal_view .modal-body label {
         margin-bottom: 5px;
     }
-
-    /* Style for textboxes */
     #myModal_view .modal-body input[type="text"] {
         width: 100%;
         padding: 8px;
         box-sizing: border-box;
-    }
+    } */
 
     /* .dt-buttons {
     position: absolute;

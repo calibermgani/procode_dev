@@ -67,7 +67,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="wizard-step mb-0 four" data-wizard-type="done">
+                                    {{-- <div class="wizard-step mb-0 four" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
@@ -78,7 +78,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="wizard-step mb-0 five" data-wizard-type="step">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">

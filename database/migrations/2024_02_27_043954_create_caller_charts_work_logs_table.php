@@ -21,6 +21,7 @@ class CreateCallerChartsWorkLogsTable extends Migration
             $table->string('record_id')->nullable();
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
+            $table->string('record_status')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

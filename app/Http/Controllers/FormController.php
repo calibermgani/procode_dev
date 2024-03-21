@@ -81,7 +81,7 @@ class FormController extends Controller
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                     if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
-                        $columns[$columnName] = 'VARCHAR(255)';
+                        $columns[$columnName] = 'TEXT';
                     } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                         $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                         $columns[$columnName] = "ENUM($enumValues)";
@@ -170,7 +170,7 @@ class FormController extends Controller
                     if (empty($tableDatasExists)) {
                         $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                            $createTableSQL .= ", $columnName TEXT";
                         }
 
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
@@ -193,7 +193,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName TEXT AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableDataName);
                                 $dynamicModel->refreshFillableFromTable();
                             }
@@ -204,7 +204,7 @@ class FormController extends Controller
                     if (empty($tableHistoryExists)) {
                         $createTableSQL = "CREATE TABLE $tableHistoryName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                            $createTableSQL .= ", $columnName TEXT";
                         }
 
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
@@ -227,7 +227,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName TEXT AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableHistoryName);
                                 $dynamicModel->refreshFillableFromTable();
                             }
@@ -302,7 +302,7 @@ class FormController extends Controller
                        // $columnName = Str::lower(str_replace([' ', '/'], '_', $data['label_name'][$i]));
                         $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                         if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
-                            $columns[$columnName] = 'VARCHAR(255)';
+                            $columns[$columnName] = 'TEXT';
                         } else if ($data['input_type'][$i] == 'select' || $data['input_type'][$i] == 'checkbox' || $data['input_type'][$i] == 'radio') {
                               $enumValues = "'" . implode("','", explode(',',$data['options_name'][$i])) . "'";
                             $columns[$columnName] = "ENUM($enumValues)";
@@ -391,7 +391,7 @@ class FormController extends Controller
                     if (empty($tableDatasExists)) {
                         $createTableSQL = "CREATE TABLE $tableDataName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                            $createTableSQL .= ", $columnName TEXT";
                         }
 
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
@@ -414,7 +414,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableDataName ADD COLUMN $columnName TEXT AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableDataName);
                                 $dynamicModel->refreshFillableFromTable();
                             }
@@ -425,7 +425,7 @@ class FormController extends Controller
                     if (empty($tableHistoryExists)) {
                         $createTableSQL = "CREATE TABLE $tableHistoryName (id INT AUTO_INCREMENT PRIMARY KEY";
                         foreach ($columns as $columnName => $columnType) {
-                            $createTableSQL .= ", $columnName VARCHAR(255)";
+                            $createTableSQL .= ", $columnName TEXT";
                         }
 
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
@@ -448,7 +448,7 @@ class FormController extends Controller
                             ");
                             if (empty($columnExists)) {
 
-                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName VARCHAR(255) AFTER $afterColumn");
+                                DB::statement("ALTER TABLE $tableHistoryName ADD COLUMN $columnName TEXT AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableHistoryName);
                                 $dynamicModel->refreshFillableFromTable();
                             }

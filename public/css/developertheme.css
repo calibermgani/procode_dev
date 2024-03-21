@@ -43,7 +43,7 @@
     letter-spacing: 0.1rem;
     background-color: #0969C3;
     width: 287.2px;
-    height: 40px;
+    /* height: 40px; */
 }
 
 /* Common styles for both mobile and desktop */
@@ -641,3 +641,36 @@ margin-left: -1rem;
     margin-right: 5px;
 }
 
+#myModal_view .modal-dialog {
+    max-width: 800px;
+    /* Adjust the width as needed */
+}
+
+/* Style for labels */
+#myModal_view .modal-body label {
+    margin-bottom: 5px;
+}
+
+/* Style for textboxes */
+#myModal_view .modal-body input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#myModal_status .modal-dialog {
+    max-width: 800px;
+    /* Adjust the width as needed */
+}
+
+/* Style for labels */
+#myModal_status .modal-body label {
+    margin-bottom: 5px;
+}
+
+/* Style for textboxes */
+#myModal_status .modal-body input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
