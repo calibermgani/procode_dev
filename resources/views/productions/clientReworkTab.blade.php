@@ -36,9 +36,11 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Assigned</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $assignedCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $assignedCount])
+
                                                 </div>
                                             </div>
                                         </div>
@@ -48,9 +50,10 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Pending</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $pendingCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $pendingCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -60,9 +63,10 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Hold</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $holdCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $holdCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -84,9 +88,10 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Rework</h6>
-                                                    <div class="rounded-circle code-badge-tab-selected">
+                                                    {{-- <div class="rounded-circle code-badge-tab-selected">
                                                         {{ $reworkCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $reworkCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -97,9 +102,10 @@
                                                 <div class="wizard-label p-2 mt-2">
                                                     <div class="wizard-title" style="display: flex; align-items: center;">
                                                         <h6 style="margin-right: 5px;">Duplicate</h6>
-                                                            <div class="rounded-circle code-badge-tab">
+                                                            {{-- <div class="rounded-circle code-badge-tab">
                                                                 {{ $duplicateCount }}
-                                                            </div>
+                                                            </div> --}}
+                                                            @include('CountVar.countRectangle', ['count' => $duplicateCount])
                                                     </div>
                                                 </div>
                                             </div>

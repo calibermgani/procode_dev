@@ -3011,7 +3011,7 @@ pre code {
 .form-control:focus {
     color: #464E5F;
     background-color: #ffffff;
-    border-color: #0969C3;
+    border-color: #139AB3;
     outline: 0;
     -webkit-box-shadow: none, none;
     box-shadow: none, none;
@@ -72942,7 +72942,7 @@ code {
 }
 
 .checkbox>input:checked~span {
-    background-color: #0969C3 !important;
+    background-color: #139AB3 !important;
 }
 
 .checkbox>input:checked~span:after {
@@ -73690,12 +73690,12 @@ td>.radio.radio-single {
 .radio>input:checked~span {
     background-color: #F3F3F3;
     /* color:#191C24 !important; */
-    border-color: #0969C3;
+    border-color: #139AB3;
 }
 
 .radio>input:checked~span:after {
-    background-color: #0969C3;
-    border-color: #0969C3;
+    background-color: #139AB3;
+    border-color: #139AB3;
 }
 
 .radio.radio-outline>span {
@@ -88298,7 +88298,7 @@ td>.radio.radio-single {
     transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, -webkit-box-shadow 0.15s ease;
     transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, -webkit-box-shadow 0.15s ease;
-    background-color: #0969C3;
+    background-color: #139AB3;
     color: #ffffff;
 }
 
@@ -90920,14 +90920,14 @@ td>.radio.radio-single {
 }
 
 .scroll.ps>.ps__rail-x>.ps__thumb-x {
-    background-color: #0969C3;
+    background-color: #139AB3;
     opacity: 1;
 }
 
 .scroll.ps>.ps__rail-x>.ps__thumb-x:hover,
 .scroll.ps>.ps__rail-x>.ps__thumb-x:focus {
     opacity: 1;
-    background-color: #0969C3;
+    background-color: #139AB3;
 }
 
 .scroll.ps>.ps__rail-y {
@@ -90946,14 +90946,14 @@ td>.radio.radio-single {
 }
 
 .scroll.ps>.ps__rail-y>.ps__thumb-y {
-    background: #0969C3;
+    background: #139AB3;
     opacity: 1;
 }
 
 .scroll.ps>.ps__rail-y>.ps__thumb-y:hover,
 .scroll.ps>.ps__rail-y>.ps__thumb-y:focus {
     opacity: 1;
-    background: #0969C3;
+    background: #139AB3;
 }
 
 .ql-toolbar.ql-snow {
@@ -91602,16 +91602,16 @@ body.swal2-height-auto {
 }
 
 .swal2-icon.swal2-success {
-    border-color: #0969C3;
-    color: #0969C3;
+    border-color: #139AB3;
+    color: #139AB3;
 }
 
 .swal2-icon.swal2-success [class^=swal2-success-line] {
-    background-color: #0969C3;
+    background-color: #139AB3;
 }
 
 .swal2-icon.swal2-success .swal2-success-ring {
-    border-color: #0969C3;
+    border-color: #139AB3;
 }
 
 .swal2-icon.swal2-info {

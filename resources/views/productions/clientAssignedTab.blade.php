@@ -22,7 +22,7 @@
                                                 d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
                                         </svg>
                                     </span> --}}
-                                    <span class="project_header" style="margin-left: 4px !important;">Client Information</span>
+                                    <span class="project_header" style="margin-left: 4px !important;">Practice List</span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
@@ -57,9 +57,18 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Assigned</h6>
-                                                    <div class="rounded-circle code-badge-tab-selected">
-                                                        {{ $assignedCount }}
-                                                    </div>
+                                                    {{-- @php
+                                                    if(strlen($assignedCount) == 1)
+                                                        $countWidth = strlen($assignedCount) * 15;
+                                                    elseif(strlen($assignedCount) == 2)
+                                                        $countWidth = strlen($assignedCount) * 9;
+                                                     else
+                                                       $countWidth = strlen($assignedCount) * 8;
+                                                    @endphp
+                                                    <div class="rectangle"  style="width: {{$countWidth }}px;">
+                                                        <div class="count">{{$assignedCount}}</div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $assignedCount])
                                                 </div>
 
                                             </div>
@@ -71,9 +80,10 @@
                                                 <div class="wizard-title"
                                                 style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Pending</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $pendingCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $pendingCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -84,9 +94,10 @@
                                                 <div class="wizard-title"
                                                 style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Hold</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $holdCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $holdCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -110,9 +121,10 @@
                                                 <div class="wizard-title"
                                                 style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Rework</h6>
-                                                    <div class="rounded-circle code-badge-tab">
+                                                    {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $reworkCount }}
-                                                    </div>
+                                                    </div> --}}
+                                                    @include('CountVar.countRectangle', ['count' => $reworkCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -124,9 +136,10 @@
                                                     <div class="wizard-title"
                                                     style="display: flex; align-items: center;">
                                                         <h6 style="margin-right: 5px;">Duplicate</h6>
-                                                        <div class="rounded-circle code-badge-tab">
+                                                        {{-- <div class="rounded-circle code-badge-tab">
                                                             {{ $duplicateCount }}
-                                                        </div>
+                                                        </div> --}}
+                                                        @include('CountVar.countRectangle', ['count' => $duplicateCount])
                                                     </div>
                                                 </div>
                                             </div>
@@ -274,7 +287,7 @@
 
                                                                         </span> --}}
                                                                         <button class="task-start clickable-row"
-                                                                            title="Start">Start</button>
+                                                                            title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
                                                                     @elseif(in_array($data->id, $existingCallerChartsWorkLogs))
                                                                         {{-- <span
                                                                             class="svg-icon svg-icon-black-start mr-2 question_play clickable-row"
@@ -296,7 +309,7 @@
                                                                             </svg>
                                                                         </span> --}}
                                                                         <button class="task-start clickable-row"
-                                                                            title="Start">Start</button>
+                                                                            title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
                                                                     @endif
                                                                 @endif
                                                                 {{-- <a class="pt-1" data-toggle="tooltip" title="View"
@@ -375,7 +388,7 @@
 
 
                                                     <div class="modal-content" style="margin-top: 7rem">
-                                                        <div class="modal-header" style="background-color: #0969C3;height: 84px">
+                                                        <div class="modal-header" style="background-color: #139AB3;height: 84px">
 
                                                             <div class="col-md-4">
                                                                 <div class="d-flex align-items-center">
@@ -458,7 +471,14 @@
                                                                     @endif
                                                                 </div>
                                                                 <div class="col-md-9" style="border-left: 1px solid #ccc;" data-scroll="true" data-height="400">
-                                                                    <h6 class="title-h6">Form</h6>&nbsp;&nbsp;
+                                                                    <h6 class="title-h6">Form
+                                                                        <button type = "button" id="expandButton"  class="float-right">
+                                                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                                                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                                                                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+                                                                      </svg></button>
+
+                                                                    </h6>&nbsp;&nbsp;
                                                                     @if (count($popupEditableFields) > 0)
                                                                         @php $count = 0; @endphp
                                                                         @foreach ($popupEditableFields as $key => $data)
@@ -999,7 +1019,7 @@
 
 
                                                 <div class="modal-content" style="margin-top: 7rem">
-                                                    <div class="modal-header" style="background-color: #0969C3;height: 84px">
+                                                    <div class="modal-header" style="background-color: #139AB3;height: 84px">
 
                                                         <div class="col-md-4">
                                                             <div class="d-flex align-items-center">
@@ -1133,7 +1153,7 @@
                                 <div class="modal fade modal-second modal-left" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
-                                            <div class="modal-header" style="background-color: #0969C3;height: 84px">
+                                            <div class="modal-header" style="background-color: #139AB3;height: 84px">
                                                 <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
                                                     <a href= {{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16" style="color: #ffffff; margin-left: 365px;">
@@ -1165,15 +1185,14 @@
     #myModal_status .modal-dialog {
         max-width: 1000px;
         max-Height: 1200px;
-        /* Adjust the width as needed */
     }
 
-    /* Style for labels */
+
     #myModal_status .modal-body label {
         margin-bottom: 5px;
     }
 
-    /* Style for textboxes */
+
     #myModal_status .modal-body input[type="text"] {
         width: 100%;
         padding: 8px;
@@ -1256,7 +1275,21 @@
         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
+            $("#expandButton").click(function() {
+                var modalContent = $(".modal-content");console.log(modalContent.width(),'modalContent');
 
+// Toggle modal width
+if (modalContent.width() === 800) {
+  modalContent.css("width", "120%");
+} else {
+  modalContent.css("width", "100%");
+}
+  });
+
+  // Close the modal when the close button is clicked
+  $(".close").click(function() {
+    $("#myModal_status").hide();
+  });
             var countDigits = {{ strlen($assignedCount) }};
             var newWidth = 30 + (countDigits - 1) * 6;
             var newHeight = 30 + (countDigits - 1) * 6;

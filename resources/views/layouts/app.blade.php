@@ -177,8 +177,8 @@ $url_segment = Request::segment(1);
         <div class="right-side">
             <div class="login-card">
                 <div class="text-left  mt-0 mb-12 mb-lg-12 ml-8 mr-8">
-                    <h3 class="font-size-h1">Welcome Sign In!</h3>
-                    <p class="login-subtext mt-4">Enter your username and password</p>
+                    <h3 class="font-size-h1">Sign In</h3>
+                    {{-- <p class="login-subtext mt-4">Enter your username and password</p> --}}
                 </div>
                 @yield('content')
             </div>
