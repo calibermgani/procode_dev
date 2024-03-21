@@ -1388,7 +1388,7 @@
                         endDate: end,
                         showDropdowns: true,
                         ranges: {}
-                    });
+                    }).attr("autocomplete", "off");
                     newDateRangePicker.val('');
                 }
             });

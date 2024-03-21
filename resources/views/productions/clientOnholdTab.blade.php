@@ -828,11 +828,15 @@
                         endDate: end,
                         showDropdowns: true,
                         ranges: {}
-                    });
+                    }).attr("autocomplete", "off");
                     newDateRangePicker.val('');
                 }
             });
-
+            $(document).on('click', '.remove_more', function() {
+                var uniqueId = $(this).attr('id');
+                var elementId = 'dynamicElement_' + uniqueId;
+                $('#' + elementId).remove();
+            });
             var table = $("#client_onhold_list").DataTable({
                 processing: true,
                 lengthChange: false,
@@ -1077,7 +1081,11 @@
                                                     $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                         }
                                     }
-
+                                    $('.date_range').daterangepicker({
+                                        autoUpdateInput: false,
+                                    }).on('apply.daterangepicker', function(ev, picker) {
+                                        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                                    }).attr("autocomplete", "off");
                                 } else if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                                     var checkboxValues = value.split(',');
                                     $('input[name="' + header + '[]"]').each(function() {
@@ -1093,9 +1101,10 @@
                                     $('input[name="parentId"]').val(clientData['parent_id']);
                                     $('input[name="record_old_status"]').val(clientData['claim_status']);
                                       if (header === 'claim_status' && value.includes('CE_')) {
+                                            claimStatus = value;
                                             value = value.replace('CE_', '');
-                                            $('select[name="claim_status"]').val('CE_Pending').trigger('change');
-                                        $('#title_status').text('CE_Pending');
+                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                        $('#title_status').text(value);
                                     }
                                     if (header == 'id') {
                                         $('input[name="idValue"]').val(value);

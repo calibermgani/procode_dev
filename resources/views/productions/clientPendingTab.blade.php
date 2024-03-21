@@ -650,7 +650,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-
+        var start = moment().startOf('month');
+        var end = moment().endOf('month');
+        $('.date_range').attr("autocomplete", "off");
+        $('.date_range').daterangepicker({
+            showOn: 'both',
+            startDate: start,
+            endDate: end,
+            showDropdowns: true,
+            ranges: {}
+        });
+         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
             // Function to parse URL parameters
@@ -804,7 +814,7 @@
                         endDate: end,
                         showDropdowns: true,
                         ranges: {}
-                    });
+                    }).attr("autocomplete", "off");
                     newDateRangePicker.val('');
                 }
             });
@@ -1058,24 +1068,23 @@
                                                 }
                                                 console.log(fieldType,'fieldType',header,dateRangeClass,values);
                                                 if(dateRangeClass == 'date_range') { console.log(fieldType,'fieldType daterange',header,dateRangeClass,values,i);
-                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control date_range ' + header + ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
-                                                  //$('.date_range').attr("autocomplete", "off");
-                                                    $('.'+header).daterangepicker({
-                                                        showOn: 'both',
-                                                        startDate: start,
-                                                        endDate: end,
-                                                        showDropdowns: true,
-                                                        ranges: {}
-                                                    });
 
-                                                } else {
+                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control date_range ' + header + ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
+                                                    if(i === values.length - 1) {
+                                                            var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
+                                                    } else {
+                                                        var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+ header+ i +'"></i>';
+                                                    }
+                                                }
+                                                else {
                                                     inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
+                                                    if(i === values.length - 1) {
+                                                            var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
+                                                    } else {
+                                                        var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+ header+ i +'"></i>';
+                                                    }
                                                 }
-                                                  if(i === values.length - 1) {
-                                                         var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
-                                                } else {
-                                                    var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+ header+ i +'"></i>';
-                                                }
+
                                                 var span = '<div class="row mt-4"  id="' +newElementId+ '">' +
                                                     '<div class="col-md-10">'+ inputType +'</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                         minusButton +'</div><div></div></div>';
@@ -1083,6 +1092,12 @@
                                                     $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                         }
                                     }
+                                    $('.date_range').daterangepicker({
+                                        autoUpdateInput: false,
+                                    }).on('apply.daterangepicker', function(ev, picker) {
+                                        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                                    }).attr("autocomplete", "off");
+
 
                                 } else if ($('input[name="' + header + '[]"]').is(':checkbox')) {
                                     var checkboxValues = value.split(',');
@@ -1099,9 +1114,10 @@
                                     $('input[name="parentId"]').val(clientData['parent_id']);
                                     $('input[name="record_old_status"]').val(clientData['claim_status']);
                                       if (header === 'claim_status' && value.includes('CE_')) {
+                                            claimStatus = value;
                                             value = value.replace('CE_', '');
-                                            $('select[name="claim_status"]').val('CE_Pending').trigger('change');
-                                        $('#title_status').text('CE_Pending');
+                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                        $('#title_status').text(value);
                                     }
                                     if (header == 'id') {
                                         $('input[name="idValue"]').val(value);
@@ -1452,16 +1468,6 @@
             setTimeout(updateTime, 1000);
         }
        updateTime();
-       var start = moment().startOf('month')
-        var end = moment().endOf('month');
-        $('.date_range').attr("autocomplete", "off");
-        $('.date_range').daterangepicker({
-            showOn: 'both',
-            startDate: start,
-            endDate: end,
-            showDropdowns: true,
-            ranges: {}
-        });
-         $('.date_range').val('');
+
     </script>
 @endpush
