@@ -715,7 +715,13 @@ class ProductionController extends Controller
                 }
 
                 $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
-                $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first()->toArray();//dd($clientData,$startTimeVal,$data['urlDynamicValue']);
+                // $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first()->toArray();
+                $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first();
+                if($clientData != null) {
+                    $clientData = $clientData->toArray();
+                } else {
+                    $clientData = $modelClass::where('id',$data['record_id'])->first();
+                }
                 if(isset($clientData) && !empty($clientData)) {
                    return response()->json(['success' => true,'clientData'=>$clientData,'startTimeVal'=>$startTimeVal]);
                 } else {
