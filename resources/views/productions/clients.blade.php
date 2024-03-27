@@ -41,10 +41,10 @@
                                             if (isset($data["subprject_name"]) && !empty($data["subprject_name"])) {
                                                 $subproject_name = $data["subprject_name"];
                                                 $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
-                                                            return str_replace(' ', '',ucfirst(Str::slug($projectName)) . ucfirst(Str::slug($item)));
+                                                            return str_replace(' ', '',ucfirst($projectName) . ucfirst($item));
                                                         })->all();
                                             } else {
-                                                $model_name = collect(str_replace(' ', '', ucfirst(Str::slug($projectName)) . ucfirst(Str::slug($projectName))));
+                                                $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
                                             }
 
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
