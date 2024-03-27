@@ -410,7 +410,7 @@
                                                         );
                                                     } else {
                                                         $practiceName = '';
-                                                        $subProjectName = '';
+                                                        $subProjectName = '--';
                                                     }
                                                     $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                                         $popUpHeader->project_id,
