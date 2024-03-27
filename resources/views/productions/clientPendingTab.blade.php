@@ -225,31 +225,32 @@
 
                                     <div class="modal-content" style="margin-top: 7rem">
                                         <div class="modal-header" style="background-color: #139AB3;height: 84px">
-
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
-                                                        <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
-                                                    </div>&nbsp;&nbsp;
-                                                    <div>
-                                                        <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
-                                                            {{ ucfirst($clientName->project_name) }}
-                                                        </h6>
-                                                        @if($practiceName != '')
-                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
-                                                        @endif
-                                                    </div>&nbsp;&nbsp;
-                                                   <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
-                                                        <span id="title_status"></span>
+                                            <div class="row" style="height: auto;width:100%">
+                                                <div class="col-md-4">
+                                                    <div class="align-items-center" style="display: -webkit-box !important;">
+                                                        <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
+                                                            <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
+                                                        </div>&nbsp;&nbsp;
+                                                        <div>
+                                                            <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
+                                                                {{ ucfirst($clientName->project_name) }}
+                                                            </h6>
+                                                            @if($practiceName != '')
+                                                            <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                            @endif
+                                                        </div>&nbsp;&nbsp;
+                                                    <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
+                                                            <span id="title_status"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                        <div class="col-md-8 d-flex justify-content-end">
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                            <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
+                                                <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
+                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
+                                                    <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
+                                                    <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
+                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
+                                                </div>
                                         </div>
                                         </div>
                                         {!! Form::open([
@@ -525,39 +526,39 @@
 
                                     <div class="modal-content" style="margin-top: 7rem">
                                         <div class="modal-header" style="background-color: #139AB3;height: 84px">
-
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Round background for the first letter of the project name -->
-                                                    <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
-                                                        <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
-                                                    </div>&nbsp;&nbsp;
-                                                    <div>
-                                                        <!-- Project name -->
-                                                        <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
-                                                            {{ ucfirst($clientName->project_name) }}
-                                                        </h6>
-                                                        <!-- Sub project name -->
-                                                        @if($practiceName != '')
-                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
-                                                        @endif
-                                                    </div>&nbsp;&nbsp;
-                                                    <!-- Oval background for project status -->
-                                                    <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
-                                                        <span id="title_status"></span>
+                                            <div class="row" style="height: auto;width:100%">
+                                                    <div class="col-md-4">
+                                                        <div class="align-items-center" style="display: -webkit-box !important;">
+                                                            <!-- Round background for the first letter of the project name -->
+                                                            <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
+                                                                <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
+                                                            </div>&nbsp;&nbsp;
+                                                            <div>
+                                                                <!-- Project name -->
+                                                                <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
+                                                                    {{ ucfirst($clientName->project_name) }}
+                                                                </h6>
+                                                                <!-- Sub project name -->
+                                                                @if($practiceName != '')
+                                                                <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                                @endif
+                                                            </div>&nbsp;&nbsp;
+                                                            <!-- Oval background for project status -->
+                                                            <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
+                                                                <span id="title_status"></span>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
+                                                <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
+                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
+                                                    <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
+                                                    <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
+                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                                 </div>
                                             </div>
-
-                                        <div class="col-md-8 d-flex justify-content-end">
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                            <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
-                                        </div>
-
-                                            <button type="button" class="close comment_close" data-dismiss="modal"
-                                                aria-hidden="true" style="color:#ffffff !important">&times;</button>
+                                            {{-- <button type="button" class="close comment_close" data-dismiss="modal"
+                                                aria-hidden="true" style="color:#ffffff !important">&times;</button> --}}
 
                                         </div>
 
