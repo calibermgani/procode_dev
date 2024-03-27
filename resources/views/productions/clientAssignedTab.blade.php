@@ -1060,9 +1060,9 @@
 
                                                 <div class="modal-content" style="margin-top: 7rem">
                                                     <div class="modal-header" style="background-color: #139AB3;height: 84px">
-
+                                                        <div class="row" style="height: auto;width:100%">
                                                         <div class="col-md-4">
-                                                            <div class="row" style="height: auto;width:100%">
+
                                                             <div class="align-items-center" style="display: -webkit-box !important;">
                                                                 <!-- Round background for the first letter of the project name -->
                                                                 <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
