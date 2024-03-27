@@ -1085,15 +1085,15 @@
                                                             </div>
                                                         </div>
 
-                                                    <div class="col-md-7 justify-content-end" style="display: -webkit-box !important;">
+                                                    <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
                                                         {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
                                                         <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
                                                         <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
                                                         {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                                     </div>
-                                                      <div> <button type="button" class="close comment_close" data-dismiss="modal"
-                                                        aria-hidden="true" style="color:#ffffff !important">&times;</button></div>
 
+                                                        {{-- <button type="button" class="close comment_close" data-dismiss="modal"
+                                                            aria-hidden="true" style="color:#ffffff !important">&times;</button> --}}
                                                 </div>
                                                     </div>
 
