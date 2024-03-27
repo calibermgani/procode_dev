@@ -232,9 +232,9 @@
                                                         <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
                                                     </div>&nbsp;&nbsp;
                                                     <div>
-                                                        <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
+                                                        <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                             {{ ucfirst($clientName->project_name) }}
-                                                        </h4>
+                                                        </h6>
                                                         @if($practiceName != '')
                                                           <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
                                                         @endif
@@ -246,10 +246,10 @@
                                             </div>
 
                                         <div class="col-md-8 d-flex justify-content-end">
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a>
+                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
+                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
                                             <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a>
+                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                         </div>
                                         </div>
                                         {!! Form::open([
