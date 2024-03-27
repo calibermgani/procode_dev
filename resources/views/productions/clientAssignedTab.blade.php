@@ -423,9 +423,9 @@
 
                                                     <div class="modal-content" style="margin-top: 7rem">
                                                         <div class="modal-header" style="background-color: #139AB3;height: 84px">
-                                                      <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <div class="d-flex align-items-center">
+                                                      <div class="row" style="height: auto;width:100%">
+                                                                <div class="col-md-4" >
+                                                                    <div class="align-items-center" style="display: -webkit-box !important;">
                                                                         <!-- Round background for the first letter of the project name -->
                                                                         <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
                                                                             <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
@@ -446,7 +446,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                            <div class="col-md-8 d-flex justify-content-end">
+                                                            <div class="col-md-8  justify-content-end" style="display: -webkit-box !important;">
                                                                 {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
                                                                 <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
                                                                 <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
