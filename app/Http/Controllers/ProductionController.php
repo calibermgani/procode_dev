@@ -715,6 +715,7 @@ class ProductionController extends Controller
                 }
 
                 $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
+                $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 // $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first()->toArray();
                 $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first();
                 if($clientData != null) {
