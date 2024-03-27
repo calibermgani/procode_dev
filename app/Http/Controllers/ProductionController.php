@@ -699,6 +699,8 @@ class ProductionController extends Controller
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? Helpers::projectName($data['project_id'] )->project_name :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = 'CE_'.ucwords($data['urlDynamicValue']);
                 // $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->first();//dd($data['record_id'],$existingRecordId);
