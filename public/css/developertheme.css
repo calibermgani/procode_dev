@@ -696,3 +696,9 @@ margin-left: -1rem;
 .count {
     text-align: center;
 }
+
+.text_align_ptag{
+    width: 34.5%;
+    border-radius: 5px;
+    padding: 2px 4px;
+}

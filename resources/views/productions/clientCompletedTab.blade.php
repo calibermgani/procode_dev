@@ -97,7 +97,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
+                                    @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -213,7 +213,7 @@
                                                                 </td>
                                                             @else
                                                                 <td style="display:none;max-width: 300px;
-                                                                white-space: normal;">
+                                                                white-space: normal;" id="table_id">
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
@@ -459,7 +459,8 @@
                 var subProjectName = $('#subProjectName').val();
                 $(document).on('click', '.clickable-view', function(e) {
                     // var record_id = $(this).closest('tr').find('td:eq(0)').text();
-                    var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                    // var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;

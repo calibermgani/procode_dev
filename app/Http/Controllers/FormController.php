@@ -46,7 +46,7 @@ class FormController extends Controller
                 $existingSubProject = formConfiguration::where('project_id', $request->project_id)->groupBy(['project_id', 'sub_project_id'])
                 ->pluck('sub_project_id')->toArray();
                 // $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
-                $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'sub_project_id')->prepend(trans('Select'), '')->toArray();
+                $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'sub_project_id')->toArray();
                 return response()->json(["subProject" => $data, "existingSubProject" => $existingSubProject]);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -61,13 +61,13 @@ class FormController extends Controller
             try {
                 $data = $request->all();
                 // $projectName = project::where('id',$data['project_id'])->first();
-                // $subProjectName = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
+                // $subProjectArray = subproject::where('project_id',$data['project_id'])->where('id',$data['sub_project_id'])->first();
                 $projectName = project::where('project_id',$data['project_id'])->first();
-                $subProjectName = subproject::where('project_id',$data['project_id'])->where('sub_project_id',$data['sub_project_id'])->first();
+                $subProjectArray = $data['sub_project_id'] != null ? subproject::where('project_id',$data['project_id'])->where('sub_project_id',$data['sub_project_id'])->first() : $projectName;
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
                     $requiredData['project_id'] = $data['project_id'];
-                    $requiredData['sub_project_id'] = $data['sub_project_id'];
+                    $requiredData['sub_project_id'] = $data['sub_project_id'] != null ? $data['sub_project_id'] : NULL;
                     $requiredData['label_name'] = $data['label_name'][$i];
                     $requiredData['input_type'] = $data['input_type'][$i];
                     $requiredData['options_name'] = $data['options_name'][$i];
@@ -77,7 +77,7 @@ class FormController extends Controller
                     $requiredData['field_type_3'] = $data['field_type_3'][$i];
                     $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                     $requiredData['user_type'] = $data['user_type'][$i];
-                    formConfiguration::create($requiredData);
+                    // formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                     if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
@@ -91,11 +91,11 @@ class FormController extends Controller
                         $columns[$columnName] = 'TEXT';
                     }
                 }
-
-                $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name),'_');
-                $tableDataName = Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas'),'_');
-                $duplicateTableName = Str::slug(($projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates'),'_');
-                $tableHistoryName =Str::slug(($projectName->project_name.'_'.$subProjectName->sub_project_name. '_history'),'_');
+                $subProjectName = $data['sub_project_id'] != null ? $subProjectArray->sub_project_name : $projectName->project_name;
+                $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName),'_');
+                $tableDataName = Str::slug(($projectName->project_name.'_'.$subProjectName. '_datas'),'_');
+                $duplicateTableName = Str::slug(($projectName->project_name . '_' . $subProjectName . '_duplicates'),'_');
+                $tableHistoryName =Str::slug(($projectName->project_name.'_'.$subProjectName. '_history'),'_');
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
                         $createTableSQL = "CREATE TABLE $tableName (id INT AUTO_INCREMENT PRIMARY KEY";
@@ -246,13 +246,22 @@ class FormController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $projectId = Helpers::encodeAndDecodeID($project_id,'decode');
-                $subProjectId = Helpers::encodeAndDecodeID($sub_project_id,'decode');
-                $projectDetails = formConfiguration::groupBy(['project_id', 'sub_project_id'])
-                ->where('project_id',$projectId)->where('sub_project_id',$subProjectId)
-                ->select('project_id', 'sub_project_id')
-                ->first();
-                $formDetails = formConfiguration::where('project_id',$projectId)->where('sub_project_id',$subProjectId)
-                ->get();
+                $subProjectId = $sub_project_id == '--' ? '--' :Helpers::encodeAndDecodeID($sub_project_id,'decode');
+                if($sub_project_id != '--') {
+                    $projectDetails = formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                    ->where('project_id',$projectId)->where('sub_project_id',$subProjectId)
+                    ->select('project_id', 'sub_project_id')
+                    ->first();
+                    $formDetails = formConfiguration::where('project_id',$projectId)->where('sub_project_id',$subProjectId)
+                    ->get();
+                } else {
+                    $projectDetails = formConfiguration::groupBy(['project_id', 'sub_project_id'])
+                    ->where('project_id',$projectId)
+                    ->select('project_id', 'sub_project_id')
+                    ->first();
+                    $formDetails = formConfiguration::where('project_id',$projectId)
+                    ->get();
+                }
                return view('Form.formEdit',compact('projectDetails','formDetails'));
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -267,16 +276,17 @@ class FormController extends Controller
             try {
                 $data = $request->all();
                 // $projectName = project::where('id',$data['project_id_val'])->first();
-                // $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
+                // $subProjectArray = subproject::where('project_id',$data['project_id_val'])->where('id',$data['sub_project_id_val'])->first();
                 $projectName = project::where('project_id',$data['project_id_val'])->first();
-                $subProjectName = subproject::where('project_id',$data['project_id_val'])->where('sub_project_id',$data['sub_project_id_val'])->first();
+                $subProjectArray = $data['sub_project_id_val'] != null ? subproject::where('project_id',$data['project_id_val'])->where('sub_project_id',$data['sub_project_id_val'])->first() : $projectName;
+
                 $columns = [];
                 for($i=0;$i<count($data['label_name']);$i++) {
-                    $existingRecord = formConfiguration::where('label_name',$data['label_name'][$i])->first();
+                    $existingRecord = $data['sub_project_id_val'] != null ? formConfiguration::where('project_id',$data['project_id_val'])->where('sub_project_id',$data['sub_project_id_val'])->where('label_name',$data['label_name'][$i])->first() : formConfiguration::where('project_id',$data['project_id_val'])->where('label_name',$data['label_name'][$i])->first();
                     if($existingRecord)
                     {
                         $requiredData['project_id'] = $data['project_id_val'];
-                        $requiredData['sub_project_id'] = $data['sub_project_id_val'];
+                        $requiredData['sub_project_id'] = $data['sub_project_id_val'] != null ? $data['sub_project_id_val'] : NULL;
                         $requiredData['label_name'] = $data['label_name'][$i];
                         $requiredData['options_name'] = $data['options_name'][$i];
                         $requiredData['field_type'] = $data['field_type'][$i];
@@ -288,7 +298,7 @@ class FormController extends Controller
                         $existingRecord->update($requiredData);
                     } else {
                         $requiredData['project_id'] = $data['project_id_val'];
-                        $requiredData['sub_project_id'] = $data['sub_project_id_val'];
+                        $requiredData['sub_project_id'] = $data['sub_project_id_val'] != null ? $data['sub_project_id_val'] : NULL;
                         $requiredData['label_name'] = $data['label_name'][$i];
                         $requiredData['input_type'] = $data['input_type'][$i];
                         $requiredData['options_name'] = $data['options_name'][$i];
@@ -314,10 +324,11 @@ class FormController extends Controller
                     }
 
                 }
-                $tableName =$projectName->project_name.'_'.$subProjectName->sub_project_name;
-                $tableDataName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_datas';
-                $duplicateTableName = $projectName->project_name . '_' . $subProjectName->sub_project_name . '_duplicates';
-                $tableHistoryName =$projectName->project_name.'_'.$subProjectName->sub_project_name. '_history';
+                $subProjectName = $data['sub_project_id_val'] != null ? $subProjectArray->sub_project_name : $projectName->project_name;
+                $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName),'_');
+                $tableDataName =Str::slug($projectName->project_name.'_'.$subProjectName. '_datas','_');
+                $duplicateTableName = Str::slug($projectName->project_name . '_' . $subProjectName . '_duplicates','_');
+                $tableHistoryName = Str::slug($projectName->project_name.'_'.$subProjectName. '_history','_');
 
                 $tableExists = DB::select("SHOW TABLES LIKE '$tableName'");
                     if (empty($tableExists)) {
@@ -343,7 +354,7 @@ class FormController extends Controller
                                 FROM INFORMATION_SCHEMA.COLUMNS
                                 WHERE TABLE_NAME = '$tableName'
                                 AND COLUMN_NAME = '$columnName'
-                            ");
+                            ");//dd('else',$columns,$columnExists,empty($columnExists),$tableName);
                             if (empty($columnExists)) {
                                 DB::statement("ALTER TABLE $tableName ADD COLUMN $columnName $columnType AFTER $afterColumn");
                                 $dynamicModel = new DynamicModel($tableName);

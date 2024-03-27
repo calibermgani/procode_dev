@@ -217,6 +217,7 @@
                 input.value = value.replace(/[^a-zA-Z0-9\s\/]/g, '');
             }
         }
+        var subprojectCount;
         $(document).ready(function() {
 
             var j = 0;
@@ -285,7 +286,7 @@
                         project_id: project_id
                     },
                     success: function(res) {
-
+                         subprojectCount = Object.keys(res.subProject).length;
                         var myArray = res.existingSubProject;
                         var sla_options = '<option value="">-- Select --</option>';
                         $.each(res.subProject, function(key, value) {
@@ -321,21 +322,21 @@
                 var sub_project_id = $('#sub_project_list');
                 var label_name = $('.label_name');
                 var input_type = $('.input_type');
-                if (project_id.val() == '' || sub_project_id.val() == '') {
+                if (project_id.val() == '' || (sub_project_id.val() == '' && subprojectCount > 0)) {
                     if (project_id.val() == '') {
                         project_id.next('.select2').find(".select2-selection").css('border-color', 'red');
                     } else {
                         project_id.next('.select2').find(".select2-selection").css('border-color', '');
                     }
-                    if (sub_project_id.val() == '') {
-                        sub_project_id.next('.select2').find(".select2-selection").css('border-color',
-                            'red');
+                    if (sub_project_id.val() == '' && subprojectCount > 0) {
+                        sub_project_id.next('.select2').find(".select2-selection").css('border-color','red');
                     } else {
                         sub_project_id.next('.select2').find(".select2-selection").css('border-color', '');
                     }
 
                     return false;
                 } else {
+                    // sub_project_id.next('.select2').find(".select2-selection").css('border-color', '');
                     var labelNameValue;
                     var inputTypeValue;
                     label_name.each(function() {

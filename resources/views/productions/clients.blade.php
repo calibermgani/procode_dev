@@ -38,32 +38,37 @@
                                 $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                                     $projectName = $data["client_name"];
                                   //   $subproject_name = App\Models\subproject::where('project_id',$data['id'])->pluck('sub_project_name')->toArray();
-                                    $subproject_name = $data["subprject_name"];
-                                     $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
-                                                return ucfirst($projectName) . ucfirst($item);
-                                            })->all();
+                                            if (isset($data["subprject_name"]) && !empty($data["subprject_name"])) {
+                                                $subproject_name = $data["subprject_name"];
+                                                $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
+                                                            return str_replace(' ', '',ucfirst($projectName) . ucfirst($item));
+                                                        })->all();
+                                            } else {
+                                                $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
+                                            }
+
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
                                                 $modelClass = "App\\Models\\" .  $model;
-                                                $assignedCount = 0;
-                                                        $completedCount = 0;
-                                                        $pendingCount = 0;
-                                                        $holdCount = 0;
-                                                if ($loginEmpId && ($empDesignation == "Administrator" || $empDesignation == "Assistant Manager")) {
-                                                    if (class_exists($modelClass)) {
-                                                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->count();
-                                                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                                                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                                                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                                                    } else {
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
                                                         $holdCount = 0;
-                                                    }
+                                                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                                                            if (class_exists($modelClass)) {
+                                                                $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
+                                                                $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
+                                                                $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
+                                                                $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                                                            } else {
+                                                                $assignedCount = 0;
+                                                                $completedCount = 0;
+                                                                $pendingCount = 0;
+                                                                $holdCount = 0;
+                                                            }
                                                 } else if($loginEmpId) {
                                                     if (class_exists($modelClass)) {
-                                                        $assignedCount = $modelClass::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->count();
+                                                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
                                                         $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                                                         $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
                                                         $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
@@ -80,7 +85,7 @@
                                                 $holdTotalCount += $holdCount;
                                             }
                             @endphp
-                                <tr>
+                                <tr class="clickable-client cursor_hand">
                                     <td class="details-control"></td>
                                     <td>{{ $data['client_name'] }} <input type="hidden" value={{ $data['id'] }}></td>
                                     <td>{{$assignedTotalCount}}</td>
@@ -139,7 +144,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
+
         $(document).ready(function() {
+                    var subProjects; var subprojectCountData;
             var table = $("#clients_list").DataTable({
                 processing: true,
                 lengthChange: false,
@@ -165,7 +172,7 @@
                 var client_id = $(this).closest('tr').find('td:eq(1) input').val();
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
-
+                var subProjectName = '--';
                 if (row.child.isShown()) {
                     // This row is already open - close it
                     row.child.hide();
@@ -185,7 +192,17 @@
                         success: function(res) {
                             console.log(res, 'res');
                             subProjects = res.subprojects;
-                            row.child(format(row.data(), subProjects)).show();
+                            subprojectCountData = Object.keys(subProjects).length;console.log(subprojectCountData,'subprojectCountData');
+                            format1();
+                            if(typeof subprojectCountData !== 'undefined' && subprojectCountData > 0) {
+                              row.child(format(row.data(), subProjects)).show();
+                            } else {
+                                if(typeof subprojectCountData !== 'undefined') {
+                                    window.location.href = baseUrl + 'projects_assigned/' + btoa(client_id) + '/' +
+                                        subProjectName + "?parent=" +
+                                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                                }
+                            }
                             tr.addClass('shown');
                         },
                         error: function(jqXHR, exception) {}
@@ -196,25 +213,31 @@
 
 
             function format(data, subProjects) {
-                var html =
-                    '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
-                    '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
-                $.each(subProjects, function(index, val) {
-                    console.log(val, 'val',val.client_name,val.sub_project_name );
-                    html +=
-                        '<tbody><tr class="clickable-row cursor_hand">' +
-                        '<td><input type="hidden" value=' + val.client_id + '></td>' +
-                        '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.sub_project_id + '></td>' +
-                        '<td>' + val.assignedCount + '</td>' +
-                        '<td>' + val.CompletedCount + '</td>' +
-                        '<td>' + val.PendingCount + '</td>' +
-                        '<td>' + val.holdCount + '</td>' +
-                        '</tr></tbody>';
-                });
-                html += '</table>';
-                return html;
+                //  subprojectCountt = Object.keys(subProjects).length;
+                console.log(subprojectCountData,'format');
+                if(subprojectCountData > 0) {
+                    var html =
+                        '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
+                        '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
+                    $.each(subProjects, function(index, val) {
+                        console.log(val, 'val',val.client_name,val.sub_project_name );
+                        html +=
+                            '<tbody><tr class="clickable-row cursor_hand">' +
+                            '<td><input type="hidden" value=' + val.client_id + '></td>' +
+                            '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.sub_project_id + '></td>' +
+                            '<td>' + val.assignedCount + '</td>' +
+                            '<td>' + val.CompletedCount + '</td>' +
+                            '<td>' + val.PendingCount + '</td>' +
+                            '<td>' + val.holdCount + '</td>' +
+                            '</tr></tbody>';
+                    });
+                    html += '</table>';
+                    return html;
+              }
             }
-
+            function format1() {
+                console.log(subprojectCountData,'subprojectCount1');
+            }
             $(document).on('click', '.clickable-row', function(e) {
 
                 // var client_name = $(this).closest('tr').find('td:eq(1)').text();
@@ -222,7 +245,7 @@
                 // var encodedId = $(this).closest('tr').find('td:eq(0) input').val();
                 var clientName = $(this).closest('tr').find('td:eq(0) input').val();
                 var subProjectName = $(this).closest('tr').find('td:eq(1) input').val();
-console.log(clientName,'clientName',subProjectName);
+
                 if (!clientName) {
                     console.error('encodedclientname is undefined or empty');
                     return;
@@ -235,6 +258,27 @@ console.log(clientName,'clientName',subProjectName);
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
 
             })
+
+
+                // $(document).on('click', '.clickable-client', function() {
+
+                //             var clientName = $(this).closest('tr').find('td:eq(1) input').val();
+                //             var subProjectName = '--';
+
+                //             if (!clientName) {
+                //                 console.error('encodedclientname is undefined or empty');
+                //                 return;
+                //             }
+
+                //             console.log(subprojectCountData,'subprojectCount');
+                //             if (typeof subprojectCountData !== 'undefined' && subprojectCountData <= 0) {
+                //             window.location.href = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' +
+                //                     subProjectName + "?parent=" +
+                //                 getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                //             }
+                // })
+
+
         })
 
     </script>

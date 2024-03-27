@@ -5,6 +5,7 @@
                     <div class="card-body p-0">
                         @php
                              $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
+                             $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                         @endphp
                            <div class="card-header border-0 px-4">
                             <div class="row">
@@ -86,7 +87,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
+                                    @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -139,7 +140,9 @@
                                                     <tr
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                                         <td>
-                                                            @if (empty($assignedDropDown))
+                                                               @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
+                                                                {{-- @if (empty($assignedDropDown)) --}}
+                                                                @else
                                                                 @if (empty($existingCallerChartsWorkLogs))
                                                                     <button class="task-start clickable-row start"
                                                                         title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
@@ -172,7 +175,7 @@
                                                                     </td>
                                                                 @else
                                                                     <td style="display:none;max-width: 300px;
-                                                                    white-space: normal;">
+                                                                    white-space: normal;" id="table_id">
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
@@ -200,19 +203,23 @@
                                     $clientName = App\Http\Helper\Admin\Helpers::projectName(
                                         $popUpHeader->project_id,
                                     );
-                                    $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
-                                        $popUpHeader->project_id,
-                                        $popUpHeader->sub_project_id,
-                                    );
                                     $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                         $popUpHeader->project_id,
                                         'encode',
                                     );
-                                    $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
+                                    if($popUpHeader->sub_project_id != NULL) {
+                                        $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
+                                            $popUpHeader->project_id,
+                                            $popUpHeader->sub_project_id,
+                                        );
+                                        $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                         $popUpHeader->sub_project_id,
                                         'encode',
-                                    );
-
+                                        );
+                                    } else {
+                                        $practiceName = '';
+                                        $subProjectName = '';
+                                    }
                                 @endphp
 
 
@@ -228,7 +235,9 @@
                                                         <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                             {{ ucfirst($clientName->project_name) }}
                                                         </h4>
-                                                        <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @if($practiceName != '')
+                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @endif
                                                     </div>&nbsp;&nbsp;
                                                    <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
                                                         <span id="title_status"></span>
@@ -493,18 +502,23 @@
                                     $clientName = App\Http\Helper\Admin\Helpers::projectName(
                                         $popUpHeader->project_id,
                                     );
-                                    $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
-                                        $popUpHeader->project_id,
-                                        $popUpHeader->sub_project_id,
-                                    );
                                     $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                         $popUpHeader->project_id,
                                         'encode',
                                     );
-                                    $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
-                                        $popUpHeader->project_id,
+                                    if($popUpHeader->sub_project_id != NULL) {
+                                        $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
+                                            $popUpHeader->project_id,
+                                            $popUpHeader->sub_project_id,
+                                        );
+                                        $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
+                                        $popUpHeader->sub_project_id,
                                         'encode',
-                                    );
+                                        );
+                                    } else {
+                                        $practiceName = '';
+                                        $subProjectName = '';
+                                    }
 
                                 @endphp
 
@@ -524,7 +538,9 @@
                                                             {{ ucfirst($clientName->project_name) }}
                                                         </h4>
                                                         <!-- Sub project name -->
-                                                        <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @if($practiceName != '')
+                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @endif
                                                     </div>&nbsp;&nbsp;
                                                     <!-- Oval background for project status -->
                                                     <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
@@ -885,7 +901,8 @@
                     var classArray = classes.split(' ');
                     var lastClass = classArray[classArray.length - 1];
                 }
-                var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                // var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -1173,7 +1190,8 @@
             $(document).on('click', '.clickable-view', function(e) {
                 $('#myModal_status').modal('hide');
                     // var record_id = $(this).closest('tr').find('td:eq(0)').text();
-                    var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                    // var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -1299,16 +1317,18 @@
                     $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
                         console.log(groupName, 'chckkkkkkkk');
-                        if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
-                            if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
-                                0) {
-                                $('#check_p1').css('display', 'block');
-                                inputTypeValue = 1;
-                            } else {
-                                $('#check_p1').css('display', 'none');
-                                inputTypeValue = 0;
+                        if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
+                            if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
+                                if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
+                                    0) {
+                                    $('#check_p1').css('display', 'block');
+                                    inputTypeValue = 1;
+                                } else {
+                                    $('#check_p1').css('display', 'none');
+                                    inputTypeValue = 0;
+                                }
+                                return false;
                             }
-                            return false;
                         }
                     });
 

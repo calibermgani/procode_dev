@@ -103,7 +103,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
+                                        @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                             <div class="wizard-step mb-0 six" data-wizard-type="step">
                                                 <div class="wizard-wrapper py-2">
                                                     <div class="wizard-label p-2 mt-2">
@@ -155,17 +155,17 @@
                                                         @php
                                                             $columnsToExclude = ['id','QA_emp_id','duplicate_status', 'created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
-                                                          <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
+                                                          <th><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
-                                                            <th style="width:12%"><input type="hideen"
+                                                            <th><input type="hideen"
                                                                     value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
                                                             </th>
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                <th style="width: 10px"><input type="checkbox" id="ckbCheckAll"></th>
+                                                <th><input type="checkbox" id="ckbCheckAll"></th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        <th style="width:12%"><input type="hidden"
+                                                        <th><input type="hidden"
                                                                 value={{ $columnValue }}>
                                                             {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
                                                         </th>

@@ -527,6 +527,7 @@
                 input.value = value.replace(/[^a-zA-Z0-9\s\/]/g, '');
             }
         }
+        var subprojectCount;
         $(document).ready(function() {
 
             var j = $('#row_count').val();
@@ -599,6 +600,7 @@
                         project_id: project_id
                     },
                     success: function(res) {
+                        subprojectCount = Object.keys(res.subProject).length;
                         var sla_options = '<option value="">-- Select --</option>';
                         $.each(res, function(key, value) {
                             sla_options += '<option value="' + key + '">' + value +
@@ -631,13 +633,13 @@
                 var sub_project_id = $('#sub_project_list');
                 var label_name = $('.label_name');
                 var input_type = $('.input_type');
-                if (project_id.val() == '' || sub_project_id.val() == '') {
+                if (project_id.val() == '' || (sub_project_id.val() == '' && subprojectCount > 0)) {
                     if (project_id.val() == '') {
                         project_id.next('.select2').find(".select2-selection").css('border-color', 'red');
                     } else {
                         project_id.next('.select2').find(".select2-selection").css('border-color', '');
                     }
-                    if (sub_project_id.val() == '') {
+                    if (sub_project_id.val() == '' && subprojectCount > 0) {
                         sub_project_id.next('.select2').find(".select2-selection").css('border-color',
                             'red');
                     } else {

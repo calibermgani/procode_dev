@@ -5,6 +5,7 @@
                     <div class="card-body p-0">
                         @php
                             $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
+                            $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                             //$encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
                         @endphp
                         <div class="card-header border-0 px-4">
@@ -27,13 +28,14 @@
                                 <div class="col-md-6">
                                     <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
 
-                                        @if (isset($assignedDropDown) && !empty($assignedDropDown))
+                                        {{-- @if (isset($assignedDropDown) && !empty($assignedDropDown)) --}}
+                                        @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="col-lg-3 mb-lg-0 mb-6">
 
                                             <fieldset class="form-group mb-0 white-smoke-disabled">
 
-                                                {!! Form::select('assignee_name', ['' => '--Select--'] + $assignedDropDown, null, [
-                                                    'class' => 'form-control select2',
+                                                {!! Form::select('assignee_name', ['' => '--Assignee--'] + $assignedDropDown, null, [
+                                                    'class' => 'form-control kt_select2_assignee',
                                                     'id' => 'assigneeDropdown',
                                                     'style' => 'width: 100%;',
                                                     'disabled',
@@ -129,7 +131,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($empDesignation == 'Administrator' || $empDesignation == "Assistant Manager")
+                                    @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="wizard-step mb-0 six" data-wizard-type="step">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -231,19 +233,20 @@
                                             <thead>
                                                 @if (!empty($columnsHeader))
                                                     <tr>
-                                                        @if (isset($assignedDropDown) && !empty($assignedDropDown))
-                                                            <th style="width: 10px"><input type="checkbox" id="ckbCheckAll" class="cursor_hand ">
+                                                        {{-- @if (isset($assignedDropDown) && !empty($assignedDropDown)) --}}
+                                                        @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
+                                                            <th><input type="checkbox" id="ckbCheckAll" class="cursor_hand">
                                                             </th>
                                                         @endif
-                                                        <th style="width:16%">Action</th>
+                                                        <th>Action</th>
                                                         @foreach ($columnsHeader as $columnName => $columnValue)
                                                             @if ($columnValue != 'id')
-                                                                <th style="width:12%"><input type="hidden"
+                                                                <th><input type="hidden"
                                                                         value={{ $columnValue }}>
                                                                     {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                                 </th>
                                                             @else
-                                                                <th style="width:12%;display:none"><input type="hidden"
+                                                                <th style="display:none"><input type="hidden"
                                                                         value={{ $columnValue }}>
                                                                     {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                                 </th>
@@ -258,14 +261,18 @@
                                                 @if (isset($assignedProjectDetails))
                                                     @foreach ($assignedProjectDetails as $data)
                                                         <tr>
-                                                            @if (isset($assignedDropDown) && !empty($assignedDropDown))
+                                                            {{-- @if (isset($assignedDropDown) && !empty($assignedDropDown)) --}}
+                                                            @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                                                 <td><input type="checkbox" class="checkBoxClass cursor_hand" name='check[]'
                                                                         value="{{ $data->id }}">
                                                                 </td>
                                                             @endif
                                                             <td>
-                                                                @if (empty($assignedDropDown))
-                                                                    @if (empty($existingCallerChartsWorkLogs))
+                                                                @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
+                                                                {{-- @if (empty($assignedDropDown)) --}}
+                                                                @else
+
+                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus))
                                                                         {{-- <span
                                                                             class="svg-icon svg-icon-black-start mr-2 question_play clickable-row"
                                                                             title="play">
@@ -288,7 +295,8 @@
                                                                         </span> --}}
                                                                         <button class="task-start clickable-row"
                                                                             title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
-                                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs))
+                                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->claim_status == "CE_Inprocess")
+
                                                                         {{-- <span
                                                                             class="svg-icon svg-icon-black-start mr-2 question_play clickable-row"
                                                                             title="play">
@@ -327,15 +335,35 @@
                                                                         'updated_at',
                                                                         'deleted_at',
                                                                     ];
+                                                                    $text = "UnAssigned";
+                                                                    $backgroundColor = ($text == "UnAssigned") ? "red" : "transparent";
+                                                                    $textColor = ($text == "UnAssigned") ? "white" : "black";
+
                                                                 @endphp
                                                                 @if (!in_array($columnName, $columnsToExclude))
                                                                     @if ($columnName != 'id')
                                                                         <td style="max-width: 300px;
                                                                         white-space: normal;">
-                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                            {{-- @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                                 {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                             @else
                                                                                 @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                                    {{ str_replace('CE_', '', $columnValue) }}
+                                                                                @elseif($columnName == 'CE_emp_id' &&  $columnValue == NULL)
+                                                                                <p class="text_align_ptag" style="background-color: {{ $backgroundColor }}; color: {{ $textColor }}">
+                                                                                    {{ $text }}
+                                                                                </p>
+                                                                                @else
+                                                                                    {{ $columnValue }}
+                                                                                @endif
+                                                                            @endif --}}
+                                                                            @if ($columnName == 'claim_status' && is_null($data->CE_emp_id))
+                                                                            {{-- <p class="text_align_ptag" style="background-color: red; color: white;">UnAssigned</p> --}}
+                                                                            <b><p  style="color: red;">UnAssigned</p></b>
+                                                                            @else
+                                                                                @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                                    {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                                @elseif ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
                                                                                     {{ str_replace('CE_', '', $columnValue) }}
                                                                                 @else
                                                                                     {{ $columnValue }}
@@ -344,7 +372,7 @@
                                                                         </td>
                                                                     @else
                                                                         <td style="display:none;max-width: 300px;
-                                                                        white-space: normal;">
+                                                                        white-space: normal;" id="table_id">
                                                                             @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                                 {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                             @else
@@ -371,18 +399,24 @@
                                                     $clientName = App\Http\Helper\Admin\Helpers::projectName(
                                                         $popUpHeader->project_id,
                                                     );
-                                                    $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
-                                                        $popUpHeader->project_id,
+                                                    if($popUpHeader->sub_project_id != NULL) {
+                                                        $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
+                                                            $popUpHeader->project_id,
+                                                            $popUpHeader->sub_project_id,
+                                                        );
+                                                        $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                                         $popUpHeader->sub_project_id,
-                                                    );
+                                                        'encode',
+                                                        );
+                                                    } else {
+                                                        $practiceName = '';
+                                                        $subProjectName = '';
+                                                    }
                                                     $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                                         $popUpHeader->project_id,
                                                         'encode',
                                                     );
-                                                    $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
-                                                        $popUpHeader->sub_project_id,
-                                                        'encode',
-                                                    );
+
 
                                                 @endphp
 
@@ -401,8 +435,9 @@
                                                                         <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                                             {{ ucfirst($clientName->project_name) }}
                                                                         </h4>
-                                                                        <!-- Sub project name -->
-                                                                        <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                                        @if($practiceName != '')
+                                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                                        @endif
                                                                     </div>&nbsp;&nbsp;
                                                                     <!-- Oval background for project status -->
                                                                     <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
@@ -1002,18 +1037,23 @@
                                                 $clientName = App\Http\Helper\Admin\Helpers::projectName(
                                                     $popUpHeader->project_id,
                                                 );
-                                                $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
-                                                    $popUpHeader->project_id,
-                                                    $popUpHeader->sub_project_id,
-                                                );
                                                 $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                                     $popUpHeader->project_id,
                                                     'encode',
                                                 );
-                                                $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
-                                                    $popUpHeader->project_id,
-                                                    'encode',
-                                                );
+                                                if($popUpHeader->sub_project_id != NULL) {
+                                                        $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
+                                                            $popUpHeader->project_id,
+                                                            $popUpHeader->sub_project_id,
+                                                        );
+                                                        $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
+                                                        $popUpHeader->sub_project_id,
+                                                        'encode',
+                                                        );
+                                                    } else {
+                                                        $practiceName = '';
+                                                        $subProjectName = '';
+                                                    }
 
                                             @endphp
 
@@ -1033,7 +1073,9 @@
                                                                         {{ ucfirst($clientName->project_name) }}
                                                                     </h4>
                                                                     <!-- Sub project name -->
-                                                                    <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                                    @if($practiceName != '')
+                                                                      <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                                    @endif
                                                                 </div>&nbsp;&nbsp;
                                                                 <!-- Oval background for project status -->
                                                                 <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
@@ -1198,7 +1240,7 @@
         padding: 8px;
         box-sizing: border-box;
     }
-    /* #myModal_view .modal-dialog {
+    #myModal_view .modal-dialog {
         max-width: 1000px;
         max-Height: 1200px;
     }
@@ -1209,7 +1251,7 @@
         width: 100%;
         padding: 8px;
         box-sizing: border-box;
-    } */
+    }
     /* .modal-first {
       left: 50%  !important;
       top: 50%  !important;
@@ -1463,6 +1505,7 @@ if (modalContent.width() === 800) {
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-view', function(e) {
+                console.log('view');
                 $('#myModal_view').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
@@ -1483,7 +1526,8 @@ if (modalContent.width() === 800) {
             });
             $(document).on('click', '.clickable-row', function(e) {
                 // var record_id = $(this).closest('tr').find('td:eq(0)').text();
-                var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                // var record_id = $(this).closest('tr').find('td:eq(1)').text();
+                var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
@@ -1524,7 +1568,7 @@ if (modalContent.width() === 800) {
                 });
 
                 $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
-                    var header = headers[index-1];
+                    var header = headers[index-1];console.log(headers,'headers',header);
                     var value = $(this).text().trim();
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
@@ -1567,6 +1611,7 @@ if (modalContent.width() === 800) {
                                     $('input[name="' + header + '[]"]').val(customDate)
                                 } else {
                                     $('input[name="' + header + '[]"]').val(value);
+                                    $('input[name="' + header + '"]').val(value);
                                 }
                                 // var dateRangePicker = $('.date_range').data('daterangepicker');
                                 // if (dateRangePicker) {
@@ -1576,13 +1621,13 @@ if (modalContent.width() === 800) {
                             } else {
                                 $('input[name="' + header + '[]"]').val(value);
                                 $('label[id="' + header + '"]').text(value);
-
+                                $('input[name="' + header + '"]').val(value);
                             }
                         } else {
                             $('input[name="' + header + '[]"]').val(value);
                             $('label[id="' + header + '"]').text(value);
                             $('input[name="' + header + '"]').val(value);
-
+                            $('input[name="' + header + '"]').val(value);
                         }
 
                     }
@@ -1658,16 +1703,18 @@ if (modalContent.width() === 800) {
                 $('input[type="checkbox"]').each(function() {
                     var groupName = $(this).attr("id");
                     console.log(groupName, 'chckkkkkkkk');
-                    if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
-                        if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
-                            0) {
-                            $('#check_p1').css('display', 'block');
-                            inputTypeValue = 1;
-                        } else {
-                            $('#check_p1').css('display', 'none');
-                            inputTypeValue = 0;
+                  if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
+                        if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
+                            if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
+                                0) {
+                                $('#check_p1').css('display', 'block');
+                                inputTypeValue = 1;
+                            } else {
+                                $('#check_p1').css('display', 'none');
+                                inputTypeValue = 0;
+                            }
+                            return false;
                         }
-                        return false;
                     }
                 });
 
@@ -1850,8 +1897,8 @@ if (modalContent.width() === 800) {
                     confirmButtonText: "Yes",
                     cancelButtonText: "No",
                     customClass: {
-                        confirmButton: "btn font-weight-bold btn-primary",
-                        cancelButton: "btn font-weight-bold btn-danger",
+                        confirmButton: "btn font-weight-bold btn-white-black",
+                        cancelButton: "btn font-weight-bold  btn-light-danger",
                     }
 
                 }).then(function(result) {

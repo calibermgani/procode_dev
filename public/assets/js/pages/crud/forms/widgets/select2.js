@@ -39,7 +39,10 @@ var KTSelect2 = function() {
             placeholder: "Select Project"
         });
         $('.kt_select2_sub_project').select2({
-            placeholder: "Select Project"
+            placeholder: "Select Sub Project"
+        });
+        $('.kt_select2_assignee').select2({
+            placeholder: "--Assignee--"
         });
 
         // loading data from array
