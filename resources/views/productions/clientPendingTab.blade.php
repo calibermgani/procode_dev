@@ -453,7 +453,7 @@
                                                                         'CE_Inprocess' => 'Inprocess',
                                                                         'CE_Pending' => 'Pending',
                                                                         'CE_Completed' => 'Completed',
-                                                                        'CE_Clarification' => 'Clarification',
+                                                                        // 'CE_Clarification' => 'Clarification',
                                                                         'CE_Hold' => 'Hold',
                                                                     ],
                                                                     null,
