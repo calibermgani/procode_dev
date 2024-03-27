@@ -689,7 +689,7 @@ class ProductionController extends Controller
     public function clientCompletedDatasDetails(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data =  $request->all();dd($data);
+                $data =  $request->all();
                 // $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
                 // $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
                 // $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
