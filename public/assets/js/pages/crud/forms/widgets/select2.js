@@ -10,6 +10,18 @@ var KTSelect2 = function() {
             placeholder: "-- Select --",
         });
 
+        $('.project_select').select2({
+            placeholder: "Select Project"
+        });
+
+        $('.sub_project_select').select2({
+            placeholder: "Select Sub Project"
+        });
+
+        $('.user_select').select2({
+            placeholder: "Select Users"
+        });
+
         // basic
         $('#kt_select2_1, #kt_select2_1_validate').select2({
             placeholder: "Select a state"

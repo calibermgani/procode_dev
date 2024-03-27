@@ -53,8 +53,10 @@ Route::any('assignee_change', 'App\Http\Controllers\ProductionController@assigne
 Route::any('caller_chart_work_logs', 'App\Http\Controllers\ProductionController@callerChartWorkLogs');
 Route::any('client_completed_datas_details', 'App\Http\Controllers\ProductionController@clientCompletedDatasDetails');
 Route::any('client_table_update', 'App\Http\Controllers\ProjectController@clientTableUpdate');
-Route::any('project_update/{projectName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientsUpdate');
-Route::any('client_view_details', 'App\Http\Controllers\ProductionController@clientViewDetails');
+
+Route::any('reports', 'App\Http\Controllers\Reports\ReportsController@reporstIndex');
+Route::any('reports/get_sub_projects', 'App\Http\Controllers\Reports\ReportsController@getSubProjects');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
