@@ -230,7 +230,7 @@
                                         );
                                     } else {
                                         $practiceName = '';
-                                        $subProjectName = '';
+                                        $subProjectName = '--';
                                     }
                              @endphp
 
