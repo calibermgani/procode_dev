@@ -747,6 +747,7 @@ class ProductionController extends Controller
                 // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $decodedsubProjectName = $decodedPracticeName == NULL ? Helpers::projectName($decodedProjectName)->project_name :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
+                $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $data = [];
                 foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
                     if (is_array($value)) {
@@ -760,12 +761,14 @@ class ProductionController extends Controller
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 if($datasRecord != null) {
                   $datasRecord->update($data);
+                  $record = $originalModelClass::where('id', $data['parent_id'])->first();
+                  $record->update( ['claim_status' => $data['claim_status']] );
                 } else {
+                    $data['parent_id'] = $data['idValue'];
+                    $record = $originalModelClass::where('id', $data['parent_id'])->first();
+                    $record->update( ['claim_status' => $data['claim_status']] );
                     $modelClass::create($data);
                 }
-                $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
-                $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                $record->update( ['claim_status' => $data['claim_status']] );
                 $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
                 ->where('record_status',$data['record_old_status'])
