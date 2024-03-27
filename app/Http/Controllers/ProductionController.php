@@ -90,7 +90,7 @@ class ProductionController extends Controller
                 $subProjectsWithCount[$key]['sub_project_name'] = $data['name'];
                 $projectName = $subProjectsWithCount[$key]['client_name'];
                 $model_name = ucfirst($projectName) . ucfirst($subProjectsWithCount[$key]['sub_project_name']);
-                // dd($model_name);
+                 dd($model_name);
 
                     $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',$model_name);
                     if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {

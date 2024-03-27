@@ -47,7 +47,7 @@
                                                 $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
                                             }
 
-                                            $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
+                                            $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;dd($model_name );
                                             foreach($model_name as $model) {
                                                 $modelClass = "App\\Models\\" .  $model;
                                                         $assignedCount = 0;
