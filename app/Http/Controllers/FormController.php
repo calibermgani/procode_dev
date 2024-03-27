@@ -77,7 +77,7 @@ class FormController extends Controller
                     $requiredData['field_type_3'] = $data['field_type_3'][$i];
                     $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                     $requiredData['user_type'] = $data['user_type'][$i];
-                    // formConfiguration::create($requiredData);
+                    formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
                     if ($data['input_type'][$i] == 'text' || $data['input_type'][$i] == 'date_range') {
