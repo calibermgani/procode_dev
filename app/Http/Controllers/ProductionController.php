@@ -689,19 +689,21 @@ class ProductionController extends Controller
     public function clientCompletedDatasDetails(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                $data =  $request->all();
-                $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
-                $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $data =  $request->all();dd($data);
+                // $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
+                // $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
+                // $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
 
                 $currentTime = Carbon::now();
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
-                $data['sub_project_id'] = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = 'CE_'.ucwords($data['urlDynamicValue']);
-                $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->first();//dd($data['record_id'],$existingRecordId);
+                // $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->first();//dd($data['record_id'],$existingRecordId);
+                $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
+
                 if(empty($existingRecordId)) {
                     $startTimeVal = $data['start_time'];
                     $save_flag = CallerChartsWorkLogs::create($data);
