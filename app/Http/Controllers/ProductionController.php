@@ -758,7 +758,11 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
-                $datasRecord->update($data);
+                if($datasRecord != null) {
+                  $datasRecord->update($data);
+                } else {
+                    $modelClass::create($data);
+                }
                 $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();
                 $record->update( ['claim_status' => $data['claim_status']] );
