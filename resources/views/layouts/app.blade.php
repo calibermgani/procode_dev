@@ -187,11 +187,10 @@ $url_segment = Request::segment(1);
         {{-- <img src="{{ asset('/assets/media/bg/annexmed_logo.svg') }}" alt="Company Logo" class="company-logo"> --}}
     </div>
     <div class="copyright-container">
-        <p>&copy; {{ date('Y') }} Pro coding</p>
-        <p href="#">Privacy</p>
-        <p href="#">Legal</p>
-        <p href="#">Contact</p>
-        <p> <img src="{{ asset('/assets/media/bg/annexmed_logo_1.svg') }}" alt="Company Logo" class="company-logo"></p>
+        <p>&copy; {{ date('Y') }} Procode- All rights reserved by Annexmed </p>
+        <p>procodesupport@annexmed.net</p>
+
+        {{-- <p> <img src="{{ asset('/assets/media/bg/annexmed_logo_1.svg') }}" alt="Company Logo" class="company-logo"></p --}}
 
     </div>
 </body>
