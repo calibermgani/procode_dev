@@ -65,28 +65,33 @@ class ReportsController extends Controller
                 $decodedsubProjectName = Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 if (isset($request->checkedValues)) {
-                    $columnsHeader = implode(',', $request->checkedValues);
+                    if ($request->checkedValues[0] === 'all') {
+                        $checkedValues = array_diff($request->checkedValues, ['all']);
+                    }else{
+                        $checkedValues = $request->checkedValues;
+                    }
+                    $columnsHeader = implode(',', $checkedValues);
                     $client_data = DB::table($table_name)->select(DB::raw($columnsHeader))->get();
                 } else {
                     $client_data = [];
                 }
                 if (count($client_data) > 0) {
-                    $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
-                        foreach ($request->checkedValues as $key => $header) {
-                            $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
-                        }
-                    $body_info .= '</tr><thead><tbody><tr>';
+                    $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column" id="report_list"><thead><tr>';
+                    foreach ($checkedValues as $key => $header) {
+                        $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
+                    }
+                    $body_info .= '</tr></thead><tbody>';
+
                     foreach ($client_data as $row) {
-                        foreach ($request->checkedValues as $header) {
-                            if (isset($row->{$header}) && !empty($row->{$header})) {
-                                $data = $row->{$header};
-                            } else {
-                                $data ="--";
-                            }
+                        $body_info .= '<tr>';
+                        foreach ($checkedValues as $header) {
+                            $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
                             $body_info .= '<td>' . $data . '</td>';
                         }
+                        $body_info .= '</tr>';
                     }
-                    $body_info .= '</tr></tbody></table>';
+
+                    $body_info .= '</tbody></table>';
                 } else {
                     $body_info = '<p>No data available</p>';
                 }

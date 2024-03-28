@@ -125,6 +125,8 @@
 
             $(document).on('click', '#reportModalBtn', function(e) {
                 $('#reportModal').modal('show');
+                $('#project_assign_body').show();
+                $('#headers_modal').hide();
             });
 
             $(document).on('change', '#project_id', function() {
@@ -169,13 +171,15 @@
                         sub_project_id: sub_project_id
                     },
                     success: function(res) {
-                        if (res.columnsHeader) {
+                        if (res.columnsHeader != '') {
                             $('#exampleModalCenterTitle').hide();
                             $('#project_assign_body').hide();
                             $('#headers_modal').show();
                             var columns = res.columnsHeader;
                             var $modalRow = $('#headers_row');
                             $modalRow.empty();
+                            var $selectAllCheckbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" value="all" id="select_all_columns">Select All<span></span></label></div></div>');
+                            $modalRow.append($selectAllCheckbox);
                             $.each(columns, function(index, columnName) {
                                 if (columnName !== 'id') {
                                     var displayName = columnName.split('_').map(function(word) {
@@ -185,8 +189,16 @@
                                     $modalRow.append($checkbox);
                                 }
                             });
+                            $('#select_all_columns').change(function() {
+                                var isChecked = $(this).prop('checked');
+                                $('input[name="project_columns"]').prop('checked', isChecked);
+                            });
+                            $('input[name="project_columns"]').change(function() {
+                                var allChecked = $('input[name="project_columns"]:checked').length === $('input[name="project_columns"]').length;
+                                $('#select_all_columns').prop('checked', allChecked);
+                            });
                         } else {
-
+                            $('#project_assign_body').show();
                         }
                     },
                     error: function(jqXHR, exception) {
@@ -196,8 +208,8 @@
             });
 
             $('#reportModal').on('hidden.bs.modal', function () {
-                $('#project_id').val('');
-                $('#sub_project_id').val('');
+                $('#project_id').val('').change();
+                $('#sub_project_id').val('').change();
             });
 
             $(document).on('click', '#project_assign_save', function() {
@@ -221,7 +233,6 @@
                         checkedValues: checkedValues
                     },
                     success: function(res) {
-                        console.log(res);
                         if (res.body_info) {
                             $('#reportModal').modal('hide');
                             $('#generateReportClass').hide();
@@ -233,11 +244,6 @@
                                 lengthChange: false,
                                 searching: true,
                                 pageLength: 20,
-                                scrollCollapse: true,
-                                scrollX: true,
-                                "initComplete": function(settings, json) {
-                                    $('body').find('.dataTables_scrollBody').addClass("scrollbar");
-                                },
                                 language: {
                                     "search": '',
                                     "searchPlaceholder": "   Search",
@@ -253,6 +259,8 @@
                                 dom: "<'row'<'col-md-12 text-right'fB>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
                             });
                             table.buttons().container().appendTo('.dataTables_filter');
+                        }else{
+
                         }
                     },
                     error: function(jqXHR, exception) {
