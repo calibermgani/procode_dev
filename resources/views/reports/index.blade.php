@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div class="text-center" style="height:550px">
+        <div class="text-center" style="height:600px">
             <div style="margin-top: 170px;">
                 <img src="{{ asset('assets/svg/human_report.svg') }}">
                 <p style="margin-top: 30px">Click Generate report to get response</p>
@@ -27,7 +27,7 @@
 <!-- Modal content-->
 <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content" style="margin-top: 7rem">
+        <div class="modal-content">
             <div class="modal-header" style="background-color: #139AB3;height: 84px">
                 <h5 class="modal-title" id="modalLabel" style="color: #ffffff;" >Generate report</h5>
                 <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
