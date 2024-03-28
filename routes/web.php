@@ -57,6 +57,8 @@ Route::any('project_update/{projectName}/{subProjectName}', 'App\Http\Controller
 Route::any('client_view_details', 'App\Http\Controllers\ProductionController@clientViewDetails');
 Route::any('reports', 'App\Http\Controllers\Reports\ReportsController@reporstIndex');
 Route::any('reports/get_sub_projects', 'App\Http\Controllers\Reports\ReportsController@getSubProjects');
+Route::any('reports/report_client_assigned_tab', 'App\Http\Controllers\Reports\ReportsController@reportClientAssignedTab');
+Route::any('reports/report_client_columns_list', 'App\Http\Controllers\Reports\ReportsController@reportClientColumnsList');
 
 Auth::routes();
 

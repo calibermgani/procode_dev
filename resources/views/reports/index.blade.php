@@ -1,15 +1,12 @@
 @extends('layouts.app3')
 @section('content')
-<div class="card card-custom custom-card">
+<div class="card card-custom custom-card" id="generateReportClass">
     <div class="card-body py-2 px-2">
         <div class="d-flex justify-content-between align-items-center m-2">
             <span class="project_header">Report</span>
             <div>
                 <button class="btn1" id="reportModalBtn" style="width: 171px;">
                     <img src="{{ asset('assets/svg/generate_report.svg') }}">&nbsp;&nbsp;<strong>Generate Report</strong>
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="btn1">
-                    <img src="{{ asset('assets/svg/export.svg') }}">&nbsp;&nbsp;<strong>Export</strong>
                 </button>
             </div>
         </div>
@@ -21,15 +18,21 @@
         </div>
     </div>
 </div>
+<div class="card card-custom custom-card" style="display: none" id="listData">
+    <div class="card-body py-2 px-2">
+        <div class="table-responsive pt-5 pb-5" id="reportTable">
+        </div>
+    </div>
+</div>
 <!-- Modal content-->
 <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content" style="margin-top: 7rem">
-            <div class="modal-header" style="background-color: #0969C3;height: 84px">
+            <div class="modal-header" style="background-color: #139AB3;height: 84px">
                 <h5 class="modal-title" id="modalLabel" style="color: #ffffff;" >Generate report</h5>
                 <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <div class="modal-body" style="background-color: #0969C3;height: 84px">
+            <div class="modal-body" style="background-color: #139AB3;height: 84px">
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="row form-group">
@@ -79,8 +82,12 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-body m-10">
+            <div class="modal-body m-10" id="project_assign_body">
                 <p style="text-align: center">Select Projects to Generate Report</p>
+            </div>
+            <div class="modal-body m-5" id="headers_modal" style="display: none">
+                <div class="row" id="headers_row">
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
@@ -134,7 +141,6 @@
                         project_id: project_id
                     },
                     success: function(res) {
-                        console.log(res.subProject)
                          $("#sub_project_id").val(res.subProject);
                         var sla_options = '<option value="">-- Select --</option>';
                         $.each(res, function(key, value) {
@@ -142,94 +148,117 @@
                                 '</option>';
                         });
                         $("#sub_project_id").html(sla_options);
-                        console.log(res);
                     },
                     error: function(jqXHR, exception) {}
                 });
             });
 
-            var table = $("#clients_list").DataTable({
-                processing: true,
-                lengthChange: false,
-                searching: false,
-                pageLength: 20,
-                    columnDefs: [{
-                        className: 'details-control',
-                        targets: [0],
-                        orderable: false,
-                    }, ],
-                responsive: true
+            $(document).on('change', '#sub_project_id', function() {
+                var project_id = $('#project_id').val();
+                var sub_project_id = $('#sub_project_id').val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl + 'reports/report_client_assigned_tab',
+                    data: {
+                        project_id: project_id,
+                        sub_project_id: sub_project_id
+                    },
+                    success: function(res) {
+                        if (res.columnsHeader) {
+                            $('#exampleModalCenterTitle').hide();
+                            $('#project_assign_body').hide();
+                            $('#headers_modal').show();
+                            var columns = res.columnsHeader;
+                            var $modalRow = $('#headers_row');
+                            $modalRow.empty();
+                            $.each(columns, function(index, columnName) {
+                                if (columnName !== 'id') {
+                                    var displayName = columnName.split('_').map(function(word) {
+                                        return word.charAt(0).toUpperCase() + word.slice(1);
+                                    }).join(' ');
+                                    var $checkbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" name="project_columns" value="' + columnName + '">' + displayName + '<span></span></label></div></div>');
+                                    $modalRow.append($checkbox);
+                                }
+                            });
+                        } else {
 
-            })
-            table.buttons().container().appendTo('.outside');
-
-            $('#clients_list tbody').on('click', 'td.details-control', function() {
-                var client_id = $(this).closest('tr').find('td:eq(1) input').val();
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
-
-                if (row.child.isShown()) {
-                    // This row is already open - close it
-                    row.child.hide();
-                    tr.removeClass('shown');
-                } else {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
-                    });
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('sub_projects') }}",
-                        data: {
-                            project_id: client_id,
-                        },
-                        success: function(res) {
-                            console.log(res, 'res');
-                            subProjects = res.subprojects;
-                            row.child(format(row.data(), subProjects)).show();
-                            tr.addClass('shown');
-                        },
-                        error: function(jqXHR, exception) {}
-                    });
-
-                }
+                    },
+                    error: function(jqXHR, exception) {
+                        console.error(jqXHR.responseText);
+                    }
+                });
             });
 
+            $('#reportModal').on('hidden.bs.modal', function () {
+                $('#project_id').val('');
+                $('#sub_project_id').val('');
+            });
 
-            function format(data, subProjects) {
-                var html =
-                    '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
-                    '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
-                $.each(subProjects, function(index, val) {
-                    console.log(val, 'val',val.client_name,val.sub_project_name );
-                    html +=
-                        '<tbody><tr class="clickable-row cursor_hand">' +
-                        '<td><input type="hidden" value=' + val.client_id + '></td>' +
-                        '<td>' + val.sub_project_name + '<input type="hidden" value=' + val.sub_project_id + '></td>' +
-                        '<td>' + val.assignedCount + '</td>' +
-                        '<td>' + val.CompletedCount + '</td>' +
-                        '<td>' + val.PendingCount + '</td>' +
-                        '<td>' + val.holdCount + '</td>' +
-                        '</tr></tbody>';
+            $(document).on('click', '#project_assign_save', function() {
+                var project_id = $('#project_id').val();
+                var sub_project_id = $('#sub_project_id').val();
+                var checkedValues = [];
+                $('.header_columns').find('input[type="checkbox"]:checked').each(function() {
+                    checkedValues.push($(this).val());
                 });
-                html += '</table>';
-                return html;
-            }
-
-            $(document).on('click', '.clickable-row', function(e) {
-                var clientName = $(this).closest('tr').find('td:eq(0) input').val();
-                var subProjectName = $(this).closest('tr').find('td:eq(1) input').val();
-                if (!clientName) {
-                    console.error('encodedclientname is undefined or empty');
-                    return;
-                }
-                window.location.href = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(
-                        subProjectName) + "?parent=" +
-                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-
-            })
-        })
-
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('reports/report_client_columns_list') }}",
+                    data: {
+                        project_id: project_id,
+                        sub_project_id: sub_project_id,
+                        checkedValues: checkedValues
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.body_info) {
+                            $('#reportModal').modal('hide');
+                            $('#generateReportClass').hide();
+                            $('#listData').show();
+                            $('#reportTable').html(res.body_info);
+                            var table = $('#report_list').DataTable({
+                                processing: true,
+                                clientSide: true,
+                                lengthChange: false,
+                                searching: true,
+                                pageLength: 20,
+                                scrollCollapse: true,
+                                scrollX: true,
+                                "initComplete": function(settings, json) {
+                                    $('body').find('.dataTables_scrollBody').addClass("scrollbar");
+                                },
+                                language: {
+                                    "search": '',
+                                    "searchPlaceholder": "   Search",
+                                },
+                                buttons: [{
+                                    "extend": 'excel',
+                                    "text": `<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export" style="font-size:13px"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+                                            </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
+                                    "className": 'btn btn-primary-export text-white',
+                                    "title": 'ProCode',
+                                    "filename": 'procode_report',
+                                }],
+                                dom: "<'row'<'col-md-12 text-right'fB>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
+                            });
+                            table.buttons().container().appendTo('.dataTables_filter');
+                        }
+                    },
+                    error: function(jqXHR, exception) {
+                    }
+                });
+            });
+        });
     </script>
 @endpush
