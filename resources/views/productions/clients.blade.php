@@ -87,7 +87,7 @@
                             @endphp
                                 <tr class="clickable-client cursor_hand">
                                     <td class="details-control"></td>
-                                    <td>{{ $data['client_name'] }} <input type="hidden" value={{ $data['id'] }}></td>
+                                    <td>{{ strtoupper($data['client_name']) }} <input type="hidden" value={{ $data['id'] }}></td>
                                     <td>{{$assignedTotalCount}}</td>
                                     <td>{{$completedTotalCount}}</td>
                                     <td>{{$pendingTotalCount}}</td>
