@@ -868,6 +868,7 @@
                 //     text: 'Column Visibility'
                 // }]
                 processing: true,
+                ordering: false,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

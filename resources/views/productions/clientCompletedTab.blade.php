@@ -428,6 +428,7 @@
         $(document).ready(function() {
             var table = $("#client_completed_list").DataTable({
                 processing: true,
+                ordering: false,
                 clientSide: true,
                 lengthChange: false,
                 searching: true,

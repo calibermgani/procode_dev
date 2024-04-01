@@ -1485,6 +1485,7 @@ if (modalContent.width() === 800) {
 
             var table = $("#client_assigned_list").DataTable({
                 processing: true,
+                ordering: false,
                 clientSide: true,
                 lengthChange: false,
                 searching: true,
