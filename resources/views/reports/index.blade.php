@@ -213,6 +213,7 @@
                             });
                         } else {
                             $('#project_assign_body').show();
+                            $('#headers_modal').hide();
                         }
                     },
                     error: function(jqXHR, exception) {
