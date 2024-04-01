@@ -12,7 +12,7 @@
         </div>
         <div class="text-center" style="height:600px">
             <div style="margin-top: 170px;">
-                <img src="{{ asset('assets/svg/human_report.svg') }}">
+                <img src="{{ asset('assets/svg/green_human_image.svg') }}">
                 <p style="margin-top: 30px">Click Generate report to get response</p>
             </div>
         </div>
@@ -98,6 +98,9 @@
             </div>
             <div class="modal-body m-10" id="project_assign_body">
                 <p style="text-align: center">Select Projects to Generate Report</p>
+            </div>
+            <div class="modal-body m-10" id="no_data" style="display: none">
+                <p style="text-align: center">No Data Available</p>
             </div>
             <div class="modal-body m-5" id="headers_modal" style="display: none">
                 <div class="row" id="headers_row">
@@ -188,6 +191,7 @@
                         if (res.columnsHeader != '') {
                             $('#exampleModalCenterTitle').hide();
                             $('#project_assign_body').hide();
+                            $('#no_data').hide();
                             $('#headers_modal').show();
                             var columns = res.columnsHeader;
                             var $modalRow = $('#headers_row');
@@ -212,7 +216,8 @@
                                 $('#select_all_columns').prop('checked', allChecked);
                             });
                         } else {
-                            $('#project_assign_body').show();
+                            $('#no_data').show();
+                            $('#project_assign_body').hide();
                             $('#headers_modal').hide();
                         }
                     },
