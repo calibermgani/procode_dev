@@ -1196,9 +1196,17 @@
                                 <div class="modal fade modal-second modal-left" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
+                                                @if ($popUpHeader != null)
+                                                    @php
+                                                            $clientName = App\Http\Helper\Admin\Helpers::projectName(
+                                                                $popUpHeader->project_id,
+                                                            );
+                                                            $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
+                                                    @endphp
+                                                @endif
                                             <div class="modal-header" style="background-color: #139AB3;height: 84px">
                                                 <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
-                                                    <a href= {{ asset('/pdf_folder/Ashe_Memorial_SOP_updated.pdf') }} target="_blank">
+                                                    <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16" style="color: #ffffff; margin-left: 365px;">
                                                             <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 8.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"/>
                                                         </svg>
@@ -1206,14 +1214,6 @@
                                                 <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                @if ($popUpHeader != null)
-                                                    @php
-                                                        $clientName = App\Http\Helper\Admin\Helpers::projectName(
-                                                            $popUpHeader->project_id,
-                                                        );
-                                                        $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
-                                                        @endphp
-                                                @endif
                                                 <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
                                             </div>
                                             <div class="modal-footer">
