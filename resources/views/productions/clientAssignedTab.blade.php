@@ -1206,7 +1206,15 @@
                                                 <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                             </div>
                                             <div class="modal-body">
-                                                <iframe src={{ asset('/pdf_folder/Ashe_Memorial_SOP_updated.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
+                                                @if ($popUpHeader != null)
+                                                    @php
+                                                        $clientName = App\Http\Helper\Admin\Helpers::projectName(
+                                                            $popUpHeader->project_id,
+                                                        );
+                                                        $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
+                                                        @endphp
+                                                @endif
+                                                <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
                                             </div>
                                             <div class="modal-footer">
                                                 {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
