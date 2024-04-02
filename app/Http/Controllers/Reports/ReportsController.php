@@ -64,6 +64,14 @@ class ReportsController extends Controller
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
                 $decodedsubProjectName = Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
+                if (isset($request->work_date) && !empty($request->work_date)) {
+                    $work_date = explode(' - ', $request->work_date);
+                    $start_date = date('Y-m-d', strtotime($work_date[0]));
+                    $end_date = date('Y-m-d', strtotime($work_date[1]));
+                }else{
+                    $start_date = "";
+                    $end_date = "";
+                }
                 if (isset($request->checkedValues)) {
                     if ($request->checkedValues[0] === 'all') {
                         $checkedValues = array_diff($request->checkedValues, ['all']);
@@ -71,7 +79,16 @@ class ReportsController extends Controller
                         $checkedValues = $request->checkedValues;
                     }
                     $columnsHeader = implode(',', $checkedValues);
-                    $client_data = DB::table($table_name)->select(DB::raw($columnsHeader))->get();
+                    $client_data = DB::table($table_name)->select(DB::raw($columnsHeader))
+                        ->leftJoin('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.id')
+                        ->where(function ($query) use ($start_date, $end_date) {
+                            if (!empty($start_date) && !empty($end_date)) {
+                                $query->whereBetween('caller_charts_work_logs.start_time', [$start_date, $end_date]);
+                            }else{
+                                $query;
+                            }
+                        })
+                        ->get();
                 } else {
                     $client_data = [];
                 }
