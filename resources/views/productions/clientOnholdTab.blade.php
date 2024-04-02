@@ -858,6 +858,7 @@
             });
             var table = $("#client_onhold_list").DataTable({
                 processing: true,
+                ordering: false,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

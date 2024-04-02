@@ -228,6 +228,7 @@
         $(document).ready(function() {
             var table = $("#client_rework_list").DataTable({
                 processing: true,
+                ordering: false,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

@@ -49,7 +49,7 @@
 
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
-                                                $modelClass = "App\\Models\\" .  $model;
+                                                $modelClass = "App\\Models\\" .  preg_replace('/[^A-Za-z0-9]/', '',$model);
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
