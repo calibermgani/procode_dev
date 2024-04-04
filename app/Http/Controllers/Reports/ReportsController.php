@@ -63,7 +63,7 @@ class ReportsController extends Controller
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
                 $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
-                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
+                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)).'datas','_');
                 if (isset($request->work_date) && !empty($request->work_date)) {
                     $work_date = explode(' - ', $request->work_date);
                     $start_date = date('Y-m-d', strtotime($work_date[0]));
@@ -84,7 +84,7 @@ class ReportsController extends Controller
                             DB::raw($columnsHeader),
                             DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
                         ])
-                        ->leftJoin('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.id')
+                        ->leftJoin('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.parent_id')
                         ->where(function ($query) use ($start_date, $end_date) {
                             if (!empty($start_date) && !empty($end_date)) {
                                 $query->whereBetween('caller_charts_work_logs.start_time', [$start_date, $end_date]);
