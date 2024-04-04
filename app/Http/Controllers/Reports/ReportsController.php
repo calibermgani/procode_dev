@@ -52,7 +52,7 @@ class ReportsController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
 
@@ -130,7 +130,7 @@ class ReportsController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
 }

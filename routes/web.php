@@ -59,6 +59,9 @@ Route::any('reports', 'App\Http\Controllers\Reports\ReportsController@reporstInd
 Route::any('reports/get_sub_projects', 'App\Http\Controllers\Reports\ReportsController@getSubProjects');
 Route::any('reports/report_client_assigned_tab', 'App\Http\Controllers\Reports\ReportsController@reportClientAssignedTab');
 Route::any('reports/report_client_columns_list', 'App\Http\Controllers\Reports\ReportsController@reportClientColumnsList');
+Route::any('project_config_delete', 'App\Http\Controllers\FormController@projectConfigDelete');
+Route::any('sampling', 'App\Http\Controllers\SettingController@qualitySampling');
+Route::any('qa_sampling_store', 'App\Http\Controllers\SettingController@qualitySamplingStore');
 
 Auth::routes();
 

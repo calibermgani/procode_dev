@@ -15,7 +15,7 @@ class DashboardController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
     public function procodeTesting() {
