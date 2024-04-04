@@ -32,7 +32,7 @@ class ReportsController extends Controller
            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
-                $decodedsubProjectName = Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
+                $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $columnsHeader=[];
                 if (Schema::hasTable($table_name)) {
@@ -62,7 +62,7 @@ class ReportsController extends Controller
            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
-                $decodedsubProjectName = Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
+                $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 if (isset($request->work_date) && !empty($request->work_date)) {
                     $work_date = explode(' - ', $request->work_date);
@@ -79,7 +79,11 @@ class ReportsController extends Controller
                         $checkedValues = $request->checkedValues;
                     }
                     $columnsHeader = implode(',', $checkedValues);
-                    $client_data = DB::table($table_name)->select(DB::raw($columnsHeader))
+                    $client_data = DB::table($table_name)
+                        ->select([
+                            DB::raw($columnsHeader),
+                            DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
+                        ])
                         ->leftJoin('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.id')
                         ->where(function ($query) use ($start_date, $end_date) {
                             if (!empty($start_date) && !empty($end_date)) {
@@ -94,6 +98,7 @@ class ReportsController extends Controller
                 }
                 if (count($client_data) > 0) {
                     $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column" id="report_list"><thead><tr>';
+                    $checkedValues[] = 'work_hours';
                     foreach ($checkedValues as $key => $header) {
                         $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
                     }
@@ -103,6 +108,9 @@ class ReportsController extends Controller
                         $body_info .= '<tr>';
                         foreach ($checkedValues as $header) {
                             $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
+                            if ($header === 'claim_status') {
+                                $data = str_replace('CE_', '', $data);
+                            }
                             $body_info .= '<td>' . $data . '</td>';
                         }
                         $body_info .= '</tr>';
