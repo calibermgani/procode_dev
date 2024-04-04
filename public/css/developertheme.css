@@ -702,3 +702,19 @@ margin-left: -1rem;
     border-radius: 5px;
     padding: 2px 4px;
 }
+
+.white-black-color {
+    color: #191C24 !important;
+    background-color: #ffffff !important;
+    border-color: #ffffff;
+}
+
+span[aria-labelledby="select2-project_id-container"],
+span[aria-labelledby="select2-sub_project_list-container"],
+span[aria-labelledby="select2-coder_id-container"],
+span[aria-labelledby="select2-qa_id-container"] {
+    color: #191C24 !important;
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+

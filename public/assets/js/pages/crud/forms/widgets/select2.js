@@ -56,7 +56,12 @@ var KTSelect2 = function() {
         $('.kt_select2_assignee').select2({
             placeholder: "--Assignee--"
         });
-
+        $('.kt_select2_coder').select2({
+            placeholder: "Select Coder"
+        });
+        $('.kt_select2_QA').select2({
+            placeholder: "Select QA"
+        });
         // loading data from array
         // var data = [{
         //     id: 0,
