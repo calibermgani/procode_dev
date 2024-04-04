@@ -79,7 +79,7 @@
                         <div class="row form-group">
                             <div class="col-md-12">
                                 {!!Form::text('wfcall_completed_date', null,
-                                ['class'=>'form-control date_picker1','autocomplete'=>'off','id' => 'date', 'placeholder'=> 'MM-DD-YYYY']) !!}
+                                ['class'=>'form-control form-control daterange','autocomplete'=>'off','id' => 'work_date', 'placeholder'=> 'mm/dd/yyyy - mm/dd/yyyy']) !!}
                             </div>
                         </div>
                     </div>
@@ -139,6 +139,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
+
+            var start = moment().startOf('month');
+            var end = moment().endOf('month');
+
+            $('.daterange').attr("autocomplete", "off");
+            $('.daterange').daterangepicker({
+                showOn: 'both',
+                startDate: start,
+                endDate: end,
+                showDropdowns: true,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                        'month')]
+                }
+            });
+            $('.daterange').val('');
 
             $(document).on('click', '#reportModalBtn', function(e) {
                 $('#reportModal').modal('show');
@@ -230,11 +247,13 @@
             $('#reportModal').on('hidden.bs.modal', function () {
                 $('#project_id').val('').change();
                 $('#sub_project_id').val('').change();
+                $('.daterange').val('');
             });
 
             $(document).on('click', '#project_assign_save', function() {
                 var project_id = $('#project_id').val();
                 var sub_project_id = $('#sub_project_id').val();
+                var work_date = $('#work_date').val();
                 var checkedValues = [];
                 $('.header_columns').find('input[type="checkbox"]:checked').each(function() {
                     checkedValues.push($(this).val());
@@ -250,6 +269,7 @@
                     data: {
                         project_id: project_id,
                         sub_project_id: sub_project_id,
+                        work_date: work_date,
                         checkedValues: checkedValues
                     },
                     success: function(res) {
