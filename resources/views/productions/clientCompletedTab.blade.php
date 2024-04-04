@@ -297,9 +297,10 @@
                                             <div class="row">
                                                 <div class="col-md-3" data-scroll="true" data-height="400">
                                                     <h6 class="title-h6">Basic Information</h6>&nbsp;&nbsp;
+                                                    <input type="hidden" name="idValue">
                                                     @if (count($popupNonEditableFields) > 0)
                                                         @php $count = 0; @endphp
-                                                        <input type="hidden" name="idValue">
+
                                                         @foreach ($popupNonEditableFields as $data)
                                                         @php
                                                         $columnName = Str::lower(
