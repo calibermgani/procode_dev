@@ -62,7 +62,7 @@ class ReportsController extends Controller
            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
-                $decodedsubProjectName = Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
+                $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 if (isset($request->work_date) && !empty($request->work_date)) {
                     $work_date = explode(' - ', $request->work_date);
