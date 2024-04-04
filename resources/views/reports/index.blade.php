@@ -189,7 +189,7 @@
                 });
             });
 
-            $(document).on('change', '#sub_project_id', function() {
+            function getColumnsheaders() {
                 var project_id = $('#project_id').val();
                 var sub_project_id = $('#sub_project_id').val();
                 $.ajaxSetup({
@@ -242,6 +242,14 @@
                         console.error(jqXHR.responseText);
                     }
                 });
+            }
+
+            $("#project_id").on('change', function() {
+                getColumnsheaders();
+            });
+
+            $("#sub_project_id").on('change', function() {
+                getColumnsheaders();
             });
 
             $('#reportModal').on('hidden.bs.modal', function () {
