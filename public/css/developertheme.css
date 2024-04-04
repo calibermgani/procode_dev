@@ -715,6 +715,6 @@ span[aria-labelledby="select2-coder_id-container"],
 span[aria-labelledby="select2-qa_id-container"] {
     color: #191C24 !important;
     background-color: #ffffff !important;
-    border-color: #ffffff !important;
+    /* border-color: #ffffff !important; */
 }
 

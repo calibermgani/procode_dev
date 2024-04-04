@@ -29,7 +29,7 @@
                     @php $projectList = App\Http\Helper\Admin\Helpers::projectList(); @endphp
                     <fieldset class="form-group mb-1">
                         {!! Form::select('project_id', $projectList, null, [
-                            'class' => 'form-control kt_select2_project custom-select-background',
+                            'class' => 'form-control kt_select2_project',
                             'id' => 'project_id',
                             'style' => 'width: 100%;',
                         ]) !!}
@@ -50,7 +50,7 @@
                     <label>Coder</label>
                     <fieldset class="form-group mb-1">
                         {!! Form::select('coder_emp_id', $coderList, null, [
-                            'class' => 'form-control kt_select2_coder custom-select-background',
+                            'class' => 'form-control kt_select2_coder',
                             'id' => 'coder_id',
                             'style' => 'width: 100%;; background-color: #ffffff !important;',
                         ]) !!}
