@@ -63,7 +63,8 @@ class ReportsController extends Controller
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
                 $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
-                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)).'datas','_');
+                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)).'_datas','_');
+                dd($table_name);
                 if (isset($request->work_date) && !empty($request->work_date)) {
                     $work_date = explode(' - ', $request->work_date);
                     $start_date = date('Y-m-d', strtotime($work_date[0]));
