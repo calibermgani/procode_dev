@@ -528,13 +528,13 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_completed_datas_details') }}",
+                        url: "{{ url('client_view_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
                             clientName: clientName,
                             subProjectName: subProjectName,
-                            urlDynamicValue: urlDynamicValue
+                            // urlDynamicValue: urlDynamicValue
                         },
                         success: function(response) {
                             if (response.success == true) {
