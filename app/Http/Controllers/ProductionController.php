@@ -219,7 +219,7 @@ class ProductionController extends Controller
                          // $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                         $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->get();
-                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
+                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedDropDownIds = $modelClass::where('claim_status','CE_Assigned')->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                         $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
                         $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
@@ -260,7 +260,7 @@ class ProductionController extends Controller
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
-                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
+                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
@@ -317,7 +317,7 @@ class ProductionController extends Controller
                       //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" .$modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
-                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();//dd($existingCallerChartsWorkLogs);
+                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
@@ -327,7 +327,7 @@ class ProductionController extends Controller
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
-                      $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();//dd($existingCallerChartsWorkLogs);
+                      $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
@@ -378,7 +378,7 @@ class ProductionController extends Controller
                       //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
-                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
+                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
@@ -388,7 +388,7 @@ class ProductionController extends Controller
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
-                      $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
+                      $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
@@ -628,7 +628,7 @@ class ProductionController extends Controller
                         $data[$key] = $value;
                     }
                 }
-                $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));dd($data);
+                $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['idValue'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 if($datasRecord != null) {
