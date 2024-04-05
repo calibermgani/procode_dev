@@ -316,11 +316,11 @@
                                                                 $data->label_name,
                                                             ),
                                                         );
-                                                        $inputType = $data->input_type;
-                                                        $options =
-                                                            $data->options_name != null
-                                                                ? explode(',', $data->options_name)
-                                                                : null;
+                                                        // $inputType = $data->input_type;
+                                                        // $options =
+                                                        //     $data->options_name != null
+                                                        //         ? explode(',', $data->options_name)
+                                                        //         : null;
                                                     @endphp
 
                                                         <label
