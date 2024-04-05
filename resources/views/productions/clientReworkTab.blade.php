@@ -71,18 +71,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="wizard-step mb-0 four" data-wizard-type="done">
+                                    <div class="wizard-step mb-0 four" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Completed</h6>
-                                                    <div class="rounded-circle code-badge-tab">
-                                                        {{ $completedCount }}
-                                                    </div>
+                                                    @include('CountVar.countRectangle', ['count' => $completedCount])
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="wizard-step mb-0 five" data-wizard-type="step">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">

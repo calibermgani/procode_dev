@@ -78,18 +78,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <div class="wizard-step mb-0 four" data-wizard-type="done">
+                                        <div class="wizard-step mb-0 four" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
                                                     <div class="wizard-title" style="display: flex; align-items: center;">
                                                         <h6 style="margin-right: 5px;">Completed</h6>
-                                                        <div class="rounded-circle code-badge-tab">
-                                                            {{ $completedCount }}
-                                                        </div>
+                                                        @include('CountVar.countRectangle', ['count' => $completedCount])
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                         <div class="wizard-step mb-0 five" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
@@ -155,7 +153,7 @@
                                                         @php
                                                             $columnsToExclude = ['id','QA_emp_id','duplicate_status', 'created_at', 'updated_at', 'deleted_at'];
                                                         @endphp
-                                                          <th><input type="checkbox" id="ckbCheckAll"></th>
+                                                          <th class='notexport'><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             <th><input type="hideen"
                                                                     value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
@@ -163,7 +161,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                <th><input type="checkbox" id="ckbCheckAll"></th>
+                                                <th class='notexport'><input type="checkbox" id="ckbCheckAll"></th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         <th><input type="hidden"
                                                                 value={{ $columnValue }}>
@@ -175,6 +173,7 @@
 
 
                                         </thead>
+
                                         <tbody>
                                             @if (isset($duplicateProjectDetails))
                                                 @foreach ($duplicateProjectDetails as $data)
@@ -253,6 +252,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
+                var d = new Date();
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+                var date = (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_duplicate_list").DataTable({
                 processing: true,
                 ordering: false,
@@ -279,7 +283,10 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_report_',
+                    "filename": 'procode_duplicate_'+date,
+                    "exportOptions": {
+                        "columns": ':not(.notexport)'// Exclude first two columns
+                    }
                 }],
                 dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
             })

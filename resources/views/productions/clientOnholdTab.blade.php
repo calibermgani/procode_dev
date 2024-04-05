@@ -71,18 +71,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="wizard-step mb-0 four" data-wizard-type="done">
+                                    <div class="wizard-step mb-0 four" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Completed</h6>
-                                                    <div class="rounded-circle code-badge-tab">
-                                                        {{ $completedCount }}
-                                                    </div>
+                                                    @include('CountVar.countRectangle', ['count' => $completedCount])
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="wizard-step mb-0 five" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
@@ -127,7 +125,7 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
-                                                    <th>Action</th>
+                                                    <th class='notexport'>Action</th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th><input type="hidden"
@@ -135,7 +133,7 @@
                                                                 {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                             </th>
                                                         @else
-                                                            <th style="display:none"><input type="hidden"
+                                                            <th style="display:none" class='notexport'><input type="hidden"
                                                                     value={{ $columnValue }}>
                                                                 {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                             </th>
@@ -260,7 +258,7 @@
                                             <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
                                                 {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
                                                 <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                                <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
+                                                <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
                                                 {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                             </div>
                                         </div>
@@ -451,36 +449,49 @@
                                                  @endif
                                                      @endforeach
                                                  @endif
-                                                 <div class="col-md-6">
-                                                     <input type="hidden" name="invoke_date">
-                                                     <input type="hidden" name="CE_emp_id">
-                                                     <div class="form-group row" style="margin-left: -2rem">
-                                                         <label class="col-md-12 required">
-                                                             Claim Status
-                                                         </label>
-                                                         <div class="col-md-10">
-                                                             {!! Form::Select(
-                                                                 'claim_status',
-                                                                 [
-                                                                     '' => '--Select--',
-                                                                     'CE_Inprocess' => 'Inprocess',
-                                                                     'CE_Pending' => 'Pending',
-                                                                     'CE_Completed' => 'Completed',
-                                                                    //  'CE_Clarification' => 'Clarification',
-                                                                     'CE_Hold' => 'Hold',
-                                                                 ],
-                                                                 null,
-                                                                 [
-                                                                     'class' => 'form-control white-smoke  pop-non-edt-val ',
-                                                                     'autocomplete' => 'none',
-                                                                     'id' => 'claim_status',
-                                                                     'style' => 'cursor:pointer',
-                                                                 ],
-                                                             ) !!}
-                                                         </div>
-                                                     </div>
-                                                 </div>
-                                             </div>
+                                                 <div class="row mt-4">
+                                                    <div class="col-md-6">
+                                                        <input type="hidden" name="invoke_date">
+                                                        <input type="hidden" name="CE_emp_id">
+                                                        <div class="form-group row" >
+                                                            <label class="col-md-12 required">
+                                                                Claim Status
+                                                            </label>
+                                                            <div class="col-md-10">
+                                                                {!! Form::Select(
+                                                                    'claim_status',
+                                                                    [
+                                                                        '' => '--Select--',
+                                                                        'CE_Inprocess' => 'Inprocess',
+                                                                        'CE_Pending' => 'Pending',
+                                                                        'CE_Completed' => 'Completed',
+                                                                        //  'CE_Clarification' => 'Clarification',
+                                                                        'CE_Hold' => 'Hold',
+                                                                    ],
+                                                                    null,
+                                                                    [
+                                                                        'class' => 'form-control white-smoke  pop-non-edt-val ',
+                                                                        'autocomplete' => 'none',
+                                                                        'id' => 'claim_status',
+                                                                        'style' => 'cursor:pointer',
+                                                                    ],
+                                                                ) !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                            <div class="form-group row" >
+                                                                <label class="col-md-12 required" id="ce_hold_reason_label">
+                                                                    Hold Reason
+                                                                </label>
+                                                                <div class="col-md-10">
+                                                                    {!! Form::textarea('ce_hold_reason',  null, ['class' => 'text-black form-control','rows' => 3,'id' => 'ce_hold_reason_editable']) !!}
+
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                          </div>
                                          <div class="modal-footer" style="justify-content: space-between;">
 
@@ -564,7 +575,7 @@
                                                 <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
                                                     {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
                                                     <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                                    <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
+                                                    <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
                                                     {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                                 </div>
                                             </div>
@@ -642,16 +653,26 @@
                                                     @endif
                                                         @endforeach
                                                     @endif
-                                                    <div class="col-md-6">
-                                                        <div class="form-group row" style="margin-left: -2rem">
-                                                            <label class="col-md-12">
-                                                                Claim Status
-                                                            </label>
-                                                            <label class="col-md-12 pop-non-edt-val"
-                                                            id="claim_status">
-                                                        </label>
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        Claim Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="claim_status">
+                                                                </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        Hold Reason
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val" id="ce_hold_reason"></label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -669,6 +690,37 @@
                             </div>
                         @endif
                    </div>
+                        <div class="modal fade modal-second modal-left" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                        @if ($popUpHeader != null)
+                                            @php
+                                                    $clientName = App\Http\Helper\Admin\Helpers::projectName(
+                                                        $popUpHeader->project_id,
+                                                    );
+                                                    $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
+                                            @endphp
+                                        @endif
+                                    <div class="modal-header" style="background-color: #139AB3;height: 84px">
+                                        <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
+                                            <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16" style="color: #ffffff; margin-left: 365px;">
+                                                    <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 8.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"/>
+                                                </svg>
+                                            </a>
+                                        <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
+                                    </div>
+                                    <div class="modal-footer">
+                                        {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
+                                        <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
+                                        <!-- Additional buttons can be added here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                 </div>
 
@@ -679,6 +731,26 @@
         text-decoration: none;
         background-color: #888a91;
     }
+    .modal-left .modal-dialog {
+        margin-top: 90px;
+        margin-left: 320px;
+        margin-right: auto;
+    }
+
+    .modal-left .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-right .modal-dialog {
+        margin-left: auto;
+        margin-right: 220px;
+        transition: margin 5s ease-in-out;
+    }
+
+    .modal-right .modal-content {
+        border-radius: 5px;
+    }
+
 </style>
 @push('view.scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
@@ -856,6 +928,13 @@
                 var elementId = 'dynamicElement_' + uniqueId;
                 $('#' + elementId).remove();
             });
+
+                var d = new Date();
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+                var date = (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
+
             var table = $("#client_onhold_list").DataTable({
                 processing: true,
                 ordering: false,
@@ -877,7 +956,10 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_report_',
+                    "filename": 'procode_hold_'+date,
+                    "exportOptions": {
+                        "columns": ':not(.notexport)'// Exclude first two columns
+                    }
                 }],
                 dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
             })
@@ -941,9 +1023,10 @@
                     function handleClientPendData(clientData,headers) {
 
                         $.each(headers, function(index, header) {
-                            value = clientData[header];
+                            value = clientData[header];console.log(clientData,'clientData reason',header);
                             $('label[id="' + header + '"]').html("");
                             $('input[name="' + header + '[]"]').html("");
+                            $('textarea[id="ce_hold_reason_editable"]').val(clientData['ce_hold_reason']);
                             if (/_el_/.test(value)) {
                                 elementToRemove = 'add_more_'+header;
                                 $('#'+elementToRemove).remove();
@@ -1211,6 +1294,7 @@
                         }
 
                        $('label[id="' + header + '"]').text(value);
+                       $('label[id="ce_hold_reason"]').text(clientData.ce_hold_reason);
                     }
 
                     function formatDate(dateString) {
@@ -1224,6 +1308,21 @@
 
                }
             });
+            $(document).on('click', '.sop_click', function(e) {
+                console.log('sop modal');
+                $('#myModal_sop').modal('show');
+            });
+                $('#myModal_sop').on('shown.bs.modal', function () {
+                    $('#myModal_status').addClass('modal-right');
+                    $('#myModal_view').addClass('modal-right');
+                });
+
+                $('#myModal_sop').on('hidden.bs.modal', function () {
+                    $('#myModal_status').removeClass('modal-right');
+                    $('#myModal_view').removeClass('modal-right');
+                });
+
+
             $(document).on('click', '#project_hold_save', function(e) {
                     e.preventDefault();
                     var fieldNames = $('#holdFormConfiguration').serializeArray().map(function(input) {
@@ -1262,16 +1361,13 @@
 
                     $('input[type="radio"]').each(function() {
                         var groupName = $(this).attr("name");
-                        // if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
-                        if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                         if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
                             $('#radio_p1').css('display', 'block');
                             inputTypeValue = 1;
                         } else {
                             $('#radio_p1').css('display', 'none');
                             inputTypeValue = 0;
                         }
-                        //     return false;
-                        // }
                     });
 
 
@@ -1295,7 +1391,7 @@
 
                     for (var fieldType in requiredFields) {
                         if (requiredFields.hasOwnProperty(
-                                fieldType)) { //console.log(requiredFields,'requiredFields');
+                                fieldType)) {
                             var fieldNames = requiredFields[fieldType];
                             fieldNames.forEach(function(fieldNameVal) {
                                 var label_id = $('' + fieldType + '[name="' + fieldNameVal + '"]').attr(
@@ -1309,34 +1405,26 @@
                                     var classes = classValue.split(' ');
                                     inputclass.push($('.' + classes[1]));
                                     inclass = $('.' + classes[1]);
-                                    // console.log(inclass,'inclass',inputclass[0]);
                                     inclass.each(function(element) {
-
                                         var label_id = $(this).attr('id');
-                                        console.log(label_id, 'label_id',$('#' + label_id).val(),$(this).val());
-                                        if ($(this).val() == '') {
-                                            if ($(this).val() == '') { //alert(label_id);
+                                         if ($(this).val() == '') {
+                                            if ($(this).val() == '') {
                                                 e.preventDefault();
                                                 $(this).css('border-color', 'red', 'important');
-                                                inputTypeValue =
-                                                    1; // console.log('inside',inputTypeValue);
+                                                inputTypeValue = 1;
                                             } else {
                                                 $(this).css('border-color', '');
-                                                inputTypeValue =
-                                                    0; //console.log('else',inputTypeValue);
+                                                inputTypeValue = 0;
                                             }
                                             return false;
                                         }
+                                        if(label_id == "icd" || label_id == "cpt") {
+                                            var textValue = $(this).val();
+                                            if(textValue.length < 3) {
+                                                js_notification('error', label_id.toUpperCase() + " value has only " + textValue.length + " Characters" );
+                                            }
+                                        }
                                     });
-
-                                    // if ($('.' + classes[1]).val() == '') {
-                                    //     $('.' + classes[1]).css('border-color', 'red');
-                                    //     labelNameValue = 1;
-                                    //     return false; // This will exit the forEach loop, not the entire function
-                                    // } else {
-                                    //     $('.' + classes[1]).css('border-color', '');
-                                    //     labelNameValue = 0;
-                                    // }
                                 }
                             });
 
@@ -1373,7 +1461,17 @@
                         });
                     });
 
-
+                    var claimStatus =  $('#claim_status').val();
+                        if(claimStatus == "CE_Hold") {
+                            var ceHoldReason = $('#ce_hold_reason_editable');
+                            if(ceHoldReason.val() == '') {
+                                ceHoldReason.css('border-color', 'red', 'important');
+                                    inputTypeValue = 1;
+                            } else {
+                                    ceHoldReason.css('border-color', '');
+                                    inputTypeValue = 0;
+                            }
+                        }
 
                     if (inputTypeValue == 0) {
 
@@ -1437,6 +1535,19 @@
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
+
+                $(document).on('change', '#claim_status', function() {
+                        var claimStatus = $(this).val();
+                        if(claimStatus == "CE_Hold") {
+                            $('#ce_hold_reason_editable').css('display', 'block');
+                            $('#ce_hold_reason_label').css('display', 'block');
+                        } else {
+                            $('#ce_hold_reason_editable').css('display', 'none');
+                            $('#ce_hold_reason_label').css('display', 'none');
+                            $('#ce_hold_reason_editable').css('border-color', '');
+                        // $('#ce_hold_reason_editable').val('');
+                        }
+                })
         })
 
              function updateTime() {
