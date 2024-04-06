@@ -1418,12 +1418,18 @@
                                             }
                                             return false;
                                         }
-                                        if(label_id == "icd" || label_id == "cpt") {
-                                            var textValue = $(this).val();
-                                            if(textValue.length < 3) {
-                                                js_notification('error', label_id.toUpperCase() + " value has only " + textValue.length + " Characters" );
+                                        if(label_id == "cpt") {
+                                                var textValue = $(this).val();
+                                                if(textValue.length < 4) {
+                                                    js_notification('error',"The " + label_id.toUpperCase() + " value must be at least 3 characters long" );
+                                                }
                                             }
-                                        }
+                                            if(label_id == "icd") {
+                                                var textValue = $(this).val();
+                                                if(textValue.length < 3 || textValue.length > 7) {
+                                                    js_notification('error', "The " + label_id.toUpperCase() + " value must be between 3 and 7 characters long" );
+                                                }
+                                            }
                                     });
                                 }
                             });
