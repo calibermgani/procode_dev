@@ -224,6 +224,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
+               var d = new Date();
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+                var date = (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_rework_list").DataTable({
                 processing: true,
                 ordering: false,
@@ -245,7 +250,7 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_report_',
+                    "filename": 'procode_rework_'+date,
                 }],
                 dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
             })
