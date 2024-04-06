@@ -1214,6 +1214,10 @@
                                                             );
                                                             $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
                                                     @endphp
+                                                    @else
+                                                    @php
+                                                        $pdfName = '';
+                                                    @endphp
                                                 @endif
                                             <div class="modal-header" style="background-color: #139AB3;height: 84px">
                                                 <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
