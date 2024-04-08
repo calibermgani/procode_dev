@@ -1418,18 +1418,18 @@
                                             }
                                             return false;
                                         }
-                                        if(label_id == "cpt") {
-                                                var textValue = $(this).val();
-                                                if(textValue.length < 4) {
-                                                    js_notification('error',"The " + label_id.toUpperCase() + " value must be at least 3 characters long" );
-                                                }
+                                        if(label_id.substring(0, 3) == "cpt") {
+                                            var textValue = $(this).val();
+                                            if(textValue.length < 4) {
+                                                js_notification('error',"The CPT value must be at least 4 characters long" );
                                             }
-                                            if(label_id == "icd") {
-                                                var textValue = $(this).val();
-                                                if(textValue.length < 3 || textValue.length > 7) {
-                                                    js_notification('error', "The " + label_id.toUpperCase() + " value must be between 3 and 7 characters long" );
-                                                }
+                                         }
+                                        if(label_id.substring(0, 3) == "icd") {
+                                            var textValue = $(this).val();
+                                            if(textValue.length < 3 || textValue.length > 7) {
+                                                js_notification('error', "The ICD value must be between 3 and 7 characters long" );
                                             }
+                                        }
                                     });
                                 }
                             });
