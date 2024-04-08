@@ -504,7 +504,7 @@
                                                                     @endif
                                                                 </div>
                                                                 <div class="col-md-9" style="border-left: 1px solid #ccc;" data-scroll="true" data-height="400">
-                                                                    <h6 class="title-h6">Form
+                                                                    <h6 class="title-h6">Coder
                                                                         <span type = "button" id="expandButton"  class="float-right">
                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
                                                                         <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
@@ -1144,7 +1144,7 @@
                                                                 @endif
                                                             </div>
                                                             <div class="col-md-9" style="border-left: 1px solid #ccc;" data-scroll="true" data-height="400">
-                                                                <h6 class="title-h6">Form</h6>&nbsp;&nbsp;
+                                                                <h6 class="title-h6">Coder</h6>&nbsp;&nbsp;
                                                                 @if (count($popupEditableFields) > 0)
                                                                     @php $count = 0; @endphp
                                                                     @foreach ($popupEditableFields as $key => $data)
@@ -1352,9 +1352,9 @@
        });
 
         // Close the modal when the close button is clicked
-        $(".close").click(function() {
-            $("#myModal_status").hide();
-        });
+        // $(".close").click(function() {
+        //     $("#myModal_status").hide();
+        // });
             var countDigits = {{ strlen($assignedCount) }};
             var newWidth = 30 + (countDigits - 1) * 6;
             var newHeight = 30 + (countDigits - 1) * 6;
