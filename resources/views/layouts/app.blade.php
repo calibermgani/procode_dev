@@ -18,6 +18,9 @@
             display: flex;
             min-height: 100vh;
             background-color: #ffffff;
+            /* background-image: url("assets/media/bg/login_background_3.svg"); */
+            background-size: cover;
+            background-position: bottom !important;
             color: white;
             position: relative;
         }
@@ -29,10 +32,8 @@
         .left-side {
             background-image: url('{{ asset("assets/media/bg/login_background_4.svg") }}');
             background-size: cover;
+            /* background-position: center; */
             background-repeat: no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .right-side {
@@ -40,7 +41,6 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            position: relative;
         }
 
         .login-card {
@@ -57,56 +57,17 @@
             .login-container {
                 flex-direction: column;
             }
-
-            .left-side {
-                min-height: 200px; /* Adjust as needed */
-            }
-
-            .right-side {
-                padding: 20px 0;
-            }
-
-            .copyright-container {
-                position: relative; /* Change to relative */
-                text-align: center;
-                margin-top: 20px;
-                left:11rem !important;
-            }
-
-            .copyright-container p {
-                color: black; /* Change text color to black */
-            }
         }
-
-        @media (max-width: 480px) {
-            .copyright-container p {
-                color: black; /* Change text color to black for smaller screens */
-            }
-            .copyright-container {
-                left:0rem !important;
-            }
-        }
-        @media (max-width: 321px) {
-            .copyright-container p {
-                color: black; /* Change text color to black for smaller screens */
-            }
-            .copyright-container {
-                left:0rem !important;
-            }
-        }
-
         .copyright-container {
-            position: absolute; /* Keep absolute positioning */
-            bottom: 10px; /* Adjust as needed */
-            left: 3.5rem; /* Set left to 0 */
-            right: 0; /* Set right to 0 */
-            text-align: center; /* Center text */
+            position: absolute;
+            bottom: 10px;
+            left: 22.5rem;
+            transform: translateX(-50%);
             font-size: 11px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             padding-top: 10px;
-            width: 100%;
         }
 
         .copyright-container p {
@@ -125,9 +86,7 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="left-side">
-            <!-- Left side content -->
-        </div>
+        <div class="left-side"></div>
         <div class="right-side">
             <div class="login-card">
                 <div class="text-left mt-0 mb-12 mb-lg-12 ml-8 mr-8">
