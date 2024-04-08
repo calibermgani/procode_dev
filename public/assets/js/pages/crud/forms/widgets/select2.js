@@ -62,6 +62,9 @@ var KTSelect2 = function() {
         $('.kt_select2_QA').select2({
             placeholder: "Select QA"
         });
+        $('.kt_select2_priority').select2({
+            placeholder: "Priority"
+        });
         // loading data from array
         // var data = [{
         //     id: 0,

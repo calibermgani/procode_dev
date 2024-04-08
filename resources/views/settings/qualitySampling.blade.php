@@ -73,7 +73,29 @@
                             autocomplete="nope"  onkeypress = "return event.charCode >= 48 && event.charCode <= 57">
                     </fieldset>
                 </div>
-                <div class="col-lg-3 mt-8">
+
+                <div class="col-lg-1 mb-lg-0 mb-6">
+                    <label>Priority</label>
+                    <fieldset class="form-group mb-1">
+                        {!! Form::Select(
+                            'claim_priority',
+                            [
+                                '' => '--Select--',
+                                'low' => 'Low',
+                                'medium' => 'Medium',
+                                'high' => 'High'
+                            ],
+                            null,
+                            [
+                                'class' => 'form-control kt_select2_priority',
+                                'autocomplete' => 'none',
+                                'id' => 'claim_priority',
+                            ],
+                        ) !!}
+                    </fieldset>
+                </div>
+
+                <div class="col-lg-2 mt-8">
                     <button class="btn btn-light-danger" id="clear_submit" tabindex="10" type="button">
                         <span>
                             <span>Clear</span>
@@ -98,6 +120,7 @@
                                         <th>Coder</th>
                                         <th>QA</th>
                                         <th>Percentage</th>
+                                        <th>Priority</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,6 +145,7 @@
                                                 <td>{{$coderName == NULL ? '--' :  $coderName}}</td>
                                                 <td>{{$qaName == NULL ? '--' : $qaName}}</td>
                                                 <td>{{$data['qa_percentage']. '%'}}</td>
+                                                <td>{{isset($data['claim_priority']) ? $data['claim_priority'] : '--'}}</td>
                                             </tr>
                                         @endforeach
                                     @endif
