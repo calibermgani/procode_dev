@@ -2,7 +2,7 @@
     <div class="brand flex-column-auto" id="kt_brand">
         <a href="{{ url('dashboard') }}" class="brand-logo">
 
-            <img src="{{ asset('/assets/media/bg/pc_logo_sm.svg') }}" alt="logo"
+            <img src="{{ asset('/assets/media/bg/pc_logo_sm2.svg') }}" alt="logo"
                 class="logo-default max-h-50px" />
         </a>
 
