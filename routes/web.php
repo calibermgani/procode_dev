@@ -62,6 +62,8 @@ Route::any('reports/report_client_columns_list', 'App\Http\Controllers\Reports\R
 Route::any('project_config_delete', 'App\Http\Controllers\FormController@projectConfigDelete');
 Route::any('sampling', 'App\Http\Controllers\SettingController@qualitySampling');
 Route::any('qa_sampling_store', 'App\Http\Controllers\SettingController@qualitySamplingStore');
+Route::any('qa_sampling_update', 'App\Http\Controllers\SettingController@qualitySamplingUpdate');
+
 
 Auth::routes();
 
