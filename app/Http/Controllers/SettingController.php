@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
 use App\Models\QualitySampling;
+use App\Models\QualitySamplingHistory;
+use Illuminate\Support\Str;
+use App\Http\Helper\Admin\Helpers as Helpers;
 
 class SettingController extends Controller
 {
@@ -51,7 +54,7 @@ class SettingController extends Controller
             try {
                 $data =  $request->all();
                 $data['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
-                QualitySampling::create($data);
+                 QualitySampling::create($data);
                 return redirect('/sampling' . '?parent=' . request()->parent . '&child=' . request()->child);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
@@ -59,6 +62,29 @@ class SettingController extends Controller
         } else {
             return redirect('/');
         }
+    }
 
+    public function qualitySamplingUpdate(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                $data =  $request->all();
+                $data['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
+                $existingRecord = QualitySampling::where('id',$data["record_id"])->first();
+                if($existingRecord) {//dd($data,$existingRecord);//need to maintain history
+                    $historyRecord = $existingRecord->toArray();
+                    $historyRecord['quality_sampling_id']= $historyRecord['id'];
+                    unset($historyRecord['id']);
+                    QualitySamplingHistory::create($historyRecord);
+                    $existingRecord->update($data);
+                } else {
+                   QualitySampling::create($data);
+                }
+                return redirect('/sampling' . '?parent=' . request()->parent . '&child=' . request()->child);
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/');
+        }
     }
 }
