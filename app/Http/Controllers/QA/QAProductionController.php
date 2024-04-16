@@ -698,11 +698,11 @@ class QAProductionController extends Controller
                 if($datasRecord != null) {
                   $datasRecord->update($data);
                   $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                  $record->update( ['claim_status' => $data['claim_status'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
+                  $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
                  } else {
                     $data['parent_id'] = $data['idValue'];
                     $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                    $record->update( ['claim_status' => $data['claim_status'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
+                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
                    $modelClass::create($data);
                 }
                 $currentTime = Carbon::now();
