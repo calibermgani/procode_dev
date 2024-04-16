@@ -81,7 +81,7 @@
                                         ) {
                                             if (class_exists($modelClass)) {
                                                 $assignedCount = $modelClass
-                                                    ::where('claim_status', 'CE_Completed')
+                                                    ::whereIn('claim_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->count();
                                                 $completedCount = $modelClass
                                                     ::where('claim_status', 'QA_Completed')
@@ -99,7 +99,7 @@
                                         } elseif ($loginEmpId) {
                                             if (class_exists($modelClass)) {
                                                 $assignedCount = $modelClass
-                                                    ::where('claim_status','CE_Completed')
+                                                    ::whereIn('claim_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->where('QA_emp_id', $loginEmpId)
                                                     ->count();
                                                 $completedCount = $modelClass
