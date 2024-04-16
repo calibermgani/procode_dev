@@ -5,20 +5,11 @@
                     <div class="card-body p-0">
                         @php
                              $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
-                            //$encodedId = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(Str::lower($databaseConnection));
-                        @endphp
+                         @endphp
                         <div class="card-header border-0 px-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
-                                        class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
-                                        style="width: 1.05rem !important;color: #000000 !important;margin-left: 4px !important;">
-                                        <path fill-rule="evenodd"
-                                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                                    </svg>
-                                </span> --}}
-                                <span class="project_header" style="margin-left: 4px !important;">Practice List</span>
+                                    <span class="project_header" style="margin-left: 4px !important;">Practice List</span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
@@ -31,16 +22,12 @@
                             data-wizard-clickable="true" style="margin-top:-2rem !important">
                             <div class="wizard-nav">
                                 <div class="wizard-steps">
-                                    <!--begin:: Tab Menu View -->
                                     <div class="wizard-step mb-0 one" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Assigned</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $assignedCount }}
-                                                    </div> --}}
-                                                    @include('CountVar.countRectangle', ['count' => $assignedCount])
+                                                       @include('CountVar.countRectangle', ['count' => $assignedCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -50,10 +37,7 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Pending</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $pendingCount }}
-                                                    </div> --}}
-                                                    @include('CountVar.countRectangle', ['count' => $pendingCount])
+                                                      @include('CountVar.countRectangle', ['count' => $pendingCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -63,10 +47,7 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Hold</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $holdCount }}
-                                                    </div> --}}
-                                                    @include('CountVar.countRectangle', ['count' => $holdCount])
+                                                      @include('CountVar.countRectangle', ['count' => $holdCount])
                                                 </div>
                                             </div>
                                         </div>
@@ -76,37 +57,28 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Completed</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab-selected">
-                                                        {{ $completedCount }}
-                                                    </div> --}}
-                                                    @include('CountVar.countRectangle', ['count' => $completedCount])
+                                                      @include('CountVar.countRectangle', ['count' => $completedCount])
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="wizard-step mb-0 five" data-wizard-type="done">
+                                    {{-- <div class="wizard-step mb-0 five" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Rework</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $reworkCount }}
-                                                    </div> --}}
-                                                    @include('CountVar.countRectangle', ['count' => $reworkCount])
+                                                        @include('CountVar.countRectangle', ['count' => $reworkCount])
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
                                                     <div class="wizard-title" style="display: flex; align-items: center;">
                                                         <h6 style="margin-right: 5px;">Duplicate</h6>
-                                                        {{-- <div class="rounded-circle code-badge-tab">
-                                                            {{ $duplicateCount }}
-                                                        </div> --}}
-                                                        @include('CountVar.countRectangle', ['count' => $duplicateCount])
+                                                           @include('CountVar.countRectangle', ['count' => $duplicateCount])
                                                     </div>
                                                 </div>
                                             </div>
@@ -118,41 +90,11 @@
 
                         <div class="card card-custom custom-top-border">
                             <div class="card-body py-0 px-7">
-                                {{-- <input type="hidden" value={{ $databaseConnection }} id="dbConnection">
-                                <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
-                                <input type="hidden" value={{ $clientName }} id="clientName">
+                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
                                 <div class="table-responsive pt-5 pb-5 clietnts_table">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
                                         id="client_completed_list">
-                                        {{-- <thead>
-
-                                            <tr>
-                                                @if ($completedProjectDetails->contains('key', 'value'))
-                                                    @foreach ($completedProjectDetails[0]->getAttributes() as $columnName => $columnValue)
-                                                        @php
-                                                            $columnsToExclude = ['id','QA_emp_id', 'created_at', 'updated_at', 'deleted_at'];
-                                                        @endphp
-                                                        @if (!in_array($columnName, $columnsToExclude))
-                                                            <th style="width:12%"><input type="hideen"
-                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
-                                                            </th>
-                                                        @endif
-                                                    @endforeach
-                                                    <th style="width:16%">Action</th>
-                                                @else
-                                                    @foreach ($columnsHeader as $columnName => $columnValue)
-                                                        <th style="width:12%"><input type="hidden"
-                                                                value={{ $columnValue }}>
-                                                            {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
-                                                        </th>
-                                                    @endforeach
-                                                @endif
-                                                <th style="width:16%">Action</th>
-                                            </tr>
-
-
-                                        </thead> --}}
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
@@ -184,28 +126,17 @@
                                                             class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button></td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
-                                                                {{-- <td style="max-width: 300px;white-space: normal;">
-                                                                    @if (str_contains($columnValue, '-') && strtotime($columnValue))
-                                                                        {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                    @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
-                                                                            {{ str_replace('CE_', '', $columnValue) }}
-                                                                        @else
-                                                                            {{ $columnValue }}
-                                                                        @endif
-                                                                    @endif
-                                                                </td> --}}
-                                                                @if ($columnName != 'id')
+                                                              @if ($columnName != 'id')
                                                                 <td style="max-width: 300px;
                                                                 white-space: normal;">
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
-                                                                            {{ str_replace('CE_', '', $columnValue) }}
+                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                            {{ str_replace('QA_', '', $columnValue) }}
                                                                         @else
                                                                             {{ $columnValue }}
                                                                         @endif
@@ -267,20 +198,17 @@
 
                                             <div class="col-md-4">
                                                 <div class="align-items-center" style="display: -webkit-box !important;">
-                                                    <!-- Round background for the first letter of the project name -->
                                                     <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
                                                         <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
                                                     </div>&nbsp;&nbsp;
                                                     <div>
-                                                        <!-- Project name -->
-                                                        <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
+                                                          <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                             {{ ucfirst($clientName->project_name) }}
                                                         </h4>
                                                         @if($practiceName != '')
                                                          <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
                                                         @endif
                                                     </div>&nbsp;&nbsp;
-                                                    <!-- Oval background for project status -->
                                                     <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
                                                         <span id="title_status_view"></span>
                                                     </div>
@@ -288,10 +216,7 @@
                                             </div>
 
                                         <div class="col-md-8 d-flex justify-content-end" style="display: -webkit-box !important;">
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                            <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
+                                             <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
                                         </div>
 
                                             <button type="button" class="close comment_close" data-dismiss="modal"
@@ -316,11 +241,6 @@
                                                                 $data->label_name,
                                                             ),
                                                         );
-                                                        // $inputType = $data->input_type;
-                                                        // $options =
-                                                        //     $data->options_name != null
-                                                        //         ? explode(',', $data->options_name)
-                                                        //         : null;
                                                     @endphp
 
                                                         <label
@@ -340,16 +260,16 @@
                                                     @if (count($popupEditableFields) > 0)
                                                         @php $count = 0; @endphp
                                                         @foreach ($popupEditableFields as $key => $data)
-                                                        @php
-                                                        $labelName = $data->label_name;
-                                                        $columnName = Str::lower(
-                                                            str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
-                                                        );
+                                                            @php
+                                                            $labelName = $data->label_name;
+                                                            $columnName = Str::lower(
+                                                                str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
+                                                            );
 
-                                                    @endphp
-                                                    @if ($count % 2 == 0)
-                                                        <div class="row" id={{ $columnName }}>
-                                                    @endif
+                                                            @endphp
+                                                            @if ($count % 2 == 0)
+                                                                <div class="row" id={{ $columnName }}>
+                                                            @endif
                                                         <div class="col-md-6">
                                                             <div class="form-group row">
                                                                 <label
@@ -363,22 +283,78 @@
                                                                 <div></div>
                                                             </div>
                                                         </div>
+                                                        @php $count++; @endphp
+                                                        @if ($count % 2 == 0 || $loop->last)
+                                                        </div>
+                                                        @endif
+                                                        @endforeach
+                                                    @endif
+                                                    <hr>
+                                                    <h6 class="title-h6">QA</h6>&nbsp;&nbsp;
+                                                    @if (count($popupQAEditableFields) > 0)
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($popupQAEditableFields as $key => $data)
+                                                        @php
+                                                        $labelName = $data->label_name;
+                                                        $columnName = Str::lower(
+                                                            str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
+                                                        );
+
+                                                        @endphp
+                                                        @if ($count % 2 == 0)
+                                                            <div class="row" id={{ $columnName }}>
+                                                        @endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group row">
+                                                            <label
+                                                                class="col-md-12">
+                                                                {{ $labelName }}
+                                                            </label>
+                                                            <label class="col-md-12 pop-non-edt-val"
+                                                            id={{ $columnName }}>
+                                                        </label>
+
+                                                            <div></div>
+                                                        </div>
+                                                    </div>
                                                     @php $count++; @endphp
                                                     @if ($count % 2 == 0 || $loop->last)
                                                     </div>
                                                     @endif
-                                                        @endforeach
-                                                    @endif
-                                                    <div class="col-md-6">
-                                                        <div class="form-group row" style="margin-left: -2rem">
-                                                            <label class="col-md-12">
-                                                                Claim Status
-                                                            </label>
-                                                            <label class="col-md-12 pop-non-edt-val"
-                                                            id="claim_status">
-                                                        </label>
+                                                    @endforeach
+                                                @endif
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        Claim Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="claim_status">
+                                                                </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        QA Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="qa_status_view"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        QA Sub Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="qa_sub_status_view"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -390,9 +366,7 @@
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
-
                             </div>
                         @endif
                 </div>
@@ -420,10 +394,8 @@
                                 <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
                             </div>
                             <div class="modal-footer">
-                                {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
-                                <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
-                                <!-- Additional buttons can be added here -->
-                            </div>
+                                 <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -493,7 +465,7 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_completed_'+date,
+                    "filename": 'procode_qa_completed_'+date,
                     "exportOptions": {
                         "columns": ':not(.notexport)'// Exclude first two columns
                     }
@@ -507,9 +479,7 @@
                 var clientName = $('#clientName').val();
                 var subProjectName = $('#subProjectName').val();
                 $(document).on('click', '.clickable-view', function(e) {
-                    // var record_id = $(this).closest('tr').find('td:eq(0)').text();
-                    // var record_id = $(this).closest('tr').find('td:eq(1)').text();
-                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
+                     var record_id =  $(this).closest('tr').find('#table_id').text();
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -528,18 +498,17 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_view_details') }}",
+                        url: "{{ url('qa_production/qa_client_view_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
                             clientName: clientName,
                             subProjectName: subProjectName,
-                            // urlDynamicValue: urlDynamicValue
-                        },
+                           },
                         success: function(response) {
                             if (response.success == true) {
 
-                                $('#myModal_view').modal('show');
+                                $('#myModal_view').modal('show');console.log(response.clientData,headers,'header');
                                 handleClientData(response.clientData,headers);
                             } else {
                                 $('#myModal_view').modal('hide');
@@ -548,8 +517,6 @@
                         },
                     });
                     function handleClientData(clientData,headers) {
-                        console.log(clientData, 'clientData',headers,clientData.id);
-
                     $.each(headers, function(index, header) {
                         value = clientData[header];
                         $('label[id="' + header + '"]').html("");
@@ -557,29 +524,25 @@
                         var values = value.split('_el_');
                         var formattedDatas = [];
                         values.forEach(function(data, index) {
-                            // if (data.includes('-')) {
-                            //     var formattedData = formatDate(data);
-                            // } else {
-                            //     var formattedData = data;
-                            // }
-                            // var span = $('<span>').addClass('date-label').text(formattedData);
                             var circle = $('<span>').addClass('circle');
                             var span = $('<span>').addClass('date-label').text(data);
                                 span.prepend(circle);
                                    formattedDatas.push(span);
-                        }); console.log(formattedDatas,'formattedDatas');
+                        });
                         formattedDatas.forEach(function(span, index) {
-
                             $('label[id="' + header + '"]').append(span);
-                            // Add comma after each span except the last one
-
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('CE_')) {
-                                value = value.replace('CE_', '');
+                        if (header === 'claim_status' && value.includes('QA_')) {
+                                value = value.replace('QA_', '');
                                 $('#title_status_view').text(value);
                         }
-
+                        if (header == 'QA_status_code') {
+                            $('label[id="qa_status_view"]').text(value);
+                        }
+                        if (header == 'QA_sub_status_code') {
+                            $('label[id="qa_sub_status_view"]').text(value);
+                        }
                        $('label[id="' + header + '"]').text(value);
                     }
 
@@ -588,28 +551,26 @@
                         var formattedDatas = parts[1] + '/' + parts[2] + '/' + parts[0];
                         return formattedDatas;
                     }
-                        // $('label[id="' + header + '"]').text(value);
-                    console.log("Index: " + index + ", Value: " + header,value);
+
                   });
 
                }
             });
-            // var encodedProjectId = $('#encodeddbConnection').val();
 
             $(document).on('click', '.one', function() {
-                window.location.href = baseUrl + 'projects_assigned/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_assigned/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] +
                     "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.two', function() {
-                window.location.href = baseUrl + 'projects_pending/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_pending/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.three', function() {
-                window.location.href = baseUrl + 'projects_hold/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_hold/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
@@ -617,19 +578,18 @@
                 window.location.href = "{{ url('#') }}";
             })
             $(document).on('click', '.five', function() {
-                window.location.href = baseUrl + 'projects_Revoke/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_Revoke/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.six', function() {
-                window.location.href = baseUrl + 'projects_duplicate/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_duplicate/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
 
             $(document).on('click', '#sop_click', function(e) {
-                console.log('sop modal');
-                $('#myModal_sop').modal('show');
+                 $('#myModal_sop').modal('show');
             });
                 $('#myModal_sop').on('shown.bs.modal', function () {
                      $('#myModal_view').addClass('modal-right');

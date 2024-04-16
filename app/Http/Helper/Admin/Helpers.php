@@ -549,4 +549,23 @@ class Helpers
         $userName = $data['user_name']['user_name'];
 		return $userName;
 	}
+
+    public static function getUserEmpIdById($id)
+	{
+        $payload = [
+            'token' => '1a32e71a46317b9cc6feb7388238c95d',
+            'user_id' => $id
+        ];
+        $client = new Client();
+        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_user_emp_id_by_id', [
+            'json' => $payload
+        ]);
+        if ($response->getStatusCode() == 200) {
+            $data = json_decode($response->getBody(), true);
+        } else {
+            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+        }
+        $userName = $data['user_list']['emp_id'];
+		return $userName;
+	}
 }

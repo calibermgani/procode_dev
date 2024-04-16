@@ -65,6 +65,15 @@ var KTSelect2 = function() {
         $('.kt_select2_priority').select2({
             placeholder: "Priority"
         });
+        $('.kt_select2_qa_status').select2({
+            placeholder: "Status"
+        });
+        $('.kt_select2_qa_sub_status').select2({
+            placeholder: "Sub Status"
+        });
+        $('.kt_select2_qa_required_sampling').select2({
+            placeholder: "QA Required"
+        });
         // loading data from array
         // var data = [{
         //     id: 0,

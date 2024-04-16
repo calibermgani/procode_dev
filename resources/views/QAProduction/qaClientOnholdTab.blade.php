@@ -10,14 +10,6 @@
                         <div class="card-header border-0 px-4">
                             <div class="row">
                                     <div class="col-md-6">
-                                    {{-- <span class="svg-icon svg-icon-primary svg-icon-lg ">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" fill="currentColor"
-                                            class="bi bi-arrow-left project_header_row" viewBox="0 0 16 16"
-                                            style="width: 1.05rem !important;color: #000000 !important;margin-left: 4px !important;">
-                                            <path fill-rule="evenodd"
-                                                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                                        </svg>
-                                    </span> --}}
                                     <span class="project_header" style="margin-left: 4px !important;">Practice List</span>
                                 </div>
                                 <div class="col-md-6">
@@ -31,15 +23,11 @@
                             data-wizard-clickable="true" style="margin-top:-2rem !important">
                             <div class="wizard-nav">
                                 <div class="wizard-steps">
-                                    <!--begin:: Tab Menu View -->
                                     <div class="wizard-step mb-0 one" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Assigned</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $assignedCount }}
-                                                    </div> --}}
                                                     @include('CountVar.countRectangle', ['count' => $assignedCount])
                                                 </div>
                                             </div>
@@ -50,9 +38,6 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Pending</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $pendingCount }}
-                                                    </div> --}}
                                                     @include('CountVar.countRectangle', ['count' => $pendingCount])
                                                 </div>
                                             </div>
@@ -63,9 +48,6 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Hold</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab-selected">
-                                                        {{ $holdCount }}
-                                                    </div> --}}
                                                     @include('CountVar.countRectangle', ['count' => $holdCount])
                                                 </div>
                                             </div>
@@ -81,28 +63,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="wizard-step mb-0 five" data-wizard-type="done">
+                                    {{-- <div class="wizard-step mb-0 five" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
                                                     <h6 style="margin-right: 5px;">Rework</h6>
-                                                    {{-- <div class="rounded-circle code-badge-tab">
-                                                        {{ $reworkCount }}
-                                                    </div> --}}
                                                     @include('CountVar.countRectangle', ['count' => $reworkCount])
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
                                         <div class="wizard-step mb-0 six" data-wizard-type="done">
                                             <div class="wizard-wrapper py-2">
                                                 <div class="wizard-label p-2 mt-2">
                                                     <div class="wizard-title" style="display: flex; align-items: center;">
                                                         <h6 style="margin-right: 5px;">Duplicate</h6>
-                                                            {{-- <div class="rounded-circle code-badge-tab">
-                                                                {{ $duplicateCount }}
-                                                            </div> --}}
                                                             @include('CountVar.countRectangle', ['count' => $duplicateCount])
                                                     </div>
                                                 </div>
@@ -115,8 +91,6 @@
 
                         <div class="card card-custom custom-top-border">
                             <div class="card-body py-0 px-7">
-                                {{-- <input type="hidden" value={{ $databaseConnection }} id="dbConnection">
-                                <input type="hidden" value={{ $encodedId }} id="encodeddbConnection"> --}}
                                 <input type="hidden" value={{ $clientName }} id="clientName">
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
                                 <div class="table-responsive pt-5 pb-5 clietnts_table">
@@ -149,9 +123,8 @@
                                                     <tr
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                                         <td>
-                                                            @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
-                                                            {{-- @if (empty($assignedDropDown)) --}}
-                                                            @else
+                                                            @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->QA_emp_id)
+                                                             @else
                                                                 @if (empty($existingCallerChartsWorkLogs))
                                                                     <button class="task-start clickable-row start"
                                                                         title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
@@ -166,7 +139,7 @@
                                                         </td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                     @if ($columnName != 'id')
@@ -175,8 +148,8 @@
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
-                                                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
-                                                                                {{ str_replace('CE_', '', $columnValue) }}
+                                                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                                {{ str_replace('QA_', '', $columnValue) }}
                                                                             @else
                                                                                 {{ $columnValue }}
                                                                             @endif
@@ -231,8 +204,6 @@
                                         $subProjectName = '--';
                                     }
                              @endphp
-
-
                                  <div class="modal-content" style="margin-top: 7rem">
                                      <div class="modal-header" style="background-color: #139AB3;height: 84px">
                                         <div class="row" style="height: auto;width:100%">
@@ -256,16 +227,13 @@
                                                 </div>
 
                                             <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
-                                                {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                                <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
                                                 <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                                {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
-                                            </div>
+                                             </div>
                                         </div>
                                      </div>
                                      {!! Form::open([
                                          'url' =>
-                                             url('project_update/' . $projectName . '/' . $subProjectName) .
+                                             url('qa_production/qa_project_update/' . $projectName . '/' . $subProjectName) .
                                              '?parent=' .
                                              request()->parent .
                                              '&child=' .
@@ -293,11 +261,6 @@
                                                              $data->label_name,
                                                          ),
                                                      );
-                                                    //  $inputType = $data->input_type;
-                                                    //  $options =
-                                                    //      $data->options_name != null
-                                                    //          ? explode(',', $data->options_name)
-                                                    //          : null;
                                                  @endphp
 
                                                      <label
@@ -450,9 +413,9 @@
                                                      @endforeach
                                                  @endif
                                                  <div class="row mt-4">
-                                                    <div class="col-md-6">
+                                                    {{-- <div class="col-md-6">
                                                         <input type="hidden" name="invoke_date">
-                                                        <input type="hidden" name="CE_emp_id">
+                                                        <input type="hidden" name="QA_emp_id">
                                                         <div class="form-group row" >
                                                             <label class="col-md-12 required">
                                                                 Claim Status
@@ -462,11 +425,10 @@
                                                                     'claim_status',
                                                                     [
                                                                         '' => '--Select--',
-                                                                        'CE_Inprocess' => 'Inprocess',
-                                                                        'CE_Pending' => 'Pending',
-                                                                        'CE_Completed' => 'Completed',
-                                                                        //  'CE_Clarification' => 'Clarification',
-                                                                        'CE_Hold' => 'Hold',
+                                                                        'QA_Inprocess' => 'Inprocess',
+                                                                        'QA_Pending' => 'Pending',
+                                                                        'QA_Completed' => 'Completed',
+                                                                        'QA_Hold' => 'Hold',
                                                                     ],
                                                                     null,
                                                                     [
@@ -478,19 +440,261 @@
                                                                 ) !!}
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    </div> --}}
+                                                    {{-- <div class="col-md-6">
                                                             <div class="form-group row" >
-                                                                <label class="col-md-12 required" id="ce_hold_reason_label">
+                                                                <label class="col-md-12 required" id="qa_hold_reason_label">
                                                                     Hold Reason
                                                                 </label>
                                                                 <div class="col-md-10">
-                                                                    {!! Form::textarea('ce_hold_reason',  null, ['class' => 'text-black form-control','rows' => 3,'id' => 'ce_hold_reason_editable']) !!}
+                                                                    {!! Form::textarea('qa_hold_reason',  null, ['class' => 'text-black form-control','rows' => 3,'id' => 'qa_hold_reason_editable']) !!}
 
                                                                 </div>
                                                             </div>
+                                                    </div> --}}
+                                                </div>
+                                                <hr>
+                                                <h6 class="title-h6">QA</h6>&nbsp;&nbsp;
+                                            @if (count($popupQAEditableFields) > 0)
+                                                @php $count = 0; @endphp
+                                                @foreach ($popupQAEditableFields as $key => $data)
+                                                        @php
+                                                            $labelName = $data->label_name;
+                                                            $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data->label_name));
+                                                            $inputType = $data->input_type;
+                                                            $options = $data->options_name != null ? explode(',', $data->options_name) : null;
+                                                            $associativeOptions = [];
+                                                            if ($options !== null) {
+                                                                foreach ($options as $option) {
+                                                                    $associativeOptions[$option] = $option;
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        @if ($count % 2 == 0)
+                                                            <div class="row" id={{ $columnName }}>
+                                                        @endif
+                                                        <div class="col-md-6">
+                                                            <div class="form-group row row_mar_bm">
+                                                                <label class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
+                                                                    {{ $labelName }}
+                                                                </label>
+                                                                <div class="col-md-10">
+                                                                    @if ($options == null)
+                                                                        @if ($inputType != 'date_range')
+                                                                            {!! Form::$inputType($columnName . '[]', null, [
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'cursor:pointer',
+                                                                                'rows' => 3,
+                                                                                'id' => $columnName,
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @else
+                                                                            {!! Form::text($columnName . '[]', null, [
+                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'cursor:pointer',
+                                                                                'id' => 'date_range',
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @endif
+                                                                    @else
+                                                                        @if ($inputType == 'select')
+                                                                            {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'autocomplete' => 'none',
+                                                                                'style' => 'cursor:pointer',
+                                                                                'id' => $columnName,
+                                                                                $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                            ]) !!}
+                                                                        @elseif ($inputType == 'checkbox')
+                                                                            <p id="check_p1" style="display:none;color:red; margin-left: 3px;">
+                                                                                Checkbox
+                                                                                is mandatory</p>
+                                                                            <div class="form-group row">
+                                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="checkbox-inline mt-2">
+                                                                                            <label class="checkbox pop-non-edt-val"
+                                                                                                style="word-break: break-all;">
+                                                                                                {!! Form::$inputType($columnName . '[]', $options[$i], false, [
+                                                                                                    'class' => $columnName,
+                                                                                                    'id' => $columnName,
+                                                                                                ]) !!}{{ $options[$i] }}
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endfor
+                                                                            </div>
+                                                                        @elseif ($inputType == 'radio')
+                                                                            <p id="radio_p1" style="display: none; color: red; margin-left: 3px;">
+                                                                                Radio
+                                                                                is mandatory</p>
+                                                                            <div class="form-group row">
+                                                                                @for ($i = 0; $i < count($options); $i++)
+                                                                                    <div class="col-md-6">
+                                                                                        <div class="radio-inline mt-2">
+                                                                                            <label class="radio pop-non-edt-val"
+                                                                                                style="word-break: break-all;">
+                                                                                                {!! Form::$inputType($columnName, $options[$i], false, [
+                                                                                                    'class' => $columnName,
+                                                                                                ]) !!}{{ $options[$i] }}
+                                                                                                <span></span>
+                                                                                            </label>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                @endfor
+                                                                            </div>
+                                                                        @endif
+                                                                    @endif
+
+                                                                </div>
+                                                                <div class="col-md-1 col-form-label pt-0 pb-4" style="margin-left: -1.3rem;">
+                                                                    <input type="hidden"
+                                                                        value="{{ $associativeOptions != null ? json_encode($associativeOptions) : null }}"
+                                                                        class="add_options">
+
+                                                                    @if ($data->field_type_1 == 'multiple')
+                                                                        <i class="fa fa-plus add_more" id="add_more_{{ $columnName }}"
+                                                                            style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
+                                                                            class="add_labelName">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $columnName : '' }}"
+                                                                            class="add_columnName">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? $inputType : '' }}"
+                                                                            class="add_inputtype">
+                                                                        <input type="hidden"
+                                                                            value="{{ $data->field_type_1 == 'multiple' ? ($data->field_type_2 == 'mandatory' ? 'required' : '') : '' }}"
+                                                                            class="add_mandatory">
+                                                                    @endif
+                                                                </div>
+                                                                <div></div>
+                                                            </div>
+                                                        </div>
+                                                            @php $count++; @endphp
+                                                            @if ($count % 2 == 0 || $loop->last)
+                                                            </div>
+                                                            @endif
+                                                @endforeach
+                                            @endif
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <input type="hidden" name="invoke_date">
+                                                <input type="hidden" name="QA_emp_id">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12 required">
+                                                        Claim Status
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        {!! Form::Select(
+                                                            'claim_status',
+                                                            [
+                                                                '' => '--Select--',
+                                                                'QA_Inprocess' => 'Inprocess',
+                                                                'QA_Pending' => 'Pending',
+                                                                'QA_Completed' => 'Completed',
+                                                                'QA_Hold' => 'Hold',
+                                                                'Revoke' =>'Revoke'
+                                                            ],
+                                                            null,
+                                                            [
+                                                                'class' => 'form-control white-smoke  pop-non-edt-val ',
+                                                                'autocomplete' => 'none',
+                                                                'id' => 'claim_status',
+                                                                'style' => 'cursor:pointer',
+                                                            ],
+                                                        ) !!}
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12 required" id="qa_hold_reason_label" style ="display:none">
+                                                        Hold Reason
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        {!! Form::textarea('qa_hold_reason', null, [
+                                                            'class' => 'text-black form-control',
+                                                            'rows' => 3,
+                                                            'id' => 'qa_hold_reason_editable',
+                                                            'style' => 'display:none',
+                                                        ]) !!}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <input type="hidden" name="invoke_date">
+                                                <input type="hidden" name="QA_emp_id">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12 required">
+                                                        QA Status
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        {!! Form::Select(
+                                                            'QA_status_code',
+                                                            [
+                                                                '' => '--Select--',
+                                                                'CPT' => 'CPT',
+                                                                'ICD' => 'ICD',
+                                                                'Modifier' => 'Modifier',
+                                                                'Units' => 'Units',
+                                                                'Provider' => 'Provider',
+                                                                'Others' => 'Others',
+                                                            ],
+                                                            null,
+                                                            [
+                                                                'class' => 'form-control white-smoke  kt_select2_qa_status pop-non-edt-val ',
+                                                                'autocomplete' => 'none',
+                                                                'id' => 'qa_status',
+                                                                'style' => 'cursor:pointer',
+                                                            ],
+                                                        ) !!}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12 required">
+                                                        QA Sub Status
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        {!! Form::Select(
+                                                            'QA_sub_status_code',
+                                                            [
+                                                                '' => '--Select--',
+                                                                'Incorrect CPT' => 'Incorrect CPT',
+                                                                'Missed CPT' => 'Missed CPT',
+                                                                'Incorrect ICD' => 'Incorrect ICD',
+                                                                'Missed ICD' => 'Missed ICD',
+                                                                'Invalid ICD' => 'Invalid ICD',
+                                                                'Incorrect Modifier' => 'Incorrect Modifier',
+                                                                'Missed modifier' => 'Missed modifier',
+                                                                'Invalid Modifier' => 'Invalid Modifier',
+                                                                'Incorrect Units' => 'Incorrect Units',
+                                                                'Incorrect provider' => 'Incorrect provider',
+                                                                'Process related' => 'Process related',
+                                                            ],
+                                                            null,
+                                                            [
+                                                                'class' => 'form-control white-smoke  kt_select2_qa_sub_status pop-non-edt-val ',
+                                                                'autocomplete' => 'none',
+                                                                'id' => 'qa_sub_status',
+                                                                'style' => 'cursor:pointer',
+                                                            ],
+                                                        ) !!}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                             </div>
                                          </div>
                                          <div class="modal-footer" style="justify-content: space-between;">
@@ -552,12 +756,10 @@
                                             <div class="row" style="height: auto;width:100%">
                                                 <div class="col-md-4">
                                                     <div class="align-items-center" style="display: -webkit-box !important;">
-                                                        <!-- Round background for the first letter of the project name -->
                                                         <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
                                                             <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
                                                         </div>&nbsp;&nbsp;
                                                         <div>
-                                                            <!-- Project name -->
                                                             <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                                 {{ ucfirst($clientName->project_name) }}
                                                             </h6>
@@ -565,23 +767,16 @@
                                                             <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
                                                             @endif
                                                         </div>&nbsp;&nbsp;
-                                                        <!-- Oval background for project status -->
                                                         <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
                                                             <span id="title_status_view"></span>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
-                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                                    <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
-                                                    <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                                    {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
-                                                </div>
+                                                    <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
+                                                        <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
+                                                    </div>
                                             </div>
-                                            {{-- <button type="button" class="close comment_close" data-dismiss="modal"
-                                                aria-hidden="true" style="color:#ffffff !important">&times;</button> --}}
-
                                         </div>
 
                                         <div class="modal-body">
@@ -600,11 +795,6 @@
                                                                 $data->label_name,
                                                             ),
                                                         );
-                                                        // $inputType = $data->input_type;
-                                                        // $options =
-                                                        //     $data->options_name != null
-                                                        //         ? explode(',', $data->options_name)
-                                                        //         : null;
                                                     @endphp
 
                                                         <label
@@ -624,16 +814,16 @@
                                                     @if (count($popupEditableFields) > 0)
                                                         @php $count = 0; @endphp
                                                         @foreach ($popupEditableFields as $key => $data)
-                                                        @php
-                                                        $labelName = $data->label_name;
-                                                        $columnName = Str::lower(
-                                                            str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
-                                                        );
+                                                            @php
+                                                            $labelName = $data->label_name;
+                                                            $columnName = Str::lower(
+                                                                str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
+                                                            );
 
-                                                    @endphp
-                                                    @if ($count % 2 == 0)
-                                                        <div class="row" id={{ $columnName }}>
-                                                    @endif
+                                                            @endphp
+                                                            @if ($count % 2 == 0)
+                                                                <div class="row" id={{ $columnName }}>
+                                                            @endif
                                                         <div class="col-md-6">
                                                             <div class="form-group row">
                                                                 <label
@@ -647,12 +837,46 @@
                                                                 <div></div>
                                                             </div>
                                                         </div>
+                                                        @php $count++; @endphp
+                                                        @if ($count % 2 == 0 || $loop->last)
+                                                        </div>
+                                                        @endif
+                                                        @endforeach
+                                                    @endif
+                                                    <hr>
+                                                    <h6 class="title-h6">QA</h6>&nbsp;&nbsp;
+                                                    @if (count($popupQAEditableFields) > 0)
+                                                    @php $count = 0; @endphp
+                                                    @foreach ($popupQAEditableFields as $key => $data)
+                                                        @php
+                                                        $labelName = $data->label_name;
+                                                        $columnName = Str::lower(
+                                                            str_replace([' ', '/'], ['_', '_else_'], $data->label_name),
+                                                        );
+
+                                                        @endphp
+                                                        @if ($count % 2 == 0)
+                                                            <div class="row" id={{ $columnName }}>
+                                                        @endif
+                                                    <div class="col-md-6">
+                                                        <div class="form-group row">
+                                                            <label
+                                                                class="col-md-12">
+                                                                {{ $labelName }}
+                                                            </label>
+                                                            <label class="col-md-12 pop-non-edt-val"
+                                                            id={{ $columnName }}>
+                                                        </label>
+
+                                                            <div></div>
+                                                        </div>
+                                                    </div>
                                                     @php $count++; @endphp
                                                     @if ($count % 2 == 0 || $loop->last)
                                                     </div>
                                                     @endif
-                                                        @endforeach
-                                                    @endif
+                                                    @endforeach
+                                                @endif
                                                         <div class="row mt-4">
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
@@ -669,7 +893,27 @@
                                                                     <label class="col-md-12">
                                                                         Hold Reason
                                                                     </label>
-                                                                    <label class="col-md-12 pop-non-edt-val" id="ce_hold_reason"></label>
+                                                                    <label class="col-md-12 pop-non-edt-val" id="qa_hold_reason"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-4">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        QA Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="qa_status_view"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-12">
+                                                                        QA Sub Status
+                                                                    </label>
+                                                                    <label class="col-md-12 pop-non-edt-val"
+                                                                    id="qa_sub_status_view"></label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -714,10 +958,8 @@
                                         <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
                                     </div>
                                     <div class="modal-footer">
-                                        {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
-                                        <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
-                                        <!-- Additional buttons can be added here -->
-                                    </div>
+                                          <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
+                                     </div>
                                 </div>
                             </div>
                         </div>
@@ -773,8 +1015,6 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(param);
             }
-
-            // Get the URL parameter dynamically
             const url = window.location.href;
             const startIndex = url.indexOf('projects_') + 'projects_'.length;
             const endIndex = url.indexOf('/', startIndex);
@@ -787,13 +1027,12 @@
                 $('.' + clumnClassName).each(function() {
                     ids.push($(this).attr('id'));
                 });
-                var lastElement = ids[ids.length - 1];console.log(ids,'$(this)',clumnClassName,lastElement);
+                var lastElement = ids[ids.length - 1];
                 var lastId = lastElement.replace(new RegExp('^' + clumnClassName), '');
                 if (lastId) {
                     uniqueId=lastId;
                 }
                 uniqueId++;
-               // console.log(lastId, lastElement,ids,clumnClassName,'clumnClassName',$(this).closest('.form-group').find('.add_labelName').val(),$('.'+clumnClassName).closest('.row_mar_bm').find('.add_labelName').val());
                 var labelName =$('.'+clumnClassName).closest('.row_mar_bm').find('.add_labelName').val();
                 var columnName = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_columnName').val();
                 var inputType = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_inputtype').val();
@@ -890,7 +1129,6 @@
                 }
 
                 var plusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+columnName +'"></i>';
-                // var minusButton = '<i class="fa fa-minus minus_button remove_more" id="' + uniqueId +'"></i>';
                 var newRow = '<div class="row mt-6" id="' + newElementId + '">' +
                     '<div class="col-md-10">' + newElement + '</div>' +
                     '<div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
@@ -904,9 +1142,8 @@
                      elementToRemove = 'add_more_'+clumnClassName;
                                 $('#'+elementToRemove).remove();
                                 uniqueId = uniqueId-1;
-                                removeId = uniqueId == 0 ? clumnClassName : clumnClassName+ uniqueId;console.log(removeId,'removeId');
-                                //   $('#patient_name2').closest('.row_mar_bm').find('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="' + uniqueId + '"></i>');
-                                if(uniqueId > 0) {
+                                removeId = uniqueId == 0 ? clumnClassName : clumnClassName+ uniqueId;
+                                 if(uniqueId > 0) {
                                   $('#'+lastElement).closest('.col-md-10').next('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="'+removeId +'"></i>');
                                 }
 
@@ -956,7 +1193,7 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_hold_'+date,
+                    "filename": 'procode_qa_hold_'+date,
                     "exportOptions": {
                         "columns": ':not(.notexport)'// Exclude first two columns
                     }
@@ -979,8 +1216,7 @@
                     var classArray = classes.split(' ');
                     var lastClass = classArray[classArray.length - 1];
                 }
-                // var record_id = $(this).closest('tr').find('td:eq(1)').text();
-                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
+                    var record_id =  $(this).closest('tr').find('#table_id').text();
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -999,7 +1235,7 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_completed_datas_details') }}",
+                        url: "{{ url('qa_production/qa_client_completed_datas_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
@@ -1009,7 +1245,7 @@
                         },
                         success: function(response) {
                             if(lastClass == 'start'){
-                                if (response.success == true) {console.log(response.success,'success');
+                                if (response.success == true) {
                                     $('#myModal_status').modal('show');
                                     startTime_db = response.startTimeVal;
                                     handleClientPendData(response.clientData,headers);
@@ -1023,28 +1259,24 @@
                     function handleClientPendData(clientData,headers) {
 
                         $.each(headers, function(index, header) {
-                            value = clientData[header];console.log(clientData,'clientData reason',header);
+                            value = clientData[header];
                             $('label[id="' + header + '"]').html("");
                             $('input[name="' + header + '[]"]').html("");
-                            $('textarea[id="ce_hold_reason_editable"]').val(clientData['ce_hold_reason']);
+                            $('textarea[id="qa_hold_reason_editable"]').val(clientData['qa_hold_reason']);
                             if (/_el_/.test(value)) {
                                 elementToRemove = 'add_more_'+header;
                                 $('#'+elementToRemove).remove();
-                             //   console.log( $('.'+header).closest('.row_mar_bm').find('.col-md-1'),'col',header);
-                                // $('.' + header).closest('.row_mar_bm').find('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="' + header + '"></i>');//initital row minus button
-
                                 var values = value.split('_el_');
                                 var optionsJson =  $('.'+header).closest('.dynamic-field').find('.add_options').val();
                                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                                 var optionsArray = optionsObject ? Object.values(optionsObject) : null;
                                 var inputType;
                                 $('select[name="' + header + '[]"]').val(values[0]).trigger('change');
-                                // $('input[name="' + header + '[]"]').val(values[0]);
-                                $('textarea[name="' + header + '[]"]').val(values[0]);//console.log($('.'+header).attr('type'),'valuesType');
+                                $('textarea[name="' + header + '[]"]').val(values[0]);
                                 if ($('input[name="' + header + '[]"][type="checkbox"]').length > 0) {
-                                    var checkboxValues = values[0].split(','); // Split the string into an array of checkbox values
+                                    var checkboxValues = values[0].split(',');
                                     $('input[name="' + header + '[]"]').each(function() {
-                                        var checkboxValue = $(this).val(); //console.log(checkboxValue,checkboxValues,'checkboxValues');
+                                        var checkboxValue = $(this).val();
                                         var isChecked = checkboxValues.includes(checkboxValue);
                                         $(this).prop('checked', isChecked);
                                     });
@@ -1058,32 +1290,26 @@
 
 
                                     for (var i = 1; i < values.length; i++) {
-                                        var selectType;//console.log(values,'values',values[i],i,values.length);
+                                        var selectType;
                                         var isLastValue = i === values.length - 1;
-                                        var newElementId =  'dynamicElement_' + header + i;//console.log($('textarea[name="' + header + '[]"]').prop('nodeName'),'textarea');
+                                        var newElementId =  'dynamicElement_' + header + i;
                                         if ($('select[name="' + header + '[]"]').prop('tagName') != undefined) {
-                                                // Create a new <select> element
                                                 selectType = $('<select>', {
                                                     name: header + '[]',
                                                     class: 'form-control ' + header + ' white-smoke pop-non-edt-val',
                                                     id: header + i
                                                 });
 
-                                                // Add an empty default option
                                                 selectType.append($('<option>', { value: '', text: '-- Select --' }));
-
-                                                // Add options from optionsArray
                                                 optionsArray.forEach(function(option) {
                                                     selectType.append($('<option>', {
                                                         value: option,
                                                         text: option,
-                                                        selected: option == values[i]  // Set selected attribute if option matches value
+                                                        selected: option == values[i]
                                                     }));
                                                 });
-
-                                                // Append the select element to its parent
                                                 var selectWrapper = $('<div>', { class: 'col-md-10' }).append(selectType);
-                                                    if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                    if(i === values.length - 1) {
                                                       var minusButton = $('<i>', { class: 'fa fa-plus add_more', id: 'add_more_'+header });
                                                 } else {
                                                     var minusButton = $('<i>', { class: 'fa fa-minus minus_button remove_more', id: header+ i });
@@ -1094,7 +1320,7 @@
 
                                             } else if ($('textarea[name="' + header + '[]"]').prop('nodeName') != undefined) {
                                                     inputType =  '<textarea name="' + header + '[]" class="form-control ' + header + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
-                                                    if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                    if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                 } else {
                                                     var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1119,7 +1345,7 @@
                                                         });
 
                                                         inputType += '</div>';
-                                                        if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                        if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                         } else {
                                                             var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1127,7 +1353,6 @@
                                                         var span = '<div class="row mt-4" id="' + newElementId + '">' +
                                                             '<div class="col-md-10">' + inputType + '</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                                 minusButton + '</div><div></div></div>';
-                                                      //  console.log(header, 'header', $('.' + header).find('.col-md-6'));
                                                         $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                             } else if ($('input[name="' + header + '"][type="radio"]').length > 0 && Array.isArray(optionsArray)) {
                                                         inputType = '<div class="form-group row">';
@@ -1146,7 +1371,7 @@
                                                         });
 
                                                         inputType += '</div>';
-                                                        if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                        if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                         } else {
                                                             var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1154,7 +1379,6 @@
                                                         var span = '<div class="row mt-4" id="' + newElementId + '">' +
                                                             '<div class="col-md-10">' + inputType + '</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                                 minusButton + '</div><div></div></div>';
-                                                      //  console.log(header, 'header', $('.' + header).find('.col-md-6'));
                                                         $('input[name="' + header + '"]').closest('.dynamic-field').append(span);
                                             } else {
                                                 var fieldType =  $('.'+header).attr('type');
@@ -1167,8 +1391,8 @@
                                                         break;
                                                     }
                                                 }
-                                                console.log(fieldType,'fieldType',header,dateRangeClass,values);
-                                                if(dateRangeClass == 'date_range') { console.log(fieldType,'fieldType daterange',header,dateRangeClass,values);
+
+                                                if(dateRangeClass == 'date_range') {
                                                   inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control date_range ' + header + ' white-smoke pop-non-edt-val"  style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
                                                 } else {
                                                     inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
@@ -1181,7 +1405,6 @@
                                                 var span = '<div class="row mt-4"  id="' +newElementId+ '">' +
                                                     '<div class="col-md-10">'+ inputType +'</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                         minusButton +'</div><div></div></div>';
-                                                   // console.log(header,'header', $('.'+header).find('.col-md-6'));
                                                     $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                         }
                                     }
@@ -1204,9 +1427,9 @@
                                 } else {
                                     $('input[name="parentId"]').val(clientData['parent_id']);
                                     $('input[name="record_old_status"]').val(clientData['claim_status']);
-                                      if (header === 'claim_status' && value.includes('CE_')) {
+                                      if (header === 'claim_status' && value.includes('QA_')) {
                                             claimStatus = value;
-                                            value = value.replace('CE_', '');
+                                            value = value.replace('QA_', '');
                                             $('select[name="claim_status"]').val(claimStatus).trigger('change');
                                         $('#title_status').text(value);
                                     }
@@ -1216,8 +1439,14 @@
                                     if (header == 'invoke_date') {
                                         $('input[name="invoke_date"]').val(value);
                                     }
-                                    if (header == 'CE_emp_id') {
-                                        $('input[name="CE_emp_id"]').val(value);
+                                    if (header == 'QA_emp_id') {
+                                        $('input[name="QA_emp_id"]').val(value);
+                                    }
+                                    if (header == 'QA_status_code') {
+                                        $('select[name="QA_status_code"]').val(value).trigger('change');
+                                    }
+                                    if (header == 'QA_sub_status_code') {
+                                        $('select[name="QA_sub_status_code"]').val(value).trigger('change');
                                     }
                                     $('textarea[name="' + header + '[]"]').val(value);
                                     $('input[name="' + header + '[]"]').val(value);
@@ -1229,9 +1458,7 @@
                     }
             });
             $(document).on('click', '.clickable-view', function(e) {
-                    // var record_id = $(this).closest('tr').find('td:eq(0)').text();
-                    // var record_id = $(this).closest('tr').find('td:eq(1)').text();
-                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
+                    var record_id =  $(this).closest('tr').find('#table_id').text();
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -1250,7 +1477,7 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_view_details') }}",
+                        url: "{{ url('qa_production/qa_client_view_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
@@ -1269,9 +1496,7 @@
                         },
                     });
                     function handleClientData(clientData,headers) {
-                        console.log(clientData, 'clientData',headers,clientData.id);
-
-                    $.each(headers, function(index, header) {
+                      $.each(headers, function(index, header) {
                         value = clientData[header];
                         $('label[id="' + header + '"]').html("");
                     if (/_el_/.test(value)) {
@@ -1284,18 +1509,23 @@
                                     span.prepend(circle);
                                     formattedDatas.push(span);
                             }
-                        }); console.log(formattedDatas,'formattedDatas');
+                        });
                         formattedDatas.forEach(function(span, index) {
                             $('label[id="' + header + '"]').append(span);
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('CE_')) {
-                                value = value.replace('CE_', '');
+                        if (header === 'claim_status' && value.includes('QA_')) {
+                                value = value.replace('QA_', '');
                                 $('#title_status_view').text(value);
                         }
-
+                        if (header == 'QA_status_code') {
+                            $('label[id="qa_status_view"]').text(value);
+                        }
+                        if (header == 'QA_sub_status_code') {
+                            $('label[id="qa_sub_status_view"]').text(value);
+                        }
                        $('label[id="' + header + '"]').text(value);
-                       $('label[id="ce_hold_reason"]').text(clientData.ce_hold_reason);
+                       $('label[id="qa_hold_reason"]').text(clientData.qa_hold_reason);
                     }
 
                     function formatDate(dateString) {
@@ -1303,15 +1533,12 @@
                         var formattedDatas = parts[1] + '/' + parts[2] + '/' + parts[0];
                         return formattedDatas;
                     }
-                        // $('label[id="' + header + '"]').text(value);
-                    console.log("Index: " + index + ", Value: " + header,value);
                   });
 
                }
             });
             $(document).on('click', '.sop_click', function(e) {
-                console.log('sop modal');
-                $('#myModal_sop').modal('show');
+                   $('#myModal_sop').modal('show');
             });
                 $('#myModal_sop').on('shown.bs.modal', function () {
                     $('#myModal_status').addClass('modal-right');
@@ -1326,23 +1553,6 @@
 
             $(document).on('click', '#project_hold_save', function(e) {
                     e.preventDefault();
-                    $('#holdFormConfiguration').serializeArray().map(function(input) {
-                        labelName = input.name;
-                            if(labelName.substring(0, 3).toLowerCase() == "cpt") {
-                                var textValue = input.value;
-                                if(textValue.length < 4) {
-                                    js_notification('error',"The CPT value must be at least 4 characters long" );
-                                }
-                            }
-                            if(labelName.substring(0, 3).toLowerCase() == "icd") {
-                                var textValue = input.value;
-                                if(textValue.length < 3 || textValue.length > 7) {
-                                    js_notification('error', "The ICD value must be between 3 and 7 characters long" );
-                                }
-                            }
-                            return labelName;
-                    });
-
                     var fieldNames = $('#holdFormConfiguration').serializeArray().map(function(input) {
                         return input.name;
                     });
@@ -1355,14 +1565,11 @@
                         function() {
                             var fieldName = $(this).attr('name');
                             var fieldType = $(this).attr('type') || $(this).prop('tagName').toLowerCase();
-
-                             if (!requiredFields[fieldType]) {
+                            if (!requiredFields[fieldType]) {
                                 requiredFields[fieldType] = [];
                             }
-
-                              requiredFields[fieldType].push(fieldName);
+                            requiredFields[fieldType].push(fieldName);
                         });
-
                     $('input[type="radio"]').each(function() {
                         var groupName = $(this).attr("name");
                          if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
@@ -1377,7 +1584,6 @@
 
                     $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
-                        console.log(groupName, 'chckkkkkkkk');
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
                                 if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
@@ -1422,18 +1628,18 @@
                                             }
                                             return false;
                                         }
-                                        // if(label_id.substring(0, 3) == "cpt") {
-                                        //     var textValue = $(this).val();
-                                        //     if(textValue.length < 4) {
-                                        //         js_notification('error',"The CPT value must be at least 4 characters long" );
-                                        //     }
-                                        //  }
-                                        // if(label_id.substring(0, 3) == "icd") {
-                                        //     var textValue = $(this).val();
-                                        //     if(textValue.length < 3 || textValue.length > 7) {
-                                        //         js_notification('error', "The ICD value must be between 3 and 7 characters long" );
-                                        //     }
-                                        // }
+                                        if(label_id == "cpt") {
+                                            var textValue = $(this).val();
+                                            if(textValue.length < 4) {
+                                                js_notification('error',"The " + label_id.toUpperCase() + " value must be at least 3 characters long" );
+                                            }
+                                        }
+                                        if(label_id == "icd") {
+                                            var textValue = $(this).val();
+                                            if(textValue.length < 3 || textValue.length > 7) {
+                                                js_notification('error', "The " + label_id.toUpperCase() + " value must be between 3 and 7 characters long" );
+                                            }
+                                        }
                                     });
                                 }
                             });
@@ -1445,7 +1651,7 @@
 
                     $('input[type="radio"]:checked').each(function() {
                         var fieldName = $(this).attr('class');
-                        var fieldValue = $(this).val();console.log(fieldName,fieldValue,'fieldName');
+                        var fieldValue = $(this).val();
                         if (!fieldValuesByFieldName[fieldName]) {
                             fieldValuesByFieldName[fieldName] = [];
                         }
@@ -1472,8 +1678,8 @@
                     });
 
                     var claimStatus =  $('#claim_status').val();
-                        if(claimStatus == "CE_Hold") {
-                            var ceHoldReason = $('#ce_hold_reason_editable');
+                        if(claimStatus == "QA_Hold") {
+                            var ceHoldReason = $('#qa_hold_reason_editable');
                             if(ceHoldReason.val() == '') {
                                 ceHoldReason.css('border-color', 'red', 'important');
                                     inputTypeValue = 1;
@@ -1512,14 +1718,14 @@
                     }
                 });
             $(document).on('click', '.one', function() {
-                window.location.href = baseUrl + 'projects_assigned/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_assigned/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] +
                     "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.two', function() {
-                window.location.href = baseUrl + 'projects_pending/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_pending/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
@@ -1528,19 +1734,19 @@
                 window.location.href = "{{ url('#') }}";
             })
             $(document).on('click', '.four', function() {
-                window.location.href = baseUrl + 'projects_completed/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_completed/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.five', function() {
-                window.location.href = baseUrl + 'projects_Revoke/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_Revoke/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.six', function() {
-                window.location.href = baseUrl + 'projects_duplicate/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_duplicate/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
@@ -1548,32 +1754,31 @@
 
                 $(document).on('change', '#claim_status', function() {
                         var claimStatus = $(this).val();
-                        if(claimStatus == "CE_Hold") {
-                            $('#ce_hold_reason_editable').css('display', 'block');
-                            $('#ce_hold_reason_label').css('display', 'block');
+                        if(claimStatus == "QA_Hold") {
+                            $('#qa_hold_reason_editable').css('display', 'block');
+                            $('#qa_hold_reason_label').css('display', 'block');
                         } else {
-                            $('#ce_hold_reason_editable').css('display', 'none');
-                            $('#ce_hold_reason_label').css('display', 'none');
-                            $('#ce_hold_reason_editable').css('border-color', '');
-                        // $('#ce_hold_reason_editable').val('');
+                            $('#qa_hold_reason_editable').css('display', 'none');
+                            $('#qa_hold_reason_label').css('display', 'none');
+                            $('#qa_hold_reason_editable').css('border-color', '');
                         }
                 })
         })
 
-             function updateTime() {
-                    var now = new Date();
-                    var hours = now.getHours();
-                    var minutes = now.getMinutes();
-                    var seconds = now.getSeconds();
-                    var startTime = new Date(startTime_db).getTime();
-                    var elapsedTimeMs = new Date().getTime() - startTime;
-                    var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
-                    var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
-                    elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
-                    remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
-                    document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
-                    setTimeout(updateTime, 1000);
-           }
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var startTime = new Date(startTime_db).getTime();
+            var elapsedTimeMs = new Date().getTime() - startTime;console.log(startTime_db,startTime,new Date().getTime(),elapsedTimeMs,'minutes');
+            var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
+            var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+            elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
+            remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
+            document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
+            setTimeout(updateTime, 1000);
+        }
        updateTime();
     </script>
 @endpush

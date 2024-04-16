@@ -40,16 +40,23 @@
                                   //   $subproject_name = App\Models\subproject::where('project_id',$data['id'])->pluck('sub_project_name')->toArray();
                                             if (isset($data["subprject_name"]) && !empty($data["subprject_name"])) {
                                                 $subproject_name = $data["subprject_name"];
+                                                // $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
+                                                //             return str_replace(' ', '',ucfirst($projectName) . ucfirst($item));
+                                                //         })->all();
                                                 $model_name = collect($subproject_name)->map(function ($item) use ($projectName) {
-                                                            return str_replace(' ', '',ucfirst($projectName) . ucfirst($item));
+                                                            return Str::studly(Str::slug((Str::lower($projectName).'_'.Str::lower($item)),'_'));
                                                         })->all();
                                             } else {
-                                                $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
+                                                // $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
+                                                $model_name = collect(Str::studly(Str::slug((Str::lower($projectName).'_'.Str::lower($projectName)),'_')));
+
                                             }
+
 
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
-                                                $modelClass = "App\\Models\\" .  preg_replace('/[^A-Za-z0-9]/', '',$model);
+                                                $modelClass = "App\\Models\\" .  $model;
+                                                // $modelClass = "App\\Models\\" .  preg_replace('/[^A-Za-z0-9]/', '',$model);
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
@@ -193,7 +200,7 @@
                             console.log(res, 'res');
                             subProjects = res.subprojects;
                             subprojectCountData = Object.keys(subProjects).length;console.log(subprojectCountData,'subprojectCountData');
-                            format1();
+
                             if(typeof subprojectCountData !== 'undefined' && subprojectCountData > 0) {
                               row.child(format(row.data(), subProjects)).show();
                             } else {
@@ -235,9 +242,7 @@
                     return html;
               }
             }
-            function format1() {
-                console.log(subprojectCountData,'subprojectCount1');
-            }
+
             $(document).on('click', '.clickable-row', function(e) {
 
                 // var client_name = $(this).closest('tr').find('td:eq(1)').text();

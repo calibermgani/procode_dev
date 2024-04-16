@@ -12,6 +12,8 @@ use App\Http\Helper\Admin\Helpers as Helpers;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\DynamicModel;
+use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class FormController extends Controller
 {
@@ -26,7 +28,7 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
     public function formCreationIndex() {
@@ -37,7 +39,7 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
     public static function getSubProjectList(Request $request) {
@@ -52,7 +54,7 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
 
@@ -107,6 +109,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -143,6 +155,16 @@ class FormController extends Controller
                                                     QA_emp_id VARCHAR(255) NULL,
                                                     claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     duplicate_status VARCHAR(255) NULL,
+                                                    ce_hold_reason TEXT NULL,
+                                                    qa_hold_reason TEXT NULL,
+                                                    qa_work_status VARCHAR(255) NULL,
+                                                    QA_required_sampling VARCHAR(255) NULL,
+                                                    QA_status_code VARCHAR(255) NULL,
+                                                    QA_sub_status_code VARCHAR(255) NULL,
+                                                    QA_followup_date DATE NULL,
+                                                    CE_status_code VARCHAR(255) NULL,
+                                                    CE_sub_status_code VARCHAR(255) NULL,
+                                                    CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
@@ -177,6 +199,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -211,6 +243,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -239,7 +281,7 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
     public function formEdit($project_id,$sub_project_id) {
@@ -267,7 +309,7 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
         }
     }
 
@@ -341,6 +383,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -376,6 +428,16 @@ class FormController extends Controller
                                                     QA_emp_id VARCHAR(255) NULL,
                                                     claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     duplicate_status VARCHAR(255) NULL,
+                                                    ce_hold_reason TEXT NULL,
+                                                    qa_hold_reason TEXT NULL,
+                                                    qa_work_status VARCHAR(255) NULL,
+                                                    QA_required_sampling VARCHAR(255) NULL,
+                                                    QA_status_code VARCHAR(255) NULL,
+                                                    QA_sub_status_code VARCHAR(255) NULL,
+                                                    QA_followup_date DATE NULL,
+                                                    CE_status_code VARCHAR(255) NULL,
+                                                    CE_sub_status_code VARCHAR(255) NULL,
+                                                    CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
@@ -409,6 +471,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -443,6 +515,16 @@ class FormController extends Controller
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
                                             claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            ce_hold_reason TEXT NULL,
+                                            qa_hold_reason TEXT NULL,
+                                            qa_work_status VARCHAR(255) NULL,
+                                            QA_required_sampling VARCHAR(255) NULL,
+                                            QA_status_code VARCHAR(255) NULL,
+                                            QA_sub_status_code VARCHAR(255) NULL,
+                                            QA_followup_date DATE NULL,
+                                            CE_status_code VARCHAR(255) NULL,
+                                            CE_sub_status_code VARCHAR(255) NULL,
+                                            CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
@@ -470,7 +552,68 @@ class FormController extends Controller
                 log::debug($e->getMessage());
             }
         } else {
-            return redirect('/login');
+            return redirect('/');
+        }
+    }
+
+    public function projectConfigDelete(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+              try {
+                    $data = $request->all();dd($data);
+                    $projectName = $decodedClientName = Helpers::projectName($data['projectId'])->project_name;
+                    $subProjectName = $data['subProjectId'] == null ? Helpers::projectName($data['projectId'])->project_name :Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name;
+                    $table_name= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName)),'_');
+                    $table_name_datas= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName). '_datas'),'_');
+                    $table_name_duplicates= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName). '_duplicates'),'_');
+                    $table_name_history= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName).'_history'),'_');
+                    $dataCount = DB::table($table_name)->count();
+                    $modelName = Str::studly($table_name);
+                    $modelNameDatas = Str::studly($table_name_datas);
+                    $modelNameDuplicates = Str::studly($table_name_duplicates);
+                    $modelNameHistory = Str::studly($table_name_history);
+                    $existingRecord =  formConfiguration::where('project_id',$data['projectId'])->where('sub_project_id',$data['subProjectId'])->get();
+
+                    if($dataCount == 0) {
+                        if (Schema::hasTable($table_name)) {
+                            Schema::dropIfExists($table_name);
+                        }
+                        if (Schema::hasTable($table_name_datas)) {
+                            Schema::dropIfExists($table_name_datas);
+                        }
+                        if (Schema::hasTable($table_name_duplicates)) {
+                            Schema::dropIfExists($table_name_duplicates);
+                        }
+                        if (Schema::hasTable($table_name_history)) {
+                            Schema::dropIfExists($table_name_history);
+                        }
+
+                        if (class_exists("App\\Models\\" .$modelName)) {
+                            unlink(app_path('Models/'.$modelName.'.php'));
+                        }
+                        if (class_exists("App\\Models\\" .$modelNameDatas)) {
+                            unlink(app_path('Models/'.$modelNameDatas.'.php'));
+                        }
+                        if (class_exists("App\\Models\\" .$modelNameDuplicates)) {
+                             unlink(app_path('Models/'.$modelNameDuplicates.'.php'));
+                        }
+                        if (class_exists("App\\Models\\" .$modelNameHistory)) {
+                             unlink(app_path('Models/'.$modelNameHistory.'.php'));
+                        }
+                        foreach ($existingRecord as $record) {
+                            $record->deleted_at = Carbon::now();
+                            $record->save();
+                        }
+                        return response()->json(['success' => true]);
+                    } else {
+                        return response()->json(['error' => true]);
+                    }
+
+
+                } catch (Exception $e) {
+                    log::debug($e->getMessage());
+                }
+        } else {
+            return redirect('/');
         }
     }
 }
