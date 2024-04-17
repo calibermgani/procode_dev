@@ -645,6 +645,7 @@
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
                                                     <div class="col-md-10">
+                                                        <input type="hidden" id="status_val">
                                                         {!! Form::Select(
                                                             'QA_status_code',
                                                             $qaStatusList,
@@ -1435,16 +1436,13 @@
                                     }
                                     if (header == 'QA_status_code') {
                                         $('select[name="QA_status_code"]').val(value).trigger('change');
-                                        subStatus(value);
+                                        $('#status_val').val(value);
                                     }
                                     if (header == 'QA_sub_status_code') {
-                                        console.log(value,'su val');
-                                        (function(val) {
-                                            setTimeout(function() {
-                                                $('select[name="QA_sub_status_code"]').val(val).trigger('change');
-                                            }, 5000);
-                                        })(value);
-                                    }
+                                        statusVal = $('#status_val').val();console.log(statusVal,'statusVal',value);
+                                         subStatus(statusVal,value);
+                                     }
+
                                     $('textarea[name="' + header + '[]"]').val(value);
                                     $('input[name="' + header + '[]"]').val(value);
                                     $('label[id="' + header + '"]').text(value);
@@ -1455,7 +1453,7 @@
                     }
             });
 
-            function subStatus(value) {
+            function subStatus(statusVal,value) {
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1465,7 +1463,7 @@
                         type: "GET",
                         url: "{{ url('qa_production/qa_sub_status_list') }}",
                         data: {
-                            status_code_id: value
+                            status_code_id: statusVal
                         },
                         success: function(res) {
                             subStatusCount = Object.keys(res.subStatus).length;
@@ -1474,15 +1472,17 @@
                                 sla_options += '<option value="' + key + '" ' + '>' + value +
                                     '</option>';
                             });console.log(sla_options,'sla_options');
-                            // $("#qa_sub_status").html(sla_options);
                             $('select[name="QA_sub_status_code"]').html(sla_options);
+                            if (value) {
+                                $('select[name="QA_sub_status_code"]').val(value);
+                            }
                         },
                         error: function(jqXHR, exception) {}
                     });
                 }
                 $(document).on('change', '#qa_status', function() {
                     var status_code_id = $(this).val();
-                    subStatus(status_code_id);
+                    subStatus(status_code_id,'');
                 });
 
             $(document).on('click', '.clickable-view', function(e) {
