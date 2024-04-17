@@ -590,4 +590,24 @@ class Helpers
         $data = QASubStatus::where('status', 'Active')->where('id',$id)->first('sub_status_code');
 		return $data;
 	}
+
+    public static function getUserNameByEmpId($id)
+	{
+        $payload = [
+            'token' => '1a32e71a46317b9cc6feb7388238c95d',
+            'user_emp_id' => $id
+        ];
+        $client = new Client();
+        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_username_by_empid', [
+            'json' => $payload
+        ]);
+        if ($response->getStatusCode() == 200) {
+            $data = json_decode($response->getBody(), true);
+        } else {
+            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+        }
+
+        $userName = $data['user_name']['user_name']; 
+		return $userName;
+	}
 }

@@ -699,7 +699,8 @@ class ProductionController extends Controller
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                            $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
+                            // $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
                            if(is_int($qarecords) == true) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
@@ -712,7 +713,7 @@ class ProductionController extends Controller
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                            $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                            if(is_int($qarecords) == true) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
@@ -922,7 +923,7 @@ class ProductionController extends Controller
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                            $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                            if(is_int($qarecords) == true) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
@@ -935,7 +936,7 @@ class ProductionController extends Controller
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                            $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                            if(is_int($qarecords) == true) {
                               $data['qa_work_status'] = "Sampling";
                             } else {

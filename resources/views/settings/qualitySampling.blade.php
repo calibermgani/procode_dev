@@ -146,11 +146,11 @@
                                     }
                                     $coderName =
                                         $data['coder_emp_id'] != null
-                                            ? App\Http\Helper\Admin\Helpers::getUserNameById($data['coder_emp_id'])
+                                            ? App\Http\Helper\Admin\Helpers::getUserNameByEmpId($data['coder_emp_id'])
                                             : '--';
                                     $qaName =
                                         $data['qa_emp_id'] != null
-                                            ? App\Http\Helper\Admin\Helpers::getUserNameById($data['qa_emp_id'])
+                                            ? App\Http\Helper\Admin\Helpers::getUserNameByEmpId($data['qa_emp_id'])
                                             : '--';
                                 @endphp
                                 <tr class="clickable-row" data-toggle="modal" style="cursor:pointer">
