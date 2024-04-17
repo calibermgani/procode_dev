@@ -690,28 +690,42 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['idValue'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
+                $coderCompletedRecords = $originalModelClass::where('claim_status','CE_Completed')->get();
+                $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
                         $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
-                            $data['QA_emp_id'] = Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
-                            $data['qa_work_status'] = "Sampling";
+                            $qaPercentage = $qasamplingDetails["qa_percentage"];
+                            $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
+                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                           if(is_int($qarecords) == true) {
+                              $data['qa_work_status'] = "Sampling";
+                            } else {
+                                $data['qa_work_status'] = "Auto_Close";
+                            }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();//dd($qasamplingDetails,$decodedProjectName,$decodedPracticeName,'else',$qasamplingDetails["qa_emp_id"], $data['claim_status'],$datasRecord);
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
+                            $qaPercentage = $qasamplingDetails["qa_percentage"];
+                            $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
-                            $data['qa_work_status'] = "Sampling";
+                           if(is_int($qarecords) == true) {
+                              $data['qa_work_status'] = "Sampling";
+                            } else {
+                                $data['qa_work_status'] = "Auto_Close";
+                            }
                         }
                     }
                 }
-                $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($data);
+                $record = $originalModelClass::where('id', $data['parent_id'])->first();
                 $qaData = $originalModelClass::where('id', $data['parent_id'])->first()->toArray();
                 $excludeKeys = ['id', 'created_at', 'updated_at', 'deleted_at'];
                 $filteredQAData = collect($qaData)->except($excludeKeys)->toArray();
-                $data = array_merge($data, array_diff_key($filteredQAData, $data));//dd($data);
+                $data = array_merge($data, array_diff_key($filteredQAData, $data));
                  if($datasRecord != null) {
                   $datasRecord->update($data);
                   $data['claim_status'] == "CE_Completed" ? $record->update( ['claim_status' => $data['claim_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status']]) : $record->update( ['claim_status' => $data['claim_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
@@ -899,20 +913,34 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
+                $coderCompletedRecords = $originalModelClass::where('claim_status','CE_Completed')->get();
+                $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->first();//dd($qasamplingDetails,$decodedProjectName,$decodedPracticeName);
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
-                            $data['QA_emp_id'] = Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
-                            $data['qa_work_status'] = "Sampling";
+                            $qaPercentage = $qasamplingDetails["qa_percentage"];
+                            $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
+                            $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
+                           if(is_int($qarecords) == true) {
+                              $data['qa_work_status'] = "Sampling";
+                            } else {
+                                $data['qa_work_status'] = "Auto_Close";
+                            }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();//dd($qasamplingDetails,$decodedProjectName,$decodedPracticeName,'else',$qasamplingDetails["qa_emp_id"], $data['claim_status'],$datasRecord);
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
+                            $qaPercentage = $qasamplingDetails["qa_percentage"];
+                            $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
-                            $data['qa_work_status'] = "Sampling";
+                           if(is_int($qarecords) == true) {
+                              $data['qa_work_status'] = "Sampling";
+                            } else {
+                                $data['qa_work_status'] = "Auto_Close";
+                            }
                         }
                     }
                 }
