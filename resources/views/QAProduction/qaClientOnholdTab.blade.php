@@ -1441,7 +1441,7 @@
                                         (function(val) {
                                             setTimeout(function() {
                                                 $('select[name="QA_sub_status_code"]').val(val).trigger('change');
-                                            }, 500);
+                                            }, 1000);
                                         })(value);
                                     }
                                     $('textarea[name="' + header + '[]"]').val(value);
