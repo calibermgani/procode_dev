@@ -23,6 +23,8 @@ use App\Models\Menu;
 use App\Models\project;
 use App\Models\subproject;
 use App\Models\formConfiguration;
+use App\Models\QAStatus;
+use App\Models\QASubStatus;
 use Illuminate\Support\Facades\Session;
 use GuzzleHttp\Client;
 
@@ -567,5 +569,25 @@ class Helpers
         }
         $userName = $data['user_list']['emp_id'];
 		return $userName;
+	}
+    public static function qaStatusList()
+	{
+        $data = QAStatus::where('status', 'Active')->pluck('status_code', 'id')->prepend(trans('Select Status'), '')->toArray();
+		return $data;
+	}
+    public static function qaSubStatusList()
+	{
+        $data = QASubStatus::where('status', 'Active')->pluck('sub_status_code', 'id')->prepend(trans('Select Sub Status'), '')->toArray();
+    	return $data;
+	}
+    public static function qaStatusById($id)
+	{
+        $data = QAStatus::where('status', 'Active')->where('id',$id)->first('status_code');
+		return $data;
+	}
+    public static function qaSubStatusById($id)
+	{
+        $data = QASubStatus::where('status', 'Active')->where('id',$id)->first('sub_status_code');
+		return $data;
 	}
 }

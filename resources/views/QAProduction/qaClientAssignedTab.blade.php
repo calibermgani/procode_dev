@@ -241,10 +241,29 @@
                                                                     {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                 @elseif ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
                                                                     {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
-                                                                    Assigned
-                                                                    @elseif ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
-                                                                    {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
-                                                                    In process
+                                                                Assigned
+                                                                @elseif ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
+                                                                In process
+                                                                @elseif ($columnName == 'QA_status_code')
+                                                                @php
+                                                                    if($columnValue != null) {
+                                                                       $statusCode = App\Http\Helper\Admin\Helpers::qaStatusById($columnValue);
+                                                                    } else {
+                                                                        $statusCode = '';
+                                                                    }
+                                                                 @endphp
+                                                                    {{ $columnValue == null ? $columnValue : $statusCode['status_code'] }}
+                                                                @elseif ($columnName == 'QA_sub_status_code')
+                                                                    @php
+                                                                     if($columnValue != null) {
+                                                                        $subStatusCode = App\Http\Helper\Admin\Helpers::qaSubStatusById($columnValue);
+                                                                    } else {
+                                                                        $subStatusCode = '';
+                                                                    }
+
+                                                                    @endphp
+                                                                    {{ $columnValue == null ? $columnValue :  $subStatusCode['sub_status_code'] }}
                                                                 @else
                                                                     {{ $columnValue }}
                                                                 @endif
@@ -704,18 +723,12 @@
                                                     <label class="col-md-12 required">
                                                         QA Status
                                                     </label>
+                                                    @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
+
                                                     <div class="col-md-10">
-                                                        {!! Form::Select(
+                                                           {!! Form::Select(
                                                             'QA_status_code',
-                                                            [
-                                                                '' => '--Select--',
-                                                                'CPT' => 'CPT',
-                                                                'ICD' => 'ICD',
-                                                                'Modifier' => 'Modifier',
-                                                                'Units' => 'Units',
-                                                                'Provider' => 'Provider',
-                                                                'Others' => 'Others',
-                                                            ],
+                                                            $qaStatusList,
                                                             null,
                                                             [
                                                                 'class' => 'form-control white-smoke  kt_select2_qa_status pop-non-edt-val ',
@@ -732,23 +745,11 @@
                                                     <label class="col-md-12 required">
                                                         QA Sub Status
                                                     </label>
+                                                    @php $qaSubStatusList = []; @endphp
                                                     <div class="col-md-10">
                                                         {!! Form::Select(
                                                             'QA_sub_status_code',
-                                                            [
-                                                                '' => '--Select--',
-                                                                'Incorrect CPT' => 'Incorrect CPT',
-                                                                'Missed CPT' => 'Missed CPT',
-                                                                'Incorrect ICD' => 'Incorrect ICD',
-                                                                'Missed ICD' => 'Missed ICD',
-                                                                'Invalid ICD' => 'Invalid ICD',
-                                                                'Incorrect Modifier' => 'Incorrect Modifier',
-                                                                'Missed modifier' => 'Missed modifier',
-                                                                'Invalid Modifier' => 'Invalid Modifier',
-                                                                'Incorrect Units' => 'Incorrect Units',
-                                                                'Incorrect provider' => 'Incorrect provider',
-                                                                'Process related' => 'Process related',
-                                                            ],
+                                                            $qaSubStatusList,
                                                             null,
                                                             [
                                                                 'class' => 'form-control white-smoke  kt_select2_qa_sub_status pop-non-edt-val ',
@@ -1073,6 +1074,8 @@
         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
+            var qaSubStatusList = @json($qaSubStatusListVal);
+            var qaStatusList = @json( $qaStatusList);
             $("#expandButton").click(function() {
                 var modalContent = $(".modal-content");
                 if (modalContent.width() === 800) {
@@ -1595,9 +1598,15 @@
                             }
                             if (header == 'QA_status_code') {
                                 $('select[name="QA_status_code"]').val(value).trigger('change');
+                                subStatus(value);
                             }
                             if (header == 'QA_sub_status_code') {
                               $('select[name="QA_sub_status_code"]').val(value).trigger('change');
+                              (function(val) {
+                                            setTimeout(function() {
+                                                $('select[name="QA_sub_status_code"]').val(val).trigger('change');
+                                            }, 500);
+                                        })(value);
                             }
                             $('textarea[name="' + header + '[]"]').val(value);
                             $('input[name="' + header + '[]"]').val(value);
@@ -1608,7 +1617,35 @@
 
                 }
             });
-
+            function subStatus(value) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('qa_production/qa_sub_status_list') }}",
+                        data: {
+                            status_code_id: value
+                        },
+                        success: function(res) {
+                            subStatusCount = Object.keys(res.subStatus).length;
+                            var sla_options = '<option value="">-- Select --</option>';
+                            $.each(res.subStatus, function(key, value) {
+                                sla_options += '<option value="' + key + '" ' + '>' + value +
+                                    '</option>';
+                            });console.log(sla_options,'sla_options');
+                            // $("#qa_sub_status").html(sla_options);
+                            $('select[name="QA_sub_status_code"]').html(sla_options);
+                        },
+                        error: function(jqXHR, exception) {}
+                    });
+                }
+                $(document).on('change', '#qa_status', function() {
+                    var status_code_id = $(this).val();
+                    subStatus(status_code_id);
+                });
 
             $(document).on('click', '.clickable-view', function(e) {
                 $('#myModal_status').modal('hide');
@@ -1685,10 +1722,23 @@
                             $('#claim_status').text() == "Assigned" ? $('#qa_sub_status_view').css('display','none') : $('#qa_sub_status_view').css('display','block');
 
                             if (header == 'QA_status_code') {
-                                    $('label[id="qa_status_view"]').text(value);
+                                var statusName = '';
+                                    $.each(qaStatusList, function(key, val) {
+                                        if (value == key) {
+                                            statusName = val;
+                                        }
+                                    });
+                                    $('label[id="qa_status_view"]').text(statusName);
                                }
                                 if (header == 'QA_sub_status_code') {
-                                    $('label[id="qa_sub_status_view"]').text(value);
+                                    var subStatusName = '';
+                                    $.each(qaSubStatusList, function(key, val) {
+                                        if (value == key) {
+                                            subStatusName = val;
+                                        }
+                                    });
+                                    $('label[id="qa_sub_status_view"]').text(subStatusName);
+                     
                                 }
                             $('label[id="' + header + '"]').text(value);
                         }
@@ -2054,6 +2104,8 @@
                     $('#qa_hold_reason').val('');
                 }
             })
+
+
         })
 
         function updateTime() {

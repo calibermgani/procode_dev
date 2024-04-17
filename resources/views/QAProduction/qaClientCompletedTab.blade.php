@@ -137,6 +137,12 @@
                                                                     @else
                                                                         @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
                                                                             {{ str_replace('QA_', '', $columnValue) }}
+                                                                        @elseif ($columnName == 'QA_status_code')
+                                                                            @php $statusCode = App\Http\Helper\Admin\Helpers::qaStatusById($columnValue);@endphp
+                                                                            {{ $statusCode['status_code'] }}
+                                                                        @elseif ($columnName == 'QA_sub_status_code')
+                                                                            @php $subStatusCode = App\Http\Helper\Admin\Helpers::qaSubStatusById($columnValue);@endphp
+                                                                            {{ $subStatusCode['sub_status_code'] }}
                                                                         @else
                                                                             {{ $columnValue }}
                                                                         @endif
@@ -434,6 +440,8 @@
     <script>
 
         $(document).ready(function() {
+            var qaSubStatusList = @json($qaSubStatusListVal);
+            var qaStatusList = @json( $qaStatusList);
             const url = window.location.href;
             const startIndex = url.indexOf('projects_') + 'projects_'.length;
             const endIndex = url.indexOf('/', startIndex);
@@ -538,10 +546,22 @@
                                 $('#title_status_view').text(value);
                         }
                         if (header == 'QA_status_code') {
-                            $('label[id="qa_status_view"]').text(value);
+                                var statusName = '';
+                                $.each(qaStatusList, function(key, val) {
+                                    if (value == key) {
+                                        statusName = val;
+                                    }
+                                });
+                                $('label[id="qa_status_view"]').text(statusName);
                         }
                         if (header == 'QA_sub_status_code') {
-                            $('label[id="qa_sub_status_view"]').text(value);
+                            var subStatusName = '';
+                            $.each(qaSubStatusList, function(key, val) {
+                                if (value == key) {
+                                    subStatusName = val;
+                                }
+                            });
+                            $('label[id="qa_sub_status_view"]').text(subStatusName);
                         }
                        $('label[id="' + header + '"]').text(value);
                     }

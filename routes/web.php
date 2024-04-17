@@ -77,6 +77,7 @@ Route::group(['prefix' => 'qa_production'], function () {
     Route::any('qa_client_view_details', 'App\Http\Controllers\QA\QAProductionController@qaClientViewDetails');
     Route::any('qa_project_store/{projectName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientsStore');
     Route::any('qa_project_update/{projectName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientsUpdate');
+    Route::any('qa_sub_status_list', 'App\Http\Controllers\QA\QAProductionController@qaSubStatusList');
 });
 Auth::routes();
 
