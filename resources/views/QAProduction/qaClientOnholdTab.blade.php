@@ -1432,10 +1432,10 @@
                                     }
                                     if (header == 'QA_emp_id') {
                                         $('input[name="QA_emp_id"]').val(value);
-                                        subStatus(value);
                                     }
                                     if (header == 'QA_status_code') {
                                         $('select[name="QA_status_code"]').val(value).trigger('change');
+                                        subStatus(value);
                                     }
                                     if (header == 'QA_sub_status_code') {
                                         (function(val) {
