@@ -1438,6 +1438,7 @@
                                         subStatus(value);
                                     }
                                     if (header == 'QA_sub_status_code') {
+                                        console.log(value,'su val');
                                         (function(val) {
                                             setTimeout(function() {
                                                 $('select[name="QA_sub_status_code"]').val(val).trigger('change');
