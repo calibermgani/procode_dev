@@ -694,7 +694,7 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -708,7 +708,7 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -918,7 +918,7 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -931,7 +931,7 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
