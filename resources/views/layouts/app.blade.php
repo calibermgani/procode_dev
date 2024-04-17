@@ -59,7 +59,7 @@
             }
 
             .left-side {
-                min-height: 200px; /* Adjust as needed */
+                min-height: 200px; 
             }
 
             .right-side {
@@ -67,20 +67,20 @@
             }
 
             .copyright-container {
-                position: relative; /* Change to relative */
+                position: relative;
                 text-align: center;
                 margin-top: 20px;
                 left:11rem !important;
             }
 
             .copyright-container p {
-                color: black; /* Change text color to black */
+                color: black;
             }
         }
 
         @media (max-width: 480px) {
             .copyright-container p {
-                color: black; /* Change text color to black for smaller screens */
+                color: black;
             }
             .copyright-container {
                 left:0rem !important;
@@ -88,7 +88,7 @@
         }
         @media (max-width: 321px) {
             .copyright-container p {
-                color: black; /* Change text color to black for smaller screens */
+                color: black;
             }
             .copyright-container {
                 left:0rem !important;
@@ -96,11 +96,10 @@
         }
 
         .copyright-container {
-            position: absolute; /* Keep absolute positioning */
-            bottom: 10px; /* Adjust as needed */
-            left: 3.5rem; /* Set left to 0 */
-            right: 0; /* Set right to 0 */
-            text-align: center; /* Center text */
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+            text-align: center;
             font-size: 11px;
             display: flex;
             justify-content: center;
@@ -139,7 +138,7 @@
     </div>
 
     <div class="copyright-container">
-        <p>&copy; {{ date('Y') }} Procode - All rights reserved by Annexmed &nbsp;&nbsp;&nbsp;&nbsp; &#x2709; : procodesupport@annexmed.net</p>
+        <p style="margin-left: 3.5rem;">&copy; {{ date('Y') }} Procode - All rights reserved by Annexmed &nbsp;&nbsp;&nbsp;&nbsp; &#x2709; : procodesupport@annexmed.net</p>
     </div>
 </body>
 @include('layouts/footer_script_login')
