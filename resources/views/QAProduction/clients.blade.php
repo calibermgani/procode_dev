@@ -62,7 +62,7 @@
                                     $assignedTotalCount = 0;
                                     $completedTotalCount = 0;
                                     $pendingTotalCount = 0;
-                                    $holdTotalCount = 0;
+                                    $holdTotalCount = 0;$startDate = Carbon\Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
                                     foreach ($model_name as $model) {
                                         $modelClass = 'App\\Models\\' . $model;
                                         $assignedCount = 0;
@@ -84,12 +84,12 @@
                                                     ::whereIn('claim_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->count();
                                                 $completedCount = $modelClass
-                                                    ::where('claim_status', 'QA_Completed')
+                                                    ::where('claim_status', 'QA_Completed')->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $pendingCount = $modelClass
-                                                    ::where('claim_status', 'QA_Pending')
+                                                    ::where('claim_status', 'QA_Pending')->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
-                                                $holdCount = $modelClass::where('claim_status', 'QA_Hold')->count();
+                                                $holdCount = $modelClass::where('claim_status', 'QA_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                                             } else {
                                                 $assignedCount = 0;
                                                 $completedCount = 0;
@@ -104,15 +104,15 @@
                                                     ->count();
                                                 $completedCount = $modelClass
                                                     ::where('claim_status', 'QA_Completed')
-                                                    ->where('QA_emp_id', $loginEmpId)
+                                                    ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $pendingCount = $modelClass
                                                     ::where('claim_status', 'QA_Pending')
-                                                    ->where('QA_emp_id', $loginEmpId)
+                                                    ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $holdCount = $modelClass
                                                     ::where('claim_status', 'QA_Hold')
-                                                    ->where('QA_emp_id', $loginEmpId)
+                                                    ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                             } else {
                                                 $assignedCount = 0;
