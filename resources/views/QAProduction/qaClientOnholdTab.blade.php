@@ -1599,14 +1599,36 @@
 
             $(document).on('click', '#project_hold_save', function(e) {
                     e.preventDefault();
+                    var inputTypeValue = 0;
+                    $('#holdFormConfiguration').serializeArray().map(function(input) {
+                        labelName = input.name;
+                            if(labelName.substring(0, 3).toLowerCase() == "cpt") {
+                                var textValue = input.value;
+                                if(textValue.length < 4) {
+                                    inputTypeValue = 1;
+                                    js_notification('error',"The CPT value must be at least 4 characters long" );
+                                } else {
+                                    inputTypeValue = 0;
+                                }
+                            }
+                            if(labelName.substring(0, 3).toLowerCase() == "icd") {
+                                var textValue = input.value;
+                                if(textValue.length < 3 || textValue.length > 7) {
+                                    inputTypeValue = 1;
+                                    js_notification('error', "The ICD value must be between 3 and 7 characters long" );
+                                } else {
+                                    inputTypeValue = 0;
+                                }
+                            }
+                            return labelName;
+                    });
                     var fieldNames = $('#holdFormConfiguration').serializeArray().map(function(input) {
                         return input.name;
                     });
                     var requiredFields = {};
                     var requiredFieldsType = {};
                     var inputclass = [];
-                    var inputTypeValue = 0;
-                    $('#holdFormConfiguration').find(':input[required], select[required], textarea[required]',
+                      $('#holdFormConfiguration').find(':input[required], select[required], textarea[required]',
                         ':input[type="checkbox"][required], input[type="radio"]').each(
                         function() {
                             var fieldName = $(this).attr('name');
