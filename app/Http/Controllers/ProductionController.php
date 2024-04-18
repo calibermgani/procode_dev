@@ -705,7 +705,7 @@ class ProductionController extends Controller
                     if($decodedPracticeName == NULL) {
                         $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
                         if( $qasamplingDetails == null) {
-                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
                         }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
