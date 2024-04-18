@@ -1790,7 +1790,7 @@
                                 inputTypeValue = 0;
                             }
                         }
-                        return labelName;
+                        return inputTypeValue;
                 });
                 var fieldNames = $('#formConfiguration').serializeArray().map(function(input) {
                     return input.name;
@@ -2099,7 +2099,6 @@
 
             $(document).on('change', '#claim_status_start', function() {
                 var claimStatus = $(this).val();
-                console.log();
                 if (claimStatus == "QA_Hold") {
                     $('#qa_hold_reason').css('display', 'block');
                     $('#qa_hold_reason_label').css('display', 'block');

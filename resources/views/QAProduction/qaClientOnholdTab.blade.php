@@ -1620,7 +1620,7 @@
                                     inputTypeValue = 0;
                                 }
                             }
-                            return labelName;
+                            return inputTypeValue;
                     });
                     var fieldNames = $('#holdFormConfiguration').serializeArray().map(function(input) {
                         return input.name;

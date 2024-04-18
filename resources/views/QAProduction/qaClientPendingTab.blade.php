@@ -1583,7 +1583,7 @@
                                     inputTypeValue = 0;
                                 }
                             }
-                            return labelName;
+                            return inputTypeValue;
                     });
                     var fieldNames = $('#pendingFormConfiguration').serializeArray().map(function(input) {
                         return input.name;
