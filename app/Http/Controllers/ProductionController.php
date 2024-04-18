@@ -703,9 +703,9 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
                         if( $qasamplingDetails == null) {
-                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
                         }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
@@ -938,9 +938,9 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
                         if( $qasamplingDetails == null) {
-                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
                         }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
