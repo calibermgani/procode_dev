@@ -696,6 +696,8 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['idValue'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
+                $samplingRecord = $originalModelClass::where('claim_status','CE_Completed')->where('qa_work_status','Sampling')->get();
+                $samplingRecordCount =  count($samplingRecord);
                 $coderCompletedRecords = $originalModelClass::where('claim_status','CE_Completed')->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
@@ -707,7 +709,8 @@ class ProductionController extends Controller
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                             // $data['QA_emp_id'] =  Helpers::getUserEmpIdById($qasamplingDetails["qa_emp_id"]);
-                           if(is_int($qarecords) == true) {
+                        //    if(is_int($qarecords) == true) {
+                            if($qarecords > $samplingRecordCount) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
                                 $data['qa_work_status'] = "Auto_Close";
@@ -720,7 +723,8 @@ class ProductionController extends Controller
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
-                           if(is_int($qarecords) == true) {
+                        //    if(is_int($qarecords) == true) {
+                            if($qarecords > $samplingRecordCount) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
                                 $data['qa_work_status'] = "Auto_Close";
@@ -919,6 +923,8 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
+                $samplingRecord = $originalModelClass::where('claim_status','CE_Completed')->where('qa_work_status','Sampling')->get();
+                $samplingRecordCount =  count($samplingRecord);
                 $coderCompletedRecords = $originalModelClass::where('claim_status','CE_Completed')->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
@@ -929,7 +935,8 @@ class ProductionController extends Controller
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
-                           if(is_int($qarecords) == true) {
+                        //    if(is_int($qarecords) == true) {
+                            if($qarecords > $samplingRecordCount) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
                                 $data['qa_work_status'] = "Auto_Close";
@@ -942,7 +949,8 @@ class ProductionController extends Controller
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
                             $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
                             $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
-                           if(is_int($qarecords) == true) {
+                        //    if(is_int($qarecords) == true) {
+                            if($qarecords > $samplingRecordCount) {
                               $data['qa_work_status'] = "Sampling";
                             } else {
                                 $data['qa_work_status'] = "Auto_Close";
