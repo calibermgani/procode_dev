@@ -675,6 +675,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 // $data = $request->all();
+                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
@@ -702,7 +703,10 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        if( $qasamplingDetails == null) {
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                        }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -717,7 +721,11 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        if( $qasamplingDetails == null) {
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                        }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -900,6 +908,7 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                  $data = $request->all();
+                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 // $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
@@ -929,7 +938,10 @@ class ProductionController extends Controller
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['claim_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        if( $qasamplingDetails == null) {
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                        }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
@@ -943,7 +955,10 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                        $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->first();
+                        if( $qasamplingDetails == null) {
+                            $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->first();
+                        }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         if($qasamplingDetails != null) {
                             $qaPercentage = $qasamplingDetails["qa_percentage"];
