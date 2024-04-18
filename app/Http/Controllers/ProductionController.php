@@ -94,13 +94,13 @@ class ProductionController extends Controller
                 // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',$model_name);
                 $table_name = Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectsWithCount[$key]['sub_project_name'])),'_');
                 $modelName = Str::studly($table_name);
-                $modelClass = "App\\Models\\" .  $modelName;
+                $modelClass = "App\\Models\\" .  $modelName; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                     if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                         if (class_exists($modelClass)) {
-                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->count();
-                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->count();
-                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->count();
+                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         } else {
                             $subProjectsWithCount[$key]['assignedCount'] ='--';
                             $subProjectsWithCount[$key]['CompletedCount'] = '--';
@@ -109,10 +109,10 @@ class ProductionController extends Controller
                         }
                     } else if($loginEmpId) {
                         if (class_exists($modelClass)) {
-                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                            $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         } else {
                             $subProjectsWithCount[$key]['assignedCount'] ='--';
                             $subProjectsWithCount[$key]['CompletedCount'] = '--';
@@ -203,7 +203,7 @@ class ProductionController extends Controller
             }
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" .  $modelName;
-                $modelClassDatas = "App\\Models\\" .  $modelName.'Datas';
+                $modelClassDatas = "App\\Models\\" .  $modelName.'Datas'; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 // $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];$assignedProjectDetailsStatus = [];
@@ -225,11 +225,11 @@ class ProductionController extends Controller
                         $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->get();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedDropDownIds = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
-                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $duplicateCount = $modelClassDuplcates::count();
                         // $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('claim_status','DESC')->limit(2000)->pluck('claim_status')->toArray();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->pluck('claim_status')->toArray();
@@ -257,11 +257,11 @@ class ProductionController extends Controller
                     //    $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('id','desc')->pluck('record_id')->toArray();
                     $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
                     $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
-                    $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                    $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                     //    $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->where('CE_emp_id',$loginEmpId)->orderBy('claim_status','DESC')->limit(2000)->pluck('claim_status')->toArray();
                     $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->pluck('claim_status')->toArray();
                    }
@@ -302,15 +302,17 @@ class ProductionController extends Controller
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
             //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
+            //    $startDate = Date('Y-m-01 00:00:01');$endDate = Date('Y-m-t 23:59:59');
+               $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
-                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','ASC')->limit(2000)->get();
-                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                       //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" .$modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
@@ -318,12 +320,12 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->orderBy('id','ASC')->where('CE_emp_id',$loginEmpId)->limit(2000)->get();
-                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                      $pendingProjectDetails = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
+                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -363,15 +365,16 @@ class ProductionController extends Controller
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
                //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
+               $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
-                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','ASC')->limit(2000)->get();
-                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                       //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
@@ -379,12 +382,12 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->orderBy('id','ASC')->where('CE_emp_id',$loginEmpId)->limit(2000)->get();
-                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                      $holdProjectDetails = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
+                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -424,27 +427,28 @@ class ProductionController extends Controller
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
                //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
+               $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
-                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','ASC')->limit(2000)->get();
-                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->orderBy('id','ASC')->where('CE_emp_id',$loginEmpId)->limit(2000)->get();
-                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                      $completedProjectDetails = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                    }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
@@ -536,27 +540,28 @@ class ProductionController extends Controller
                });
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
+               $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $revokeProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
-                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','ASC')->limit(2000)->get();
-                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                       $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $modelClassDuplcates = "App\\Models\\" .$modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','Revoke')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->orderBy('id','ASC')->where('CE_emp_id',$loginEmpId)->limit(2000)->get();
-                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                      $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','Revoke')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -600,26 +605,27 @@ class ProductionController extends Controller
                //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $modelClassDuplcates = "App\\Models\\" . $modelName."Duplicates";
                $modelClass = "App\\Models\\" .$modelName;
+               $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $duplicateProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClassDuplcates)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
-                        $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','ASC')->limit(2000)->get();
-                        $assignedCount =  $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                        $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                        $pendingCount =   $modelClass::where('claim_status','CE_Pending')->count();
-                        $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
-                        $reworkCount = $modelClass::where('claim_status','Revoke')->count();
+                        $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','ASC')->whereBetween('updated_at',[$startDate,$endDate])->limit(2000)->get();
+                        $assignedCount =  $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $pendingCount =   $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $duplicateCount = $modelClassDuplcates::count();
                    }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClassDuplcates)) {
-                       $duplicateProjectDetails = $modelClassDuplcates::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
-                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->count();
+                       $duplicateProjectDetails = $modelClassDuplcates::where('claim_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                     }
                 }
 
@@ -750,7 +756,6 @@ class ProductionController extends Controller
                     $callChartWorkLogExistingRecord->update( ['record_status' => $data['claim_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
                 }
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
-               // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }

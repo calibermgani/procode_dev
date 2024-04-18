@@ -55,7 +55,7 @@
 
                                             $assignedTotalCount = 0; $completedTotalCount = 0; $pendingTotalCount = 0; $holdTotalCount = 0;
                                             foreach($model_name as $model) {
-                                                $modelClass = "App\\Models\\" .  $model;
+                                                $modelClass = "App\\Models\\" .  $model; $startDate = Carbon\Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
                                                 // $modelClass = "App\\Models\\" .  preg_replace('/[^A-Za-z0-9]/', '',$model);
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
@@ -63,10 +63,10 @@
                                                         $holdCount = 0;
                                                 if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                                                             if (class_exists($modelClass)) {
-                                                                $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->count();
-                                                                $completedCount = $modelClass::where('claim_status','CE_Completed')->count();
-                                                                $pendingCount = $modelClass::where('claim_status','CE_Pending')->count();
-                                                                $holdCount = $modelClass::where('claim_status','CE_Hold')->count();
+                                                                $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                                $completedCount = $modelClass::where('claim_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                                $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                                $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                                                             } else {
                                                                 $assignedCount = 0;
                                                                 $completedCount = 0;
@@ -75,10 +75,10 @@
                                                             }
                                                 } else if($loginEmpId) {
                                                     if (class_exists($modelClass)) {
-                                                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                                                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->count();
-                                                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->count();
-                                                        $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->count();
+                                                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                        $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                                                     } else {
                                                         $assignedCount = 0;
                                                         $completedCount = 0;

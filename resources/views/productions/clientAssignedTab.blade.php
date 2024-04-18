@@ -154,7 +154,8 @@
                                                             <td>
                                                                 @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
                                                                 @else
-                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus) && $reworkCount < 3)
+                                                                    {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus) && $reworkCount < 3) --}}
+                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus))
                                                                         <button class="task-start clickable-row"
                                                                             title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
                                                                     @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->claim_status == "CE_Inprocess")
@@ -1153,8 +1154,7 @@
 
                 $('input[type="checkbox"]').each(function() {
                     var groupName = $(this).attr("id");
-                    console.log(groupName, 'chckkkkkkkk');
-                  if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
+                   if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                         if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
                                 0) {
