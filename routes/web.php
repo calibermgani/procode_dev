@@ -38,7 +38,7 @@ Route::any('projects_assigned/{clientName}/{subProjectName}', 'App\Http\Controll
 Route::any('projects_pending/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientPendingTab')->name('clientPending');
 Route::any('projects_hold/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientHoldTab')->name('clientHold');
 Route::any('projects_completed/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientCompletedTab')->name('clientCompleted');
-Route::any('projects_rework/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientReworkTab')->name('clientRework');
+Route::any('projects_Revoke/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientReworkTab')->name('clientRework');
 Route::any('projects_duplicate/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientDuplicateTab')->name('clientDuplicate');
 Route::any('clients_duplicate_status', 'App\Http\Controllers\ProductionController@clientsDuplicateStatus');
 Route::any('form_creation', 'App\Http\Controllers\FormController@formCreationIndex')->name('formCreationIndex');
@@ -62,7 +62,23 @@ Route::any('reports/report_client_columns_list', 'App\Http\Controllers\Reports\R
 Route::any('project_config_delete', 'App\Http\Controllers\FormController@projectConfigDelete');
 Route::any('sampling', 'App\Http\Controllers\SettingController@qualitySampling');
 Route::any('qa_sampling_store', 'App\Http\Controllers\SettingController@qualitySamplingStore');
+Route::any('qa_sampling_update', 'App\Http\Controllers\SettingController@qualitySamplingUpdate');
 
+Route::group(['prefix' => 'qa_production'], function () {
+    Route::any('qa_clients', 'App\Http\Controllers\QA\QAProductionController@clients')->name('qaClients');
+    Route::any('qa_sub_projects', 'App\Http\Controllers\QA\QAProductionController@getSubProjects')->name('qaSubProjects');
+    Route::any('qa_projects_assigned/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientAssignedTab')->name('qaClientAssigned');
+    Route::any('qa_projects_pending/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientPendingTab')->name('qaClientPending');
+    Route::any('qa_projects_hold/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientHoldTab')->name('qaClientHold');
+    Route::any('qa_projects_completed/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientCompletedTab')->name('cqaCientCompleted');
+    Route::any('qa_projects_Revoke/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientReworkTab')->name('qaClientRework');
+    Route::any('qa_projects_duplicate/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientDuplicateTab')->name('qaClientDuplicate');
+    Route::any('qa_client_completed_datas_details', 'App\Http\Controllers\QA\QAProductionController@qaClientCompletedDatasDetails');
+    Route::any('qa_client_view_details', 'App\Http\Controllers\QA\QAProductionController@qaClientViewDetails');
+    Route::any('qa_project_store/{projectName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientsStore');
+    Route::any('qa_project_update/{projectName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientsUpdate');
+    Route::any('qa_sub_status_list', 'App\Http\Controllers\QA\QAProductionController@qaSubStatusList');
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

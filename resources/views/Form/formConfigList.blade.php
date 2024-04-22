@@ -29,6 +29,7 @@
                                 <th>Project Name</th>
                                 <th>Sub Project Name</th>
                                 <th>Column Fields</th>
+                                <th  style="width: 3%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,10 +59,12 @@
                                     @endphp
                                     @if($projectName !== null  && $subProjectName !== null )
                                     <tr
-                                        data-href="{{ route('formEdit', ['parent' => request()->parent, 'child' => request()->child, 'project_id' => $project_id_encode, 'sub_project_id' => $sub_project_id_encode]) }}">
-                                        <td>{{ $projectName->project_name }}</td>
-                                        <td>{{ $subProjectName == '--' ? '--' : $subProjectName->sub_project_name }}</td>
+                                        data-href="{{ route('formEdit', ['parent' => request()->parent, 'child' => request()->child, 'project_id' => $project_id_encode, 'sub_project_id' => $sub_project_id_encode]) }}" style="cursor:pointer !important">
+                                        <td><input type="hidden" value="{{$data->project_id}}">{{ $projectName->project_name }}</td>
+                                        <td><input type="hidden" value="{{$data->sub_project_id}}">{{ $subProjectName == '--' ? '--' : $subProjectName->sub_project_name }}</td>
                                         <td>{{ $data->label_names }}</td>
+                                        <td class="project_delete" data-value="{{$loop->iteration}}"><i
+                                            class="fa fas fa-trash text-danger icon-circle2 ml-1 mt-0 record_delete"></i></a></td>
                                     </tr>
                                     @endif
                                 @endforeach
@@ -78,8 +81,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(document).ready(function() {
-                $('#formConfigurationLsit').DataTable({
+                  $('#formConfigurationLsit').DataTable({
                     lengthChange: false,
                     searching: true,
                     pageLength: 20,
@@ -88,18 +90,70 @@
                         "searchPlaceholder": "   Search",
                     },
                     "columnDefs": [
-            { "width": "200px", "targets": 0 }, // Adjust the width as needed
-            { "width": "150px", "targets": 1 }, // Adjust the width as needed
-            // Add more columnDefs for each column as needed
-            { "className": "dt-wrap", "targets": "_all" } // Enable text wrapping for all columns
-        ]
+                        { "width": "200px", "targets": 0 }, // Adjust the width as needed
+                        { "width": "150px", "targets": 1 }, // Adjust the width as needed
+                        // Add more columnDefs for each column as needed
+                        { "className": "dt-wrap", "targets": "_all" } // Enable text wrapping for all columns
+                    ]
                 });
 
-                $('tr[data-href]').click(function() {
-                    var url = $(this).data('href');
-                    window.location.href = url;
+                // $('tr[data-href]').click(function() { // full row click
+                //     var url = $(this).data('href');
+                //     window.location.href = url;
+                // });
+                $('#formConfigurationLsit tbody tr td:not(:last-child)').click(function() {
+                        // Your row click event handler logic here
+                        var href = $(this).closest('tr').data('href');
+                        window.location.href = href;
                 });
-            });
+                $('#formConfigurationLsit tbody').on('click', 'td.project_delete', function(e){
+                    var projectId = $(this).closest('tr').find('td:eq(0) input').val();
+                    var subProjectId = $(this).closest('tr').find('td:eq(1) input').val();
+                    swal.fire({
+                            text: "Are you sure you want to delete?",
+                            icon: "success",
+                            buttonsStyling: false,
+                            showCancelButton: true,
+                            confirmButtonText: "Yes",
+                            cancelButtonText: "No",
+                            reverseButtons: true,
+                            customClass: {
+                                confirmButton: "btn font-weight-bold btn-white-black",
+                                cancelButton: "btn font-weight-bold  btn-light-danger",
+                            }
+                        }).then(function(result) {
+                            if (result.value == true) {
+                                $.ajaxSetup({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                            'content')
+                                    }
+                                });
+
+                                $.ajax({
+                                    url: "{{ url('project_config_delete') }}",
+                                    method: 'POST',
+                                    data: {
+                                        projectId: projectId,
+                                        subProjectId: subProjectId,
+                                    },
+                                    success: function(response) {
+                                        if (response.success == true) {
+                                            js_notification('success', 'Project configuration deleted successfully');
+                                            setTimeout(function() {
+                                                    location.reload();
+                                            }, 2000);
+                                        } else {
+                                            js_notification('error', 'We can not delete the project because it contains data.');
+                                        }
+                                    },
+                                });
+                            } else {
+                               location.reload();
+                            }
+                        });
+                     console.log('project delete',projectId,subProjectId);
+                });
         });
     </script>
 @endpush

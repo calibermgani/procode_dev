@@ -20,6 +20,7 @@ class CreateQualitySamplingsTable extends Migration
             $table->string('coder_emp_id')->nullable();
             $table->string('qa_emp_id')->nullable();
             $table->string('qa_percentage')->nullable();
+            $table->string('claim_priority')->nullable();
             $table->string('added_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

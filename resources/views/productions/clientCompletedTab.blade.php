@@ -36,7 +36,7 @@
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Assigned</h6>
+                                                    <h6 style="margin-right: 5px;">Total Inventory</h6>
                                                     {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $assignedCount }}
                                                     </div> --}}
@@ -88,7 +88,7 @@
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Rework</h6>
+                                                    <h6 style="margin-right: 5px;">Audit Rework</h6>
                                                     {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $reworkCount }}
                                                     </div> --}}
@@ -156,15 +156,15 @@
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
-                                                    <th style="width:16%">Action</th>
+                                                    <th class='notexport'>Action</th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
-                                                            <th style="width:12%"><input type="hidden"
+                                                            <th><input type="hidden"
                                                                     value={{ $columnValue }}>
                                                                 {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                             </th>
                                                         @else
-                                                            <th style="width:12%;display:none"><input type="hidden"
+                                                            <th style="display:none" class='notexport'><input type="hidden"
                                                                     value={{ $columnValue }}>
                                                                 {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
                                                             </th>
@@ -184,7 +184,7 @@
                                                             class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button></td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['QA_emp_id', 'created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 {{-- <td style="max-width: 300px;white-space: normal;">
@@ -241,18 +241,23 @@
                                     $clientName = App\Http\Helper\Admin\Helpers::projectName(
                                         $popUpHeader->project_id,
                                     );
-                                    $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
-                                        $popUpHeader->project_id,
-                                        $popUpHeader->sub_project_id,
-                                    );
                                     $projectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
                                         $popUpHeader->project_id,
                                         'encode',
                                     );
-                                    $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
-                                        $popUpHeader->project_id,
+                                    if($popUpHeader->sub_project_id != NULL) {
+                                        $practiceName = App\Http\Helper\Admin\Helpers::subProjectName(
+                                            $popUpHeader->project_id,
+                                            $popUpHeader->sub_project_id,
+                                        );
+                                        $subProjectName = App\Http\Helper\Admin\Helpers::encodeAndDecodeID(
+                                        $popUpHeader->sub_project_id,
                                         'encode',
-                                    );
+                                        );
+                                    } else {
+                                        $practiceName = '';
+                                        $subProjectName = '--';
+                                    }
 
                                 @endphp
 
@@ -261,7 +266,7 @@
                                         <div class="modal-header" style="background-color: #139AB3;height: 84px">
 
                                             <div class="col-md-4">
-                                                <div class="d-flex align-items-center">
+                                                <div class="align-items-center" style="display: -webkit-box !important;">
                                                     <!-- Round background for the first letter of the project name -->
                                                     <div class="rounded-circle bg-white text-black mr-2" style="width: 50px; height: 50px; display: flex; justify-content: center; align-items: center;font-weight;bold">
                                                         <span>{{ strtoupper(substr($clientName->project_name, 0, 1)) }}</span>
@@ -271,21 +276,22 @@
                                                         <h4 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
                                                             {{ ucfirst($clientName->project_name) }}
                                                         </h4>
-                                                        <!-- Sub project name -->
-                                                        <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @if($practiceName != '')
+                                                         <h6 style="color: #ffffff;font-size:1rem;">{{ ucfirst($practiceName->sub_project_name) }}</h6>
+                                                        @endif
                                                     </div>&nbsp;&nbsp;
                                                     <!-- Oval background for project status -->
                                                     <div class="bg-white rounded-pill px-2 text-black" style="margin-bottom: 2rem;margin-left:2.2px;font-size:10px;font-weight:500;background-color:#E9F3FF;color:#139AB3;">
-                                                        <span id="title_status"></span>
+                                                        <span id="title_status_view"></span>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                        <div class="col-md-8 d-flex justify-content-end">
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a>
+                                        <div class="col-md-8 d-flex justify-content-end" style="display: -webkit-box !important;">
+                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Reference</a>
+                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">MOM</a> --}}
                                             <button type="button" class="btn btn-black-white mr-3" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                            <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a>
+                                            {{-- <a href="" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Custom</a> --}}
                                         </div>
 
                                             <button type="button" class="close comment_close" data-dismiss="modal"
@@ -310,11 +316,11 @@
                                                                 $data->label_name,
                                                             ),
                                                         );
-                                                        $inputType = $data->input_type;
-                                                        $options =
-                                                            $data->options_name != null
-                                                                ? explode(',', $data->options_name)
-                                                                : null;
+                                                        // $inputType = $data->input_type;
+                                                        // $options =
+                                                        //     $data->options_name != null
+                                                        //         ? explode(',', $data->options_name)
+                                                        //         : null;
                                                     @endphp
 
                                                         <label
@@ -330,7 +336,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-md-9" style="border-left: 1px solid #ccc;" data-scroll="true" data-height="400">
-                                                    <h6 class="title-h6">Form</h6>&nbsp;&nbsp;
+                                                    <h6 class="title-h6">Coder</h6>&nbsp;&nbsp;
                                                     @if (count($popupEditableFields) > 0)
                                                         @php $count = 0; @endphp
                                                         @foreach ($popupEditableFields as $key => $data)
@@ -390,35 +396,64 @@
                             </div>
                         @endif
                 </div>
+                <div class="modal fade modal-second modal-left" id="myModal_sop" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                                @if ($popUpHeader != null)
+                                    @php
+                                            $clientName = App\Http\Helper\Admin\Helpers::projectName(
+                                                $popUpHeader->project_id,
+                                            );
+                                            $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientName->project_name);
+                                    @endphp
+                                @endif
+                            <div class="modal-header" style="background-color: #139AB3;height: 84px">
+                                <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;" >SOP</h5>
+                                    <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-up-right-square" viewBox="0 0 16 16" style="color: #ffffff; margin-left: 365px;">
+                                            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.854 8.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"/>
+                                        </svg>
+                                    </a>
+                                <button type="button" class="close comment_close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <iframe src={{ asset('/pdf_folder/'.$pdfName.'.pdf') }} style="width: 100%; height: 418px;" frameborder="0" type="application/pdf"></iframe>
+                            </div>
+                            <div class="modal-footer">
+                                {{-- <a href={{ asset('/pdf_folder/sample_1234.pdf') }} target="_blank" class="btn btn-black-white mr-3" style="padding: 0.35rem 1rem;">Tab</a> --}}
+                                <button type="button" class="btn btn-light-danger" data-dismiss="modal">Close</button>
+                                <!-- Additional buttons can be added here -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 @endsection
 <style>
-    /* Increase modal width */
-    /* #myModal_view .modal-dialog {
-        max-width: 800px;
-    }
-    #myModal_view .modal-body label {
-        margin-bottom: 5px;
-    }
-    #myModal_view .modal-body input[type="text"] {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-    } */
-
-    /* .dt-buttons {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1000;
-  } */
-
-
     .dropdown-item.active {
-        color: #ffffff;
-        text-decoration: none;
-        background-color: #888a91;
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #888a91;
+    }
+
+    .modal-left .modal-dialog {
+        margin-top: 90px;
+        margin-left: 320px;
+        margin-right: auto;
+    }
+
+    .modal-left .modal-content {
+        border-radius: 5px;
+    }
+
+    .modal-right .modal-dialog {
+        margin-left: auto;
+        margin-right: 220px;
+        transition: margin 5s ease-in-out;
+    }
+
+    .modal-right .modal-content {
+        border-radius: 5px;
     }
 </style>
 @push('view.scripts')
@@ -427,6 +462,15 @@
     <script>
 
         $(document).ready(function() {
+            const url = window.location.href;
+            const startIndex = url.indexOf('projects_') + 'projects_'.length;
+            const endIndex = url.indexOf('/', startIndex);
+            const urlDynamicValue = url.substring(startIndex, endIndex);
+                var d = new Date();
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+                var date = (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_completed_list").DataTable({
                 processing: true,
                 ordering: false,
@@ -449,7 +493,10 @@
                              </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
                     "className": 'btn btn-primary-export text-white',
                     "title": 'PROCODE',
-                    "filename": 'procode_report_',
+                    "filename": 'procode_completed_'+date,
+                    "exportOptions": {
+                        "columns": ':not(.notexport)'// Exclude first two columns
+                    }
                 }],
                 dom: "B<'row'<'col-md-12'f><'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>"
             })
@@ -481,12 +528,13 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_completed_datas_details') }}",
+                        url: "{{ url('client_view_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
                             clientName: clientName,
-                            subProjectName: subProjectName
+                            subProjectName: subProjectName,
+                            // urlDynamicValue: urlDynamicValue
                         },
                         success: function(response) {
                             if (response.success == true) {
@@ -529,6 +577,7 @@
                     } else {
                         if (header === 'claim_status' && value.includes('CE_')) {
                                 value = value.replace('CE_', '');
+                                $('#title_status_view').text(value);
                         }
 
                        $('label[id="' + header + '"]').text(value);
@@ -568,7 +617,7 @@
                 window.location.href = "{{ url('#') }}";
             })
             $(document).on('click', '.five', function() {
-                window.location.href = baseUrl + 'projects_rework/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'projects_Revoke/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
@@ -577,6 +626,18 @@
                     "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
             })
+
+            $(document).on('click', '#sop_click', function(e) {
+                console.log('sop modal');
+                $('#myModal_sop').modal('show');
+            });
+                $('#myModal_sop').on('shown.bs.modal', function () {
+                     $('#myModal_view').addClass('modal-right');
+                });
+
+                $('#myModal_sop').on('hidden.bs.modal', function () {
+                    $('#myModal_view').removeClass('modal-right');
+                });
         })
     </script>
 @endpush
