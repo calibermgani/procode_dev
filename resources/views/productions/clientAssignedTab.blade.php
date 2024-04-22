@@ -40,7 +40,7 @@
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Assigned</h6>
+                                                    <h6 style="margin-right: 5px;">Total Inventory</h6>
                                                     @include('CountVar.countRectangle', ['count' => $assignedCount])
                                                 </div>
 
@@ -85,7 +85,7 @@
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title"
                                                 style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Rework</h6>
+                                                    <h6 style="margin-right: 5px;">Audit Rework</h6>
                                                     @include('CountVar.countRectangle', ['count' => $reworkCount])
                                                 </div>
                                             </div>
@@ -491,7 +491,7 @@
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <div class="form-group row" >
-                                                                                <label class="col-md-12 required" id="ce_hold_reason_label">
+                                                                                <label class="col-md-12 required" id="ce_hold_reason_label" style = 'display:none'>
                                                                                     Hold Reason
                                                                                 </label>
                                                                                 <div class="col-md-10">
