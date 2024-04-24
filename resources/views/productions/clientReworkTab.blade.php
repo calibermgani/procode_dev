@@ -791,7 +791,7 @@
            aria-labelledby="myModalLabel" data-backdrop="static" aria-hidden="true">
          @if ($popUpHeader != null)
              <div class="modal-dialog">
-                 @php
+                @php
                      $clientName = App\Http\Helper\Admin\Helpers::projectName(
                          $popUpHeader->project_id,
                      );
@@ -810,11 +810,9 @@
                          );
                      } else {
                          $practiceName = '';
-                         $subProjectName = '';
+                         $subProjectName = '--';
                      }
-
                  @endphp
-
 
                      <div class="modal-content" style="margin-top: 7rem">
                          <div class="modal-header" style="background-color: #139AB3;height: 84px">
