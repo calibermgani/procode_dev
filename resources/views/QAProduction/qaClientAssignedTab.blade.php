@@ -2335,14 +2335,17 @@
 
                     var textAreaValue = $('#QA_rework_comments').val();
 
-                    // Check if the formattedValue already exists in the textarea
                     if (textAreaValue.includes(formattedValue)) {
-                        // Replace the existing line with the new information
-                        var regex = new RegExp(formattedValue + ' .*', 'g');
+                        var regex = new RegExp(formattedValue + ' .*', 'g');console.log('regex',regex,textAreaValue,newLine);
                         textAreaValue = textAreaValue.replace(regex, newLine);
                     } else {
-                        // Append the new line to the textarea
-                        textAreaValue += newLine;
+                        console.log('else',textAreaValue,'space',newLine);
+                        if(textAreaValue == "") {
+                          textAreaValue += newLine;
+                        } else {
+                            newLine = '\n'+newLine;
+                            textAreaValue += newLine;
+                        }
                     }
 
                     // Set the updated value back to the textarea
