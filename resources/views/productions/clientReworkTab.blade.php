@@ -1693,6 +1693,9 @@
                                     });
                                     $('label[id="qa_sub_status_view"]').text(subStatusName);
                                 }
+                                if (header == 'QA_rework_comments') {
+                                    $('label[id="qa_rework_comments_view"]').text(value);
+                                }
                                 $('input[name="parentId"]').val(clientData['parent_id']);
                                 $('label[id="' + header + '"]').text(value);
 

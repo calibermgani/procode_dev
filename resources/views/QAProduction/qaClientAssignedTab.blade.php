@@ -1024,6 +1024,44 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <hr style="display:none" id="hr_view">
+                                        <div class="row mt-4">
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="QA_rework_comments_label_view" style="display:none">
+                                                      Notes
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                         <label class="col-md-12 pop-non-edt-val coder_rework_status" id="QA_rework_comments_view" style="display:none">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" style="display:none" id="coder_rework_status_label_view">
+                                                       Coder Status
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        <label class="col-md-12 pop-non-edt-val coder_rework_status" id="coder_rework_status_view" style="display:none">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="coder_rework_reason_label_view" style="display:none">
+                                                       Coder Comments
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        <label class="col-md-12 pop-non-edt-val coder_rework_reason" id="coder_rework_reason_view" style="display:none">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                             </div>
                         </div>
     <div class="modal-footer">
@@ -1767,7 +1805,9 @@
                     },
                     success: function(response) {
                         if (response.success == true) {
-
+                            headers.push('QA_rework_comments');
+                                headers.push('coder_rework_status');
+                                headers.push('coder_rework_reason');
                             $('#myModal_view').modal('show');
                             handleClientData(response.clientData, headers);
                         } else {
@@ -1794,6 +1834,18 @@
                                 }
                             });
                             formattedDatas.forEach(function(span, index) {
+                                if (header == 'QA_rework_comments') {
+                                        $('label[id="QA_rework_comments_view"]').append(span);
+                                        if (span !== null) {
+                                            $('#QA_rework_comments_label_view').css('display','block');
+                                            $('#QA_rework_comments_view').css('display','block');
+                                            $('#hr_view').css('display','block');
+                                        } else {
+                                            $('#QA_rework_comments_label_view').css('display','none');
+                                            $('#QA_rework_comments_view').css('display','none');
+                                            $('#hr_view').css('display','none');
+                                        }
+                                    }
                                 $('label[id="' + header + '"]').append(span);
                             });
                         } else {
@@ -1830,6 +1882,41 @@
                                     $('label[id="qa_sub_status_view"]').text(subStatusName);
 
                                 }
+                                if (header == 'coder_rework_status') {
+                                   $('label[id="coder_rework_status_view"]').text(value);
+                                    if (value !== null) {
+                                        $('#coder_rework_status_label_view').css('display','block');
+                                        $('#coder_rework_status_view').css('display','block');
+                                    } else {
+                                        $('#coder_rework_status_label_view').css('display','none');
+                                        $('#coder_rework_status_view').css('display','none');
+                                    }
+                                }
+                                if (header == 'coder_rework_reason') {
+
+                                    $('label[id="coder_rework_reason_view"]').text(value);
+                                    if (value !== null) {
+                                        $('#coder_rework_reason_label_view').css('display','block');
+                                        $('#coder_rework_reason_view').css('display','block');
+                                        $('#hr_view').css('display','block');
+                                    } else {
+                                        $('#coder_rework_reason_label_view').css('display','none');
+                                        $('#coder_rework_reason_view').css('display','none');
+                                        $('#hr_view').css('display','none');
+                                    }
+                                }
+                                if (header == 'QA_rework_comments') {
+                                        $('label[id="QA_rework_comments_view"]').text(value);
+                                        if (value !== null) {
+                                            $('#QA_rework_comments_label_view').css('display','block');
+                                            $('#QA_rework_comments_view').css('display','block');
+                                            $('#hr_view').css('display','block');
+                                        } else {
+                                            $('#QA_rework_comments_label_view').css('display','none');
+                                            $('#QA_rework_comments_view').css('display','none');
+                                            $('#hr_view').css('display','none');
+                                        }
+                                    }
                             $('label[id="' + header + '"]').text(value);
                         }
 
