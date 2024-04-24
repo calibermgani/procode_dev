@@ -968,7 +968,7 @@
                                     <div class="row mt-4">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="col-md-12 required">
+                                                <label class="col-md-12 required" id="rework_status_label" style="display:none">
                                                    Rework Status
                                                 </label>
                                                 <div class="col-md-10">
@@ -984,7 +984,7 @@
                                                             'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                             'autocomplete' => 'none',
                                                             'id' => 'rework_status',
-                                                            'style' => 'cursor:pointer',
+                                                            'style' => 'cursor:pointer;display:none',
                                                         ],
                                                     ) !!}
                                                 </div>
@@ -1636,6 +1636,8 @@
 
                                  $('#myModal_view').modal('show');
                                  headers.push('QA_rework_comments');
+                                 headers.push('coder_rework_status');
+                                 headers.push('coder_rework_reason');
                                  handleClientData(response.clientData,headers);
                             } else {
                                 $('#myModal_view').modal('hide');
@@ -1695,6 +1697,26 @@
                                 }
                                 if (header == 'QA_rework_comments') {
                                     $('label[id="qa_rework_comments_view"]').text(value);
+                                }
+                                if (header == 'coder_rework_status') {
+                                    $('select[name="coder_rework_status"]').val(value);
+                                    if (value !== null) {
+                                        $('#rework_status_label').css('display','block');
+                                        $('#rework_status').css('display','block');
+                                    } else {
+                                        $('#rework_status_label').css('display','none');
+                                        $('#rework_status').css('display','none');
+                                    }
+                                }
+                                if (header == 'coder_rework_reason') {
+                                    $('textarea[name="coder_rework_reason"]').val(value);
+                                    if (value !== null) {
+                                        $('#rework_reason_label').css('display','block');
+                                        $('#rework_reason').css('display','block');
+                                    } else {
+                                        $('#rework_reason_label').css('display','none');
+                                        $('#rework_reason').css('display','none');
+                                    }
                                 }
                                 $('input[name="parentId"]').val(clientData['parent_id']);
                                 $('label[id="' + header + '"]').text(value);
