@@ -2331,7 +2331,7 @@
                         currentValue = $(this).val();
                     }
                     var prevValue = prevValues[trimmedFiled] || '';
-                    var newLine = formattedValue + ' '+prevValue + ' Changed to ' + currentValue + '\n';
+                    var newLine = formattedValue + ' '+prevValue + ' Changed to ' + currentValue;
 
                     var textAreaValue = $('#QA_rework_comments').val();
 
