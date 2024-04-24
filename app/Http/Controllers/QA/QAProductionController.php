@@ -135,7 +135,7 @@ class QAProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                    $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -234,7 +234,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -304,7 +304,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -374,7 +374,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -442,7 +442,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id', 'CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id', 'CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -500,7 +500,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id', 'CE_emp_id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id', 'CE_emp_id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -649,6 +649,11 @@ class QAProductionController extends Controller
                 $data['parent_id'] = $data['idValue'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();
+                $data['QA_rework_comments']=$data['QA_rework_comments'] != null ? str_replace("\r\n", '_el_', $data['QA_rework_comments']) : $data['QA_rework_comments'];
+                if($data['claim_status'] == "Revoke") {
+                  $data['coder_error_count'] = $datasRecord['coder_error_count']+1;
+                }
+
                 if($datasRecord != null) {
                     $datasRecord->update($data);
                     $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]);

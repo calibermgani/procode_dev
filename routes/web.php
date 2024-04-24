@@ -63,6 +63,8 @@ Route::any('project_config_delete', 'App\Http\Controllers\FormController@project
 Route::any('sampling', 'App\Http\Controllers\SettingController@qualitySampling');
 Route::any('qa_sampling_store', 'App\Http\Controllers\SettingController@qualitySamplingStore');
 Route::any('qa_sampling_update', 'App\Http\Controllers\SettingController@qualitySamplingUpdate');
+Route::any('client_rework_datas_details', 'App\Http\Controllers\ProductionController@clientReworkDatasDetails');
+Route::any('project_rework_update/{projectName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientsReworkUpdate');
 
 Route::group(['prefix' => 'qa_production'], function () {
     Route::any('qa_clients', 'App\Http\Controllers\QA\QAProductionController@clients')->name('qaClients');

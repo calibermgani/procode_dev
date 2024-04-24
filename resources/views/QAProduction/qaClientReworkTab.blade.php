@@ -127,7 +127,7 @@
                                                         style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['id','CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['id','CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                 <td style="max-width: 300px;white-space: normal;">

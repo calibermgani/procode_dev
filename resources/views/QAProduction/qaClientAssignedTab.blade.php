@@ -217,7 +217,7 @@
                                                 @php
                                                     $columnsToExclude = [
                                                         'CE_emp_id',
-                                                        'ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                                                        'ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
                                                         'created_at',
                                                         'updated_at',
                                                         'deleted_at',
@@ -764,6 +764,62 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <hr>
+                                        <div class="row mt-4">
+                                            <div class="col-md-12">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="QA_rework_comments_label">
+                                                      Notes
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        {!! Form::textarea('QA_rework_comments',  null, ['class' => 'text-black form-control QA_rework_comments','rows' => 6,'id' => 'QA_rework_comments','readonly']) !!}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" style="display:none" id="coder_rework_status_label">
+                                                       Coder Status
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        <label class="col-md-12 pop-non-edt-val coder_rework_status" id="coder_rework_status" style="display:none">
+                                                        </label>
+                                                        {{-- {!! Form::Select(
+                                                            'coder_rework_status',
+                                                            [
+                                                                '' => 'Select',
+                                                                'Accept' => 'Accept',
+                                                                'Rebuttal' => 'Rebuttal',
+                                                              ],
+                                                            null,
+                                                            [
+                                                                'class' => 'form-control white-smoke coder_rework_status pop-non-edt-val ',
+                                                                'autocomplete' => 'none',
+                                                                'id' => 'coder_rework_status',
+                                                                'style' => 'cursor:pointer',
+                                                            ],
+                                                        ) !!} --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="coder_rework_reason_label" style="display:none">
+                                                       Coder Comments
+                                                    </label>
+                                                    <div class="col-md-10">
+                                                        <label class="col-md-12 pop-non-edt-val coder_rework_reason" id="coder_rework_reason" style="display:none">
+                                                        </label>
+                                                        {{-- {!! Form::textarea('coder_rework_reason',  null, ['class' => 'text-black form-control coder_rework_reason','rows' => 3,'id' => 'rework_reason']) !!} --}}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                           </div>
                     </div>
         <div class="modal-footer" style="justify-content: space-between;">
@@ -1077,6 +1133,7 @@
         $(document).ready(function() {
             var qaSubStatusList = @json($qaSubStatusListVal);
             var qaStatusList = @json( $qaStatusList);
+            var prevValues;
             $("#expandButton").click(function() {
                 var modalContent = $(".modal-content");
                 if (modalContent.width() === 800) {
@@ -1311,11 +1368,14 @@
                         urlDynamicValue: urlDynamicValue
                     },
                     success: function(response) {
-                        console.log(response.success, 'response.success', lastClass, response);
                         if (lastClass == 'start') {
                             if (response.success == true) {
                                 $('#myModal_status').modal('show');
                                 startTime_db = response.startTimeVal;
+                                headers.push('QA_rework_comments');
+                                headers.push('coder_rework_status');
+                                headers.push('coder_rework_reason');
+                                prevValues = response.clientData;
                                 handleClientPendData(response.clientData, headers);
                             } else {
                                 $('#myModal_status').modal('hide');
@@ -1329,6 +1389,15 @@
 
                     $.each(headers, function(index, header) {
                         value = clientData[header];
+                          if (header == 'QA_rework_comments') {
+                                if (/_el_/.test(value)) {
+                                    var commentsValues = value.split('_el_');
+                                    var commentsText = commentsValues.join('\n');
+                                    $('textarea[name="QA_rework_comments"]').val(commentsText);
+                                } else {
+                                    $('textarea[name="QA_rework_comments"]').val(value);
+                                }
+                           }
                         $('label[id="' + header + '"]').html("");
                         $('input[name="' + header + '[]"]').html("");
                         if (/_el_/.test(value)) {
@@ -1597,6 +1666,7 @@
                             if (header == 'QA_emp_id') {
                                 $('input[name="QA_emp_id"]').val(value);
                             }
+
                             if (header == 'QA_status_code') {
                                 $('select[name="QA_status_code"]').val(value).trigger('change');
                                 $('#status_val').val(value);
@@ -1604,6 +1674,27 @@
                             if (header == 'QA_sub_status_code') {
                                 statusVal = $('#status_val').val();
                                 subStatus(statusVal,value);
+                            }
+                            if (header == 'coder_rework_status') {
+                                $('label[id="coder_rework_status"]').text(value);
+                                if (value !== null) {
+                                    $('#coder_rework_status_label').css('display','block');
+                                    $('#coder_rework_status').css('display','block');
+                                } else {
+                                    $('#coder_rework_status_label').css('display','none');
+                                    $('#coder_rework_status').css('display','none');
+                                }
+                            }
+                            if (header == 'coder_rework_reason') {
+
+                                $('label[id="coder_rework_reason"]').text(value);
+                                if (value !== null) {
+                                    $('#coder_rework_reason_label').css('display','block');
+                                    $('#coder_rework_reason').css('display','block');
+                                } else {
+                                    $('#coder_rework_reason_label').css('display','none');
+                                    $('#coder_rework_reason').css('display','none');
+                                }
                             }
                             $('textarea[name="' + header + '[]"]').val(value);
                             $('input[name="' + header + '[]"]').val(value);
@@ -1706,7 +1797,7 @@
                                 $('label[id="' + header + '"]').append(span);
                             });
                         } else {
-                            console.log(value, 'qa value');
+
                             if (header === 'claim_status' && value.includes('CE_')) {
                                 // value = value.replace('CE_', '');
                                 value = "Assigned";
@@ -1865,8 +1956,7 @@
                                         if ($(this).val() == '') {
                                             e.preventDefault();
                                             $(this).css('border-color', 'red', 'important');
-                                            inputTypeValue =
-                                                1;
+                                            inputTypeValue = 1;
                                         } else {
                                             $(this).css('border-color', '');
                                             inputTypeValue =
@@ -1928,18 +2018,12 @@
                         qaStatus.next('.select2').find(".select2-selection").css('border-color', 'red','important');
                         inputTypeValue = 1;
                         return false;
-                    } else {
-                        qaStatus.next('.select2').find(".select2-selection").css('border-color', '');
-                        inputTypeValue = 0;
                     }
 
                     if (qaSubStatus.val() == '' || qaSubStatus.val() == null) {
                         qaSubStatus.next('.select2').find(".select2-selection").css('border-color', 'red','important');
                         inputTypeValue = 1;
                         return false;
-                    } else {
-                        qaSubStatus.next('.select2').find(".select2-selection").css('border-color', '');
-                        inputTypeValue = 0;
                     }
 
 
@@ -2111,6 +2195,74 @@
             })
 
 
+
+            // Exclude fields you don't want to track
+            var excludedFields = ['QA_rework_comments', 'claim_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code'];
+
+
+            // $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
+            //     var fieldName = $(this).attr('name');
+            //     var trimmedFiled = $(this).attr('name').replace(/\[\]$/, '');
+            //     var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+
+            //     if (excludedFields.indexOf(fieldName) === -1) {
+            //         var currentValue = '';
+            //         if ($(this).is('input[type="checkbox"]')) {
+            //             currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+            //         } else if ($(this).is('input[type="radio"]')) {
+            //             currentValue = $(`input[name="${fieldName}"]:checked`).val();
+            //         } else if ($(this).is('input[type="date"]')) {
+            //             currentValue = $(this).val();
+            //         } else {
+            //             currentValue = $(this).val();
+            //         }
+            //         var prevValue = prevValues[trimmedFiled] || '';
+            //          $('#QA_rework_comments').val(function(index, value) {
+            //             console.log(index, value,'index, value');
+            //                //value = value.replace(new RegExp('\\b' + trimmedFiled + ' Value Changed' + prevValue + '\\n?', 'g'), '');
+            //                value.contains(formattedValue);
+            //               return value + formattedValue + ' '+prevValue +' Changed to ' + currentValue + '\n';
+            //         });
+            //        //prevValues[fieldName] = currentValue;
+            //     }
+            // });
+
+            $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
+                var fieldName = $(this).attr('name');
+                var trimmedFiled = $(this).attr('name').replace(/\[\]$/, '');
+                var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+
+                if (excludedFields.indexOf(fieldName) === -1) {
+                    var currentValue = '';
+                    if ($(this).is('input[type="checkbox"]')) {
+                        currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+                    } else if ($(this).is('input[type="radio"]')) {
+                        currentValue = $(`input[name="${fieldName}"]:checked`).val();
+                    } else if ($(this).is('input[type="date"]')) {
+                        currentValue = $(this).val();
+                    } else {
+                        currentValue = $(this).val();
+                    }
+                    var prevValue = prevValues[trimmedFiled] || '';
+                    var newLine = formattedValue + ' '+prevValue + ' Changed to ' + currentValue + '\n';
+
+                    var textAreaValue = $('#QA_rework_comments').val();
+
+                    // Check if the formattedValue already exists in the textarea
+                    if (textAreaValue.includes(formattedValue)) {
+                        // Replace the existing line with the new information
+                        var regex = new RegExp(formattedValue + ' .*', 'g');
+                        textAreaValue = textAreaValue.replace(regex, newLine);
+                    } else {
+                        // Append the new line to the textarea
+                        textAreaValue += newLine;
+                    }
+
+                    // Set the updated value back to the textarea
+                    $('#QA_rework_comments').val(textAreaValue);
+                }
+            });
+
         })
 
         function updateTime() {
@@ -2120,7 +2272,7 @@
             var seconds = now.getSeconds();
             var startTime = new Date(startTime_db).getTime();
             var elapsedTimeMs = new Date().getTime() - startTime;
-            console.log(startTime_db, startTime, new Date().getTime(), elapsedTimeMs, 'minutes');
+            // console.log(startTime_db, startTime, new Date().getTime(), elapsedTimeMs, 'minutes');
             var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
             var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
             elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;

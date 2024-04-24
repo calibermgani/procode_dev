@@ -141,7 +141,7 @@
                                     @foreach ($revokeProjectDetails as $data)
                                         <tr style="{{ $data->invoke_date == 125 ? 'background-color: #f77a7a;' : '' }}">
                                             <td>
-                                                @if (
+                                                {{-- @if (
                                                     ($empDesignation !== 'Administrator' ||
                                                         strpos($empDesignation, 'Manager') !== true ||
                                                         strpos($empDesignation, 'VP') !== true ||
@@ -160,7 +160,7 @@
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
                                                     @endif
-                                                @endif
+                                                @endif --}}
                                                 <button class="task-start clickable-view" title="View"><i
                                                         class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button>
                                             </td>
@@ -172,6 +172,7 @@
                                                         'qa_hold_reason',
                                                         'qa_work_status',
                                                         'QA_required_sampling',
+                                                        'QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count',
                                                         'QA_followup_date',
                                                         'CE_status_code',
                                                         'CE_sub_status_code',
@@ -295,9 +296,9 @@
                                  </div>
                          </div>
                          </div>
-                         {!! Form::open([
+                         {{-- {!! Form::open([
                              'url' =>
-                                 url('project_update/' . $projectName . '/' . $subProjectName) .
+                                 url('project_rework_update/' . $projectName . '/' . $subProjectName) .
                                  '?parent=' .
                                  request()->parent .
                                  '&child=' .
@@ -306,7 +307,7 @@
                              'id' => 'revokeFormConfiguration',
                              'enctype' => 'multipart/form-data',
                          ]) !!}
-                         @csrf
+                         @csrf --}}
                          <div class="modal-body">
                              <div class="row">
                                  <div class="col-md-3" data-scroll="true" data-height="400">
@@ -481,7 +482,7 @@
                                                         @endif
                                             @endforeach
                                      @endif
-                                     <div class="row mt-4">
+                                     {{-- <div class="row mt-4">
                                         <div class="col-md-6">
                                              <div class="form-group row">
                                                 <label class="col-md-12 required">
@@ -506,7 +507,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                      <div class="row mt-4">
                                          <div class="col-md-6">
                                              <input type="hidden" name="invoke_date">
@@ -540,7 +541,7 @@
                                          </div>
                                          <div class="col-md-6">
                                              <div class="form-group row">
-                                                 <label class="col-md-12 required" id="ce_hold_reason_label">
+                                                 <label class="col-md-12 required" id="ce_hold_reason_label" style = 'display:none'>
                                                      Hold Reason
                                                  </label>
                                                  <div class="col-md-10">
@@ -550,6 +551,7 @@
                                              </div>
                                          </div>
                                      </div>
+
                                      <hr>
                                      <h6 class="title-h6">QA</h6>&nbsp;&nbsp;
                                             @if (count($popupQAEditableFields) > 0)
@@ -727,28 +729,59 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <hr>
+                                            {{-- <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <input type="hidden" name="invoke_date">
+                                                    <input type="hidden" name="CE_emp_id">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-12 required">
+                                                           Rework Status
+                                                        </label>
+                                                        <div class="col-md-10">
+                                                            {!! Form::Select(
+                                                                'rework_status',
+                                                                [
+                                                                    '' => 'Select',
+                                                                    'Accept' => 'Accept',
+                                                                    'Rebuttal' => 'Rebuttal',
+                                                                  ],
+                                                                null,
+                                                                [
+                                                                    'class' => 'form-control white-smoke  pop-non-edt-val ',
+                                                                    'autocomplete' => 'none',
+                                                                    'id' => 'rework_status',
+                                                                    'style' => 'cursor:pointer',
+                                                                ],
+                                                            ) !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-12 required" id="rework_reason_label" style = 'display:none'>
+                                                           Rework Reason
+                                                        </label>
+                                                        <div class="col-md-10">
+                                                            {!! Form::textarea('rework_reason',  null, ['class' => 'text-black form-control','rows' => 3,'id' => 'rework_reason','style' => 'display:none']) !!}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> --}}
                                  </div>
                              </div>
-                             <div class="modal-footer" style="justify-content: space-between;">
-
-
-                                 <p class="timer_1" aria-haspopup="true" aria-expanded="false" data-toggle="modal"
-                                     data-target="#exampleModalCustomScrollable" style="margin-left: -2rem">
-
-                                     <span title="Total hours">
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="22"
-                                             fill="currentColor" class="bi bi-stopwatch" viewBox="0 0 16 16">
-                                             <path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5z" />
-                                             <path
-                                                 d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3" />
-                                         </svg>
-                                     </span><span id="elapsedTime" class="timer_2"></span>
-                                 </p>
-
+                             {{-- <div class="modal-footer" style="justify-content: space-between;">
+                                     <p  style="margin-left: -2rem"></p>
                                  <button type="submit" class="btn1" id="project_revoke_save" style="margin-right: -2rem">Submit</button>
-                             </div>
+                             </div> --}}
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-light-danger" id="close"
+                                data-dismiss="modal">Close</button>
+                                {{-- <button type="submit"  class="btn1" id="project_revoke_save" style="margin-right: -2rem">Submit</button> --}}
+                               </div>
                          </div>
-                         {!! Form::close() !!}
+                         {{-- {!! Form::close() !!} --}}
                      </div>
 
              </div>
@@ -810,11 +843,25 @@
                                  </div>
                              </div>
                          </div>
-
+                         {!! Form::open([
+                            'url' =>
+                                url('project_rework_update/' . $projectName . '/' . $subProjectName) .
+                                '?parent=' .
+                                request()->parent .
+                                '&child=' .
+                                request()->child,
+                            'class' => 'form',
+                            'id' => 'revokeFormConfiguration',
+                            'enctype' => 'multipart/form-data',
+                        ]) !!}
+                        @csrf
                          <div class="modal-body">
                              <div class="row">
                                  <div class="col-md-3" data-scroll="true" data-height="400">
                                      <h6 class="title-h6">Basic Information</h6>&nbsp;&nbsp;
+                                     <input type="hidden" name="idValue">
+                                     <input type="hidden" name="parentId">
+                                     <input type="hidden" name="record_old_status">
                                      @if (count($popupNonEditableFields) > 0)
                                          @php $count = 0; @endphp
                                          @foreach ($popupNonEditableFields as $data)
@@ -886,6 +933,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
+                                    <h6 class="title-h6">QA</h6>&nbsp;&nbsp;
                                      <div class="row mt-4">
                                         <div class="col-md-6">
                                             <div class="form-group row">
@@ -906,18 +955,72 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            <div class="form-group row">
+                                                <label class="col-md-12" id="qa_rework_comments_label">
+                                                   Rework Notes
+                                                </label>
+                                                <label class="col-md-12 pop-non-edt-val" id="qa_rework_comments_view">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-12 required">
+                                                   Rework Status
+                                                </label>
+                                                <div class="col-md-10">
+                                                    {!! Form::Select(
+                                                        'coder_rework_status',
+                                                        [
+                                                            '' => 'Select',
+                                                            'Accept' => 'Accept',
+                                                            'Rebuttal' => 'Rebuttal',
+                                                          ],
+                                                        null,
+                                                        [
+                                                            'class' => 'form-control white-smoke  pop-non-edt-val ',
+                                                            'autocomplete' => 'none',
+                                                            'id' => 'rework_status',
+                                                            'style' => 'cursor:pointer',
+                                                        ],
+                                                    ) !!}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-md-12 required" id="rework_reason_label" style = 'display:none'>
+                                                   Comments
+                                                </label>
+                                                <div class="col-md-10">
+                                                    {!! Form::textarea('coder_rework_reason',  null, ['class' => 'text-black form-control','rows' => 3,'id' => 'rework_reason','style' => 'display:none']) !!}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                  </div>
                              </div>
-                             <div class="modal-footer">
+                             {{-- <div class="modal-footer">
 
                                  <button class="btn btn-light-danger float-right" id="close_assign" tabindex="10" type="button" data-dismiss="modal">
                                      <span>
                                          <span>Close</span>
                                      </span>
                                  </button>
-                             </div>
+                             </div> --}}
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-light-danger" id="close"
+                                data-dismiss="modal">Close</button>
+                                <button type="submit"  class="btn1" id="project_revoke_save" style="margin-right: -2rem">Submit</button>
+                               </div>
                          </div>
-
+                         {!! Form::close() !!}
                      </div>
 
              </div>
@@ -998,7 +1101,7 @@
             ranges: {}
         });
          $('.date_range').val('');
-        var startTime_db;
+       // var startTime_db;
         $(document).ready(function() {
             var qaSubStatusList = @json($qaSubStatusListVal);
             var qaStatusList = @json( $qaStatusList);
@@ -1230,7 +1333,7 @@
                   });
 
                     $.ajax({
-                        url: "{{ url('client_completed_datas_details') }}",
+                        url: "{{ url('client_rework_datas_details') }}",
                         method: 'POST',
                         data: {
                             record_id: record_id,
@@ -1242,7 +1345,7 @@
                             if(lastClass == 'start'){
                                 if (response.success == true) {
                                     $('#myModal_status').modal('show');
-                                    startTime_db = response.startTimeVal;
+                                  //  startTime_db = response.startTimeVal;
                                     handleClientRevokData(response.clientData,headers);
                                 } else {
                                     $('#myModal_status').modal('hide');
@@ -1534,7 +1637,8 @@
                             if (response.success == true) {
 
                                  $('#myModal_view').modal('show');
-                                handleClientData(response.clientData,headers);
+                                 headers.push('QA_rework_comments');
+                                 handleClientData(response.clientData,headers);
                             } else {
                                 $('#myModal_view').modal('hide');
                                 js_notification('error', 'Something went wrong');
@@ -1544,19 +1648,25 @@
                     function handleClientData(clientData,headers) {
                         $.each(headers, function(index, header) {
                             value = clientData[header];
+
                             $('label[id="' + header + '"]').html("");
                             if (/_el_/.test(value)) {
                                 var values = value.split('_el_');
                                 var formattedDatas = [];
                                 values.forEach(function(data, index) {
                                     if(data !== '') {
+
                                         var circle = $('<span>').addClass('circle');
                                         var span = $('<span>').addClass('date-label').text(data);
                                             span.prepend(circle);
                                             formattedDatas.push(span);
                                     }
-                                });
+                                });console.log(value,'test value',values,formattedDatas);
                                 formattedDatas.forEach(function(span, index) {
+                                    console.log(span,'span',header);
+                                    if (header == 'QA_rework_comments') {
+                                        $('label[id="qa_rework_comments_view"]').append(span);
+                                    }
                                     $('label[id="' + header + '"]').append(span);
                                 });
                             } else {
@@ -1585,7 +1695,9 @@
                                     });
                                     $('label[id="qa_sub_status_view"]').text(subStatusName);
                                 }
-                            $('label[id="' + header + '"]').text(value);
+                                $('input[name="parentId"]').val(clientData['parent_id']);
+                                $('label[id="' + header + '"]').text(value);
+
                             }
                             function formatDate(dateString) {
                                 var parts = dateString.split('-');
@@ -1772,13 +1884,31 @@
                             }
                         }
                         console.log(inputTypeValue,'inputTypeValue');
-                        var qaRequired = $('#qa_required_sampling');
-                        if (qaRequired.val() == '' || qaRequired.val() == null) {
-                            qaRequired.next('.select2').find(".select2-selection").css('border-color', 'red','important');
+                        // var qaRequired = $('#qa_required_sampling');
+                        // if (qaRequired.val() == '' || qaRequired.val() == null) {
+                        //     qaRequired.next('.select2').find(".select2-selection").css('border-color', 'red','important');
+                        //     inputTypeValue = 1;
+                        //     return false;
+                        // } else {
+                        //     qaRequired.next('.select2').find(".select2-selection").css('border-color', '');
+                        //     inputTypeValue = 0;
+                        // }
+                        var reworkStatus = $('#rework_status');
+                        var reworkStatusReason = $('#rework_reason');
+                        if (reworkStatus.val() == '' || reworkStatus.val() == null) {
+                            reworkStatus.css('border-color', 'red','important');
                             inputTypeValue = 1;
                             return false;
                         } else {
-                            qaRequired.next('.select2').find(".select2-selection").css('border-color', '');
+                            reworkStatus.css('border-color', '');
+                            inputTypeValue = 0;
+                        }
+                        if (reworkStatusReason.val() == '' || reworkStatusReason.val() == null) {
+                            reworkStatusReason.css('border-color', 'red','important');
+                            inputTypeValue = 1;
+                            return false;
+                        } else {
+                            reworkStatusReason.css('border-color', '');
                             inputTypeValue = 0;
                         }
 
@@ -1858,21 +1988,33 @@
                        $('#ce_hold_reason').val('');
                     }
             })
+            $(document).on('change', '#rework_status', function() {
+                    var reworkStatus = $(this).val();
+                    if(reworkStatus) {
+                        $('#rework_reason').css('display', 'block');
+                        $('#rework_reason_label').css('display', 'block');
+                    } else {
+                        $('#rework_reason').css('display', 'none');
+                        $('#rework_reason_label').css('display', 'none');
+                        $('#rework_reason').css('border-color', '');
+                       $('#rework_reason').val('');
+                    }
+            })
         })
-        function updateTime() {
-            var now = new Date();
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-            var startTime = new Date(startTime_db).getTime();
-            var elapsedTimeMs = new Date().getTime() - startTime;
-            var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
-            var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
-            elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
-            remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
-            document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
-            setTimeout(updateTime, 1000);
-        }
-       updateTime();
+    //     function updateTime() {
+    //         var now = new Date();
+    //         var hours = now.getHours();
+    //         var minutes = now.getMinutes();
+    //         var seconds = now.getSeconds();
+    //         var startTime = new Date(startTime_db).getTime();
+    //         var elapsedTimeMs = new Date().getTime() - startTime;
+    //         var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
+    //         var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+    //         elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
+    //         remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
+    //         document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
+    //         setTimeout(updateTime, 1000);
+    //     }
+    //    updateTime();
     </script>
 @endpush

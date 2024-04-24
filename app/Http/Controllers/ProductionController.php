@@ -196,7 +196,7 @@ class ProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -295,7 +295,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -358,7 +358,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -420,7 +420,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -482,7 +482,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -544,7 +544,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['id','QA_emp_id','duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -1016,6 +1016,93 @@ class ProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function clientReworkDatasDetails(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                $data =  $request->all();
+                $currentTime = Carbon::now();
+                $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
+                $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
+                $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
+                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? Helpers::projectName($data['project_id'] )->project_name :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
+                $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
+                $data['record_status'] = $data['urlDynamicValue'] == "Revoke" ? "Revoke" : 'CE_'.ucwords($data['urlDynamicValue']) ;//dd($data['urlDynamicValue'],$data['record_status']);
+                $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
+
+                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
+                $modelName = Str::studly($table_name);
+                $modelClass = "App\\Models\\" . $modelName;
+                $modelClassDatas = "App\\Models\\" . $modelName.'Datas';
+                $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first();
+                if($clientData != null) {
+                    $clientData = $clientData->toArray();
+                } else {
+                    $clientData = $modelClass::where('id',$data['record_id'])->first();
+                }
+                if(isset($clientData) && !empty($clientData)) {
+                   return response()->json(['success' => true,'clientData'=>$clientData]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function clientsReworkUpdate(Request $request,$clientName,$subProjectName) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            try {
+                 $data = $request->all();
+                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
+                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
+                $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = $decodedPracticeName == NULL ? Helpers::projectName($decodedProjectName)->project_name :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
+                $modelName = Str::studly($table_name);
+                $originalModelClass = "App\\Models\\" . $modelName;
+                $modelClass = "App\\Models\\" . $modelName.'Datas';
+                $data = [];
+                foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
+                    if (is_array($value)) {
+                        $data[$key] = implode('_el_', $value);
+                    } else {
+                        $data[$key] = $value;
+                    }
+                }
+
+                $data['parent_id'] = $data['parentId'];
+                $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
+                $record = $originalModelClass::where('id', $data['parent_id'])->first();
+                $qaData = $originalModelClass::where('id', $data['parent_id'])->first()->toArray();
+                $excludeKeys = ['id', 'created_at', 'updated_at', 'deleted_at'];
+                $filteredQAData = collect($qaData)->except($excludeKeys)->toArray();
+                $data = array_merge($data, array_diff_key($filteredQAData, $data));
+                if($data['coder_rework_status'] == 'Accept') {
+                    $data['claim_status'] = "QA_Completed";
+                    $data['QA_required_sampling'] = "Auto_Close";
+                 } else {
+                    $data['claim_status'] = "CE_Completed";
+                    $data['QA_required_sampling'] = "Sampling";
+                }//dd($data);
+                $datasRecord->update( ['claim_status' => $data['claim_status'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'QA_required_sampling' => $data['QA_required_sampling']] );
+                $record->update( ['claim_status' => $data['claim_status'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'QA_required_sampling' => $data['QA_required_sampling']] );
+
+                return redirect('/projects_Revoke/'.$clientName.'/'.$subProjectName);
+                // $tabUrl = $data['record_old_status'] == "Revoke" ? $data['record_old_status'] : lcfirst(str_replace('CE_', '', $data['record_old_status']));
+                // return redirect('/projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
