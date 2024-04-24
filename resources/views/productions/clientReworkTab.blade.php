@@ -968,7 +968,7 @@
                                     <div class="row mt-4">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="col-md-12 required" id="rework_status_label" style="display:none">
+                                                <label class="col-md-12 required" id="rework_status_label" >
                                                    Rework Status
                                                 </label>
                                                 <div class="col-md-10">
@@ -984,7 +984,7 @@
                                                             'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                             'autocomplete' => 'none',
                                                             'id' => 'rework_status',
-                                                            'style' => 'cursor:pointer;display:none',
+                                                            'style' => 'cursor:pointer',
                                                         ],
                                                     ) !!}
                                                 </div>
@@ -1700,13 +1700,13 @@
                                 }
                                 if (header == 'coder_rework_status') {
                                     $('select[name="coder_rework_status"]').val(value);
-                                    if (value !== null) {
-                                        $('#rework_status_label').css('display','block');
-                                        $('#rework_status').css('display','block');
-                                    } else {
-                                        $('#rework_status_label').css('display','none');
-                                        $('#rework_status').css('display','none');
-                                    }
+                                    // if (value !== null) {
+                                    //     $('#rework_status_label').css('display','block');
+                                    //     $('#rework_status').css('display','block');
+                                    // } else {
+                                    //     $('#rework_status_label').css('display','none');
+                                    //     $('#rework_status').css('display','none');
+                                    // }
                                 }
                                 if (header == 'coder_rework_reason') {
                                     $('textarea[name="coder_rework_reason"]').val(value);
