@@ -12,16 +12,18 @@ class ManagerRebuttalMail extends Mailable
     use Queueable, SerializesModels;
     public $mailHeader;
     public $mailBody;
+    public $reportingPerson;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mailHeader, $mailBody)
+    public function __construct($mailHeader, $mailBody, $reportingPerson)
     {
         $this->mailHeader = $mailHeader;
         $this->mailBody = $mailBody;
+        $this->reportingPerson = $reportingPerson;
     }
 
     /**
