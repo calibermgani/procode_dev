@@ -703,6 +703,7 @@ class QAProductionController extends Controller
                     $time_difference = $currentTime->diff($start_time);
                     $work_time = $currentTime->diff($start_time)->format('%H:%I:%S');
                     $callChartWorkLogExistingRecord->update( ['record_status' => $data['claim_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
+                    
                 }
                 return redirect('qa_production/qa_projects_assigned/'.$clientName.'/'.$subProjectName);
             } catch (Exception $e) {

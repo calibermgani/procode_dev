@@ -584,7 +584,7 @@ class FormController extends Controller
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
-                        DB::statement($createTableSQL);
+                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableHistoryName);
                     } else {
                         $afterColumn = 'created_at';
