@@ -687,8 +687,8 @@ class QAProductionController extends Controller
                     $modelClass::create($data);
                 }
                 if($data['claim_status'] == "Revoke" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
-                     $toMailId = ["vijayalaxmi@caliberfocus.com","mashique@caliberfocus.com"];
-                    $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com"];
+                    $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
+                    $ccMailId = ["mgani@caliberfocus.com"];
                     $mailHeader = $decodedClientName." Rebuttal Mail";
                     $mailBody = $record;
                     Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader,$mailBody));
@@ -703,7 +703,7 @@ class QAProductionController extends Controller
                     $time_difference = $currentTime->diff($start_time);
                     $work_time = $currentTime->diff($start_time)->format('%H:%I:%S');
                     $callChartWorkLogExistingRecord->update( ['record_status' => $data['claim_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
-                    
+
                 }
                 return redirect('qa_production/qa_projects_assigned/'.$clientName.'/'.$subProjectName);
             } catch (Exception $e) {
