@@ -1040,7 +1040,7 @@ class ProductionController extends Controller
                     $data['QA_required_sampling'] = "Auto_Close";
                     $data['qa_error_count'] = NULL;
                     $data['coder_error_count'] = 1;
-                    $data['tl_comments'] = $data['coder_rework_reason'];
+                    $data['tl_comments'] = $data['coder_rework_reason'].'@'.$loginEmpId;
                     $data['coder_rework_reason'] = $datasRecord['coder_rework_reason'];
                  }
                   else if($data['coder_rework_status'] == 'Rebuttal' &&  $datasRecord['tl_error_count'] == 1) {
@@ -1048,7 +1048,7 @@ class ProductionController extends Controller
                     $data['QA_required_sampling'] = "Auto_Close";
                     $data['qa_error_count'] = 1;
                     $data['coder_error_count'] = NULL;
-                    $data['tl_comments'] = $data['coder_rework_reason'];
+                    $data['tl_comments'] = $data['coder_rework_reason'].'@'.$loginEmpId;
                     $data['coder_rework_reason'] = $datasRecord['coder_rework_reason'];
                  } else {
                     $data['claim_status'] = "CE_Completed";
