@@ -705,7 +705,7 @@ class QAProductionController extends Controller
                     $toMailId = $apiData['people_email'];
                     $reportingPerson = $apiData['reprting_person'];
                     // $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
-                    $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+                    $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
                     //$mailHeader = $decodedClientName." Rebuttal Mail";
                     $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
