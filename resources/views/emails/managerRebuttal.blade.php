@@ -36,8 +36,7 @@
         <p>Hi All, </p>
 
         <p>This record has been rebutted by both the coder and the QA.</p>
-        <div class="table-responsive pt-5 pb-5 clietnts_table">
-            <table class="table" border="1" style="border-collapse: collapse">
+             <table class="table" border="1" style="border-collapse: collapse">
 
                 <thead>
 
@@ -128,7 +127,7 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
+
         <br>
         @include('emails.emailFooter')
     </div>

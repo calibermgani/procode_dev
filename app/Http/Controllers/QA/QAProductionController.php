@@ -679,6 +679,8 @@ class QAProductionController extends Controller
                 } else {
                     $data['tl_error_count'] = $datasRecord['tl_error_count'];
                 }
+
+                //dd($data);
                 if($datasRecord != null) {
                     $datasRecord->update($data);
                     $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]);
@@ -687,7 +689,21 @@ class QAProductionController extends Controller
                     $modelClass::create($data);
                 }
                 if($data['claim_status'] == "Revoke" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
-                    $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
+                    $client = new Client();
+                    $payload = [
+                        'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        'client_id' => $decodedProjectName
+                    ];
+                     $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
+                        'json' => $payload
+                    ]);
+                    if ($response->getStatusCode() == 200) {
+                        $apiData = json_decode($response->getBody(), true);
+                    } else {
+                        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                    }
+                    $toMailId = $apiData['people_email'];
+                    // $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
                     $ccMailId = ["mgani@caliberfocus.com"];
                     $mailHeader = $decodedClientName." Rebuttal Mail";
                     $mailBody = $record;
