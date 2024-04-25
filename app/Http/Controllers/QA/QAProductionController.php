@@ -21,6 +21,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\QualitySampling;
 use App\Models\QASubStatus;
+use Mail;
+use App\Mail\ManagerRebuttalMail;
 
 class QAProductionController extends Controller
 {
@@ -135,7 +137,7 @@ class QAProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                    $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -234,7 +236,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -304,7 +306,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -374,7 +376,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -442,7 +444,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id', 'CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id', 'CE_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -500,7 +502,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id', 'CE_emp_id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id', 'CE_emp_id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -650,16 +652,46 @@ class QAProductionController extends Controller
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();
                 $data['QA_rework_comments']=$data['QA_rework_comments'] != null ? str_replace("\r\n", '_el_', $data['QA_rework_comments']) : $data['QA_rework_comments'];
-                if($data['claim_status'] == "Revoke") {
-                  $data['coder_error_count'] = $datasRecord['coder_error_count']+1;
-                }
+                // if($data['claim_status'] == "Revoke") {
+                //     if($datasRecord['coder_error_count'] >= 1) {
+                //         $data['tl_error_count'] = $datasRecord['tl_error_count']+1;
+                //         $data['coder_error_count'] = $datasRecord['coder_error_count'];
+                //      } else {dd($datasRecord['coder_error_count'],'coder_error_count');
+                //          $data['coder_error_count'] = $datasRecord['coder_error_count']+1;
+                //          $data['tl_error_count'] = $datasRecord['tl_error_count'];
+                //      }
+                // } else {
+                //     $data['coder_error_count'] = $datasRecord['coder_error_count'];
+                //     $data['tl_error_count'] = $datasRecord['tl_error_count'];
+                // }
 
+                 if($data['claim_status'] == "QA_Completed" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
+                    $data['qa_error_count'] = 1;
+                } else {//dd($datasRecord['qa_error_count']);
+                    $data['qa_error_count'] = $datasRecord['qa_error_count'];
+                }
+                if($data['claim_status'] == "Revoke" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
+                    $data['tl_error_count'] = 1;
+                    // $toMailId = "mgani@caliberfocus.com";
+                    // $ccMailId = "vijayalaxmi@caliberfocus.com";
+                    // $mailHeader = "Rebuttal Mail";dd($mailHeader,$data);
+                    // Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader));
+                } else {
+                    $data['tl_error_count'] = $datasRecord['tl_error_count'];
+                }
                 if($datasRecord != null) {
                     $datasRecord->update($data);
-                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]);
+                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]);
                 } else {
-                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
+                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
                     $modelClass::create($data);
+                }
+                if($data['claim_status'] == "Revoke" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
+                     $toMailId = ["vijayalaxmi@caliberfocus.com","mashique@caliberfocus.com"];
+                    $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com"];
+                    $mailHeader = $decodedClientName." Rebuttal Mail";
+                    $mailBody = $record;
+                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader,$mailBody));
                 }
                  $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
@@ -704,18 +736,32 @@ class QAProductionController extends Controller
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 $data['QA_rework_comments']=$data['QA_rework_comments'] != null ? str_replace("\r\n", '_el_', $data['QA_rework_comments']) : $data['QA_rework_comments'];
-                if($data['claim_status'] == "Revoke") {
-                  $data['coder_error_count'] = $datasRecord['coder_error_count']+1;
+                // if($data['claim_status'] == "Revoke") {
+                //   $data['coder_error_count'] = $datasRecord['coder_error_count']+1;
+                // }
+               if($data['claim_status'] == "QA_Completed" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
+                    $data['qa_error_count'] = 1;
+                } else {
+                    $data['qa_error_count'] = $datasRecord['qa_error_count'];
+                }
+                if($data['claim_status'] == "Revoke" &&  $datasRecord['coder_rework_status'] == "Rebuttal") {
+                    $data['tl_error_count'] = 1;
+                    $toMailId = "mgani@caliberfocus.com";
+                    $ccMailId = "vijayalaxmi@caliberfocus.com";
+                    $mailHeader = "Rebuttal Mail";
+                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader));
+                } else {
+                    $data['tl_error_count'] = $datasRecord['tl_error_count'];
                 }
                 if($datasRecord != null) {
                   $datasRecord->update($data);
                   $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                  $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
+                  $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]);
                  } else {
                     $data['parent_id'] = $data['idValue'];
                     $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
-                   $modelClass::create($data);
+                    $record->update( ['claim_status' => $data['claim_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']] );
+                    $modelClass::create($data);
                 }
                 $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])

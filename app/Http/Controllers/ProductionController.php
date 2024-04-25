@@ -53,8 +53,7 @@ class ProductionController extends Controller
                      return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                 }
                 $projects = $data['clientList'];
-                //  $projects = project::where('status','Active')->get();dd($projects,$aimsProjects);
-                return view('productions/clients',compact('projects'));
+                  return view('productions/clients',compact('projects'));
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
@@ -122,7 +121,7 @@ class ProductionController extends Controller
                      }
 
             }
-//dd($subProjectsWithCount);
+
             return response()->json(['subprojects' => $subProjectsWithCount]);
         } catch (Exception $e) {
             log::debug($e->getMessage());
@@ -135,7 +134,6 @@ class ProductionController extends Controller
             try {
                 $databaseConnection = Str::lower($request->client_name);
                 Config::set('database.connections.mysql.database', $databaseConnection);
-                //$result = DB::connection($databaseConnection)->table('users')->where('id', 1)->first();
                 return response()->json(['success' => true]);
                 } catch (Exception $e) {
                     log::debug($e->getMessage());
@@ -185,18 +183,12 @@ class ProductionController extends Controller
                 $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
                 $decodedsubProjectName = $decodedPracticeName == '--' ? Helpers::projectName($decodedProjectName)->project_name :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                // $modelClass = "App\\Models\\" . 'Inventory'.ucfirst($decodedsubProjectName);
-                 //$databaseConnection = Str::lower($decodedClientName);
-               // Config::set('database.connections.mysql.database',$databaseConnection);
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
-                // $column_names = DB::select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table_name'");
-                // $columns = array_column($column_names, 'COLUMN_NAME');
-                // $columns = DB::getSchemaBuilder()->getColumnListing($table_name);
                 $columnsHeader=[];
                 if (Schema::hasTable($table_name)) {
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -204,24 +196,11 @@ class ProductionController extends Controller
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" .  $modelName;
                 $modelClassDatas = "App\\Models\\" .  $modelName.'Datas'; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
-                // $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];$assignedProjectDetailsStatus = [];
                 $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                 if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
-                    // if (Schema::hasTable($table_name)) {
-                    //    $assignedProjectDetails = DB::table($table_name)->get();
-                    // }
-                    if (class_exists($modelClass)) {
-                        // if (class_exists($modelClassDatas) && class_exists($modelClass)) {
-                        // $assignedProjectDetails = $modelClassDatas::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
-                        // if(count($assignedProjectDetails) == 0) {
-                        //     $assignedProjectDetails = $modelClass::where('claim_status','CE_Assigned')->orderBy('id','desc')->get();
-                        // }
-                         // $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
+                     if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
-                        // $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('claim_status','DESC')->limit(2000)->get();dd($assignedProjectDetails);
-                        // $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->get();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedDropDownIds = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
@@ -231,7 +210,6 @@ class ProductionController extends Controller
                         $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $duplicateCount = $modelClassDuplcates::count();
-                        // $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('claim_status','DESC')->limit(2000)->pluck('claim_status')->toArray();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->pluck('claim_status')->toArray();
                         $payload = [
                             'token' => '1a32e71a46317b9cc6feb7388238c95d',
@@ -249,21 +227,16 @@ class ProductionController extends Controller
                         }
                         $assignedDropDown = array_filter($data['userDetail']);
                     }
-                    // $assignedProjectDetails = InventoryWound::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
-                    //$assignedProjectDetails = $modelClass::select('ticket_number','patient_name','patient_id','dob','dos','coders_em_icd_10','em_dx')->where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                    //    $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->where('CE_emp_id',$loginEmpId)->orderBy('claim_status','DESC')->limit(2000)->get();
-                    //    $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess','Revoke'])->orderBy('id','desc')->pluck('record_id')->toArray();
-                    $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
-                    $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
-                    $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                    //    $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess','Revoke'])->where('CE_emp_id',$loginEmpId)->orderBy('claim_status','DESC')->limit(2000)->pluck('claim_status')->toArray();
-                    $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->pluck('claim_status')->toArray();
+                        $assignedProjectDetails = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
+                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
+                        $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
+                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $assignedProjectDetailsStatus = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->pluck('claim_status')->toArray();
                    }
                 }
                 $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -295,14 +268,12 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
-            //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
-            //    $startDate = Date('Y-m-01 00:00:01');$endDate = Date('Y-m-t 23:59:59');
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
@@ -313,7 +284,6 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" .$modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
@@ -325,7 +295,7 @@ class ProductionController extends Controller
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -358,13 +328,12 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
-               //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
@@ -375,7 +344,6 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
@@ -387,7 +355,7 @@ class ProductionController extends Controller
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -420,13 +388,12 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
                $modelName = Str::studly($table_name);
                $modelClass = "App\\Models\\" . $modelName;
-               //    $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
@@ -437,7 +404,6 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('claim_status','Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                       //    $modelClassDuplcates = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Duplicates';
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                    }
@@ -448,7 +414,7 @@ class ProductionController extends Controller
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->whereBetween('updated_at',[$startDate,$endDate])->count();
                    }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
@@ -482,7 +448,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -504,12 +470,12 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                      $revokeProjectDetails = $modelClass::where('claim_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                       $assignedCount = $modelClass::whereIn('claim_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
                       $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                      $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $reworkCount = $modelClass::where('claim_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','Revoke')->orderBy('id','desc')->pluck('record_id')->toArray();
                    }
                  }
@@ -544,7 +510,7 @@ class ProductionController extends Controller
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $column_names = DB::select("DESCRIBE $table_name");
                $columns = array_column($column_names, 'Field');
-               $columnsToExclude = ['id','QA_emp_id','duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+               $columnsToExclude = ['id','QA_emp_id','duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                    return !in_array($column, $columnsToExclude);
                });
@@ -573,7 +539,7 @@ class ProductionController extends Controller
                        $completedCount = $modelClass::where('claim_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('claim_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('claim_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $reworkCount = $modelClass::where('claim_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->whereBetween('updated_at',[$startDate,$endDate])->count();
                     }
                 }
 
@@ -676,7 +642,7 @@ class ProductionController extends Controller
                         $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
                         if( count($qasamplingDetailsList) == 0) {
                             $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->get();
-                        }//dd($qasamplingDetailsList);
+                        }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         foreach ($qasamplingDetailsList as $qasamplingDetails) {
                             if($qasamplingDetails != null) {
@@ -813,11 +779,6 @@ class ProductionController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                 $data =  $request->all();
-                // $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
-                // $decodedPracticeName = Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
-                // $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-
                 $currentTime = Carbon::now();
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
@@ -826,7 +787,6 @@ class ProductionController extends Controller
                 $decodedsubProjectName = $data['sub_project_id'] == NULL ? Helpers::projectName($data['project_id'] )->project_name :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = $data['urlDynamicValue'] == "Revoke" ? "Revoke" : 'CE_'.ucwords($data['urlDynamicValue']) ;//dd($data['urlDynamicValue'],$data['record_status']);
-                // $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->first();//dd($data['record_id'],$existingRecordId);
                 $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
 
                 if(empty($existingRecordId)) {
@@ -840,9 +800,6 @@ class ProductionController extends Controller
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
                 $modelClassDatas = "App\\Models\\" . $modelName.'Datas';
-                // $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
-                // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
-                // $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first()->toArray();
                 $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first();
                 if($clientData != null) {
                     $clientData = $clientData->toArray();
@@ -868,17 +825,13 @@ class ProductionController extends Controller
                  $data = $request->all();
                  $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
-                // $decodedPracticeName = Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $decodedsubProjectName = $decodedPracticeName == NULL ? Helpers::projectName($decodedProjectName)->project_name :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $originalModelClass = "App\\Models\\" . $modelName;
                 $modelClass = "App\\Models\\" . $modelName.'Datas';
-                // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
-                // $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $data = [];
                 foreach ($request->except('_token', 'parent', 'child') as $key => $value) {
                     if (is_array($value)) {
@@ -954,16 +907,6 @@ class ProductionController extends Controller
                     $data['claim_status'] == "CE_Completed" ? $record->update( ['claim_status' => $data['claim_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status'],'QA_required_sampling' => $data['QA_required_sampling'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]) : $record->update( ['claim_status' => $data['claim_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
                     $modelClass::create($data);
                 }
-                // if($datasRecord != null) {
-                //   $datasRecord->update($data);
-                //   $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                //   $record->update( ['claim_status' => $data['claim_status']] );
-                // } else {
-                //     $data['parent_id'] = $data['idValue'];
-                //     $record = $originalModelClass::where('id', $data['parent_id'])->first();
-                //     $record->update( ['claim_status' => $data['claim_status']] );
-                //     $modelClass::create($data);
-                // }
                 $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
                 ->where('record_status',$data['record_old_status'])
@@ -981,8 +924,7 @@ class ProductionController extends Controller
                 }
                 $tabUrl = $data['record_old_status'] == "Revoke" ? $data['record_old_status'] : lcfirst(str_replace('CE_', '', $data['record_old_status']));
                 return redirect('/projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
-               // dd($request->all(),$decodedProjectName,$decodedPracticeName,$decodedClientName,$decodedsubProjectName,$modelClass);
-            } catch (Exception $e) {
+             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -997,14 +939,11 @@ class ProductionController extends Controller
                 $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
                 $decodedPracticeName = $data['subProjectName'] == '--' ? '--' : Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $decodedsubProjectName = $decodedPracticeName == '--' ? Helpers::projectName($decodedProjectName)->project_name :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
                 $modelClassDatas = "App\\Models\\" . $modelName.'Datas';
-                // $modelClassDatas = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName)).'Datas';
-                // $modelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
                 $clientData = $modelClassDatas::where('parent_id',$data['record_id'])->orderBy('id','desc')->first();
                 if($clientData != null) {
                     $clientData = $clientData->toArray();
@@ -1090,15 +1029,36 @@ class ProductionController extends Controller
                 $excludeKeys = ['id', 'created_at', 'updated_at', 'deleted_at'];
                 $filteredQAData = collect($qaData)->except($excludeKeys)->toArray();
                 $data = array_merge($data, array_diff_key($filteredQAData, $data));
-                if($data['coder_rework_status'] == 'Accept') {
+                if($data['coder_rework_status'] == 'Accept' && $datasRecord['tl_error_count'] == NULL) {
                     $data['claim_status'] = "QA_Completed";
                     $data['QA_required_sampling'] = "Auto_Close";
+                    $data['coder_error_count'] = 1;
+                    $data['qa_error_count'] = NULL;
+                    $data['tl_comments'] = $datasRecord['tl_comments'];
+                 } else if($data['coder_rework_status'] == 'Accept' &&  $datasRecord['tl_error_count'] == 1) {
+                    $data['claim_status'] = "QA_Completed";
+                    $data['QA_required_sampling'] = "Auto_Close";
+                    $data['qa_error_count'] = NULL;
+                    $data['coder_error_count'] = 1;
+                    $data['tl_comments'] = $data['coder_rework_reason'];
+                    $data['coder_rework_reason'] = $datasRecord['coder_rework_reason'];
+                 }
+                  else if($data['coder_rework_status'] == 'Rebuttal' &&  $datasRecord['tl_error_count'] == 1) {
+                    $data['claim_status'] = "QA_Completed";
+                    $data['QA_required_sampling'] = "Auto_Close";
+                    $data['qa_error_count'] = 1;
+                    $data['coder_error_count'] = NULL;
+                    $data['tl_comments'] = $data['coder_rework_reason'];
+                    $data['coder_rework_reason'] = $datasRecord['coder_rework_reason'];
                  } else {
                     $data['claim_status'] = "CE_Completed";
                     $data['QA_required_sampling'] = "Sampling";
-                }//dd($data);
-                $datasRecord->update( ['claim_status' => $data['claim_status'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'QA_required_sampling' => $data['QA_required_sampling']] );
-                $record->update( ['claim_status' => $data['claim_status'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'QA_required_sampling' => $data['QA_required_sampling']] );
+                    $data['coder_error_count'] = NULL;
+                    $data['qa_error_count'] = NULL;
+                    $data['tl_comments'] = $datasRecord['tl_comments'];
+                }
+                $datasRecord->update( ['claim_status' => $data['claim_status'],'QA_required_sampling' => $data['QA_required_sampling'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'coder_error_count' => $data['coder_error_count'],'qa_error_count' => $data['qa_error_count'], 'tl_comments' => $data['tl_comments']] );
+                $record->update( ['claim_status' => $data['claim_status'],'QA_required_sampling' => $data['QA_required_sampling'],'coder_rework_status' => $data['coder_rework_status'],'coder_rework_reason' => $data['coder_rework_reason'],'coder_error_count' => $data['coder_error_count'],'qa_error_count' => $data['qa_error_count'],'tl_comments' => $data['tl_comments']] );
 
                 return redirect('/projects_Revoke/'.$clientName.'/'.$subProjectName);
                 // $tabUrl = $data['record_old_status'] == "Revoke" ? $data['record_old_status'] : lcfirst(str_replace('CE_', '', $data['record_old_status']));
