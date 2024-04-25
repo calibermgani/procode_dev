@@ -703,11 +703,13 @@ class QAProductionController extends Controller
                         return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                     }
                     $toMailId = $apiData['people_email'];
+                    $reportingPerson = $apiData['reprting_person'];
                     // $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
-                    $ccMailId = ["mgani@caliberfocus.com"];
-                    $mailHeader = $decodedClientName." Rebuttal Mail";
+                    $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+                    //$mailHeader = $decodedClientName." Rebuttal Mail";
+                    $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
-                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader,$mailBody));
+                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader, $mailBody, $reportingPerson));
                 }
                  $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])

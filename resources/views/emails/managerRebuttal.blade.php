@@ -33,7 +33,7 @@
 
     <div class="table-responsive pb-2">
 
-        <p>Hi All, </p>
+        <p>Hi {{ $reportingPerson != null ? App\Http\Helper\Admin\Helpers::getUserNameById($reportingPerson) : 'All' }}, </p>
 
         <p>This record has been rebutted by both the coder and the QA.</p>
              <table class="table" border="1" style="border-collapse: collapse">
@@ -46,11 +46,17 @@
                                 @php
                                     $columnsToExclude = [
                                         'id',
+                                        'invoke_date',
+                                        'CE_emp_id',
+                                        'QA_emp_id',
+                                        'claim_status',
                                         'ce_hold_reason',
                                         'qa_hold_reason',
                                         'qa_work_status',
                                         'QA_required_sampling',
                                         'QA_rework_comments',
+                                        'coder_rework_status',
+                                        'coder_rework_reason',
                                         'coder_error_count',
                                         'qa_error_count',
                                         'tl_error_count',
@@ -73,7 +79,6 @@
                                 @endif
                             @endforeach
                         @else
-                            <th class='notexport'><input type="checkbox" id="ckbCheckAll"></th>
                             @foreach ($columnsHeader as $columnName => $columnValue)
                                 <th><input type="hidden" value={{ $columnValue }}>
                                     {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
@@ -89,11 +94,17 @@
                                 @php
                                     $columnsToExclude = [
                                         'id',
+                                        'invoke_date',
+                                        'CE_emp_id',
+                                        'QA_emp_id',
+                                        'claim_status',
                                         'ce_hold_reason',
                                         'qa_hold_reason',
                                         'qa_work_status',
                                         'QA_required_sampling',
                                         'QA_rework_comments',
+                                        'coder_rework_status',
+                                        'coder_rework_reason',
                                         'coder_error_count',
                                         'qa_error_count',
                                         'tl_error_count',
