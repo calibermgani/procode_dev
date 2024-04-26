@@ -35,7 +35,7 @@
 
         <p>Hi {{ $reportingPerson != null ? App\Http\Helper\Admin\Helpers::getUserNameById($reportingPerson) : 'All' }}, </p>
 
-        <p>This record has been rebutted by both the coder and the QA.</p>
+        <p>This claim has been rebutted by both the coder and the QA.</p>
              <table class="table" border="1" style="border-collapse: collapse">
 
                 <thead>
@@ -138,7 +138,7 @@
                     </tr>
                 </tbody>
             </table>
-
+         <p>Since this claim is currently in your queue, we kindly request your guidance on the way to proceed and resolve this matter.</p>
         <br>
         @include('emails.emailFooter')
     </div>
