@@ -2303,7 +2303,7 @@
 
 
             // Exclude fields you don't want to track
-            var excludedFields = ['QA_rework_comments', 'claim_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code'];
+            var excludedFields = ['QA_rework_comments', 'claim_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
 
             // $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
             //     var fieldName = $(this).attr('id');
@@ -2367,9 +2367,13 @@
                         }
                         var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
                         var textAreaValue = $('#QA_rework_comments').val();
-                        if (textAreaValue.includes(formattedValue)) {
-                            var regex = new RegExp(formattedValue1 + ' .*', 'g');
-                            textAreaValue = textAreaValue.replace(regex, newLine);
+                        // if (textAreaValue.includes(formattedValue)) {
+                        //     var regex = new RegExp(formattedValue1 + ' .*', 'g');
+                        //     textAreaValue = textAreaValue.replace(regex, newLine);
+                        if (textAreaValue.includes(previousValue) && previousValue != '') {
+                            var lines = textAreaValue.split('\n');
+                            var matchedLine = lines.find(line => line.includes(previousValue));
+                            textAreaValue = textAreaValue.replace(matchedLine, newLine);
                         } else {
                             if(textAreaValue == "") {
                             textAreaValue += newLine;
