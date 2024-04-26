@@ -104,6 +104,7 @@
                                             </div>
                                         </div>
                                     @endif
+                                    @if($reworkCount >= 1)<p style="color:red; font-weight: 600;">*you have rework records!</p>@endif
                                 </div>
                             </div>
                         </div>
@@ -155,7 +156,7 @@
                                                                 @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
                                                                 @else
                                                                     {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus) && $reworkCount < 3) --}}
-                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus))
+                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus)  && $reworkCount < 1)
                                                                         <button class="task-start clickable-row"
                                                                             title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
                                                                     @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->claim_status == "CE_Inprocess")

@@ -422,7 +422,7 @@
                                                             @if ($count % 2 == 0)
                                                                 <div class="row" id={{ $columnName }}>
                                                             @endif
-                                                                <div class="col-md-6">
+                                                                <div class="col-md-6 dynamic-field">
                                                                     <div class="form-group row row_mar_bm">
                                                                         <label
                                                                             class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
@@ -1207,40 +1207,47 @@
 
             var uniqueId = 0;
             $('.modal-body').on('click', '.add_more', function() {
+                var ids = [];
+                clumnClassName = $(this).attr('id').replace(/^add_more_/, '');
+                $('.' + clumnClassName).each(function() {
+                    ids.push($(this).attr('id'));
+                });
+                var lastElement = ids[ids.length - 1];
+                var lastId = lastElement.replace(new RegExp('^' + clumnClassName), '');
+                if (lastId) {
+                    uniqueId=lastId;
+                }
                 uniqueId++;
-
-                var labelName = $(this).closest('.form-group').find('.add_labelName').val();
-                var columnName = $(this).closest('.form-group').find('.add_columnName').val();
-                var inputType = $(this).closest('.form-group').find('.add_inputtype').val();
-                var addMandatory = $(this).closest('.form-group').find('.add_mandatory').val();
-                var optionsJson = $(this).closest('.form-group').find('.add_options').val();
+                var labelName =$('.'+clumnClassName).closest('.row_mar_bm').find('.add_labelName').val();
+                var columnName = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_columnName').val();
+                var inputType = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_inputtype').val();
+                var addMandatory = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_mandatory').val();
+                var optionsJson = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_options').val();
                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                 var optionsArray = optionsObject ? Object.values(optionsObject) : null;
 
-                var newElementId = 'dynamicElement_' + uniqueId;
+                var newElementId = 'dynamicElement_' + clumnClassName + uniqueId;
                 var newElement;
                 if (optionsArray == null) {
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]"  class="form-control ' + columnName +
-                                ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
+                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
                                 '"></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
-                                '[]"  class="form-control ' + columnName +
-                                ' white-smoke pop-non-edt-val "  id="' +
+                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
                                 '">';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
-                            '[]" class="form-control date_range daterange_' + columnName +
-                            '  white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
+                            '[]" class="form-control date_range ' + columnName +
+                            ' white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
                             '">';
@@ -1272,6 +1279,8 @@
                             '" id="' +
                             columnName +
                             uniqueId +
+                            '" class="' +
+                            columnName +
                             '">' + option +
                             '<span></span>' +
                             '</label>' +
@@ -1286,13 +1295,14 @@
                         newElement +=
                             '<div class="col-md-6">' +
                             '<div class="radio-inline mt-2">' +
-                            '<label class="radio pop-non-edt-val" style="word-break: break-all;" ' +
-                            addMandatory +
+                            '<label class="radio pop-non-edt-val" style="word-break: break-all;" ' + addMandatory +
                             '>' +
                             '<input type="radio" name="' + columnName + '_' + uniqueId +
                             '" value="' + option + '" class="' + columnName + '" id="' +
                             columnName +
                             uniqueId +
+                            '" class="' +
+                            columnName +
                             '">' + option +
                             '<span></span>' +
                             '</label>' +
@@ -1303,17 +1313,26 @@
                     newElement += '</div>';
                 }
 
-                var newRow = '<div class="row mt-6" id="' + newElementId + '">' +
+                var plusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+columnName +'"></i>';
+                 var newRow = '<div class="row mt-6" id="' + newElementId + '">' +
                     '<div class="col-md-10">' + newElement + '</div>' +
                     '<div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
-                    '<i class="fa fa-minus minus_button remove_more" id="' + uniqueId +
-                    '"></i>' +
+                        plusButton +
                     '</div><div></div>' +
                     '</div>';
-                var modalBody = $(this).closest('.modal-content').find('.modal-body');
+                var modalBody = $('.'+clumnClassName).closest('.modal-content').find('.modal-body');
 
 
                 $(this).closest('.col-md-6').append(newRow);
+                     elementToRemove = 'add_more_'+clumnClassName;
+                                $('#'+elementToRemove).remove();
+                                uniqueId = uniqueId-1;
+                                removeId = uniqueId == 0 ? clumnClassName : clumnClassName+ uniqueId;
+                                if(uniqueId > 0) {
+                                  $('#'+lastElement).closest('.col-md-10').next('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="'+removeId +'"></i>');
+                                }
+
+
                 if (inputType === 'date_range') {
                     var newDateRangePicker = modalBody.find('#' + newElementId).find('.date_range');
                     newDateRangePicker.daterangepicker({
@@ -2286,11 +2305,12 @@
             // Exclude fields you don't want to track
             var excludedFields = ['QA_rework_comments', 'claim_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code'];
 
-
             // $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
-            //     var fieldName = $(this).attr('name');
-            //     var trimmedFiled = $(this).attr('name').replace(/\[\]$/, '');
+            //     var fieldName = $(this).attr('id');
+            //     var trimmedFiled = $(this).attr('id');
+            //     var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
             //     var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+            //     var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
 
             //     if (excludedFields.indexOf(fieldName) === -1) {
             //         var currentValue = '';
@@ -2303,56 +2323,67 @@
             //         } else {
             //             currentValue = $(this).val();
             //         }
-            //         var prevValue = prevValues[trimmedFiled] || '';
-            //          $('#QA_rework_comments').val(function(index, value) {
-            //             console.log(index, value,'index, value');
-            //                //value = value.replace(new RegExp('\\b' + trimmedFiled + ' Value Changed' + prevValue + '\\n?', 'g'), '');
-            //                value.contains(formattedValue);
-            //               return value + formattedValue + ' '+prevValue +' Changed to ' + currentValue + '\n';
-            //         });
-            //        //prevValues[fieldName] = currentValue;
+            //         var prevValue = prevValues[trimmedFiled1] || '';
+
+            //          var newLine = prevValue != '' ? formattedValue1 + ' '+prevValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+            //         var textAreaValue = $('#QA_rework_comments').val();
+
+            //         if (textAreaValue.includes(formattedValue)) {
+            //             var regex = new RegExp(formattedValue1 + ' .*', 'g');
+            //             textAreaValue = textAreaValue.replace(regex, newLine);
+            //         } else {
+            //             if(textAreaValue == "") {
+            //               textAreaValue += newLine;
+            //             } else {
+            //                 newLine = '\n'+newLine;
+            //                 textAreaValue += newLine;
+            //             }
+            //         }
+
+            //         // Set the updated value back to the textarea
+            //         $('#QA_rework_comments').val(textAreaValue);
             //     }
             // });
-
-            $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
-                var fieldName = $(this).attr('name');
-                var trimmedFiled = $(this).attr('name').replace(/\[\]$/, '');
-                var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
-
-                if (excludedFields.indexOf(fieldName) === -1) {
-                    var currentValue = '';
-                    if ($(this).is('input[type="checkbox"]')) {
-                        currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
-                    } else if ($(this).is('input[type="radio"]')) {
-                        currentValue = $(`input[name="${fieldName}"]:checked`).val();
-                    } else if ($(this).is('input[type="date"]')) {
-                        currentValue = $(this).val();
-                    } else {
-                        currentValue = $(this).val();
-                    }
-                    var prevValue = prevValues[trimmedFiled] || '';
-                    var newLine = formattedValue + ' '+prevValue + ' Changed to ' + currentValue;
-
-                    var textAreaValue = $('#QA_rework_comments').val();
-
-                    if (textAreaValue.includes(formattedValue)) {
-                        var regex = new RegExp(formattedValue + ' .*', 'g');console.log('regex',regex,textAreaValue,newLine);
-                        textAreaValue = textAreaValue.replace(regex, newLine);
-                    } else {
-                        console.log('else',textAreaValue,'space',newLine);
-                        if(textAreaValue == "") {
-                          textAreaValue += newLine;
+                 var previousValue;
+                $('#formConfiguration').on('focus', 'input, select, textarea', function() {
+                    previousValue = $(this).val();
+                }).on('focusout', 'input, select, textarea', function() {
+                //   var currentValue = $(this).val();
+                        var fieldName = $(this).attr('name');
+                        var trimmedFiled = $(this).attr('id');
+                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
+                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+                        var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+                    if (excludedFields.indexOf(fieldName) === -1) {
+                        var currentValue = '';
+                        if ($(this).is('input[type="checkbox"]')) {
+                            currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+                        } else if ($(this).is('input[type="radio"]')) {
+                            currentValue = $(`input[name="${fieldName}"]:checked`).val();
+                        } else if ($(this).is('input[type="date"]')) {
+                            currentValue = $(this).val();
                         } else {
-                            newLine = '\n'+newLine;
-                            textAreaValue += newLine;
+                            currentValue = $(this).val();
                         }
+                        var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        var textAreaValue = $('#QA_rework_comments').val();
+                        if (textAreaValue.includes(formattedValue)) {
+                            var regex = new RegExp(formattedValue1 + ' .*', 'g');
+                            textAreaValue = textAreaValue.replace(regex, newLine);
+                        } else {
+                            if(textAreaValue == "") {
+                            textAreaValue += newLine;
+                            } else {
+                                newLine = '\n'+newLine;
+                                textAreaValue += newLine;
+                            }
+                        }
+
+                        // Set the updated value back to the textarea
+                        $('#QA_rework_comments').val(textAreaValue);
                     }
 
-                    // Set the updated value back to the textarea
-                    $('#QA_rework_comments').val(textAreaValue);
-                }
-            });
-
+                });
         })
 
         function updateTime() {
@@ -2362,7 +2393,6 @@
             var seconds = now.getSeconds();
             var startTime = new Date(startTime_db).getTime();
             var elapsedTimeMs = new Date().getTime() - startTime;
-            // console.log(startTime_db, startTime, new Date().getTime(), elapsedTimeMs, 'minutes');
             var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
             var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
             elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
