@@ -154,7 +154,9 @@
                                                                                 @php $statusCode = App\Http\Helper\Admin\Helpers::qaStatusById($columnValue);@endphp
                                                                                 {{ $statusCode['status_code'] }}
                                                                             @elseif ($columnName == 'QA_sub_status_code')
-                                                                                @php $subStatusCode = App\Http\Helper\Admin\Helpers::qaSubStatusById($columnValue);@endphp
+                                                                                @php $subStatusCode = App\Http\Helper\Admin\Helpers::qaSubStatusById($columnValue);
+                                                                                dd($subStatusCode,$columnName,$columnValue);
+                                                                                @endphp
                                                                                 {{ $subStatusCode['sub_status_code'] }}
                                                                             @else
                                                                                 {{ $columnValue }}
