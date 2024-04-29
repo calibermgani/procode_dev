@@ -126,7 +126,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if($reworkCount >= 1)<p style="color:red; font-weight: 600;">*you have rework records!</p>@endif
+                                     @if($reworkCount >= 1 && ($empDesignation !== "Administrator" && strpos($empDesignation, 'Manager') !== 0 && strpos($empDesignation, 'VP') !== 0 && strpos($empDesignation, 'Leader') !== 0 && strpos($empDesignation, 'Team Lead') !== 0 && strpos($empDesignation, 'CEO') !== 0 && strpos($empDesignation, 'Vice') !== 0))<p style="color:red; font-weight: 600;">*you have rework records!</p>@endif
                                 </div>
                             </div>
                         </div>
