@@ -74,6 +74,9 @@ var KTSelect2 = function() {
         $('.kt_select2_qa_required_sampling').select2({
             placeholder: "QA Required"
         });
+        $('.report_client_status').select2({
+            placeholder: "Status"
+        });
         // loading data from array
         // var data = [{
         //     id: 0,

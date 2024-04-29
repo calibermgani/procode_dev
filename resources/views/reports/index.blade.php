@@ -58,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <div class="row form-group">
                             <div class="col-md-12">
                                 @if (isset(request()->project_id))
@@ -83,13 +83,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="row form-group">
                             <div class="col-md-12">
                                 {!! Form::select(
                                     'user',
                                     ['No' => 'No', 'Yes' => 'Yes', 'Partial' => 'Partial'],null,
                                     ['class' => 'text-black form-control select2 user_select', 'id' => 'user', 'placeholder'=> 'Select User']
+                                ) !!}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                {!! Form::select(
+                                    'client_status',
+                                    ['CE_Inprocess' => 'Inprocess','CE_Pending' => 'Pending','CE_Completed' => 'Completed','CE_Hold' => 'Hold'],null,
+                                    ['class' => 'text-black form-control select2 report_client_status', 'id' => 'client_status', 'placeholder'=> 'Status']
                                 ) !!}
                             </div>
                         </div>
@@ -304,8 +315,15 @@
                                         var table = $('#report_list').DataTable({
                                             processing: true,
                                             lengthChange: false,
+                                            clientSide: true,
                                             searching: true,
                                             pageLength: 20,
+                                            scrollCollapse: true,
+                                            scrollX: true,
+                                            "initComplete": function(settings, json) {
+                                                $('body').find('.dataTables_scrollBody').addClass("scrollbar");
+                                                $('body').find('.dataTables_scrollBody').css("margin-top",'-0.3rem','important');
+                                            },
                                             language: {
                                                 "search": '',
                                                 "searchPlaceholder": "   Search",
@@ -319,7 +337,7 @@
                                                 "filename": 'procode_report',
                                             }],
                                             dom: "<'row'<'col-md-6 text-left'f><'col-md-6 text-right'B>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
-                                        });
+                                        })
                                         table.buttons().container().appendTo($('.dataTables_wrapper .col-md-6.text-right'));
                                     }else{
 

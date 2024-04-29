@@ -82,9 +82,12 @@ class ReportsController extends Controller
                     $client_data = DB::table($table_name)
                         ->select([
                             DB::raw($columnsHeader),
-                            DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
+                            "caller_charts_work_logs.work_time",
+                            // DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
                         ])
-                        ->leftJoin('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.parent_id')
+                        ->where('caller_charts_work_logs.project_id', '=', $request->project_id)
+                        ->where('caller_charts_work_logs.sub_project_id', '=', $request->sub_project_id)
+                        ->join('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.parent_id')
                         ->where(function ($query) use ($start_date, $end_date) {
                             if (!empty($start_date) && !empty($end_date)) {
                                 $query->whereBetween('caller_charts_work_logs.start_time', [$start_date, $end_date]);
@@ -96,8 +99,8 @@ class ReportsController extends Controller
                 } else {
                     $client_data = [];
                 }
-                if (count($client_data) > 0) {
-                    $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column" id="report_list"><thead><tr>';
+                // if (count($client_data) > 0) {
+                    $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
                     $checkedValues[] = 'work_hours';
                     foreach ($checkedValues as $key => $header) {
                         $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
@@ -111,15 +114,18 @@ class ReportsController extends Controller
                             if ($header === 'chart_status') {
                                 $data = str_replace('CE_', '', $data);
                             }
+                            if ($header === 'work_hours') {
+                                $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
+                            }
                             $body_info .= '<td>' . $data . '</td>';
                         }
                         $body_info .= '</tr>';
                     }
 
                     $body_info .= '</tbody></table>';
-                } else {
-                    $body_info = '<p>No data available</p>';
-                }
+                // } else {
+                //     $body_info = '<p>No data available</p>';
+                // }
 
                 return response()->json([
                     'success' => true,
