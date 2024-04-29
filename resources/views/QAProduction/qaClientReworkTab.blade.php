@@ -177,7 +177,7 @@
                     (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_rework_list").DataTable({
                 processing: true,
-                ordering: false,
+                ordering: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

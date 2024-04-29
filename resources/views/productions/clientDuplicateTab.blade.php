@@ -144,7 +144,7 @@
                                 </div> --}}
                                 <div class="table-responsive pt-5 pb-5 clietnts_table">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
-                                        id="client_duplicate_list">
+                                        id="client_duplicate_list" data-order='[[ 0, "desc" ]]'>
                                         <thead>
 
                                             <tr>
@@ -153,7 +153,7 @@
                                                         @php
                                                             $columnsToExclude =  ['id','QA_emp_id','duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                                                         @endphp
-                                                          <th class='notexport'><input type="checkbox" id="ckbCheckAll"></th>
+                                                          <th class='notexport' style="color:white !important"><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             <th><input type="hideen"
                                                                     value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
@@ -259,7 +259,7 @@
                     (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_duplicate_list").DataTable({
                 processing: true,
-                ordering: false,
+                ordering: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

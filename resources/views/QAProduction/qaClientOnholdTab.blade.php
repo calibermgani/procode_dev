@@ -14,6 +14,23 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
+                                        <div>
+                                            @if ($popUpHeader != null)
+                                                    @php
+                                                            $clientNameDetails = App\Http\Helper\Admin\Helpers::projectName(
+                                                                $popUpHeader->project_id,
+                                                            );
+                                                            $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientNameDetails->project_name);
+                                                    @endphp
+                                                    @else
+                                                    @php
+                                                        $pdfName = '';
+                                                    @endphp
+                                                @endif
+                                            <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank">
+                                            <button type="button" class="btn text-white mr-3" style="background-color:#139AB3">SOP</button>
+                                            </a>
+                                         </div>
                                        <div class="outside float-right" href="javascript:void(0);"></div>
                                   </div>
                             </div>
@@ -95,11 +112,11 @@
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
                                 <div class="table-responsive pt-5 pb-5 clietnts_table">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
-                                        id="client_onhold_list">
+                                        id="client_onhold_list" data-order='[[ 0, "desc" ]]'>
                                         <thead>
                                             @if (!empty($columnsHeader))
                                                 <tr>
-                                                    <th class='notexport'>Action</th>
+                                                    <th class='notexport' style="color:white !important">Action</th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         @if ($columnValue != 'id')
                                                             <th><input type="hidden"
@@ -232,9 +249,9 @@
                                                     </div>
                                                 </div>
 
-                                            <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
+                                            {{-- <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
                                                 <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                             </div>
+                                             </div> --}}
                                         </div>
                                      </div>
                                      {!! Form::open([
@@ -803,9 +820,9 @@
                                                     </div>
                                                 </div>
 
-                                                    <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
+                                                    {{-- <div class="col-md-8 justify-content-end" style="display: -webkit-box !important;">
                                                         <button type="button" class="btn btn-black-white mr-3 sop_click" id="sop_click" style="padding: 0.35rem 1rem;">SOP</button>
-                                                    </div>
+                                                    </div> --}}
                                             </div>
                                         </div>
 
@@ -1244,7 +1261,7 @@
 
             var table = $("#client_onhold_list").DataTable({
                 processing: true,
-                ordering: false,
+                ordering: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,

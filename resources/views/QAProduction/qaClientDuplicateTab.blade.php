@@ -101,7 +101,7 @@
                                 <input type="hidden" value={{ $subProjectName }} id="subProjectName">
                                 <div class="table-responsive pt-5 pb-5 clietnts_table">
                                     <table class="table table-separate table-head-custom no-footer dtr-column "
-                                        id="client_duplicate_list">
+                                        id="client_duplicate_list" data-order='[[ 0, "desc" ]]'>
                                         <thead>
 
                                             <tr>
@@ -118,7 +118,7 @@
                                                         @endif
                                                     @endforeach
                                                 @else
-                                                <th class='notexport'><input type="checkbox" id="ckbCheckAll"></th>
+                                                <th class='notexport' style="color:white !important"><input type="checkbox" id="ckbCheckAll"></th>
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         <th><input type="hidden"
                                                                 value={{ $columnValue }}>
@@ -190,7 +190,7 @@
                     (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_duplicate_list").DataTable({
                 processing: true,
-                ordering: false,
+                ordering: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
