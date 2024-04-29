@@ -52,7 +52,7 @@
                                         $model_name = collect(
                                             Str::studly(
                                                 Str::slug(
-                                                    Str::lower($projectName) . '_' . Str::lower($projectName),
+                                                    Str::lower($projectName) . '_project',
                                                     '_',
                                                 ),
                                             ),
