@@ -190,7 +190,7 @@
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                          {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                        @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                             {{ str_replace('CE_', '', $columnValue) }}
                                                                         @else
                                                                             {{ $columnValue }}

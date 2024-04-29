@@ -135,7 +135,7 @@
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                        @if ($columnName == 'chart_status' && str_contains($columnValue, 'QA_'))
                                                                             {{ str_replace('QA_', '', $columnValue) }}
                                                                         @elseif ($columnName == 'QA_status_code')
                                                                             @php $statusCode = App\Http\Helper\Admin\Helpers::qaStatusById($columnValue);@endphp
@@ -333,10 +333,10 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12">
-                                                                        Claim Status
+                                                                        Chart Status
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
-                                                                    id="claim_status">
+                                                                    id="chart_status">
                                                                 </label>
                                                                 </div>
                                                             </div>
@@ -541,7 +541,7 @@
                             $('label[id="' + header + '"]').append(span);
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('QA_')) {
+                        if (header === 'chart_status' && value.includes('QA_')) {
                                 value = value.replace('QA_', '');
                                 $('#title_status_view').text(value);
                         }

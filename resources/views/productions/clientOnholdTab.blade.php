@@ -176,7 +176,7 @@
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
-                                                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                            @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                                 {{ str_replace('CE_', '', $columnValue) }}
                                                                             @else
                                                                                 {{ $columnValue }}
@@ -456,11 +456,11 @@
                                                         <input type="hidden" name="CE_emp_id">
                                                         <div class="form-group row" >
                                                             <label class="col-md-12 required">
-                                                                Claim Status
+                                                                Chart Status
                                                             </label>
                                                             <div class="col-md-10">
                                                                 {!! Form::Select(
-                                                                    'claim_status',
+                                                                    'chart_status',
                                                                     [
                                                                         '' => '--Select--',
                                                                         'CE_Inprocess' => 'Inprocess',
@@ -473,7 +473,7 @@
                                                                     [
                                                                         'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                                         'autocomplete' => 'none',
-                                                                        'id' => 'claim_status',
+                                                                        'id' => 'chart_status',
                                                                         'style' => 'cursor:pointer',
                                                                     ],
                                                                 ) !!}
@@ -658,10 +658,10 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12">
-                                                                        Claim Status
+                                                                        Chart Status
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
-                                                                    id="claim_status">
+                                                                    id="chart_status">
                                                                 </label>
                                                                 </div>
                                                             </div>
@@ -788,13 +788,12 @@
                 $('.' + clumnClassName).each(function() {
                     ids.push($(this).attr('id'));
                 });
-                var lastElement = ids[ids.length - 1];console.log(ids,'$(this)',clumnClassName,lastElement);
+                var lastElement = ids[ids.length - 1];
                 var lastId = lastElement.replace(new RegExp('^' + clumnClassName), '');
                 if (lastId) {
                     uniqueId=lastId;
                 }
                 uniqueId++;
-               // console.log(lastId, lastElement,ids,clumnClassName,'clumnClassName',$(this).closest('.form-group').find('.add_labelName').val(),$('.'+clumnClassName).closest('.row_mar_bm').find('.add_labelName').val());
                 var labelName =$('.'+clumnClassName).closest('.row_mar_bm').find('.add_labelName').val();
                 var columnName = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_columnName').val();
                 var inputType = $('.'+clumnClassName).closest('.row_mar_bm').find('.add_inputtype').val();
@@ -905,7 +904,7 @@
                      elementToRemove = 'add_more_'+clumnClassName;
                                 $('#'+elementToRemove).remove();
                                 uniqueId = uniqueId-1;
-                                removeId = uniqueId == 0 ? clumnClassName : clumnClassName+ uniqueId;console.log(removeId,'removeId');
+                                removeId = uniqueId == 0 ? clumnClassName : clumnClassName+ uniqueId;
                                 //   $('#patient_name2').closest('.row_mar_bm').find('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="' + uniqueId + '"></i>');
                                 if(uniqueId > 0) {
                                   $('#'+lastElement).closest('.col-md-10').next('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="'+removeId +'"></i>');
@@ -981,7 +980,7 @@
                     var lastClass = classArray[classArray.length - 1];
                 }
                 // var record_id = $(this).closest('tr').find('td:eq(1)').text();
-                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
+                    var record_id =  $(this).closest('tr').find('#table_id').text();
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -1010,7 +1009,7 @@
                         },
                         success: function(response) {
                             if(lastClass == 'start'){
-                                if (response.success == true) {console.log(response.success,'success');
+                                if (response.success == true) {
                                     $('#myModal_status').modal('show');
                                     startTime_db = response.startTimeVal;
                                     handleClientPendData(response.clientData,headers);
@@ -1024,15 +1023,14 @@
                     function handleClientPendData(clientData,headers) {
 
                         $.each(headers, function(index, header) {
-                            value = clientData[header];console.log(clientData,'clientData reason',header);
+                            value = clientData[header];
                             $('label[id="' + header + '"]').html("");
                             $('input[name="' + header + '[]"]').html("");
                             $('textarea[id="ce_hold_reason_editable"]').val(clientData['ce_hold_reason']);
                             if (/_el_/.test(value)) {
                                 elementToRemove = 'add_more_'+header;
                                 $('#'+elementToRemove).remove();
-                             //   console.log( $('.'+header).closest('.row_mar_bm').find('.col-md-1'),'col',header);
-                                // $('.' + header).closest('.row_mar_bm').find('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="' + header + '"></i>');//initital row minus button
+                                 // $('.' + header).closest('.row_mar_bm').find('.col-md-1').append('<i class="fa fa-minus minus_button remove_more" id="' + header + '"></i>');//initital row minus button
 
                                 var values = value.split('_el_');
                                 var optionsJson =  $('.'+header).closest('.dynamic-field').find('.add_options').val();
@@ -1041,11 +1039,11 @@
                                 var inputType;
                                 $('select[name="' + header + '[]"]').val(values[0]).trigger('change');
                                 // $('input[name="' + header + '[]"]').val(values[0]);
-                                $('textarea[name="' + header + '[]"]').val(values[0]);//console.log($('.'+header).attr('type'),'valuesType');
+                                $('textarea[name="' + header + '[]"]').val(values[0]);
                                 if ($('input[name="' + header + '[]"][type="checkbox"]').length > 0) {
                                     var checkboxValues = values[0].split(','); // Split the string into an array of checkbox values
                                     $('input[name="' + header + '[]"]').each(function() {
-                                        var checkboxValue = $(this).val(); //console.log(checkboxValue,checkboxValues,'checkboxValues');
+                                        var checkboxValue = $(this).val();
                                         var isChecked = checkboxValues.includes(checkboxValue);
                                         $(this).prop('checked', isChecked);
                                     });
@@ -1059,9 +1057,9 @@
 
 
                                     for (var i = 1; i < values.length; i++) {
-                                        var selectType;//console.log(values,'values',values[i],i,values.length);
+                                        var selectType;
                                         var isLastValue = i === values.length - 1;
-                                        var newElementId =  'dynamicElement_' + header + i;//console.log($('textarea[name="' + header + '[]"]').prop('nodeName'),'textarea');
+                                        var newElementId =  'dynamicElement_' + header + i;
                                         if ($('select[name="' + header + '[]"]').prop('tagName') != undefined) {
                                                 // Create a new <select> element
                                                 selectType = $('<select>', {
@@ -1084,7 +1082,7 @@
 
                                                 // Append the select element to its parent
                                                 var selectWrapper = $('<div>', { class: 'col-md-10' }).append(selectType);
-                                                    if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                    if(i === values.length - 1) {
                                                       var minusButton = $('<i>', { class: 'fa fa-plus add_more', id: 'add_more_'+header });
                                                 } else {
                                                     var minusButton = $('<i>', { class: 'fa fa-minus minus_button remove_more', id: header+ i });
@@ -1095,7 +1093,7 @@
 
                                             } else if ($('textarea[name="' + header + '[]"]').prop('nodeName') != undefined) {
                                                     inputType =  '<textarea name="' + header + '[]" class="form-control ' + header + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
-                                                    if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                    if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                 } else {
                                                     var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1120,7 +1118,7 @@
                                                         });
 
                                                         inputType += '</div>';
-                                                        if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                        if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                         } else {
                                                             var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1128,7 +1126,7 @@
                                                         var span = '<div class="row mt-4" id="' + newElementId + '">' +
                                                             '<div class="col-md-10">' + inputType + '</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                                 minusButton + '</div><div></div></div>';
-                                                      //  console.log(header, 'header', $('.' + header).find('.col-md-6'));
+
                                                         $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                             } else if ($('input[name="' + header + '"][type="radio"]').length > 0 && Array.isArray(optionsArray)) {
                                                         inputType = '<div class="form-group row">';
@@ -1147,7 +1145,7 @@
                                                         });
 
                                                         inputType += '</div>';
-                                                        if(i === values.length - 1) {//console.log(i,values.length - 1,'length');
+                                                        if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                         } else {
                                                             var minusButton = '<i class="fa fa-minus minus_button remove_more" id="'+header+ i +'"></i>';
@@ -1155,7 +1153,7 @@
                                                         var span = '<div class="row mt-4" id="' + newElementId + '">' +
                                                             '<div class="col-md-10">' + inputType + '</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                                 minusButton + '</div><div></div></div>';
-                                                      //  console.log(header, 'header', $('.' + header).find('.col-md-6'));
+
                                                         $('input[name="' + header + '"]').closest('.dynamic-field').append(span);
                                             } else {
                                                 var fieldType =  $('.'+header).attr('type');
@@ -1168,8 +1166,8 @@
                                                         break;
                                                     }
                                                 }
-                                                console.log(fieldType,'fieldType',header,dateRangeClass,values);
-                                                if(dateRangeClass == 'date_range') { console.log(fieldType,'fieldType daterange',header,dateRangeClass,values);
+
+                                                if(dateRangeClass == 'date_range') {
                                                   inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control date_range ' + header + ' white-smoke pop-non-edt-val"  style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
                                                 } else {
                                                     inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
@@ -1182,7 +1180,7 @@
                                                 var span = '<div class="row mt-4"  id="' +newElementId+ '">' +
                                                     '<div class="col-md-10">'+ inputType +'</div><div  class="col-md-1 col-form-label text-lg-right pt-0 pb-4" style="margin-left: -1.3rem;">' +
                                                         minusButton +'</div><div></div></div>';
-                                                   // console.log(header,'header', $('.'+header).find('.col-md-6'));
+
                                                     $('input[name="' + header + '[]"]').closest('.dynamic-field').append(span);
                                         }
                                     }
@@ -1204,11 +1202,11 @@
                                    $('select[name="' + header + '[]"]').val(value).trigger('change');
                                 } else {
                                     $('input[name="parentId"]').val(clientData['parent_id']);
-                                    $('input[name="record_old_status"]').val(clientData['claim_status']);
-                                      if (header === 'claim_status' && value.includes('CE_')) {
+                                    $('input[name="record_old_status"]').val(clientData['chart_status']);
+                                      if (header === 'chart_status' && value.includes('CE_')) {
                                             claimStatus = value;
                                             value = value.replace('CE_', '');
-                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                            $('select[name="chart_status"]').val(claimStatus).trigger('change');
                                         $('#title_status').text(value);
                                     }
                                     if (header == 'id') {
@@ -1232,7 +1230,7 @@
             $(document).on('click', '.clickable-view', function(e) {
                     // var record_id = $(this).closest('tr').find('td:eq(0)').text();
                     // var record_id = $(this).closest('tr').find('td:eq(1)').text();
-                    var record_id =  $(this).closest('tr').find('#table_id').text();console.log(record_id,'record_id');
+                    var record_id =  $(this).closest('tr').find('#table_id').text();
                     var $row = $(this).closest('tr');
                     var tdCount = $row.find('td').length;
                     var thCount = tdCount - 1;
@@ -1269,9 +1267,7 @@
                             }
                         },
                     });
-                    function handleClientData(clientData,headers) {
-                        console.log(clientData, 'clientData',headers,clientData.id);
-
+                 function handleClientData(clientData,headers) {
                     $.each(headers, function(index, header) {
                         value = clientData[header];
                         $('label[id="' + header + '"]').html("");
@@ -1285,12 +1281,12 @@
                                     span.prepend(circle);
                                     formattedDatas.push(span);
                             }
-                        }); console.log(formattedDatas,'formattedDatas');
+                        });
                         formattedDatas.forEach(function(span, index) {
                             $('label[id="' + header + '"]').append(span);
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('CE_')) {
+                        if (header === 'chart_status' && value.includes('CE_')) {
                                 value = value.replace('CE_', '');
                                 $('#title_status_view').text(value);
                         }
@@ -1305,13 +1301,12 @@
                         return formattedDatas;
                     }
                         // $('label[id="' + header + '"]').text(value);
-                    console.log("Index: " + index + ", Value: " + header,value);
+
                   });
 
                }
             });
             $(document).on('click', '.sop_click', function(e) {
-                console.log('sop modal');
                 $('#myModal_sop').modal('show');
             });
                 $('#myModal_sop').on('shown.bs.modal', function () {
@@ -1351,6 +1346,17 @@
                     var requiredFieldsType = {};
                     var inputclass = [];
                     var inputTypeValue = 0;
+                    var claimStatus =  $('#chart_status').val();
+                        if(claimStatus == "CE_Hold") {
+                            var ceHoldReason = $('#ce_hold_reason_editable');
+                            if(ceHoldReason.val() == '') {
+                                ceHoldReason.css('border-color', 'red', 'important');
+                                    inputTypeValue = 1;
+                            } else {
+                                    ceHoldReason.css('border-color', '');
+                                    inputTypeValue = 0;
+                            }
+                        }
                     $('#holdFormConfiguration').find(':input[required], select[required], textarea[required]',
                         ':input[type="checkbox"][required], input[type="radio"]').each(
                         function() {
@@ -1378,7 +1384,6 @@
 
                     $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
-                        console.log(groupName, 'chckkkkkkkk');
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
                                 if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
@@ -1446,7 +1451,7 @@
 
                     $('input[type="radio"]:checked').each(function() {
                         var fieldName = $(this).attr('class');
-                        var fieldValue = $(this).val();console.log(fieldName,fieldValue,'fieldName');
+                        var fieldValue = $(this).val();
                         if (!fieldValuesByFieldName[fieldName]) {
                             fieldValuesByFieldName[fieldName] = [];
                         }
@@ -1471,18 +1476,6 @@
                             }).appendTo('form#holdFormConfiguration');
                         });
                     });
-
-                    var claimStatus =  $('#claim_status').val();
-                        if(claimStatus == "CE_Hold") {
-                            var ceHoldReason = $('#ce_hold_reason_editable');
-                            if(ceHoldReason.val() == '') {
-                                ceHoldReason.css('border-color', 'red', 'important');
-                                    inputTypeValue = 1;
-                            } else {
-                                    ceHoldReason.css('border-color', '');
-                                    inputTypeValue = 0;
-                            }
-                        }
 
                     if (inputTypeValue == 0) {
 
@@ -1547,7 +1540,7 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
 
-                $(document).on('change', '#claim_status', function() {
+                $(document).on('change', '#chart_status', function() {
                         var claimStatus = $(this).val();
                         if(claimStatus == "CE_Hold") {
                             $('#ce_hold_reason_editable').css('display', 'block');

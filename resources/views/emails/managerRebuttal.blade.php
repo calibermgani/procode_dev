@@ -49,7 +49,7 @@
                                         'invoke_date',
                                         'CE_emp_id',
                                         'QA_emp_id',
-                                        'claim_status',
+                                        'chart_status',
                                         'ce_hold_reason',
                                         'qa_hold_reason',
                                         'qa_work_status',
@@ -97,7 +97,7 @@
                                         'invoke_date',
                                         'CE_emp_id',
                                         'QA_emp_id',
-                                        'claim_status',
+                                        'chart_status',
                                         'ce_hold_reason',
                                         'qa_hold_reason',
                                         'qa_work_status',
@@ -125,7 +125,7 @@
                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                         @else
-                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                            @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                 {{ str_replace('CE_', '', $columnValue) }}
                                             @else
                                                 {{ $columnValue }}

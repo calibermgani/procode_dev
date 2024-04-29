@@ -147,7 +147,7 @@
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                          {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                        @if ($columnName == 'chart_status' && str_contains($columnValue, 'QA_'))
                                                                             {{ str_replace('QA_', '', $columnValue) }}
                                                                         @else
                                                                             {{ $columnValue }}

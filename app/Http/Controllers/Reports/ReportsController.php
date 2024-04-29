@@ -32,7 +32,7 @@ class ReportsController extends Controller
            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
-                $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
+                $decodedsubProjectName = $request->sub_project_id == null ? 'project' :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $columnsHeader=[];
                 if (Schema::hasTable($table_name)) {
@@ -62,7 +62,7 @@ class ReportsController extends Controller
            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
-                $decodedsubProjectName = $request->sub_project_id == null ? Helpers::projectName($request->project_id)->project_name :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
+                $decodedsubProjectName = $request->sub_project_id == null ? 'project' :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)).'_datas','_');
                 if (isset($request->work_date) && !empty($request->work_date)) {
                     $work_date = explode(' - ', $request->work_date);
@@ -108,7 +108,7 @@ class ReportsController extends Controller
                         $body_info .= '<tr>';
                         foreach ($checkedValues as $header) {
                             $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
-                            if ($header === 'claim_status') {
+                            if ($header === 'chart_status') {
                                 $data = str_replace('CE_', '', $data);
                             }
                             $body_info .= '<td>' . $data . '</td>';

@@ -191,7 +191,7 @@
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                        @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                             {{ str_replace('CE_', '', $columnValue) }}
                                                                         @else
                                                                             {{ $columnValue }}
@@ -204,7 +204,7 @@
                                                                     @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                         {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                     @else
-                                                                        @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                        @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                             {{ str_replace('CE_', '', $columnValue) }}
                                                                         @else
                                                                             {{ $columnValue }}
@@ -372,10 +372,10 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group row" style="margin-left: -2rem">
                                                             <label class="col-md-12">
-                                                                Claim Status
+                                                                Chart Status
                                                             </label>
                                                             <label class="col-md-12 pop-non-edt-val"
-                                                            id="claim_status">
+                                                            id="chart_status">
                                                         </label>
                                                         </div>
                                                     </div>
@@ -575,7 +575,7 @@
 
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('CE_')) {
+                        if (header === 'chart_status' && value.includes('CE_')) {
                                 value = value.replace('CE_', '');
                                 $('#title_status_view').text(value);
                         }

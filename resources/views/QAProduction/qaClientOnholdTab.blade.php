@@ -148,7 +148,7 @@
                                                                         @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                             {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                         @else
-                                                                            @if ($columnName == 'claim_status' && str_contains($columnValue, 'QA_'))
+                                                                            @if ($columnName == 'chart_status' && str_contains($columnValue, 'QA_'))
                                                                                 {{ str_replace('QA_', '', $columnValue) }}
                                                                             @elseif ($columnName == 'QA_status_code')
                                                                                 @php $statusCode = App\Http\Helper\Admin\Helpers::qaStatusById($columnValue);@endphp
@@ -424,11 +424,11 @@
                                                         <input type="hidden" name="QA_emp_id">
                                                         <div class="form-group row" >
                                                             <label class="col-md-12 required">
-                                                                Claim Status
+                                                                Chart Status
                                                             </label>
                                                             <div class="col-md-10">
                                                                 {!! Form::Select(
-                                                                    'claim_status',
+                                                                    'chart_status',
                                                                     [
                                                                         '' => '--Select--',
                                                                         'QA_Inprocess' => 'Inprocess',
@@ -440,7 +440,7 @@
                                                                     [
                                                                         'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                                         'autocomplete' => 'none',
-                                                                        'id' => 'claim_status',
+                                                                        'id' => 'chart_status',
                                                                         'style' => 'cursor:pointer',
                                                                     ],
                                                                 ) !!}
@@ -594,11 +594,11 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        Claim Status
+                                                        Chart Status
                                                     </label>
                                                     <div class="col-md-10">
                                                         {!! Form::Select(
-                                                            'claim_status',
+                                                            'chart_status',
                                                             [
                                                                 '' => '--Select--',
                                                                 'QA_Inprocess' => 'Inprocess',
@@ -611,7 +611,7 @@
                                                             [
                                                                 'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                                 'autocomplete' => 'none',
-                                                                'id' => 'claim_status',
+                                                                'id' => 'chart_status',
                                                                 'style' => 'cursor:pointer',
                                                             ],
                                                         ) !!}
@@ -911,10 +911,10 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12">
-                                                                        Claim Status
+                                                                        Chart Status
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
-                                                                    id="claim_status">
+                                                                    id="chart_status">
                                                                 </label>
                                                                 </div>
                                                             </div>
@@ -1508,11 +1508,11 @@
                                    $('select[name="' + header + '[]"]').val(value).trigger('change');
                                 } else {
                                     $('input[name="parentId"]').val(clientData['parent_id']);
-                                    $('input[name="record_old_status"]').val(clientData['claim_status']);
-                                      if (header === 'claim_status' && value.includes('QA_')) {
+                                    $('input[name="record_old_status"]').val(clientData['chart_status']);
+                                      if (header === 'chart_status' && value.includes('QA_')) {
                                             claimStatus = value;
                                             value = value.replace('QA_', '');
-                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                            $('select[name="chart_status"]').val(claimStatus).trigger('change');
                                         $('#title_status').text(value);
                                     }
                                     if (header == 'id') {
@@ -1666,7 +1666,7 @@
                             $('label[id="' + header + '"]').append(span);
                         });
                     } else {
-                        if (header === 'claim_status' && value.includes('QA_')) {
+                        if (header === 'chart_status' && value.includes('QA_')) {
                                 value = value.replace('QA_', '');
                                 $('#title_status_view').text(value);
                         }
@@ -1759,6 +1759,17 @@
             $(document).on('click', '#project_hold_save', function(e) {
                     e.preventDefault();
                     var inputTypeValue = 0;
+                    var claimStatus =  $('#chart_status').val();
+                        if(claimStatus == "QA_Hold") {
+                            var ceHoldReason = $('#qa_hold_reason_editable');
+                            if(ceHoldReason.val() == '') {
+                                ceHoldReason.css('border-color', 'red', 'important');
+                                    inputTypeValue = 1;
+                            } else {
+                                    ceHoldReason.css('border-color', '');
+                                    inputTypeValue = 0;
+                            }
+                        }
                     $('#holdFormConfiguration').serializeArray().map(function(input) {
                         labelName = input.name;
                             if(labelName.substring(0, 3).toLowerCase() == "cpt") {
@@ -1904,17 +1915,7 @@
                         });
                     });
 
-                    var claimStatus =  $('#claim_status').val();
-                        if(claimStatus == "QA_Hold") {
-                            var ceHoldReason = $('#qa_hold_reason_editable');
-                            if(ceHoldReason.val() == '') {
-                                ceHoldReason.css('border-color', 'red', 'important');
-                                    inputTypeValue = 1;
-                            } else {
-                                    ceHoldReason.css('border-color', '');
-                                    inputTypeValue = 0;
-                            }
-                        }
+
 
                     if (inputTypeValue == 0) {
 
@@ -1979,7 +1980,7 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
 
-                $(document).on('change', '#claim_status', function() {
+                $(document).on('change', '#chart_status', function() {
                         var claimStatus = $(this).val();
                         if(claimStatus == "QA_Hold") {
                             $('#qa_hold_reason_editable').css('display', 'block');
@@ -1991,7 +1992,7 @@
                         }
                 })
 
-                var excludedFields = ['QA_rework_comments', 'claim_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
+                var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
             var previousValue;
             $('#holdFormConfiguration').on('focus', 'input, select, textarea', function() {
                 previousValue = $(this).val();

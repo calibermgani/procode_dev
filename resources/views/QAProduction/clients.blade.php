@@ -81,15 +81,15 @@
                                         ) {
                                             if (class_exists($modelClass)) {
                                                 $assignedCount = $modelClass
-                                                    ::whereIn('claim_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
+                                                    ::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->count();
                                                 $completedCount = $modelClass
-                                                    ::where('claim_status', 'QA_Completed')->whereBetween('updated_at',[$startDate,$endDate])
+                                                    ::where('chart_status', 'QA_Completed')->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $pendingCount = $modelClass
-                                                    ::where('claim_status', 'QA_Pending')->whereBetween('updated_at',[$startDate,$endDate])
+                                                    ::where('chart_status', 'QA_Pending')->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
-                                                $holdCount = $modelClass::where('claim_status', 'QA_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                                                $holdCount = $modelClass::where('chart_status', 'QA_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                                             } else {
                                                 $assignedCount = 0;
                                                 $completedCount = 0;
@@ -99,19 +99,19 @@
                                         } elseif ($loginEmpId) {
                                             if (class_exists($modelClass)) {
                                                 $assignedCount = $modelClass
-                                                    ::whereIn('claim_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
+                                                    ::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->where('QA_emp_id', $loginEmpId)
                                                     ->count();
                                                 $completedCount = $modelClass
-                                                    ::where('claim_status', 'QA_Completed')
+                                                    ::where('chart_status', 'QA_Completed')
                                                     ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $pendingCount = $modelClass
-                                                    ::where('claim_status', 'QA_Pending')
+                                                    ::where('chart_status', 'QA_Pending')
                                                     ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                                 $holdCount = $modelClass
-                                                    ::where('claim_status', 'QA_Hold')
+                                                    ::where('chart_status', 'QA_Hold')
                                                     ->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])
                                                     ->count();
                                             } else {

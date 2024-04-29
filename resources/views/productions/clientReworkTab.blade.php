@@ -209,7 +209,7 @@
                                                                 @endphp
                                                                 {{ $columnValue == null ? $columnValue :  $subStatusCode['sub_status_code'] }}
                                                             @else
-                                                                @if ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                @if ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                     {{ str_replace('CE_', '', $columnValue) }}
                                                                 @else
                                                                     {{ $columnValue }}
@@ -515,11 +515,11 @@
                                              <input type="hidden" name="CE_emp_id">
                                              <div class="form-group row">
                                                  <label class="col-md-12 required">
-                                                     Claim Status
+                                                     Chart Status
                                                  </label>
                                                  <div class="col-md-10">
                                                      {!! Form::Select(
-                                                         'claim_status',
+                                                         'chart_status',
                                                          [
                                                              '' => '--Select--',
                                                              'CE_Inprocess' => 'Inprocess',
@@ -533,7 +533,7 @@
                                                          [
                                                              'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                              'autocomplete' => 'none',
-                                                             'id' => 'claim_status',
+                                                             'id' => 'chart_status',
                                                              'style' => 'cursor:pointer',
                                                          ],
                                                      ) !!}
@@ -924,10 +924,10 @@
                                         <div class="col-md-6">
                                             <div class="form-group row">
                                                 <label class="col-md-12">
-                                                    Claim Status
+                                                    Chart Status
                                                 </label>
                                                 <label class="col-md-12 pop-non-edt-val"
-                                                id="claim_status">
+                                                id="chart_status">
                                             </label>
                                             </div>
                                         </div>
@@ -1533,15 +1533,15 @@
                                    $('select[name="' + header + '[]"]').val(value).trigger('change');
                                 } else {
                                     $('input[name="parentId"]').val(clientData['parent_id']);
-                                    $('input[name="record_old_status"]').val(clientData['claim_status']);
-                                      if (header === 'claim_status' && value.includes('CE_')) {
+                                    $('input[name="record_old_status"]').val(clientData['chart_status']);
+                                      if (header === 'chart_status' && value.includes('CE_')) {
                                             claimStatus = value;
                                             value = value.replace('CE_', '');
-                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                            $('select[name="chart_status"]').val(claimStatus).trigger('change');
                                         $('#title_status').text(value);
-                                    } else if (header === 'claim_status'){
+                                    } else if (header === 'chart_status'){
                                         claimStatus = value;console.log(value,header,'header',claimStatus);
-                                            $('select[name="claim_status"]').val(claimStatus).trigger('change');
+                                            $('select[name="chart_status"]').val(claimStatus).trigger('change');
                                         $('#title_status').text(claimStatus);
                                     }
                                     if (header == 'id') {
@@ -1671,10 +1671,10 @@
                                     $('label[id="' + header + '"]').append(span);
                                 });
                             } else {
-                                if (header === 'claim_status' && value.includes('CE_')) {
+                                if (header === 'chart_status' && value.includes('CE_')) {
                                         value = value.replace('CE_', '');
                                         $('#title_status_view').text(value);
-                                } else  if (header === 'claim_status') {
+                                } else  if (header === 'chart_status') {
                                     value = value;
                                     $('#title_status_view').text(value);
                                 }
@@ -1774,6 +1774,17 @@
                     var requiredFieldsType = {};
                     var inputclass = [];
                     var inputTypeValue = 0;
+                    var claimStatus =  $('#chart_status').val();
+                        if(claimStatus == "CE_Hold") {
+                            var ceHoldReason = $('#ce_hold_reason');console.log(ceHoldReason.val(),'ceHoldReason');
+                            if(ceHoldReason.val() == '') {
+                                ceHoldReason.css('border-color', 'red', 'important');
+                                    inputTypeValue = 1;
+                            } else {
+                                    ceHoldReason.css('border-color', '');
+                                    inputTypeValue = 0;
+                            }
+                        }
                     $('#revokeFormConfiguration').find(':input[required], select[required], textarea[required]',
                         ':input[type="checkbox"][required], input[type="radio"]').each(
                         function() {
@@ -1896,18 +1907,8 @@
                             }).appendTo('form#revokeFormConfiguration');
                         });
                     });
-                    var claimStatus =  $('#claim_status').val();
-                        if(claimStatus == "CE_Hold") {
-                            var ceHoldReason = $('#ce_hold_reason');console.log(ceHoldReason.val(),'ceHoldReason');
-                            if(ceHoldReason.val() == '') {
-                                ceHoldReason.css('border-color', 'red', 'important');
-                                    inputTypeValue = 1;
-                            } else {
-                                    ceHoldReason.css('border-color', '');
-                                    inputTypeValue = 0;
-                            }
-                        }
-                        console.log(inputTypeValue,'inputTypeValue');
+
+                       
                         // var qaRequired = $('#qa_required_sampling');
                         // if (qaRequired.val() == '' || qaRequired.val() == null) {
                         //     qaRequired.next('.select2').find(".select2-selection").css('border-color', 'red','important');
@@ -2000,7 +2001,7 @@
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
-            $(document).on('change', '#claim_status', function() {
+            $(document).on('change', '#chart_status', function() {
                     var claimStatus = $(this).val();
                     if(claimStatus == "CE_Hold") {
                         $('#ce_hold_reason').css('display', 'block');

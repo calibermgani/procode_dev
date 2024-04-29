@@ -93,7 +93,7 @@ class FormController extends Controller
                         $columns[$columnName] = 'TEXT';
                     }
                 }
-                $subProjectName = $data['sub_project_id'] != null ? $subProjectArray->sub_project_name : $projectName->project_name;
+                $subProjectName = $data['sub_project_id'] != null ? $subProjectArray->sub_project_name : 'project';
                 $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName),'_');
                 $tableDataName = Str::slug(($projectName->project_name.'_'.$subProjectName. '_datas'),'_');
                 $duplicateTableName = Str::slug(($projectName->project_name . '_' . $subProjectName . '_duplicates'),'_');
@@ -108,7 +108,7 @@ class FormController extends Controller
                         $createTableSQL .= ", invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,
@@ -160,7 +160,7 @@ class FormController extends Controller
                         $createDuplicateTableSQL .= ", invoke_date DATE NULL,
                                                     CE_emp_id VARCHAR(255) NULL,
                                                     QA_emp_id VARCHAR(255) NULL,
-                                                    claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                                    chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     duplicate_status VARCHAR(255) NULL,
                                                     ce_hold_reason TEXT NULL,
                                                     qa_hold_reason TEXT NULL,
@@ -212,7 +212,7 @@ class FormController extends Controller
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,
@@ -263,7 +263,7 @@ class FormController extends Controller
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,
@@ -394,7 +394,7 @@ class FormController extends Controller
                     }
 
                 }
-                $subProjectName = $data['sub_project_id_val'] != null ? $subProjectArray->sub_project_name : $projectName->project_name;
+                $subProjectName = $data['sub_project_id_val'] != null ? $subProjectArray->sub_project_name : 'project';
                 $tableName = Str::slug(($projectName->project_name.'_'.$subProjectName),'_');
                 $tableDataName =Str::slug($projectName->project_name.'_'.$subProjectName. '_datas','_');
                 $duplicateTableName = Str::slug($projectName->project_name . '_' . $subProjectName . '_duplicates','_');
@@ -410,7 +410,7 @@ class FormController extends Controller
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,
@@ -461,7 +461,7 @@ class FormController extends Controller
                         $createDuplicateTableSQL .= ", invoke_date DATE NULL,
                                                     CE_emp_id VARCHAR(255) NULL,
                                                     QA_emp_id VARCHAR(255) NULL,
-                                                    claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                                    chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                                     duplicate_status VARCHAR(255) NULL,
                                                     ce_hold_reason TEXT NULL,
                                                     qa_hold_reason TEXT NULL,
@@ -512,7 +512,7 @@ class FormController extends Controller
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,
@@ -563,7 +563,7 @@ class FormController extends Controller
                         $createTableSQL .= ", parent_id INT NULL,invoke_date DATE NULL,
                                             CE_emp_id VARCHAR(255) NULL,
                                             QA_emp_id VARCHAR(255) NULL,
-                                            claim_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
+                                            chart_status ENUM('CE_Assigned','CE_Inprocess','CE_Pending','CE_Completed','CE_Clarification','CE_Hold','QA_Assigned','QA_Inprocess','QA_Pending','QA_Completed','QA_Clarification','QA_Hold','Revoke') DEFAULT 'CE_Assigned',
                                             ce_hold_reason TEXT NULL,
                                             qa_hold_reason TEXT NULL,
                                             qa_work_status VARCHAR(255) NULL,

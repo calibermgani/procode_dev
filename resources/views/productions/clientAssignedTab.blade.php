@@ -159,7 +159,7 @@
                                                                     @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus)  && $reworkCount < 1)
                                                                         <button class="task-start clickable-row"
                                                                             title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
-                                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->claim_status == "CE_Inprocess")
+                                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->chart_status == "CE_Inprocess")
                                                                         <button class="task-start clickable-row"
                                                                             title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
                                                                     @endif
@@ -185,12 +185,12 @@
                                                                 @if (!in_array($columnName, $columnsToExclude))
                                                                     @if ($columnName != 'id')
                                                                         <td style="max-width: 300px;white-space: normal;">
-                                                                            @if ($columnName == 'claim_status' && is_null($data->CE_emp_id))
+                                                                            @if ($columnName == 'chart_status' && is_null($data->CE_emp_id))
                                                                             <b><p  style="color: red;">UnAssigned</p></b>
                                                                             @else
                                                                                 @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                                     {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                                @elseif ($columnName == 'claim_status' && str_contains($columnValue, 'CE_'))
+                                                                                @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
                                                                                     {{ str_replace('CE_', '', $columnValue) }}
                                                                                 @else
                                                                                     {{ $columnValue }}
@@ -466,11 +466,11 @@
                                                                             <input type="hidden" name="CE_emp_id">
                                                                             <div class="form-group row">
                                                                                 <label class="col-md-12 required">
-                                                                                    Claim Status
+                                                                                    Chart Status
                                                                                 </label>
                                                                                 <div class="col-md-10">
                                                                                     {!! Form::Select(
-                                                                                        'claim_status',
+                                                                                        'chart_status',
                                                                                         [
                                                                                             '' => '--Select--',
                                                                                             'CE_Inprocess' => 'Inprocess',
@@ -483,7 +483,7 @@
                                                                                         [
                                                                                             'class' => 'form-control white-smoke  pop-non-edt-val ',
                                                                                             'autocomplete' => 'none',
-                                                                                            'id' => 'claim_status',
+                                                                                            'id' => 'chart_status',
                                                                                             'style' => 'cursor:pointer',
                                                                                         ],
                                                                                     ) !!}
@@ -658,10 +658,10 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group row" style="margin-left: -2rem">
                                                                         <label class="col-md-12 required">
-                                                                            Claim Status
+                                                                            Chart Status
                                                                         </label>
                                                                         <label class="col-md-12 pop-non-edt-val"
-                                                                        id="claim_status">
+                                                                        id="chart_status">
                                                                     </label>
                                                                     </div>
                                                                 </div>
@@ -1035,9 +1035,9 @@
                     if (header == 'CE_emp_id') {
                         $('input[name="CE_emp_id"]').val(value);
                     }
-                    if (header == 'claim_status') {
-                        // $('select[name="claim_status"]').val(value).trigger('change');
-                        $('select[name="claim_status"]').val('CE_Inprocess').trigger('change');
+                    if (header == 'chart_status') {
+                        // $('select[name="chart_status"]').val(value).trigger('change');
+                        $('select[name="chart_status"]').val('CE_Inprocess').trigger('change');
                         $('#title_status').text('In Process');
                     }
                     if ($('input[name="' + header + '[]"]').is(':checkbox')) {
@@ -1127,6 +1127,17 @@
                 var requiredFieldsType = {};
                 var inputclass = [];
                 var inputTypeValue = 0;
+                var claimStatus =  $('#chart_status').val();
+                if(claimStatus == "CE_Hold") {
+                    var ceHoldReason = $('#ce_hold_reason');
+                    if(ceHoldReason.val() == '') {
+                        ceHoldReason.css('border-color', 'red', 'important');
+                            inputTypeValue = 1;
+                    } else {
+                            ceHoldReason.css('border-color', '');
+                            inputTypeValue = 0;
+                    }
+                }
                 $('#formConfiguration').find(':input[required], select[required], textarea[required]',
                     ':input[type="checkbox"][required], input[type="radio"]').each(
                     function() {
@@ -1251,17 +1262,7 @@
                         }).appendTo('form#formConfiguration');
                     });
                 });
-                var claimStatus =  $('#claim_status').val();
-                if(claimStatus == "CE_Hold") {
-                    var ceHoldReason = $('#ce_hold_reason');
-                    if(ceHoldReason.val() == '') {
-                        ceHoldReason.css('border-color', 'red', 'important');
-                            inputTypeValue = 1;
-                    } else {
-                            ceHoldReason.css('border-color', '');
-                            inputTypeValue = 0;
-                    }
-                }
+
 
                 if (inputTypeValue == 0) {
 
@@ -1419,7 +1420,7 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
 
-            $(document).on('change', '#claim_status', function() {
+            $(document).on('change', '#chart_status', function() {
                     var claimStatus = $(this).val();
                     if(claimStatus == "CE_Hold") {
                         $('#ce_hold_reason').css('display', 'block');
