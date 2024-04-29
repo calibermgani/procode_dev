@@ -107,7 +107,7 @@ class ProductionController extends Controller
                             $subProjectsWithCount[$key]['holdCount'] = '--';
                         }
                     } else if($loginEmpId) {
-                        if (class_exists($modelClass)) {dd($modelClass);
+                        if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -228,7 +228,7 @@ class ProductionController extends Controller
                         $assignedDropDown = array_filter($data['userDetail']);
                     }
                 } elseif ($loginEmpId) {
-                    if (class_exists($modelClass)) {
+                    if (class_exists($modelClass)) {dd($modelClass);
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
