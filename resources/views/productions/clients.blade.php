@@ -48,7 +48,7 @@
                                                         })->all();
                                             } else {
                                                 // $model_name = collect(str_replace(' ', '', ucfirst($projectName) . ucfirst($projectName)));
-                                                $model_name = collect(Str::studly(Str::slug((Str::lower($projectName).'_Project'),'_')));
+                                                $model_name = collect(Str::studly(Str::slug((Str::lower($projectName).'_project'),'_')));
 
                                             }
 
