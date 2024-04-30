@@ -54,7 +54,7 @@ var KTSelect2 = function() {
             placeholder: "Select Sub Project"
         });
         $('.kt_select2_assignee').select2({
-            placeholder: "--Assignee--"
+            placeholder: "Assignee"
         });
         $('.kt_select2_coder').select2({
             placeholder: "Select Coder"
