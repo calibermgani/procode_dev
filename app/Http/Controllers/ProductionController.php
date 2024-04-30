@@ -202,32 +202,6 @@ class ProductionController extends Controller
                      if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->limit(2000)->get();
-                        $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="client_assigned_list"><thead><tr>';
-                         foreach ($columnsHeader as $key => $header) {
-                            $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
-                        }
-                        $body_info .= '</tr></thead><tbody>';
-
-                        foreach ($assignedProjectDetails as $row) {
-                            $body_info .= '<tr>';
-                            foreach ($columnsHeader as $header) {
-                                $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
-                                if ($header === 'chart_status') {
-                                    $data = str_replace('_', ' ', $data);
-                                }
-                                if ($header === 'qa_work_status') {
-                                    $data = str_replace('_', ' ', $data);
-                                }
-                                if ($header === 'work_hours') {
-                                    $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
-                                }
-                                $body_info .= '<td>' . $data . '</td>';
-                            }
-                            $body_info .= '</tr>';
-                        }
-
-                        $body_info .= '</tbody></table>';
-
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
@@ -273,7 +247,7 @@ class ProductionController extends Controller
                 $popupNonEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->whereIn('user_type',[3,$dept])->where('field_type','non_editable')->where('field_type_3','popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
 
-                    return view('productions/clientAssignedTab',compact('body_info','assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','assignedProjectDetailsStatus','unAssignedCount'));
+                    return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','assignedProjectDetailsStatus','unAssignedCount'));
 
             } catch (Exception $e) {
                 log::debug($e->getMessage());

@@ -144,8 +144,108 @@
                                 <div class="card-body py-0 px-7">
                                     <input type="hidden" value={{ $clientName }} id="clientName">
                                     <input type="hidden" value={{ $subProjectName }} id="subProjectName">
-                                    <div class="table-responsive pt-5 pb-5" id="reportTable">
+                                    <div class="table-responsive pt-5 pb-5">
+                                        <table
+                                            class="table table-separate table-head-custom no-footer dtr-column clients_list_filter"
+                                            id="client_assigned_list" data-order='[[ 0, "desc" ]]'>
+                                            <thead>
+                                                @if (!empty($columnsHeader))
+                                                    <tr>
+                                                        @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
+                                                            <th class='notexport'><input type="checkbox" id="ckbCheckAll" class="cursor_hand">
+                                                            </th>
+                                                        @endif
+                                                        <th class='notexport' style="color:white !important">Action</th>
+                                                        @foreach ($columnsHeader as $columnName => $columnValue)
+                                                            @if ($columnValue != 'id')
+                                                                <th><input type="hidden"
+                                                                        value={{ $columnValue }}>
+                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                </th>
+                                                            @else
+                                                                <th style="display:none" class='notexport'><input type="hidden"
+                                                                        value={{ $columnValue }}>
+                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                </th>
+                                                            @endif
+                                                        @endforeach
 
+                                                    </tr>
+                                                @endif
+
+                                            </thead>
+                                            <tbody>
+                                                @if (isset($assignedProjectDetails))
+                                                    @foreach ($assignedProjectDetails as $data)
+                                                        <tr>
+                                                            @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
+                                                                <td><input type="checkbox" class="checkBoxClass cursor_hand" name='check[]'
+                                                                        value="{{ $data->id }}">
+                                                                </td>
+                                                            @endif
+                                                            <td>
+                                                                @if (($empDesignation !== "Administrator" || strpos($empDesignation, 'Manager') !== true || strpos($empDesignation, 'VP') !== true || strpos($empDesignation, 'Leader') !== true || strpos($empDesignation, 'Team Lead') !== true || strpos($empDesignation, 'CEO') !== true || strpos($empDesignation, 'Vice') !== true) && $loginEmpId != $data->CE_emp_id)
+                                                                @else
+                                                                    {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus) && $reworkCount < 3) --}}
+                                                                    @if (empty($existingCallerChartsWorkLogs) && !in_array("CE_Inprocess",$assignedProjectDetailsStatus)  && $reworkCount < 1)
+                                                                        <button class="task-start clickable-row"
+                                                                            title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
+                                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->chart_status == "CE_Inprocess")
+                                                                        <button class="task-start clickable-row"
+                                                                            title="Start"><i class="fa fa-play-circle icon-circle1 mt-0" aria-hidden="true" style="color:#ffffff"></i></button>
+                                                                    @endif
+                                                                @endif
+                                                                        <button class="task-start clickable-view"
+                                                                        title="View"><i
+                                                                        class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button>
+                                                            </td>
+                                                            @foreach ($data->getAttributes() as $columnName => $columnValue)
+                                                                @php
+                                                                    $columnsToExclude = [
+                                                                        'QA_emp_id',
+                                                                        'ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                                                                        'created_at',
+                                                                        'updated_at',
+                                                                        'deleted_at',
+                                                                    ];
+                                                                    $text = "UnAssigned";
+                                                                    $backgroundColor = ($text == "UnAssigned") ? "red" : "transparent";
+                                                                    $textColor = ($text == "UnAssigned") ? "white" : "black";
+
+                                                                @endphp
+                                                                @if (!in_array($columnName, $columnsToExclude))
+                                                                    @if ($columnName != 'id')
+                                                                        <td style="max-width: 300px;white-space: normal;">
+                                                                            @if ($columnName == 'chart_status' && is_null($data->CE_emp_id))
+                                                                            <b><p  style="color: red;">UnAssigned</p></b>
+                                                                            @else
+                                                                                @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                                    {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                                @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
+                                                                                    {{ str_replace('CE_', '', $columnValue) }}
+                                                                                @else
+                                                                                    {{ $columnValue }}
+                                                                                @endif
+                                                                            @endif
+                                                                        </td>
+                                                                    @else
+                                                                        <td style="display:none;max-width: 300px;
+                                                                        white-space: normal;" id="table_id">
+                                                                            @if (str_contains($columnValue, '-') && strtotime($columnValue))
+                                                                                {{ date('m/d/Y', strtotime($columnValue)) }}
+                                                                            @else
+                                                                                {{ $columnValue }}
+                                                                            @endif
+                                                                        </td>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 
@@ -701,8 +801,6 @@
         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
-            var qaStatusList = @json($body_info);console.log(qaStatusList);
-            $('#reportTable').html(qaStatusList);
             $("#expandButton").click(function() {
                 var modalContent = $(".modal-content");console.log(modalContent.width(),'modalContent');
             if (modalContent.width() === 800) {
