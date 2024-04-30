@@ -53,7 +53,7 @@
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Total Inventory</h6>
+                                                    <h6 style="margin-right: 5px;">Assigned</h6>
                                                     {{-- <div class="rounded-circle code-badge-tab">
                                                         {{ $assignedCount }}
                                                     </div> --}}
@@ -62,6 +62,19 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
+                                        <div class="wizard-step mb-0 seven" data-wizard-type="done">
+                                            <div class="wizard-wrapper py-2">
+                                                <div class="wizard-label p-2 mt-2">
+                                                    <div class="wizard-title" style="display: flex; align-items: center;">
+                                                        <h6 style="margin-right: 5px;">UnAssigned</h6>
+                                                        @include('CountVar.countRectangle', ['count' => $unAssignedCount])
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="wizard-step mb-0 two" data-wizard-type="done">
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
@@ -1552,6 +1565,12 @@
             })
             $(document).on('click', '.six', function() {
                 window.location.href = baseUrl + 'projects_duplicate/' + clientName + '/' + subProjectName +
+                    "?parent=" +
+                    getUrlVars()[
+                        "parent"] + "&child=" + getUrlVars()["child"];
+            })
+            $(document).on('click', '.seven', function() {
+                window.location.href = baseUrl + 'projects_unassigned/' + clientName + '/' + subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] + "&child=" + getUrlVars()["child"];

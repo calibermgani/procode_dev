@@ -65,6 +65,7 @@ Route::any('qa_sampling_store', 'App\Http\Controllers\SettingController@qualityS
 Route::any('qa_sampling_update', 'App\Http\Controllers\SettingController@qualitySamplingUpdate');
 Route::any('client_rework_datas_details', 'App\Http\Controllers\ProductionController@clientReworkDatasDetails');
 Route::any('project_rework_update/{projectName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientsReworkUpdate');//
+Route::any('projects_unassigned/{clientName}/{subProjectName}', 'App\Http\Controllers\ProductionController@clientUnAssignedTab')->name('clientUnAssigned');
 
 Route::group(['prefix' => 'qa_production'], function () {
     Route::any('qa_clients', 'App\Http\Controllers\QA\QAProductionController@clients')->name('qaClients');
