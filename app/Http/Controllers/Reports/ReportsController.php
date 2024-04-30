@@ -39,7 +39,7 @@ class ReportsController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['updated_at','created_at', 'deleted_at'];
+                    $columnsToExclude = ['QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -131,6 +131,9 @@ class ReportsController extends Controller
                         foreach ($checkedValues as $header) {
                             $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
                             if ($header === 'chart_status') {
+                                $data = str_replace('_', ' ', $data);
+                            }
+                            if ($header === 'qa_work_status') {
                                 $data = str_replace('_', ' ', $data);
                             }
                             if ($header === 'work_hours') {
