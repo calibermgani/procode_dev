@@ -607,7 +607,28 @@ class Helpers
             return response()->json(['error' => 'API request failed'], $response->getStatusCode());
         }
 
-        $userName = $data['user_name']['user_name']; 
+        $userName = $data['user_name']['user_name'];
 		return $userName;
 	}
+    public static function getprojectResourceList($clientId)
+	{
+        $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
+        $payload = [
+            'token' => '1a32e71a46317b9cc6feb7388238c95d',
+            'client_id' => $clientId,
+            'user_id' => $userId
+        ];
+         $client = new Client();
+         $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_resource_name', [
+            'json' => $payload
+        ]);
+        if ($response->getStatusCode() == 200) {
+             $data = json_decode($response->getBody(), true);
+        } else {
+            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+        }
+        $projectResource = array_filter($data['userDetail']);
+        return $projectResource;
+
+    }
 }

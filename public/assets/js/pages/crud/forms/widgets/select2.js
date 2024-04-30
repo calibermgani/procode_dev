@@ -19,7 +19,7 @@ var KTSelect2 = function() {
         });
 
         $('.user_select').select2({
-            placeholder: "Select Users"
+            placeholder: "Select User"
         });
 
         // basic
@@ -75,7 +75,7 @@ var KTSelect2 = function() {
             placeholder: "QA Required"
         });
         $('.report_client_status').select2({
-            placeholder: "Status"
+            placeholder: "Select Status"
         });
         // loading data from array
         // var data = [{

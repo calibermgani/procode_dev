@@ -21,7 +21,8 @@ class ReportsController extends Controller
     public function getSubProjects(Request $request){
         try {
             $subProject = Helpers::subProjectList($request->project_id);
-            return $subProject;
+            $user = Helpers::getprojectResourceList($request->project_id);
+            return response()->json(['success' => true,'subProject'=>$subProject,'resource' => $user]);
         } catch (Exception $e) {
             log::debug($e->getMessage());
         }
@@ -38,7 +39,7 @@ class ReportsController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['QA_emp_id','updated_at','created_at', 'deleted_at'];
+                    $columnsToExclude = ['updated_at','created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -95,6 +96,24 @@ class ReportsController extends Controller
                                 $query;
                             }
                         })
+                        ->where(function ($query) use ($request) {
+                            if ($request->user) {
+                                $query->where('CE_emp_id',$request->user);
+                                $query->orWhere('QA_emp_id',$request->user);
+                            }else{
+                                $query;
+                            }
+
+                        })
+                        ->where(function ($query) use ($request) {
+
+                            if ($request->client_status) {
+                                $query->where('chart_status',$request->client_status);
+                            }else{
+                                $query;
+                            }
+                        })
+
                         ->get();
                 } else {
                     $client_data = [];
@@ -112,7 +131,7 @@ class ReportsController extends Controller
                         foreach ($checkedValues as $header) {
                             $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
                             if ($header === 'chart_status') {
-                                $data = str_replace('CE_', '', $data);
+                                $data = str_replace('_', ' ', $data);
                             }
                             if ($header === 'work_hours') {
                                 $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";

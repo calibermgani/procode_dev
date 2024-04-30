@@ -86,11 +86,22 @@
                     <div class="col-md-2">
                         <div class="row form-group">
                             <div class="col-md-12">
-                                {!! Form::select(
+                                {{-- {!! Form::select(
                                     'user',
                                     ['No' => 'No', 'Yes' => 'Yes', 'Partial' => 'Partial'],null,
                                     ['class' => 'text-black form-control select2 user_select', 'id' => 'user', 'placeholder'=> 'Select User']
-                                ) !!}
+                                ) !!} --}}
+                                {{-- @if (isset(request()->project_id))
+                                    @php dd(request()->project_id);$userList = App\Http\Helper\Admin\Helpers::getprojectResourceList(request()->project_id); @endphp
+                                    {!! Form::select('user',  ['' => 'User'] + $userList, null,
+                                        ['class' => 'text-black form-control select2', 'id' => 'user', 'placeholder'=> 'User']
+                                    ) !!}
+                                @else --}}
+                                    @php $userList = []; @endphp
+                                    {!! Form::select('user', $userList, null,
+                                        ['class' => 'text-black form-control select2 user_select', 'id' => 'user', 'placeholder'=> 'User']
+                                    ) !!}
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </div>
@@ -99,7 +110,8 @@
                             <div class="col-md-12">
                                 {!! Form::select(
                                     'client_status',
-                                    ['CE_Inprocess' => 'Inprocess','CE_Pending' => 'Pending','CE_Completed' => 'Completed','CE_Hold' => 'Hold'],null,
+                                    ['CE_Inprocess' => 'CE Inprocess','CE_Pending' => 'CE Pending','CE_Completed' => 'CE Completed','CE_Hold' => 'CE Hold',
+                                    'QA_Inprocess' => 'QA Inprocess','QA_Pending' => 'QA Pending','QA_Completed' => 'QA Completed','QA_Hold' => 'QA Hold','Revoke' => 'Rework'],null,
                                     ['class' => 'text-black form-control select2 report_client_status', 'id' => 'client_status', 'placeholder'=> 'Status']
                                 ) !!}
                             </div>
@@ -190,11 +202,18 @@
                     success: function(res) {
                          $("#sub_project_id").val(res.subProject);
                         var sla_options = '<option value="">-- Select --</option>';
-                        $.each(res, function(key, value) {
+                        $.each(res.subProject, function(key, value) {
                             sla_options = sla_options + '<option value="' + key + '">' + value +
                                 '</option>';
                         });
                         $("#sub_project_id").html(sla_options);
+                        $("#user").val(res.resource);
+                        var user_options = '<option value="">Select User</option>';
+                        $.each(res.resource, function(key, value) {
+                            user_options = user_options + '<option value="' + key + '">' + value +
+                                '</option>';
+                        });
+                        $("#user").html(user_options);
                     },
                     error: function(jqXHR, exception) {}
                 });
@@ -270,84 +289,144 @@
             });
 
             $(document).on('click', '#project_assign_save', function() {
-                swal.fire({
-                        text: "Do you want to generate all custom fields?",
-                        icon: "success",
-                        buttonsStyling: false,
-                        showCancelButton: true,
-                        confirmButtonText: "Yes",
-                        cancelButtonText: "No",
-                        reverseButtons: true,
-                        customClass: {
-                            confirmButton: "btn font-weight-bold btn-white-black",
-                            cancelButton: "btn font-weight-bold btn-light-danger",
-                        }
+                var isSelectAllChecked = $('#select_all_columns').prop('checked');
+                var project_id = $('#project_id').val();
+                var sub_project_id = $('#sub_project_id').val();
+                var work_date = $('#work_date').val();
+                var client_status =  $('#client_status').val();
+                var user =  $('#user').val();
+                var checkedValues = [];
+                $('.header_columns').find('input[type="checkbox"]:checked').each(function() {
+                    checkedValues.push($(this).val());
+                });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-                    }).then(function(result) {
-                        if (result.value == true) {
-                            var project_id = $('#project_id').val();
-                            var sub_project_id = $('#sub_project_id').val();
-                            var work_date = $('#work_date').val();
-                            var checkedValues = [];
-                            $('.header_columns').find('input[type="checkbox"]:checked').each(function() {
-                                checkedValues.push($(this).val());
-                            });
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ url('reports/report_client_columns_list') }}",
-                                data: {
-                                    project_id: project_id,
-                                    sub_project_id: sub_project_id,
-                                    work_date: work_date,
-                                    checkedValues: checkedValues
-                                },
-                                success: function(res) {
-                                    if (res.body_info) {
-                                        $('#reportModal').modal('hide');
-                                        $('#generateReportClass').hide();
-                                        $('#listData').show();
-                                        $('#reportTable').html(res.body_info);
-                                        var table = $('#report_list').DataTable({
-                                            processing: true,
-                                            lengthChange: false,
-                                            clientSide: true,
-                                            searching: true,
-                                            pageLength: 20,
-                                            scrollCollapse: true,
-                                            scrollX: true,
-                                            "initComplete": function(settings, json) {
-                                                $('body').find('.dataTables_scrollBody').addClass("scrollbar");
-                                                $('body').find('.dataTables_scrollBody').css("margin-top",'-0.3rem','important');
-                                            },
-                                            language: {
-                                                "search": '',
-                                                "searchPlaceholder": "   Search",
-                                            },
-                                            buttons: [{
-                                                "extend": 'excel',
-                                                "text": `<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export" style="font-size:13px"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
-                                                    </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
-                                                "className": 'btn btn-primary-export text-white',
-                                                "title": 'ProCode',
-                                                "filename": 'procode_report',
-                                            }],
-                                            dom: "<'row'<'col-md-6 text-left'f><'col-md-6 text-right'B>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
-                                        })
-                                        table.buttons().container().appendTo($('.dataTables_wrapper .col-md-6.text-right'));
-                                    }else{
+                         if(isSelectAllChecked == true) {
+                                    swal.fire({
+                                        text: "Do you want to generate all custom fields?",
+                                        icon: "success",
+                                        buttonsStyling: false,
+                                        showCancelButton: true,
+                                        confirmButtonText: "Yes",
+                                        cancelButtonText: "No",
+                                        reverseButtons: true,
+                                        customClass: {
+                                            confirmButton: "btn font-weight-bold btn-white-black",
+                                            cancelButton: "btn font-weight-bold btn-light-danger",
+                                        }
 
+                                    }).then(function(result) {
+                                        if (result.value == true) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "{{ url('reports/report_client_columns_list') }}",
+                                                data: {
+                                                    project_id: project_id,
+                                                    sub_project_id: sub_project_id,
+                                                    work_date: work_date,
+                                                    client_status:client_status,
+                                                    user:user,
+                                                    checkedValues: checkedValues
+                                                },
+                                                success: function(res) {
+                                                    if (res.body_info) {
+                                                        $('#reportModal').modal('hide');
+                                                        $('#generateReportClass').hide();
+                                                        $('#listData').show();
+                                                        $('#reportTable').html(res.body_info);
+                                                        var table = $('#report_list').DataTable({
+                                                            processing: true,
+                                                            lengthChange: false,
+                                                            clientSide: true,
+                                                            searching: true,
+                                                            pageLength: 20,
+                                                            scrollCollapse: true,
+                                                            scrollX: true,
+                                                            "initComplete": function(settings, json) {
+                                                                $('body').find('.dataTables_scrollBody').addClass("scrollbar");
+                                                                $('body').find('.dataTables_scrollBody').css("margin-top",'-0.3rem','important');
+                                                            },
+                                                            language: {
+                                                                "search": '',
+                                                                "searchPlaceholder": "   Search",
+                                                            },
+                                                            buttons: [{
+                                                                "extend": 'excel',
+                                                                "text": `<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export" style="font-size:13px"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+                                                                    </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
+                                                                "className": 'btn btn-primary-export text-white',
+                                                                "title": 'ProCode',
+                                                                "filename": 'procode_report',
+                                                            }],
+                                                            dom: "<'row'<'col-md-6 text-left'f><'col-md-6 text-right'B>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
+                                                        })
+                                                        table.buttons().container().appendTo($('.dataTables_wrapper .col-md-6.text-right'));
+                                                    }else{
+
+                                                    }
+                                                },
+                                                error: function(jqXHR, exception) {
+                                                }
+                                            });
+                                    } else {  }
+                                    });
+                            } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{{ url('reports/report_client_columns_list') }}",
+                                    data: {
+                                        project_id: project_id,
+                                        sub_project_id: sub_project_id,
+                                        work_date: work_date,
+                                        client_status:client_status,
+                                        user:user,
+                                        checkedValues: checkedValues
+                                    },
+                                    success: function(res) {
+                                        if (res.body_info) {
+                                            $('#reportModal').modal('hide');
+                                            $('#generateReportClass').hide();
+                                            $('#listData').show();
+                                            $('#reportTable').html(res.body_info);
+                                            var table = $('#report_list').DataTable({
+                                                processing: true,
+                                                lengthChange: false,
+                                                clientSide: true,
+                                                searching: true,
+                                                pageLength: 20,
+                                                scrollCollapse: true,
+                                                scrollX: true,
+                                                "initComplete": function(settings, json) {
+                                                    $('body').find('.dataTables_scrollBody').addClass("scrollbar");
+                                                    $('body').find('.dataTables_scrollBody').css("margin-top",'-0.3rem','important');
+                                                },
+                                                language: {
+                                                    "search": '',
+                                                    "searchPlaceholder": "   Search",
+                                                },
+                                                buttons: [{
+                                                    "extend": 'excel',
+                                                    "text": `<span data-dismiss="modal" data-toggle="tooltip" data-placement="left" data-original-title="Export" style="font-size:13px"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" fill="currentColor" class="bi bi-box-arrow-up" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z"/><path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z"/>
+                                                        </svg>&nbsp;&nbsp;&nbsp;<span>Export</span></span>`,
+                                                    "className": 'btn btn-primary-export text-white',
+                                                    "title": 'ProCode',
+                                                    "filename": 'procode_report',
+                                                }],
+                                                dom: "<'row'<'col-md-6 text-left'f><'col-md-6 text-right'B>>" + "<'row'<'col-md-12't>><'row'<'col-md-5 pt-2'i><'col-md-7 pt-2'p>>",
+                                            })
+                                            table.buttons().container().appendTo($('.dataTables_wrapper .col-md-6.text-right'));
+                                        }else{
+
+                                        }
+                                    },
+                                    error: function(jqXHR, exception) {
                                     }
-                                },
-                                error: function(jqXHR, exception) {
-                                }
-                            });
-                       } else {  }
-                    });
+                                });
+                 }
             });
         });
     </script>
