@@ -945,7 +945,6 @@
                     (day < 10 ? '0' : '') + day + '-' + d.getFullYear();
             var table = $("#client_assigned_list").DataTable({
                 processing: true,
-                serverSide: true,
                 ordering: true,
                 clientSide: true,
                 lengthChange: false,
