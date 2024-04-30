@@ -959,7 +959,7 @@
             var table = $("#client_assigned_list").DataTable({
                 processing: true,
                 ordering: true,
-                clientSide: true,
+                serverSide: true,
                 lengthChange: false,
                 searching: true,
                 pageLength: 20,
