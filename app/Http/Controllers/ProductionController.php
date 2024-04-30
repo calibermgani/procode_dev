@@ -202,31 +202,31 @@ class ProductionController extends Controller
                      if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->limit(2000)->get();
-                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
-                        $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
-                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                        $completedCount = $modelClass::where('chart_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                        $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
-                        $duplicateCount = $modelClassDuplcates::count();
-                        $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
-                        $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->pluck('chart_status')->toArray();
-                        $payload = [
-                            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                            'client_id' => $decodedProjectName,
-                            'user_id' => $userId
-                        ];
+                        // $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
+                        // $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
+                        // $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
+                        // $completedCount = $modelClass::where('chart_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        // $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        // $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        // $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
+                        // $duplicateCount = $modelClassDuplcates::count();
+                        // $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
+                        // $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->pluck('chart_status')->toArray();
+                        // $payload = [
+                        //     'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        //     'client_id' => $decodedProjectName,
+                        //     'user_id' => $userId
+                        // ];
 
-                         $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_resource_name', [
-                            'json' => $payload
-                        ]);
-                        if ($response->getStatusCode() == 200) {
-                             $data = json_decode($response->getBody(), true);
-                        } else {
-                            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                        }
-                        $assignedDropDown = array_filter($data['userDetail']);
+                        //  $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_resource_name', [
+                        //     'json' => $payload
+                        // ]);
+                        // if ($response->getStatusCode() == 200) {
+                        //      $data = json_decode($response->getBody(), true);
+                        // } else {
+                        //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                        // }
+                        // $assignedDropDown = array_filter($data['userDetail']);
                     }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
