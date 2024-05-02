@@ -635,10 +635,12 @@ class ProductionController extends Controller
                                 if($qarecords > $samplingRecordCount) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Sampling";
+                                    $data['chart_status'] = "CE_Completed";
                                     break;
                                 } else {
                                     //$data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Auto_Close";
+                                    $data['chart_status'] = "QA_Completed";
 
                                 }
                             }
@@ -659,10 +661,12 @@ class ProductionController extends Controller
                                 if($qarecords > $samplingRecordCount ) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Sampling";
+                                    $data['chart_status'] = "CE_Completed";
                                     break;
                                 } else {
                                     //$data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Auto_Close";
+                                    $data['chart_status'] = "QA_Completed";
 
                                 }
                             }
@@ -676,10 +680,10 @@ class ProductionController extends Controller
                 $filteredQAData = collect($qaData)->except($excludeKeys)->toArray();
                 $data = array_merge($data, array_diff_key($filteredQAData, $data));
                  if($datasRecord != null) {
-                  $datasRecord->update($data);
-                  $data['chart_status'] == "CE_Completed" ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
+                    $datasRecord->update($data);
+                  ($data['chart_status'] == "CE_Completed" || $data['chart_status'] == "QA_Completed") ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
                 } else {
-                    $data['chart_status'] == "CE_Completed" ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
+                   ($data['chart_status'] == "CE_Completed" || $data['chart_status'] == "QA_Completed") ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
                    $modelClass::create($data);
                 }
                 // $originalModelClass = "App\\Models\\" . preg_replace('/[^A-Za-z0-9]/', '',ucfirst($decodedClientName).ucfirst($decodedsubProjectName));
@@ -867,10 +871,12 @@ class ProductionController extends Controller
                                 if($qarecords > $samplingRecordCount ) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Sampling";
+                                    $data['chart_status'] = "CE_Completed";
                                     break;
                                 } else {
                                     //$data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Auto_Close";
+                                    $data['chart_status'] = "QA_Completed";
 
                                 }
                             }
@@ -890,10 +896,12 @@ class ProductionController extends Controller
                                 if($qarecords > $samplingRecordCount) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Sampling";
+                                    $data['chart_status'] = "CE_Completed";
                                     break;
                                 } else {
                                     //$data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
                                     $data['qa_work_status'] = "Auto_Close";
+                                    $data['chart_status'] = "QA_Completed";
 
                                 }
                             }
@@ -907,10 +915,10 @@ class ProductionController extends Controller
                 $data = array_merge($data, array_diff_key($filteredQAData, $data));
                 if($datasRecord != null) {
                   $datasRecord->update($data);
-                  $data['chart_status'] == "CE_Completed" ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status'],'QA_required_sampling' => $data['QA_required_sampling'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
+                  ($data['chart_status'] == "CE_Completed" || $data['chart_status'] == "QA_Completed") ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status'],'QA_required_sampling' => $data['QA_required_sampling'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
                 } else {
                     $data['parent_id'] = $data['idValue'];
-                    $data['chart_status'] == "CE_Completed" ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status'],'QA_required_sampling' => $data['QA_required_sampling'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
+                    ($data['chart_status'] == "CE_Completed" || $data['chart_status'] == "QA_Completed") ? $record->update( ['chart_status' => $data['chart_status'],'QA_emp_id' => $data['QA_emp_id'],'qa_work_status' => $data['qa_work_status'],'QA_required_sampling' => $data['QA_required_sampling'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code']]) : $record->update( ['chart_status' => $data['chart_status'],'ce_hold_reason' => $data['ce_hold_reason']] );
                     $modelClass::create($data);
                 }
                 $currentTime = Carbon::now();
