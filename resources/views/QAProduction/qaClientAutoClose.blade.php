@@ -25,14 +25,14 @@
                     <div class="col-md-6">
                         <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
 
-                            @if (
+                            {{-- @if (
                                 $empDesignation == 'Administrator' ||
                                     strpos($empDesignation, 'Manager') !== false ||
                                     strpos($empDesignation, 'VP') !== false ||
                                     strpos($empDesignation, 'Leader') !== false ||
                                     strpos($empDesignation, 'Team Lead') !== false ||
                                     strpos($empDesignation, 'CEO') !== false ||
-                                    strpos($empDesignation, 'Vice') !== false)
+                                    strpos($empDesignation, 'Vice') !== false) --}}
                                 <div class="col-lg-3 mb-lg-0 mb-6">
 
                                     <fieldset class="form-group mb-0 white-smoke-disabled">
@@ -45,7 +45,7 @@
                                         ]) !!}
                                     </fieldset>
                                 </div>
-                            @endif
+                            {{-- @endif --}}
                             &nbsp;&nbsp;
                             <div>
                                 @if ($popUpHeader != null)
@@ -73,7 +73,7 @@
                 data-wizard-clickable="true" style="margin-top:-2rem !important">
                 <div class="wizard-nav">
                     <div class="wizard-steps">
-                        <div class="wizard-step mb-0 one" data-wizard-type="step">
+                        <div class="wizard-step mb-0 one" data-wizard-type="done">
                             <div class="wizard-wrapper py-2">
                                 <div class="wizard-label p-2 mt-2">
                                     <div class="wizard-title" style="display: flex; align-items: center;">
@@ -84,7 +84,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="wizard-step mb-0 two" data-wizard-type="step">
+                        <div class="wizard-step mb-0 two" data-wizard-type="done">
                             <div class="wizard-wrapper py-2">
                                 <div class="wizard-label p-2 mt-2">
                                     <div class="wizard-title" style="display: flex; align-items: center;">
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="wizard-step mb-0 three" data-wizard-type="step">
+                        <div class="wizard-step mb-0 three" data-wizard-type="done">
                             <div class="wizard-wrapper py-2">
                                 <div class="wizard-label p-2 mt-2">
                                     <div class="wizard-title" style="display: flex; align-items: center;">
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="wizard-step mb-0 four" data-wizard-type="step">
+                        <div class="wizard-step mb-0 four" data-wizard-type="done">
                             <div class="wizard-wrapper py-2">
                                 <div class="wizard-label p-2 mt-2">
                                     <div class="wizard-title" style="display: flex; align-items: center;">
@@ -169,18 +169,18 @@
                             <thead>
                                 @if (!empty($columnsHeader))
                                     <tr>
-                                        @if (
+                                        {{-- @if (
                                             $empDesignation == 'Administrator' ||
                                                 strpos($empDesignation, 'Manager') !== false ||
                                                 strpos($empDesignation, 'VP') !== false ||
                                                 strpos($empDesignation, 'Leader') !== false ||
                                                 strpos($empDesignation, 'Team Lead') !== false ||
                                                 strpos($empDesignation, 'CEO') !== false ||
-                                                strpos($empDesignation, 'Vice') !== false)
+                                                strpos($empDesignation, 'Vice') !== false) --}}
                                             <th class='notexport'><input type="checkbox" id="ckbCheckAll"
                                                     class="cursor_hand">
                                             </th>
-                                        @endif
+                                        {{-- @endif --}}
                                         <th class='notexport' style="color:white !important">Action</th>
                                         @foreach ($columnsHeader as $columnName => $columnValue)
                                             @if ($columnValue != 'id')
@@ -200,23 +200,24 @@
 
                             </thead>
                             <tbody>
-                                @if (isset($assignedProjectDetails))
-                                    @foreach ($assignedProjectDetails as $data)
+
+                                @if (isset($autoCloseProjectDetails))
+                                    @foreach ($autoCloseProjectDetails as $data)
                                         <tr>
-                                            @if (
+                                            {{-- @if (
                                                 $empDesignation == 'Administrator' ||
                                                     strpos($empDesignation, 'Manager') !== false ||
                                                     strpos($empDesignation, 'VP') !== false ||
                                                     strpos($empDesignation, 'Leader') !== false ||
                                                     strpos($empDesignation, 'Team Lead') !== false ||
                                                     strpos($empDesignation, 'CEO') !== false ||
-                                                    strpos($empDesignation, 'Vice') !== false)
+                                                    strpos($empDesignation, 'Vice') !== false) --}}
                                                 <td><input type="checkbox" class="checkBoxClass cursor_hand" name='check[]'
                                                         value="{{ $data->id }}">
                                                 </td>
-                                            @endif
+                                            {{-- @endif --}}
                                             <td>
-                                                @if (
+                                                {{-- @if (
                                                     ($empDesignation !== 'Administrator' ||
                                                         strpos($empDesignation, 'Manager') !== true ||
                                                         strpos($empDesignation, 'VP') !== true ||
@@ -226,8 +227,7 @@
                                                         strpos($empDesignation, 'Vice') !== true) &&
                                                         $loginEmpId != $data->QA_emp_id)
                                                 @else
-                                                    {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array('QA_Inprocess', $assignedProjectDetailsStatus)) --}}
-                                                    @if (empty($existingCallerChartsWorkLogs))
+                                                     @if (empty($existingCallerChartsWorkLogs))
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
@@ -236,7 +236,7 @@
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
                                                     @endif
-                                                @endif
+                                                @endif --}}
                                                 <button class="task-start clickable-view" title="View"><i
                                                         class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button>
                                             </td>
@@ -2234,7 +2234,7 @@
                     }
                 });
                 swal.fire({
-                    text: "Do you want to change assignee?",
+                    text: "Do you want to move the sampling?",
                     icon: "success",
                     buttonsStyling: false,
                     showCancelButton: true,
@@ -2248,7 +2248,7 @@
                 }).then(function(result) {
                     if (result.value == true) {
                         $.ajax({
-                            url: "{{ url('assignee_change') }}",
+                            url: "{{ url('qa_production/sampling_assignee') }}",
                             method: 'POST',
                             data: {
                                 assigneeId: assigneeId,
@@ -2259,7 +2259,7 @@
                             success: function(response) {
                                 if (response.success == true) {
                                     js_notification('success',
-                                        'Assignee Updated Successfully');
+                                        'The claim has been moved to sampling successfully.');
                                 } else {
                                     js_notification('error', 'Something went wrong');
                                 }
@@ -2276,9 +2276,12 @@
             })
 
             $(document).on('click', '.one', function() {
-                window.location.href = "{{ url('#') }}";
+                window.location.href = baseUrl + 'qa_production/qa_projects_assigned/' + clientName + '/' + subProjectName +
+                    "?parent=" +
+                    getUrlVars()[
+                        "parent"] +
+                    "&child=" + getUrlVars()["child"];
             })
-
             $(document).on('click', '.two', function() {
                 window.location.href = baseUrl + 'qa_production/qa_projects_pending/' + clientName + '/' +
                     subProjectName +
@@ -2315,11 +2318,7 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.seven', function() {
-                window.location.href = baseUrl + 'qa_production/qa_projects_auto_close/' + clientName + '/' +
-                    subProjectName +
-                    "?parent=" +
-                    getUrlVars()[
-                        "parent"] + "&child=" + getUrlVars()["child"];
+                window.location.href ="{{ url('#') }}";
             })
 
             $(document).on('change', '#chart_status_start', function() {
@@ -2339,46 +2338,6 @@
 
             // Exclude fields you don't want to track
             var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
-
-            // $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
-            //     var fieldName = $(this).attr('id');
-            //     var trimmedFiled = $(this).attr('id');
-            //     var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
-            //     var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
-            //     var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
-
-            //     if (excludedFields.indexOf(fieldName) === -1) {
-            //         var currentValue = '';
-            //         if ($(this).is('input[type="checkbox"]')) {
-            //             currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
-            //         } else if ($(this).is('input[type="radio"]')) {
-            //             currentValue = $(`input[name="${fieldName}"]:checked`).val();
-            //         } else if ($(this).is('input[type="date"]')) {
-            //             currentValue = $(this).val();
-            //         } else {
-            //             currentValue = $(this).val();
-            //         }
-            //         var prevValue = prevValues[trimmedFiled1] || '';
-
-            //          var newLine = prevValue != '' ? formattedValue1 + ' '+prevValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
-            //         var textAreaValue = $('#QA_rework_comments').val();
-
-            //         if (textAreaValue.includes(formattedValue)) {
-            //             var regex = new RegExp(formattedValue1 + ' .*', 'g');
-            //             textAreaValue = textAreaValue.replace(regex, newLine);
-            //         } else {
-            //             if(textAreaValue == "") {
-            //               textAreaValue += newLine;
-            //             } else {
-            //                 newLine = '\n'+newLine;
-            //                 textAreaValue += newLine;
-            //             }
-            //         }
-
-            //         // Set the updated value back to the textarea
-            //         $('#QA_rework_comments').val(textAreaValue);
-            //     }
-            // });
                  var previousValue;
                 $('#formConfiguration').on('focus', 'input, select, textarea', function() {
                     previousValue = $(this).val();
