@@ -97,7 +97,7 @@ class ProductionController extends Controller
                     if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                         if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                             $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         } else {
@@ -109,7 +109,7 @@ class ProductionController extends Controller
                     } else if($loginEmpId) {
                         if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                            $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                             $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                             $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         } else {
@@ -205,7 +205,7 @@ class ProductionController extends Controller
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -233,7 +233,7 @@ class ProductionController extends Controller
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
@@ -281,7 +281,7 @@ class ProductionController extends Controller
                    if (class_exists($modelClass)) {
                        $pendingProjectDetails = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -294,7 +294,7 @@ class ProductionController extends Controller
                     if (class_exists($modelClass)) {
                       $pendingProjectDetails = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
                       $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
@@ -342,7 +342,7 @@ class ProductionController extends Controller
                    if (class_exists($modelClass)) {
                        $holdProjectDetails = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -355,7 +355,7 @@ class ProductionController extends Controller
                     if (class_exists($modelClass)) {
                       $holdProjectDetails = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->limit(2000)->get();
                       $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
@@ -401,9 +401,9 @@ class ProductionController extends Controller
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
-                       $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                       $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -413,9 +413,9 @@ class ProductionController extends Controller
                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
-                      $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
+                      $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                       $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
@@ -464,7 +464,7 @@ class ProductionController extends Controller
                    if (class_exists($modelClass)) {
                        $revokeProjectDetails = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -477,7 +477,7 @@ class ProductionController extends Controller
                     if (class_exists($modelClass)) {
                       $revokeProjectDetails = $modelClass::where('chart_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->where('updated_at','<=',$yesterDayDate)->orderBy('id','ASC')->limit(2000)->get();
                       $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                      $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->where('updated_at','<=',$yesterDayDate)->count();
@@ -531,7 +531,7 @@ class ProductionController extends Controller
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
                         $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','ASC')->whereBetween('updated_at',[$startDate,$endDate])->limit(2000)->get();
                         $assignedCount =  $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
-                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
+                        $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $pendingCount =   $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $holdCount = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
@@ -542,7 +542,7 @@ class ProductionController extends Controller
                     if (class_exists($modelClassDuplcates)) {
                        $duplicateProjectDetails = $modelClassDuplcates::where('chart_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->count();
-                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Auto_Close')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
+                       $completedCount = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
