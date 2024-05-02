@@ -245,6 +245,9 @@
                                                     $columnsToExclude = [
                                                         'CE_emp_id',
                                                         'ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                                                        'coder_rework_status',
+                                                        'QA_status_code',
+                                                        'QA_sub_status_code',
                                                         'created_at',
                                                         'updated_at',
                                                         'deleted_at',
@@ -1031,26 +1034,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row mt-4">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-md-12" id="qa_status_label">
-                                                        QA Status
-                                                    </label>
-                                                    <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-md-12" id="qa_sub_status_label">
-                                                        QA Sub Status
-                                                    </label>
-                                                    <label class="col-md-12 pop-non-edt-val" id="qa_sub_status_view">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                       
                                         <hr style="display:none" id="hr_view">
                                         <div class="row mt-4">
                                             <div class="col-md-12">
@@ -1900,14 +1884,10 @@
                                 // value = value.replace('CE_', '');
                                 value = "Assigned";
                                 $('#title_status_view').text("Assigned");
-                            } else if (header === 'chart_status' && value.includes('QA_')) {
-                                value = "In Process";
-                                $('#title_status_view').text("In Process");
+                            } else if (header === 'chart_status' && value == "QA_Completed") {
+                                value = "Completed";
+                                $('#title_status_view').text("Completed");
                             }
-                             $('#chart_status').text() == "Assigned" ? $('#qa_status_label').css('display','none') : $('#qa_status_label').css('display','block');
-                            $('#chart_status').text() == "Assigned" ? $('#qa_sub_status_label').css('display','none') : $('#qa_sub_status_label').css('display','block');
-                            $('#chart_status').text() == "Assigned" ? $('#qa_status_view').css('display','none') : $('#qa_status_view').css('display','block');
-                            $('#chart_status').text() == "Assigned" ? $('#qa_sub_status_view').css('display','none') : $('#qa_sub_status_view').css('display','block');
 
                             if (header == 'QA_status_code') {
                                 var statusName = '';
