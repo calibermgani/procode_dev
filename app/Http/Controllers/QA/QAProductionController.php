@@ -212,7 +212,7 @@ class QAProductionController extends Controller
                     ->select('project_id', 'sub_project_id')
                     ->first();
                 $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAssignedTab', compact('assignedProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
@@ -285,7 +285,7 @@ class QAProductionController extends Controller
                     ->select('project_id', 'sub_project_id')
                     ->first();
                 $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientPendingTab', compact('pendingProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'existingCallerChartsWorkLogs', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
@@ -358,7 +358,7 @@ class QAProductionController extends Controller
                     ->select('project_id', 'sub_project_id')
                     ->first();
                 $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientOnholdTab', compact('holdProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'existingCallerChartsWorkLogs','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
@@ -428,7 +428,7 @@ class QAProductionController extends Controller
                     ->select('project_id', 'sub_project_id')
                     ->first();
                 $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 $qaStatusList = Helpers::qaStatusList();
@@ -942,7 +942,7 @@ class QAProductionController extends Controller
                     ->select('project_id', 'sub_project_id')
                     ->first();
                 $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
-                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
+                $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAutoClose', compact('autoCloseProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
