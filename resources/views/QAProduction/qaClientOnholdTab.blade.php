@@ -2032,22 +2032,26 @@
                     previousValue = $(this).val();
                 }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     var fieldName = $(this).attr('name');
-                    var trimmedFiled = $(this).attr('id');
+                    var trimmedFiled = $(this).attr('id') !== undefined ? $(this).attr('id') : $(this).attr('class');
                     var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
                     var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
                     var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
                 if (excludedFields.indexOf(fieldName) === -1) {
                     var currentValue = '';
                     if ($(this).is('input[type="checkbox"]')) {
-                        currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+                        currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();
                     } else if ($(this).is('input[type="radio"]')) {
-                        currentValue = $(`input[name="${fieldName}"]:checked`).val();
+                        currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();
                     } else if ($(this).is('input[type="date"]')) {
                         currentValue = $(this).val();
                     } else {
                         currentValue = $(this).val();
                     }
-                    var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                    if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
+                        var newLine =  formattedValue1 + currentValue;
+                    }  else {
+                        var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                    }
                     var textAreaValue = $('#QA_rework_comments').val();
                     if (textAreaValue.includes(previousValue) && previousValue != '') {
                         var lines = textAreaValue.split('\n');
