@@ -211,7 +211,7 @@ class QAProductionController extends Controller
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
                     ->select('project_id', 'sub_project_id')
                     ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept,2])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
@@ -284,7 +284,7 @@ class QAProductionController extends Controller
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
                     ->select('project_id', 'sub_project_id')
                     ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept,2])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
@@ -357,7 +357,7 @@ class QAProductionController extends Controller
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
                     ->select('project_id', 'sub_project_id')
                     ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept,2])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
@@ -427,7 +427,7 @@ class QAProductionController extends Controller
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
                     ->select('project_id', 'sub_project_id')
                     ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept,2])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
@@ -941,7 +941,7 @@ class QAProductionController extends Controller
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
                     ->select('project_id', 'sub_project_id')
                     ->first();
-                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
+                $popupNonEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type', [3, $dept,2])->where('field_type', 'non_editable')->where('field_type_3', 'popup_visible')->get();
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,2])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  $dept)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
