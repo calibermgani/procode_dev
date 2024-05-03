@@ -369,7 +369,7 @@
                                                                         @elseif ($inputType == 'checkbox')
                                                                             <p id="check_p1"
                                                                                 style="display:none;color:red; margin-left: 3px;">Checkbox
-                                                                                is mandatory</p>
+                                                                                is not checked</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -389,7 +389,7 @@
                                                                         @elseif ($inputType == 'radio')
                                                                             <p id="radio_p1"
                                                                                 style="display: none; color: red; margin-left: 3px;">Radio
-                                                                                is mandatory</p>
+                                                                                is not selected</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -502,7 +502,7 @@
                                                                             @elseif ($inputType == 'checkbox')
                                                                                 <p id="check_p1" style="display:none;color:red; margin-left: 3px;">
                                                                                     Checkbox
-                                                                                    is mandatory</p>
+                                                                                    is not checked</p>
                                                                                 <div class="form-group row">
                                                                                     @for ($i = 0; $i < count($options); $i++)
                                                                                         <div class="col-md-6">
@@ -522,7 +522,7 @@
                                                                             @elseif ($inputType == 'radio')
                                                                                 <p id="radio_p1" style="display: none; color: red; margin-left: 3px;">
                                                                                     Radio
-                                                                                    is mandatory</p>
+                                                                                    is not selected</p>
                                                                                 <div class="form-group row">
                                                                                     @for ($i = 0; $i < count($options); $i++)
                                                                                         <div class="col-md-6">
@@ -1801,7 +1801,7 @@
 
                              requiredFields[fieldType].push(fieldName);
                         });
-                    $('input[type="radio"][required]').each(function() {
+                    $('input[type="radio"]').each(function() {
                         var groupName = $(this).attr("name");
                          if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
                             $('#radio_p1').css('display', 'block');
@@ -1813,7 +1813,7 @@
                     });
 
 
-                    $('input[type="checkbox"][required]').each(function() {
+                    $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {

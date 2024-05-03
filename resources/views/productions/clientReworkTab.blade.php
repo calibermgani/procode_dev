@@ -1828,7 +1828,7 @@
 
                              requiredFields[fieldType].push(fieldName);
                         });
-                    $('input[type="radio"][required]').each(function() {
+                    $('input[type="radio"]').each(function() {
                         var groupName = $(this).attr("name");
                          if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
                             $('#radio_p1').css('display', 'block');
@@ -1840,7 +1840,7 @@
                     });
 
 
-                    $('input[type="checkbox"][required]').each(function() {
+                    $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
                         console.log(groupName, 'chckkkkkkkk');
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
