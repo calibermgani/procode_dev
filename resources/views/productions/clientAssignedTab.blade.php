@@ -1071,15 +1071,16 @@
                         $('select[name="chart_status"]').val('CE_Inprocess').trigger('change');
                         $('#title_status').text('In Process');
                     }
-                    if ($('input[name="' + header + '[]"]').is(':checkbox')) {
+                    if ($('input[name="' + header + '[]"]').is(':checkbox') && value !== null) {
                         var checkboxValues = value.split(',');
                         $('input[name="' + header + '[]"]').each(function() {
                             $(this).prop('checked', checkboxValues.includes($(this).val()));
                         });
-                    } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' &&
-                        value.length > 0) {
-                        $('input[name="' + header + '"]').filter('[value="' + value + '"]').prop(
-                            'checked', true);
+                    } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {
+                            if(value.length > 0) {
+                                $('input[name="' + header + '"]').filter('[value="' + value + '"]').prop(
+                                    'checked', true);
+                            }
                     } else if ($('select[name="' + header + '[]"]').length) {
                         $('select[name="' + header + '[]"]').val(value).trigger('change');
                     } else {
