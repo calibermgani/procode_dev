@@ -1827,7 +1827,7 @@
                     var requiredFieldsType = {};
                     var inputclass = [];
                       $('#holdFormConfiguration').find(':input[required], select[required], textarea[required]',
-                        ':input[type="checkbox"][required], input[type="radio"]').each(
+                        ':input[type="checkbox"][required], input[type="radio"][required]').each(
                         function() {
                             var fieldName = $(this).attr('name');
                             var fieldType = $(this).attr('type') || $(this).prop('tagName').toLowerCase();
@@ -1836,7 +1836,7 @@
                             }
                             requiredFields[fieldType].push(fieldName);
                         });
-                    $('input[type="radio"]').each(function() {
+                    $('input[type="radio"][required]').each(function() {
                         var groupName = $(this).attr("name");
                          if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
                             $('#radio_p1').css('display', 'block');
@@ -1848,7 +1848,7 @@
                     });
 
 
-                    $('input[type="checkbox"]').each(function() {
+                    $('input[type="checkbox"][required]').each(function() {
                         var groupName = $(this).attr("id");
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
