@@ -515,7 +515,7 @@
                                                                     @if ($options == null)
                                                                         @if ($inputType != 'date_range')
                                                                             {!! Form::$inputType($columnName . '[]', null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'rows' => 3,
@@ -524,7 +524,7 @@
                                                                             ]) !!}
                                                                         @else
                                                                             {!! Form::text($columnName . '[]', null, [
-                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => 'date_range',
@@ -534,7 +534,7 @@
                                                                     @else
                                                                         @if ($inputType == 'select')
                                                                             {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => $columnName,
@@ -2027,9 +2027,9 @@
 
                 var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
             var previousValue;
-            $('#holdFormConfiguration').on('focus', 'input, select, textarea', function() {
-                previousValue = $(this).val();
-            }).on('focusout', 'input, select, textarea', function() {
+               $('#holdFormConfiguration').on('focus', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
+                    previousValue = $(this).val();
+                }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     var fieldName = $(this).attr('name');
                     var trimmedFiled = $(this).attr('id');
                     var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');

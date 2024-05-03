@@ -243,7 +243,7 @@
                                             @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                 @php
                                                     $columnsToExclude = [
-                                                      
+
                                                         'ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
                                                         'created_at',
                                                         'updated_at',
@@ -595,7 +595,7 @@
                                                                     @if ($options == null)
                                                                         @if ($inputType != 'date_range')
                                                                             {!! Form::$inputType($columnName . '[]', null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'rows' => 3,
@@ -604,7 +604,7 @@
                                                                             ]) !!}
                                                                         @else
                                                                             {!! Form::text($columnName . '[]', null, [
-                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => 'date_range',
@@ -614,7 +614,7 @@
                                                                     @else
                                                                         @if ($inputType == 'select')
                                                                             {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => $columnName,
@@ -2380,10 +2380,10 @@
             //     }
             // });
                  var previousValue;
-                $('#formConfiguration').on('focus', 'input, select, textarea', function() {
+                $('#formConfiguration').on('focus', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     previousValue = $(this).val();
-                }).on('focusout', 'input, select, textarea', function() {
-                //   var currentValue = $(this).val();
+                }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
+                    //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
                         var trimmedFiled = $(this).attr('id');
                         var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
