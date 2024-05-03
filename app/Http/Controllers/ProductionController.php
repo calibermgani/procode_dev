@@ -617,20 +617,26 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['idValue'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
-                $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->get();
+                $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['chart_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetailsList  = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                        if( count($qasamplingDetailsList) == 0) {
-                            $qasamplingDetailsList  = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
-                        }
+                        $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
+                         ->where(function($query) use ($loginEmpId) {
+                            $query->where('coder_emp_id', $loginEmpId)
+                                ->orWhereNull('coder_emp_id');
+                        })->orderBy('id', 'desc')->get();
+                        // $qasamplingDetailsList  = QualitySampling::where('project_id',$decodedProjectName)->whereIn('coder_emp_id',[$loginEmpId,NULL])->orderBy('id','desc')->get();
+                        // if( count($qasamplingDetailsList) == 0) {
+                        //     $qasamplingDetailsList  = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
+                        // }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         foreach ($qasamplingDetailsList as $qasamplingDetails) {
                             if($qasamplingDetails != null) {
                                 $qaPercentage = $qasamplingDetails["qa_percentage"];
                                 $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                // $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
                                 $samplingRecordCount =  count($samplingRecord);
                                 if($qarecords > $samplingRecordCount) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
@@ -646,17 +652,22 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-
-                        $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                        if( count($qasamplingDetailsList) == 0) {
-                            $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->get();
-                        }
+                        // $qasamplingDetailsList  = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id', $decodedPracticeName)->whereIn('coder_emp_id',[$loginEmpId,NULL])->orderBy('id','desc')->get();
+                        $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
+                                                ->where('sub_project_id', $decodedPracticeName)
+                                                ->where(function($query) use ($loginEmpId) {
+                                                    $query->where('coder_emp_id', $loginEmpId)
+                                                        ->orWhereNull('coder_emp_id');
+                                                })->orderBy('id', 'desc')->get();
+                        // if( count($qasamplingDetailsList) == 0) {
+                        //     $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->get();
+                        // }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         foreach ($qasamplingDetailsList as $qasamplingDetails) {
                             if($qasamplingDetails != null) {
                                 $qaPercentage = $qasamplingDetails["qa_percentage"];
                                 $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
                                 $samplingRecordCount =  count($samplingRecord);
                                 if($qarecords > $samplingRecordCount ) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
@@ -853,20 +864,27 @@ class ProductionController extends Controller
                 $data['invoke_date'] = date('Y-m-d',strtotime($data['invoke_date']));
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
-                $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->get();
+                // $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->get();
+                $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['chart_status'] == "CE_Completed") {
                     if($decodedPracticeName == NULL) {
-                        $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                        if(count($qasamplingDetailsList) == 0) {
-                            $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
-                        }
+                        $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
+                                                ->where(function($query) use ($loginEmpId) {
+                                                    $query->where('coder_emp_id', $loginEmpId)
+                                                        ->orWhereNull('coder_emp_id');
+                                                })->orderBy('id', 'desc')->get();
+                        // $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+                        // if(count($qasamplingDetailsList) == 0) {
+                        //     $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->orderBy('id','desc')->get();
+                        // }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         foreach ($qasamplingDetailsList as $qasamplingDetails) {
                             if($qasamplingDetails != null) {
                                 $qaPercentage = $qasamplingDetails["qa_percentage"];
                                 $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                // $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
                                 $samplingRecordCount =  count($samplingRecord);
                                 if($qarecords > $samplingRecordCount ) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
@@ -882,16 +900,23 @@ class ProductionController extends Controller
                             }
                         }
                     } else {
-                        $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
-                        if( count($qasamplingDetailsList) == 0) {
-                            $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->get();
-                        }
+                        $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
+                                                ->where('sub_project_id', $decodedPracticeName)
+                                                ->where(function($query) use ($loginEmpId) {
+                                                    $query->where('coder_emp_id', $loginEmpId)
+                                                        ->orWhereNull('coder_emp_id');
+                                                })->orderBy('id', 'desc')->get();
+                        // $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->where('coder_emp_id',$loginEmpId)->orderBy('id','desc')->get();
+                        // if( count($qasamplingDetailsList) == 0) {
+                        //     $qasamplingDetailsList = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->orderBy('id','desc')->get();
+                        // }
                         $data['QA_emp_id'] = NULL; $data['qa_work_status'] = NULL;
                         foreach ($qasamplingDetailsList as $qasamplingDetails) {
                             if($qasamplingDetails != null) {
                                 $qaPercentage = $qasamplingDetails["qa_percentage"];
                                 $qarecords = $coderCompletedRecordsCount*$qaPercentage/100;
-                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                // $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
+                                $samplingRecord = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->where('QA_emp_id',$qasamplingDetails["qa_emp_id"])->where('qa_work_status','Sampling')->get();
                                 $samplingRecordCount =  count($samplingRecord);
                                 if($qarecords > $samplingRecordCount) {
                                     $data['QA_emp_id'] =  $qasamplingDetails["qa_emp_id"];
