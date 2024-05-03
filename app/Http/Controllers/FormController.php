@@ -615,7 +615,7 @@ class FormController extends Controller
     public function projectConfigDelete(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
               try {
-                    $data = $request->all();dd($data);
+                    $data = $request->all();
                     $projectName = $decodedClientName = Helpers::projectName($data['projectId'])->project_name;
                     $subProjectName = $data['subProjectId'] == null ? Helpers::projectName($data['projectId'])->project_name :Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name;
                     $table_name= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName)),'_');
