@@ -414,6 +414,7 @@
                                                                                              {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                  'class' => $columnName,
                                                                                                  'id' => $columnName,
+                                                                                                 $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                              ]) !!}{{ $options[$i] }}
                                                                                              <span></span>
                                                                                          </label>
@@ -434,6 +435,7 @@
                                                                                              {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                  'class' => $columnName,
                                                                                                  'id' => $columnName,
+                                                                                                 $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                              ]) !!}{{ $options[$i] }}
                                                                                              <span></span>
                                                                                          </label>
@@ -841,14 +843,14 @@
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
-                                '"></textarea>';
+                                '" '+ addMandatory +'></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
-                                '">';
+                                '" '+ addMandatory +'>';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
@@ -856,7 +858,7 @@
                             ' white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
-                            '">';
+                            '" '+ addMandatory +'>';
                     }
                 } else if (inputType === 'select') {
 
@@ -864,7 +866,7 @@
                         columnName + ' white-smoke pop-non-edt-val" id="' +
                         columnName +
                         uniqueId +
-                        '">';
+                        '" '+ addMandatory +'>';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -887,7 +889,7 @@
                             uniqueId +
                             '" class="' +
                             columnName +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -909,7 +911,7 @@
                             uniqueId +
                             '" class="' +
                             columnName +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1066,6 +1068,7 @@
                                 var optionsJson =  $('.'+header).closest('.dynamic-field').find('.add_options').val();
                                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                                 var optionsArray = optionsObject ? Object.values(optionsObject) : null;
+                                var addMandatory =  $('.'+header).closest('.dynamic-field').find('.add_mandatory').val();
                                 var inputType;
                                 $('select[name="' + header + '[]"]').val(values[0]).trigger('change');
                                 // $('input[name="' + header + '[]"]').val(values[0]);
@@ -1095,7 +1098,8 @@
                                                 selectType = $('<select>', {
                                                     name: header + '[]',
                                                     class: 'form-control ' + header + ' white-smoke pop-non-edt-val',
-                                                    id: header + i
+                                                    id: header + i,
+                                                    addMandatory
                                                 });
 
                                                 // Add an empty default option
@@ -1122,7 +1126,7 @@
                                                 $('select[name="' + header + '[]"]').closest('.dynamic-field').append(rowDiv);
 
                                             } else if ($('textarea[name="' + header + '[]"]').prop('nodeName') != undefined) {
-                                                    inputType =  '<textarea name="' + header + '[]" class="form-control ' + header + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
+                                                    inputType =  '<textarea name="' + header + '[]" '+addMandatory+' class="form-control ' + header + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
                                                     if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                 } else {
@@ -1140,7 +1144,7 @@
                                                                 '<div class="col-md-6">' +
                                                                 '<div class="checkbox-inline mt-2">' +
                                                                 '<label class="checkbox pop-non-edt-val" style="word-break: break-all;" >' +
-                                                                '<input type="checkbox" name="' + header + '[]" value="' + option + '" class="'+header +'" id="' +header + i + '" ' + checked + '>' + option +
+                                                                '<input type="checkbox" name="' + header + '[]" value="' + option + '" '+addMandatory+' class="'+header +'" id="' +header + i + '" ' + checked + '>' + option +
                                                                 '<span></span>' +
                                                                 '</label>' +
                                                                 '</div>' +
@@ -1166,7 +1170,7 @@
                                                                 '<div class="col-md-6">' +
                                                                 '<div class="radio-inline mt-2">' +
                                                                 '<label class="radio pop-non-edt-val" style="word-break: break-all;" >' +
-                                                                '<input type="radio" name="' + header + '_' + i +'" class="'+header +'" value="' + option + '" id="' +
+                                                                '<input type="radio" name="' + header + '_' + i +'" '+addMandatory+' class="'+header +'" value="' + option + '" id="' +
                                                                     header + i + '" ' + checked + '>' + option +
                                                                 '<span></span>' +
                                                                 '</label>' +
@@ -1198,9 +1202,9 @@
                                                 }
 
                                                 if(dateRangeClass == 'date_range') {
-                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control date_range ' + header + ' white-smoke pop-non-edt-val"  style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
+                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control date_range ' + header + ' white-smoke pop-non-edt-val"  style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
                                                 } else {
-                                                    inputType = '<input type="'+fieldType+'" name="' + header +'[]"  class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
+                                                    inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
                                                 }
                                                   if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
@@ -1376,7 +1380,7 @@
                     var requiredFields = {};
                     var requiredFieldsType = {};
                     var inputclass = [];
-                    var inputTypeValue = 0;
+                    var inputTypeValue = 0; var inputTypeRadioValue = 0;
                     var claimStatus =  $('#chart_status').val();
                         if(claimStatus == "CE_Hold") {
                             var ceHoldReason = $('#ce_hold_reason_editable');
@@ -1403,22 +1407,24 @@
 
                     $('input[type="radio"][').each(function() {
                         var groupName = $(this).attr("name");
-                         if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                        var mandatory = $(this).prop('required');
+                         if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
                             $('#radio_p1').css('display', 'block');
-                            inputTypeValue = 1;
+                            inputTypeRadioValue = 1;
                         } else {
                             $('#radio_p1').css('display', 'none');
-                            inputTypeValue = 0;
+                            inputTypeRadioValue = 0;
                         }
                     });
 
 
                     $('input[type="checkbox"]').each(function() {
                         var groupName = $(this).attr("id");
+                        var mandatory = $(this).prop('required');
                         if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
                                 if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
-                                    0) {
+                                    0 && mandatory === true) {
                                     $('#check_p1').css('display', 'block');
                                     inputTypeValue = 1;
                                 } else {
@@ -1508,7 +1514,7 @@
                         });
                     });
 
-                    if (inputTypeValue == 0) {
+                    if (inputTypeValue == 0 && inputTypeRadioValue == 0) {
 
                         swal.fire({
                             text: "Do you want to update?",

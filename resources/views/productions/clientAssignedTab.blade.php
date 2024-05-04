@@ -426,6 +426,7 @@
                                                                                                                 {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                                     'class' => $columnName,
                                                                                                                     'id' => $columnName,
+                                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                                 <span></span>
                                                                                                             </label>
@@ -445,6 +446,7 @@
                                                                                                                 style="word-break: break-all;">
                                                                                                                 {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                                     'class' => $columnName,
+                                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                                 <span></span>
                                                                                                             </label>
@@ -844,14 +846,14 @@
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
-                                '"></textarea>';
+                                '" '+ addMandatory +'></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
-                                '">';
+                                '" '+ addMandatory +'>';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
@@ -859,7 +861,7 @@
                             '  white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
-                            '">';
+                            '" '+ addMandatory +'>';
                     }
                 } else if (inputType === 'select') {
 
@@ -867,7 +869,7 @@
                         columnName + ' white-smoke pop-non-edt-val" id="' +
                         columnName +
                         uniqueId +
-                        '">';
+                        '" '+ addMandatory +'>';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -888,7 +890,7 @@
                             '" id="' +
                             columnName +
                             uniqueId +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -908,7 +910,7 @@
                             '" value="' + option + '" class="' + columnName + '" id="' +
                             columnName +
                             uniqueId +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1158,7 +1160,7 @@
                 var requiredFields = {};
                 var requiredFieldsType = {};
                 var inputclass = [];
-                var inputTypeValue = 0;
+                var inputTypeValue = 0; var inputTypeRadioValue = 0;
                 var claimStatus =  $('#chart_status').val();
                 if(claimStatus == "CE_Hold") {
                     var ceHoldReason = $('#ce_hold_reason');
@@ -1186,22 +1188,24 @@
                     });
                 $('input[type="radio"]').each(function() {
                     var groupName = $(this).attr("name");
-                     if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                    var mandatory = $(this).prop('required');
+                     if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
                         $('#radio_p1').css('display', 'block');
-                        inputTypeValue = 1;
+                        inputTypeRadioValue = 1;
                     } else {
                         $('#radio_p1').css('display', 'none');
-                        inputTypeValue = 0;
+                        inputTypeRadioValue = 0;
                     }
                 });
 
 
                 $('input[type="checkbox"]').each(function() {
                     var groupName = $(this).attr("id");
+                    var mandatory = $(this).prop('required');
                    if($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                         if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length === 0) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
-                                0) {
+                                0 && mandatory === true) {
                                 $('#check_p1').css('display', 'block');
                                 inputTypeValue = 1;
                             } else {
@@ -1296,7 +1300,7 @@
                 });
 
 
-                if (inputTypeValue == 0) {
+                if (inputTypeValue == 0 && inputTypeRadioValue == 0) {
 
                     swal.fire({
                         text: "Do you want to update?",
