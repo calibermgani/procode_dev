@@ -488,7 +488,7 @@
                                                                                     <p id="check_p1"
                                                                                         style="display:none;color:red; margin-left: 3px;">
                                                                                         Checkbox
-                                                                                        is mandatory</p>
+                                                                                        is not checked</p>
                                                                                     <div class="form-group row">
                                                                                         @for ($i = 0; $i < count($options); $i++)
                                                                                             <div class="col-md-6">
@@ -499,6 +499,7 @@
                                                                                                         {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                             'class' => $columnName,
                                                                                                             'id' => $columnName,
+                                                                                                            $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                         ]) !!}{{ $options[$i] }}
                                                                                                         <span></span>
                                                                                                     </label>
@@ -510,7 +511,7 @@
                                                                                     <p id="radio_p1"
                                                                                         style="display: none; color: red; margin-left: 3px;">
                                                                                         Radio
-                                                                                        is mandatory</p>
+                                                                                        is not selected</p>
                                                                                     <div class="form-group row">
                                                                                         @for ($i = 0; $i < count($options); $i++)
                                                                                             <div class="col-md-6">
@@ -520,6 +521,8 @@
                                                                                                         style="word-break: break-all;">
                                                                                                         {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                             'class' => $columnName,
+                                                                                                            'id' => $columnName,
+                                                                                                            $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                         ]) !!}{{ $options[$i] }}
                                                                                                         <span></span>
                                                                                                     </label>
@@ -623,7 +626,7 @@
                                                                         @elseif ($inputType == 'checkbox')
                                                                             <p id="check_p1" style="display:none;color:red; margin-left: 3px;">
                                                                                 Checkbox
-                                                                                is mandatory</p>
+                                                                                is not checked</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -633,6 +636,7 @@
                                                                                                 {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                     'class' => $columnName,
                                                                                                     'id' => $columnName,
+                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
@@ -643,7 +647,7 @@
                                                                         @elseif ($inputType == 'radio')
                                                                             <p id="radio_p1" style="display: none; color: red; margin-left: 3px;">
                                                                                 Radio
-                                                                                is mandatory</p>
+                                                                                is not selcted</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -652,6 +656,8 @@
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                     'class' => $columnName,
+                                                                                                    'id' => $columnName,
+                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
@@ -1262,14 +1268,14 @@
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
-                                '"></textarea>';
+                                '" '+ addMandatory +'></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
                                 '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
-                                '">';
+                                '" '+ addMandatory +'>';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
@@ -1277,7 +1283,7 @@
                             ' white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
-                            '">';
+                            '" '+ addMandatory +'>';
                     }
                 } else if (inputType === 'select') {
 
@@ -1285,7 +1291,7 @@
                         columnName + ' white-smoke pop-non-edt-val" id="' +
                         columnName +
                         uniqueId +
-                        '">';
+                        '" '+ addMandatory +'>';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -1308,7 +1314,7 @@
                             uniqueId +
                             '" class="' +
                             columnName +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1330,7 +1336,7 @@
                             uniqueId +
                             '" class="' +
                             columnName +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1492,6 +1498,7 @@
                                 '.add_options').val();
                             var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                             var optionsArray = optionsObject ? Object.values(optionsObject) : null;
+                            var addMandatory =  $('.'+header).closest('.dynamic-field').find('.add_mandatory').val();
                             var inputType;
                             $('select[name="' + header + '[]"]').val(values[0]).trigger('change');
                             $('textarea[name="' + header + '[]"]').val(values[0]);
@@ -1522,7 +1529,8 @@
                                         name: header + '[]',
                                         class: 'form-control ' + header +
                                             ' white-smoke pop-non-edt-val',
-                                        id: header + i
+                                        id: header + i,
+                                        addMandatory
                                     });
                                     selectType.append($('<option>', {
                                         value: '',
@@ -1563,7 +1571,7 @@
                                 } else if ($('textarea[name="' + header + '[]"]').prop(
                                     'nodeName') != undefined) {
                                     inputType = '<textarea name="' + header +
-                                        '[]" class="form-control ' + header +
+                                        '[]" '+addMandatory+' class="form-control ' + header +
                                         ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                         header + i + '">' + values[i] + '</textarea>';
                                     if (i === values.length - 1) {
@@ -1592,7 +1600,7 @@
                                             '<div class="checkbox-inline mt-2">' +
                                             '<label class="checkbox pop-non-edt-val" style="word-break: break-all;" >' +
                                             '<input type="checkbox" name="' + header +
-                                            '[]" value="' + option + '" class="' + header +
+                                            '[]" value="' + option + '" '+addMandatory+' class="' + header +
                                             '" id="' + header + i + '" ' + checked + '>' +
                                             option +
                                             '<span></span>' +
@@ -1629,7 +1637,7 @@
                                             '<div class="radio-inline mt-2">' +
                                             '<label class="radio pop-non-edt-val" style="word-break: break-all;" >' +
                                             '<input type="radio" name="' + header + '_' +
-                                            i + '" class="' + header + '" value="' +
+                                            i + '" '+addMandatory+' class="' + header + '" value="' +
                                             option + '" id="' +
                                             header + i + '" ' + checked + '>' + option +
                                             '<span></span>' +
@@ -1667,7 +1675,7 @@
                                     if (dateRangeClass == 'date_range') {
 
                                         inputType = '<input type="' + fieldType + '" name="' +
-                                            header + '[]"  class="form-control date_range ' +
+                                            header + '[]"  '+addMandatory+' class="form-control date_range ' +
                                             header +
                                             ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' +
                                             values[i] + '" id="' + header + i + '">';
@@ -1682,7 +1690,7 @@
                                         }
                                     } else {
                                         inputType = '<input type="' + fieldType + '" name="' +
-                                            header + '[]"  class="form-control ' + header +
+                                            header + '[]"  '+addMandatory+' class="form-control ' + header +
                                             ' white-smoke pop-non-edt-val"  value="' + values[i] +
                                             '" id="' + header + i + '">';
                                         if (i === values.length - 1) {
@@ -1712,17 +1720,18 @@
                             }).attr("autocomplete", "off");
 
 
-                        } else if ($('input[name="' + header + '[]"]').is(':checkbox')) {
+                        } else if ($('input[name="' + header + '[]"]').is(':checkbox') && value !== null) {
                             var checkboxValues = value.split(',');
                             $('input[name="' + header + '[]"]').each(function() {
                                 $(this).prop('checked', checkboxValues.includes($(this)
                                 .val()));
                             });
-                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' &&
-                            value.length > 0) {
-                            $('input[name="' + header + '"]').filter('[value="' + value + '"]')
-                                .prop(
-                                    'checked', true);
+                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {console.log(value,'radio');
+                          if(value.length > 0) {
+                                $('input[name="' + header + '"]').filter('[value="' + value + '"]')
+                                    .prop(
+                                        'checked', true);
+                          }
                         } else if ($('select[name="' + header + '[]"]').length) {
                             $('select[name="' + header + '[]"]').val(value).trigger('change');
                         } else {
@@ -1993,7 +2002,7 @@
 
             $(document).on('click', '#project_assign_save', function(e) {
                 e.preventDefault();
-                var inputTypeValue = 0;
+                var inputTypeValue = 0;var inputTypeRadioValue = 0;
                 var claimStatus = $('#chart_status_start').val();
                 if (claimStatus == "QA_Hold") {
                     var ceHoldReason = $('#qa_hold_reason');
@@ -2047,7 +2056,7 @@
                 var requiredFieldsType = {};
                 var inputclass = [];
                 $('#formConfiguration').find(':input[required], select[required], textarea[required]',
-                    ':input[type="checkbox"][required], input[type="radio"]').each(
+                    ':input[type="checkbox"][required], input[type="radio"][required]').each(
                     function() {
                         var fieldName = $(this).attr('name');
                         var fieldType = $(this).attr('type') || $(this).prop('tagName').toLowerCase();
@@ -2062,24 +2071,27 @@
 
                 $('input[type="radio"]').each(function() {
                     var groupName = $(this).attr("name");
-                    if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                    var mandatory = $(this).prop('required');console.log(mandatory,'mandatory');
+                    if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
                         $('#radio_p1').css('display', 'block');
-                        inputTypeValue = 1;
+                        inputTypeRadioValue = 1;
+                        return false;
                     } else {
                         $('#radio_p1').css('display', 'none');
-                        inputTypeValue = 0;
+                        inputTypeRadioValue = 0;
                     }
                 });
 
 
                 $('input[type="checkbox"]').each(function() {
                     var groupName = $(this).attr("id");
+                    var mandatory = $(this).prop('required');
                     if ($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                         if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
                             0) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked')
                                 .length ===
-                                0) {
+                                0 && mandatory === true) {
                                 $('#check_p1').css('display', 'block');
                                 inputTypeValue = 1;
                             } else {
@@ -2160,8 +2172,7 @@
                 });
 
 
-
-                if (inputTypeValue == 0) {
+                if (inputTypeValue == 0 && inputTypeRadioValue == 0) {
 
                     swal.fire({
                         text: "Do you want to update?",
@@ -2385,22 +2396,26 @@
                 }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
-                        var trimmedFiled = $(this).attr('id');
-                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
-                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+                        var trimmedFiled = $(this).attr('id') !== undefined ? $(this).attr('id') : $(this).attr('class');
+                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');console.log(fieldName,trimmedFiled,trimmedFiled1);
+                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');console.log(fieldName,trimmedFiled,trimmedFiled1,formattedValue,formattedValue1);
                         var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
                     if (excludedFields.indexOf(fieldName) === -1) {
                         var currentValue = '';
                         if ($(this).is('input[type="checkbox"]')) {
-                            currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();
                         } else if ($(this).is('input[type="radio"]')) {
-                            currentValue = $(`input[name="${fieldName}"]:checked`).val();
+                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();console.log(currentValue,'currentValue',$(this).closest('label').text());
                         } else if ($(this).is('input[type="date"]')) {
                             currentValue = $(this).val();
                         } else {
                             currentValue = $(this).val();
                         }
-                        var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
+                            var newLine =  formattedValue1 + currentValue;
+                        }  else {
+                            var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        }
                         var textAreaValue = $('#QA_rework_comments').val();
                         // if (textAreaValue.includes(formattedValue)) {
                         //     var regex = new RegExp(formattedValue1 + ' .*', 'g');

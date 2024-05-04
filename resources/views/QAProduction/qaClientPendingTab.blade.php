@@ -2028,7 +2028,7 @@
                     }  else {
                         var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
                     }
-                    var textAreaValue = $('#QA_rework_comments').val();console.log(previousValue,'previousValue');
+                    var textAreaValue = $('#QA_rework_comments').val();
                     if (textAreaValue.includes(previousValue) && previousValue != '') {
                         var lines = textAreaValue.split('\n');
                         var matchedLine = lines.find(line => line.includes(previousValue));
