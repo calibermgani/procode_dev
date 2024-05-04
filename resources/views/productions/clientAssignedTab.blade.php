@@ -1100,19 +1100,24 @@
                                 if ($('input[name="' + header + '[]"]').attr('type') === 'date') {
                                     $('input[name="' + header + '[]"]').val(customDate)
                                 } else {
+                                    if(value != null) {
+                                        $('input[name="' + header + '[]"]').val(value);
+                                        $('input[name="' + header + '"]').val(value);
+                                  }
+                                }
+                            } else {
+                                 $('label[id="' + header + '"]').text(value);
+                                 if(value != null) {
                                     $('input[name="' + header + '[]"]').val(value);
                                     $('input[name="' + header + '"]').val(value);
                                 }
-                            } else {
-                                $('input[name="' + header + '[]"]').val(value);
-                                $('label[id="' + header + '"]').text(value);
-                                $('input[name="' + header + '"]').val(value);
                             }
                         } else {
-                            $('input[name="' + header + '[]"]').val(value);
-                            $('label[id="' + header + '"]').text(value);
-                            $('input[name="' + header + '"]').val(value);
-                            $('input[name="' + header + '"]').val(value);
+                             $('label[id="' + header + '"]').text(value);
+                             if(value != null) {
+                                $('input[name="' + header + '[]"]').val(value);
+                                $('input[name="' + header + '"]').val(value);
+                            }
                         }
 
                     }

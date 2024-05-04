@@ -1574,9 +1574,12 @@
                                         }
                                     }
                                     $('textarea[name="' + header + '[]"]').val(value);
-                                    $('input[name="' + header + '[]"]').val(value);
                                     $('label[id="' + header + '"]').text(value);
-                                    $('input[name="' + header + '"]').val(value);
+                                    if(value != null) {
+                                      $('input[name="' + header + '[]"]').val(value);
+                                      $('input[name="' + header + '"]').val(value);
+                                    }
+
                                 }
                         });
 
