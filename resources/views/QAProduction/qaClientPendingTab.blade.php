@@ -467,7 +467,7 @@
                                                             @if ($count % 2 == 0)
                                                                 <div class="row" id={{ $columnName }}>
                                                             @endif
-                                                            <div class="col-md-6">
+                                                                <div class="col-md-6 dynamic-field">
                                                                 <div class="form-group row row_mar_bm">
                                                                     <label class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
                                                                         {{ $labelName }}
@@ -533,7 +533,7 @@
                                                                                                 <label class="radio pop-non-edt-val"
                                                                                                     style="word-break: break-all;">
                                                                                                     {!! Form::$inputType($columnName, $options[$i], false, [
-                                                                                                        'class' => 'exclude '.$columnName,
+                                                                                                        'class' => $columnName.' exclude',
                                                                                                         'id' => $columnName,
                                                                                                         $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                     ]) !!}{{ $options[$i] }}
@@ -1349,6 +1349,13 @@
                             $('input[name="' + header + '[]"]').html("");
                             if (/_el_/.test(value)) {
                                 elementToRemove = 'add_more_'+header;
+                                var multBtnClasses =  $('#'+elementToRemove).attr('class');
+                                var multBtnLastClass = '';
+                                if (multBtnClasses && multBtnClasses !== undefined) {
+                                    var classArray = multBtnClasses.split(' ');
+                                    var multBtnLastClass = classArray[classArray.length - 1];
+                                }
+                                multBtnLastClass = multBtnLastClass == 'exclude' ? multBtnLastClass : 'include';
                                 $('#'+elementToRemove).remove();     var values = value.split('_el_');
                                 var optionsJson =  $('.'+header).closest('.dynamic-field').find('.add_options').val();
                                 var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
@@ -1380,7 +1387,7 @@
                                         if ($('select[name="' + header + '[]"]').prop('tagName') != undefined) {
                                                 selectType = $('<select>', {
                                                     name: header + '[]',
-                                                    class: 'form-control ' + header + ' white-smoke pop-non-edt-val',
+                                                    class: 'form-control ' + header + ' '+multBtnLastClass+ ' white-smoke pop-non-edt-val',
                                                     id: header + i,
                                                     addMandatory
                                                 });
@@ -1403,7 +1410,7 @@
                                                 $('select[name="' + header + '[]"]').closest('.dynamic-field').append(rowDiv);
 
                                             } else if ($('textarea[name="' + header + '[]"]').prop('nodeName') != undefined) {
-                                                    inputType =  '<textarea name="' + header + '[]" '+addMandatory+' class="form-control ' + header + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
+                                                    inputType =  '<textarea name="' + header + '[]" '+addMandatory+' class="form-control ' + header + ' '+multBtnLastClass+' white-smoke pop-non-edt-val mt-0" rows="3" id="' + header + i + '">' + values[i] + '</textarea>';
                                                     if(i === values.length - 1) {
                                                          var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                 } else {
@@ -1421,7 +1428,7 @@
                                                                 '<div class="col-md-6">' +
                                                                 '<div class="checkbox-inline mt-2">' +
                                                                 '<label class="checkbox pop-non-edt-val" style="word-break: break-all;" >' +
-                                                                '<input type="checkbox" name="' + header + '[]" value="' + option + '" '+addMandatory+' class="'+header +'" id="' +header + i + '" ' + checked + '>' + option +
+                                                                '<input type="checkbox" name="' + header + '[]" value="' + option + '" '+addMandatory+' class="'+header +' '+multBtnLastClass+'" id="' +header + i + '" ' + checked + '>' + option +
                                                                 '<span></span>' +
                                                                 '</label>' +
                                                                 '</div>' +
@@ -1447,7 +1454,7 @@
                                                                 '<div class="col-md-6">' +
                                                                 '<div class="radio-inline mt-2">' +
                                                                 '<label class="radio pop-non-edt-val" style="word-break: break-all;" >' +
-                                                                '<input type="radio" name="' + header + '_' + i +'" '+addMandatory+' class="'+header +'" value="' + option + '" id="' +
+                                                                '<input type="radio" name="' + header + '_' + i +'" '+addMandatory+' class="'+header +' '+multBtnLastClass+'" value="' + option + '" id="' +
                                                                     header + i + '" ' + checked + '>' + option +
                                                                 '<span></span>' +
                                                                 '</label>' +
@@ -1478,7 +1485,7 @@
                                                 }
                                                 if(dateRangeClass == 'date_range') {
 
-                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control date_range ' + header + ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
+                                                  inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control date_range ' + header +' '+multBtnLastClass+ ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' + values[i] + '" id="' +header + i + '">';
                                                     if(i === values.length - 1) {
                                                             var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                     } else {
@@ -1486,7 +1493,7 @@
                                                     }
                                                 }
                                                 else {
-                                                    inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control ' + header + ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
+                                                    inputType = '<input type="'+fieldType+'" name="' + header +'[]"  '+addMandatory+' class="form-control ' + header +' '+multBtnLastClass+ ' white-smoke pop-non-edt-val"  value="' + values[i] + '" id="' +header + i + '">';
                                                     if(i === values.length - 1) {
                                                             var minusButton = '<i class="fa fa-plus add_more" id="' +'add_more_'+header +'"></i>';
                                                     } else {
@@ -1897,7 +1904,7 @@
                     var fieldValuesByFieldName = {};
 
                     $('input[type="radio"]:checked').each(function() {
-                        var fieldName = $(this).attr('class');
+                        var fieldName =  $(this).attr('class').split(' ')[0];
                         var fieldValue = $(this).val();
                         if (!fieldValuesByFieldName[fieldName]) {
                             fieldValuesByFieldName[fieldName] = [];

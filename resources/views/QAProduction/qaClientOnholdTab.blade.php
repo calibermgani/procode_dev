@@ -508,7 +508,7 @@
                                                         @if ($count % 2 == 0)
                                                             <div class="row" id={{ $columnName }}>
                                                         @endif
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 dynamic-field">
                                                             <div class="form-group row row_mar_bm">
                                                                 <label class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
                                                                     {{ $labelName }}
@@ -574,7 +574,7 @@
                                                                                             <label class="radio pop-non-edt-val"
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName, $options[$i], false, [
-                                                                                                    'class' => 'exclude '.$columnName,
+                                                                                                    'class' => $columnName.' exclude',
                                                                                                     'id' => $columnName,
                                                                                                     $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                 ]) !!}{{ $options[$i] }}
@@ -1930,7 +1930,7 @@
                     var fieldValuesByFieldName = {};
 
                     $('input[type="radio"]:checked').each(function() {
-                        var fieldName = $(this).attr('class');
+                        var fieldName = $(this).attr('class').split(' ')[0];
                         var fieldValue = $(this).val();
                         if (!fieldValuesByFieldName[fieldName]) {
                             fieldValuesByFieldName[fieldName] = [];
