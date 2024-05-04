@@ -655,6 +655,7 @@
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                     'class' => $columnName,
+                                                                                                    'id' => $columnName,
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
