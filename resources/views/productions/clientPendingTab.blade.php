@@ -889,9 +889,7 @@
                             '" value="' + option + '" class="' + columnName + '" id="' +
                             columnName +
                             uniqueId +
-                            '" class="' +
-                            columnName +
-                            '" '+addMandatory +'>' + option +
+                            '"  '+addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +

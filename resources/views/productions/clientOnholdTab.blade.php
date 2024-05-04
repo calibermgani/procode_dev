@@ -909,8 +909,6 @@
                             '" value="' + option + '" class="' + columnName + '" id="' +
                             columnName +
                             uniqueId +
-                            '" class="' +
-                            columnName +
                             '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +

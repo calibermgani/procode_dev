@@ -512,7 +512,7 @@
                                                                                                 <label class="checkbox pop-non-edt-val"
                                                                                                     style="word-break: break-all;">
                                                                                                     {!! Form::$inputType($columnName . '[]', $options[$i], false, [
-                                                                                                        'class' => $columnName,
+                                                                                                        'class' => 'exclude '.$columnName,
                                                                                                         'id' => $columnName,
                                                                                                         $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                     ]) !!}{{ $options[$i] }}
@@ -533,7 +533,7 @@
                                                                                                 <label class="radio pop-non-edt-val"
                                                                                                     style="word-break: break-all;">
                                                                                                     {!! Form::$inputType($columnName, $options[$i], false, [
-                                                                                                        'class' => $columnName,
+                                                                                                        'class' => 'exclude '.$columnName,
                                                                                                         'id' => $columnName,
                                                                                                         $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                     ]) !!}{{ $options[$i] }}
@@ -554,7 +554,7 @@
                                                                             class="add_options">
 
                                                                         @if ($data->field_type_1 == 'multiple')
-                                                                            <i class="fa fa-plus add_more" id="add_more_{{ $columnName }}"
+                                                                            <i class="fa fa-plus add_more exclude" id="add_more_{{ $columnName }}"
                                                                                 style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
                                                                             <input type="hidden"
                                                                                 value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
@@ -1078,6 +1078,13 @@
 
             var uniqueId = 0;
             $('.modal-body').on('click', '.add_more', function() {
+                var addBtnClasses = $(this).attr('class');
+                var btnLastClass = '';
+                if (addBtnClasses) {
+                    var classArray = addBtnClasses.split(' ');
+                    var btnLastClass = classArray[classArray.length - 1];
+                }
+                btnLastClass = btnLastClass == 'exclude' ? btnLastClass : 'include';
                 var ids = [];
                 clumnClassName = $(this).attr('id').replace(/^add_more_/, '');
                 $('.' + clumnClassName).each(function() {
@@ -1103,21 +1110,21 @@
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
+                                '[]"  class="form-control ' + columnName + ' '+ btnLastClass +' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
                                 '" '+ addMandatory +'></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
+                                '[]"  class="form-control ' + columnName + ' '+ btnLastClass +' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
                                 '" '+ addMandatory +'>';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
-                            '[]" class="form-control date_range ' + columnName +
+                            '[]" class="form-control date_range ' + columnName +' '+ btnLastClass +
                             ' white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
@@ -1126,7 +1133,7 @@
                 } else if (inputType === 'select') {
 
                     newElement = '<select name="' + columnName + '[]"  class="form-control ' +
-                        columnName + ' white-smoke pop-non-edt-val" id="' +
+                        columnName + ' '+ btnLastClass +' white-smoke pop-non-edt-val" id="' +
                         columnName +
                         uniqueId +
                         '" '+ addMandatory +'>';
@@ -1151,7 +1158,7 @@
                             columnName +
                             uniqueId +
                             '" class="' +
-                            columnName +
+                            columnName +' '+ btnLastClass +
                             '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
@@ -1169,12 +1176,10 @@
                             '<label class="radio pop-non-edt-val" style="word-break: break-all;" ' + addMandatory +
                             '>' +
                             '<input type="radio" name="' + columnName + '_' + uniqueId +
-                            '" value="' + option + '" class="' + columnName + '" id="' +
+                            '" value="' + option + '" class="' + columnName +' '+ btnLastClass + '" id="' +
                             columnName +
                             uniqueId +
-                            '" class="' +
-                            columnName +
-                            '" '+ addMandatory +'>' + option +
+                            '"  '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
