@@ -59,7 +59,7 @@
             }
 
             .left-side {
-                min-height: 200px; 
+                min-height: 200px;
             }
 
             .right-side {
@@ -141,6 +141,6 @@
         <p style="margin-left: 3.5rem;">&copy; {{ date('Y') }} Procode - All rights reserved by Annexmed &nbsp;&nbsp;&nbsp;&nbsp; &#x2709; : procodesupport@annexmed.net</p>
     </div>
 </body>
-@include('layouts/footer_script_login')
+@include('layouts/footer_script')
 @include('layouts/flashMessage')
 </html>

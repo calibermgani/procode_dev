@@ -22,10 +22,6 @@
     <div class="form-group ml-8 mr-8">
         <label for="exampleInputPassword" class="login-username">{{ __('Password') }}</label>
         <div class="input-group">
-
-
-
-
             <input id="password" type="password" placeholder="Password"
                 class="form-control white-smoke h-auto py-5 px-6 @error('password') is-invalid @enderror"
                 name="password" required autocomplete="current-password">
@@ -35,7 +31,10 @@
                 </span>
             @enderror
         </div>
+        {{-- <input type="text" name="g-recaptcha-response" id="g-recaptcha-response"> --}}
     </div>
+
+    <div class="g-recaptcha ml-8" data-type="image" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div>
 
     @if (session()->has('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 10000)" x-show="show">
@@ -122,6 +121,7 @@
     @push('view.scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             $(document).ready(function() {
                 $("#error_close").click(function() {
@@ -260,12 +260,26 @@
                 //     });
 
                 // })
-                $(document).on('click', '#kt_login_signin_submit', function() {
+                $(document).on('click', '#kt_login_signin_submit', function(e) {
                     var token = "1a32e71a46317b9cc6feb7388238c95d";
                     var userId = $('#emp_id').val();
                     var userPassword = $('#password').val();
 
                     console.log('in login', userId, userPassword);
+                    if (userId == '' || userPassword == '') {
+                        e.preventDefault();
+                        if (userId == '') {
+                            $('#emp_id').css('border-color', 'red');
+                        } else {
+                            $('#emp_id').css('border-color', '');
+                        }
+                        if (userPassword == '') {
+                            $('#password').css('border-color', 'red');
+                        } else {
+                            $('#password').css('border-color', '');
+                        }
+                        return false;
+                    }
 
                     $.ajax({
                         type: "POST",
@@ -273,10 +287,11 @@
                         data: {
                             token: token,
                             emp_id: userId,
-                            password: userPassword
+                            password: userPassword,
+                           ' g-recaptcha-response': grecaptcha.getResponse(),
                         },
                         success: function(res) {
-                            console.log('success', res);
+
                             if (res.code == 200 && res.message == 'success') {
                                 var sessionUserId = res;
 
@@ -303,6 +318,9 @@
                                             exception);
                                     }
                                 });
+                            } else if(res.code == 500 && res.message == 'error'){
+                                console.log('error', res);
+                                js_notification('error', res.errorMessage);
                             }
                         },
                         error: function(jqXHR, exception) {
