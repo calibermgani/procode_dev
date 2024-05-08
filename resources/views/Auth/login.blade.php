@@ -219,7 +219,7 @@
                 //     console.log('in login', userId, userPassword);
                 //     $.ajax({
                 //         type: "POST",
-                //         url: "http://aims.officeos.in/api/v1_users/login_authentication",
+                //         url: "https://aims.officeos.in/api/v1_users/login_authentication",
                 //         data: {
                 //             token: token,
                 //             emp_id: userId,
@@ -283,7 +283,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "http://aims.officeos.in/api/v1_users/login_authentication",
+                        url: "https://aims.officeos.in/api/v1_users/login_authentication",
                         data: {
                             token: token,
                             emp_id: userId,

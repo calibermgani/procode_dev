@@ -19,7 +19,7 @@ class SettingController extends Controller
                         'token' => '1a32e71a46317b9cc6feb7388238c95d'
                     ];
                     $client = new Client();
-                    $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_coder_emp_list', [
+                    $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_coder_emp_list', [
                         'json' => $payload
                     ]);
                     if ($response->getStatusCode() == 200) {
@@ -29,7 +29,7 @@ class SettingController extends Controller
                     }
                     $coderList = $data['coderList'];
 
-                    $qaResponse = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_qa_emp_list', [
+                    $qaResponse = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_qa_emp_list', [
                         'json' => $payload
                     ]);
                     if ($qaResponse->getStatusCode() == 200) {

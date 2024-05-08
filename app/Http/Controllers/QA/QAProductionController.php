@@ -36,7 +36,7 @@ class QAProductionController extends Controller
                     'user_id' => $userId,
                 ];
                 $client = new Client();
-                $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_clients_on_user', [
+                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_clients_on_user', [
                     'json' => $payload,
                 ]);
                 if ($response->getStatusCode() == 200) {
@@ -64,7 +64,7 @@ class QAProductionController extends Controller
                 'client_id' => $request->project_id,
             ];
             $client = new Client();
-            $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_practice_on_client', [
+            $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_practice_on_client', [
                 'json' => $payload,
             ]);
             if ($response->getStatusCode() == 200) {
@@ -184,7 +184,7 @@ class QAProductionController extends Controller
                             'user_id' => $userId,
                         ];
 
-                        $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_resource_name', [
+                        $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name', [
                             'json' => $payload,
                         ]);
                         if ($response->getStatusCode() == 200) {
@@ -705,7 +705,7 @@ class QAProductionController extends Controller
                         'token' => '1a32e71a46317b9cc6feb7388238c95d',
                         'client_id' => $decodedProjectName
                     ];
-                     $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
+                     $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
                         'json' => $payload
                     ]);
                     if ($response->getStatusCode() == 200) {
@@ -795,7 +795,7 @@ class QAProductionController extends Controller
                         'token' => '1a32e71a46317b9cc6feb7388238c95d',
                         'client_id' => $decodedProjectName
                     ];
-                     $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
+                     $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
                         'json' => $payload
                     ]);
                     if ($response->getStatusCode() == 200) {
@@ -897,7 +897,7 @@ class QAProductionController extends Controller
                     'client_id' => $decodedProjectName,
                  ];
 
-                $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_resource_name_on_designation', [
+                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name_on_designation', [
                     'json' => $payload,
                 ]);
                 if ($response->getStatusCode() == 200) {
