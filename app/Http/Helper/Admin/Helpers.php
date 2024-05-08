@@ -540,7 +540,7 @@ class Helpers
             'user_id' => $id
         ];
         $client = new Client();
-        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_username_by_id', [
+        $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_username_by_id', [
             'json' => $payload
         ]);
         if ($response->getStatusCode() == 200) {
@@ -559,7 +559,7 @@ class Helpers
             'user_id' => $id
         ];
         $client = new Client();
-        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_user_emp_id_by_id', [
+        $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_user_emp_id_by_id', [
             'json' => $payload
         ]);
         if ($response->getStatusCode() == 200) {
@@ -598,7 +598,7 @@ class Helpers
             'user_emp_id' => $id
         ];
         $client = new Client();
-        $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_username_by_empid', [
+        $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_username_by_empid', [
             'json' => $payload
         ]);
         if ($response->getStatusCode() == 200) {
@@ -619,7 +619,7 @@ class Helpers
             'user_id' => $userId
         ];
          $client = new Client();
-         $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_resource_name', [
+         $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_resource_name', [
             'json' => $payload
         ]);
         if ($response->getStatusCode() == 200) {
@@ -630,5 +630,23 @@ class Helpers
         $projectResource = array_filter($data['userDetail']);
         return $projectResource;
 
+    }
+    public static function getMomAttendiesList()
+	{
+        $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
+        $payload = [
+            'token' => '1a32e71a46317b9cc6feb7388238c95d'
+        ];
+        $client = new Client();
+        $response = $client->request('POST', 'http://aims.officeos.in/api/v1_users/get_mom_attendies_list', [
+            'json' => $payload
+        ]);
+        if ($response->getStatusCode() == 200) {
+            $data = json_decode($response->getBody(), true);
+        } else {
+            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+        }
+        $getMomAttendiesList = $data['attendiesList'];
+        return $getMomAttendiesList;
     }
 }
