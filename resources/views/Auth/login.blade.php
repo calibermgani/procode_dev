@@ -319,8 +319,11 @@
                                     }
                                 });
                             } else if(res.code == 500 && res.message == 'error'){
-                                console.log('error', res);
+
                                 js_notification('error', res.errorMessage);
+                            } else if(res.code == 400 && res.message == 'Bad Request'){
+                                console.log('error', res);
+                                js_notification('error', 'Invalid Credentials');
                             }
                         },
                         error: function(jqXHR, exception) {
