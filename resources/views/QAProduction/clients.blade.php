@@ -1,6 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-    <div class="card card-custom custom-card" style="width:101.4%">
+    <div class="card card-custom custom-card">
         <div class="card-body pt-4 pb-0 px-2">
             <div class="my-client-div">
                 <span class="project_header" style="margin-left: 4px !important">QA Client List</span>

@@ -1,6 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-    <div class="card card-custom mb-5 custom-card" style="width:101.4%">
+    <div class="card card-custom mb-5 custom-card">
         <div class="card-body pb-4 mt-2">
             <div class="mb-0">
                 <div>
