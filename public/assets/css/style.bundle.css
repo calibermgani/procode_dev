@@ -79656,7 +79656,8 @@ code {
 }
 .fc-unthemed .fc-event .fc-content,
 .fc-unthemed .fc-event-dot .fc-content {
-  padding: 0.55rem 0.55rem 0.55rem 2rem;
+  /* padding: 0.55rem 0.55rem 0.55rem 2rem; */
+  padding: 0rem 0rem 0rem 0.15rem;
 }
 .fc-unthemed .fc-event .fc-content:before,
 .fc-unthemed .fc-event-dot .fc-content:before {
@@ -79712,7 +79713,9 @@ code {
   font-weight: 400;
 }
 .fc-unthemed .fc-popover .fc-body .fc-event-container {
-  padding: 1.25rem 1.25rem 0.75rem 1.25rem;
+  /* padding: 1.25rem 1.25rem 0.75rem 1.25rem; */
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
 }
 .fc-unthemed .fc-popover .fc-body .fc-event {
   margin-bottom: 0.5rem;

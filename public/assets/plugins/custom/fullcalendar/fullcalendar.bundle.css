@@ -128,6 +128,9 @@ hr.fc-divider {
 
 .fc th {
   text-align: center;
+  background-color: #139AB3;
+  color: #FFFFFF !important;
+
 }
 
 .fc th,
@@ -319,7 +322,7 @@ temporary rendered events).
   display: none;
 }
 
-.fc-event.fc-allow-mouse-resize .fc-resizer,
+.fc-event.popover .fc-resizer,
 .fc-event.fc-selected .fc-resizer {
   /* only show when hovering or selected (with touch) */
   display: block;
@@ -580,15 +583,19 @@ TODO: more distinction between this file and common.css
 .fc-unthemed .fc-list-heading td {
   border-color: #ddd;
 }
-
+.fc-unthemed .fc-content {
+  background-color: #CCE4F9;
+  border-color: #CCE4F9;
+}
 .fc-unthemed .fc-popover {
   background-color: #fff;
+  width: auto;
 }
 
 .fc-unthemed .fc-divider,
 .fc-unthemed .fc-popover .fc-header,
 .fc-unthemed .fc-list-heading td {
-  background: #eee;
+  background: #139AB3;
 }
 
 .fc-unthemed td.fc-today {
@@ -695,8 +702,8 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 /* theme */
 .fc-button {
   display: inline-block;
-  font-weight: 400;
-  color: #212529;
+  font-weight: 600;
+  /* color: #212529; */
   text-align: center;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -709,6 +716,9 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
   font-size: 1em;
   line-height: 1.5;
   border-radius: 0.25em;
+  color: #191C24 !important;
+  background-color: #F3F3F3 !important;
+  border-color: #F3F3F3;
 }
 
 .fc-button:hover {
@@ -794,6 +804,11 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
 .fc-button-group > .fc-button:active,
 .fc-button-group > .fc-button.fc-button-active {
   z-index: 1;
+}
+.fc-button-active{
+    color: #ffffff !important;
+    background-color: #666666 !important;
+    border-color: #666666 !important;;
 }
 
 .fc-button-group > .fc-button:not(:first-child) {
@@ -1529,7 +1544,14 @@ be a descendant of the grid when it is being dragged.
 .fc-time-grid-event.fc-allow-mouse-resize .fc-resizer:after {
   content: "=";
 }
-
+.fc-clear{
+    display:none !important;
+}
+.fc-state-active{
+    color: #ffffff !important;
+    background-color: #666666 !important;
+    border-color: #666666 !important;;
+}
 /* resizer (touch device) */
 .fc-time-grid-event.fc-selected .fc-resizer {
   /* 10x10 dot */

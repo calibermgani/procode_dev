@@ -84,6 +84,27 @@ Route::group(['prefix' => 'qa_production'], function () {
     Route::any('qa_projects_auto_close/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientAutoClose');
     Route::any('sampling_assignee', 'App\Http\Controllers\QA\QAProductionController@samplingAssignee');
 });
+
+
+    Route::any('procode_user_dashboard','App\Http\Controllers\DashboardController@procodeUserDashboard');
+    Route::group(['prefix' => 'mom'], function () {
+        // Route::post('full_calender/action', 'App\Http\Controllers\MOM\MomController@action');
+        Route::any('mom_dashboard', 'App\Http\Controllers\MOM\MomController@index');
+        Route::any('mom_add/{date}', 'App\Http\Controllers\MOM\MomController@momAdd');
+        Route::any('mom_store', 'App\Http\Controllers\MOM\MomController@momStore');
+        Route::any('mom_edit/{id}', 'App\Http\Controllers\MOM\MomController@momEdit');
+        Route::any('mom_update', 'App\Http\Controllers\MOM\MomController@momUpdate');
+        Route::any('mom_delete', 'App\Http\Controllers\MOM\MomController@momDelete');
+    });
+
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::any('sub_projects', 'App\Http\Controllers\DashboardController@getSubProjects')->name('subProjects');
+        Route::any('procode_manager_dashboard','App\Http\Controllers\DashboardController@procodeManagerDashboard');
+        Route::any('users_sub_projects', 'App\Http\Controllers\DashboardController@getUsersWithSubProjects');
+        Route::any('calendar_filter','App\Http\Controllers\DashboardController@getCalendarFilter');
+        Route::any('projects_calendar_filter','App\Http\Controllers\DashboardController@prjCalendarFilter');
+
+    });
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
