@@ -121,15 +121,15 @@
                             events: [
                                 <?php echo trim($calendar_data, '[]'); ?>
                             ],
-                            dateClick: function(info) {
-                                var clickedDate = info.date;
-                                var localDate = new Date(clickedDate.getTime() - (clickedDate
-                                    .getTimezoneOffset() * 60000));
-                                var formattedDate = localDate.toISOString().split('T')[0];
-                                window.location.href = baseUrl + "mom/mom_add/" + btoa(
-                                        formattedDate) + "?parent=" +
-                                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-                            },
+                            // dateClick: function(info) {
+                            //     var clickedDate = info.date;
+                            //     var localDate = new Date(clickedDate.getTime() - (clickedDate
+                            //         .getTimezoneOffset() * 60000));
+                            //     var formattedDate = localDate.toISOString().split('T')[0];
+                            //     window.location.href = baseUrl + "mom/mom_add/" + btoa(
+                            //             formattedDate) + "?parent=" +
+                            //         getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                            // },
                             eventRender: function(info) {
                                 var element = $(info.el);
                                 var startDate = customDate(info.event.start);
@@ -240,28 +240,13 @@
                                     }
                                 }
                             },
-                            eventClick: function(info) {
-                                var element = $(info.el);
-                                window.location.href = baseUrl + "mom/mom_edit/" + btoa(info
-                                        .event.id) +
-                                    "?parent=" +
-                                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-                                // if (confirm("Are you sure you want to remove it?")) {
-                                //     var id = event.id;
-                                //     $.ajax({
-                                //         url: "mom/full_calender/action",
-                                //         type: "POST",
-                                //         data: {
-                                //             id: id,
-                                //             type: "delete"
-                                //         },
-                                //         success: function(response) {
-                                //             calendar.fullCalendar('refetchEvents');
-                                //             alert("Event Deleted Successfully");
-                                //         }
-                                //     })
-                                // }
-                            }
+                            // eventClick: function(info) {
+                            //     var element = $(info.el);
+                            //     window.location.href = baseUrl + "mom/mom_edit/" + btoa(info
+                            //             .event.id) +
+                            //         "?parent=" +
+                            //         getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                            // }
 
                         });
                         calendar.render();
