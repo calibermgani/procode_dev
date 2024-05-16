@@ -44,7 +44,7 @@ class ProductionController extends Controller
                     'user_id' => $userId
                 ];
                 $client = new Client();
-                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_clients_on_user', [
+                $response = $client->request('POST',  config("constants.PRO_CODE_URL").'/api/v1_users/get_clients_on_user', [
                     'json' => $payload
                 ]);
                 if ($response->getStatusCode() == 200) {
@@ -70,7 +70,7 @@ class ProductionController extends Controller
                 'client_id' => $request->project_id
             ];
             $client = new Client();
-            $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_practice_on_client', [
+            $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_practice_on_client', [
                 'json' => $payload
             ]);
             if ($response->getStatusCode() == 200) {
@@ -218,7 +218,7 @@ class ProductionController extends Controller
                             'user_id' => $userId
                         ];
 
-                         $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name', [
+                         $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
                             'json' => $payload
                         ]);
                         if ($response->getStatusCode() == 200) {
@@ -1172,7 +1172,7 @@ class ProductionController extends Controller
                            'user_id' => $userId
                        ];
 
-                        $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name', [
+                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
                            'json' => $payload
                        ]);
                        if ($response->getStatusCode() == 200) {
