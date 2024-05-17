@@ -1,6 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-    <script src="{{ asset('plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
+   
     <div class="card card-custom custom-card">
         <div class="card-body pt-4 pb-0 px-2">
             <div class="my-client-div">
@@ -80,6 +80,7 @@
     } */
 </style>
 @push('view.scripts')
+<script src="{{ asset('plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
     <script>
         $(document).ready(function() {
 
