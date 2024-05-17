@@ -80,7 +80,7 @@
 </style>
 @push('view.scripts')
     <script>
-        $(document).ready(function() {
+     
 
             var KTAppsEducationSchoolCalendar = function() {
 
@@ -256,6 +256,5 @@
                 KTAppsEducationSchoolCalendar.init();
             });
 
-        });
     </script>
 @endpush
