@@ -222,8 +222,8 @@
                                                 '<p><span class="eta">Time Zone: </span>' +
                                                 timeZone + '</p>' +
                                                 '<p><span class="eta">Time: </span>' +
-                                                start_time +
-                                                ' - ' + end_time + '</p>' +
+                                                    startDate +
+                                                ' - ' + endDate + '</p>' +
                                                 '<p><span class="eta">ETA: </span>' + eta +
                                                 '</p>' +
                                                 '<span class="eta">Description: </span>' +
