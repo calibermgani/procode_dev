@@ -30,7 +30,7 @@
                                 <label class="required">Meeting Title</label>
                                 <div class="form-group mb-1">
                                     <input type="text" id="meeting_title" name="meeting_title"
-                                        class="white-smoke form-control meeting_title">
+                                        class="white-smoke form-control meeting_title" autocomplete="nope">
 
                                 </div>
                             </div>
@@ -44,6 +44,7 @@
                                         'class' => 'form-control white-smoke meeting_attendies select2',
                                         'id' => 'meeting_attendies',
                                         'multiple' => 'multiple',
+                                        'autocomplete' => 'nope',
                                     ]) !!}
                                 </div>
                             </div>
@@ -53,6 +54,7 @@
                                     {!! Form::select('time_zone', $timezones, null, [
                                         'class' => 'form-control white-smoke time_zone select2',
                                         'id' => 'time_zone',
+                                        'autocomplete' => 'nope',
                                     ]) !!}
 
                                 </div>
@@ -70,7 +72,7 @@
                                 <label class="required">Start Time</label>
                                 <div class="form-group mb-1">
                                     <input type="text" id="start_time" name="start_time"
-                                        class="white-smoke form-control start_time" value="">
+                                        class="white-smoke form-control start_time" value="" autocomplete="nope">
 
                                 </div>
                             </div>
@@ -78,14 +80,14 @@
                                 <label class="required">End Time</label>
                                 <div class="form-group mb-1">
                                     <input type="text" id="end_time" name="end_time"
-                                        class="white-smoke form-control end_time" value="">
+                                        class="white-smoke form-control end_time" value="" autocomplete="nope">
                                 </div>
                             </div>
                             <div class="col-md-3 options_div">
                                 <label class="required">ETA</label>
                                 <div class="form-group mb-1">
                                     <input type="date" id="eta" name="eta"
-                                        class="white-smoke form-control eta">
+                                        class="white-smoke form-control eta" autocomplete="nope">
 
                                 </div>
                             </div>
@@ -167,19 +169,19 @@
                                 <tr class="clonetr">
                                     {{-- <td>1</td> --}}
                                     <td>
-                                        <textarea rows="3" id="topics" name="topics[]" class="form-control topics"></textarea>
+                                        <textarea rows="3" id="topics" name="topics[]" class="form-control topics" autocomplete="nope"></textarea>
                                     </td>
                                     <td>
-                                        <textarea rows="3" id="topic_description" name="topic_description[]" class="form-control topic_description"></textarea>
+                                        <textarea rows="3" id="topic_description" name="topic_description[]" class="form-control topic_description" autocomplete="nope"></textarea>
                                     </td>
                                     <td>
-                                        <textarea rows="3" id="action_item" name="action_item[]" class="form-control action_item"></textarea>
+                                        <textarea rows="3" id="action_item" name="action_item[]" class="form-control action_item" autocomplete="nope"></textarea>
                                     </td>
                                     <td>
-                                        <textarea rows="3" id="responsible_party" name="responsible_party[]" class="form-control responsible_party"></textarea>
+                                        <textarea rows="3" id="responsible_party" name="responsible_party[]" class="form-control responsible_party" autocomplete="nope"></textarea>
                                     </td>
                                     <td><input type="date" id="topic_eta" name="topic_eta[]"
-                                            class="form-control topic_eta"></td>
+                                            class="form-control topic_eta" autocomplete="nope"></td>
 
                                     {{-- <td class="action_btn"><i class="fa fas fa-plus icon-circle2 ml-1 add_new_btn"
                                                 id="add_new_btn_1"></i></td> --}}
