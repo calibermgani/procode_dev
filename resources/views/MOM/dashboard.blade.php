@@ -235,7 +235,7 @@
                                             element.data('content', tooltipHtml);
                                             element.data('html', true);
                                             element.data('placement', 'top');
-                                            KTApp.initPopover(element);
+                                            // KTApp.initPopover(element);
                                         }
 
                                     }
