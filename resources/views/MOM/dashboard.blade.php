@@ -241,13 +241,13 @@
                                     }
                                 }
                             },
-                            // eventClick: function(info) {
-                            //     var element = $(info.el);
-                            //     window.location.href = baseUrl + "mom/mom_edit/" + btoa(info
-                            //             .event.id) +
-                            //         "?parent=" +
-                            //         getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-                            // }
+                            eventClick: function(info) {
+                                var element = $(info.el);
+                                window.location.href = baseUrl + "mom/mom_edit/" + btoa(info
+                                        .event.id) +
+                                    "?parent=" +
+                                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                            }
 
                         });
                         calendar.render();
