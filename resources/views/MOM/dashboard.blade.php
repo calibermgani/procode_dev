@@ -41,12 +41,12 @@
         color: #139AB3;
     }
 
-    /* #calendar .fc-content,
+    #calendar .fc-content,
     #calendar .fc-day-grid-event,
     #calendar .fc-day-top,
     td {
         cursor: pointer;
-    } */
+    }
 
     /* .card1 {
         width: 200px;
