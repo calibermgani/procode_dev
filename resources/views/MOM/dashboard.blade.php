@@ -80,7 +80,7 @@
     } */
 </style>
 @push('view.scripts')
-<script src="{{ asset('plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
+
     <script>
         $(document).ready(function() {
 
