@@ -71,7 +71,7 @@
                                         $holdCount = 0;
                                         if (
                                             $loginEmpId &&
-                                            ($empDesignation == 'Administrator' ||
+                                            ($loginEmpId == 'Admin' ||
                                                 strpos($empDesignation, 'Manager') !== false ||
                                                 strpos($empDesignation, 'VP') !== false ||
                                                 strpos($empDesignation, 'Leader') !== false ||

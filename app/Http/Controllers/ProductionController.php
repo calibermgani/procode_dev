@@ -28,7 +28,7 @@ class ProductionController extends Controller
        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
             return view('productions/dashboard');
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -54,7 +54,7 @@ class ProductionController extends Controller
                 }
                 $projects = $data['clientList'];
                   return view('productions/clients',compact('projects'));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -94,7 +94,7 @@ class ProductionController extends Controller
                 $table_name = Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectsWithCount[$key]['sub_project_name'])),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" .  $modelName; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
-                    if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                    if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                         if (class_exists($modelClass)) {
                             $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
                             $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -123,7 +123,7 @@ class ProductionController extends Controller
             }
 
             return response()->json(['subprojects' => $subProjectsWithCount]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             log::debug($e->getMessage());
         }
 
@@ -135,7 +135,7 @@ class ProductionController extends Controller
                 $databaseConnection = Str::lower($request->client_name);
                 Config::set('database.connections.mysql.database', $databaseConnection);
                 return response()->json(['success' => true]);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     log::debug($e->getMessage());
                 }
         } else {
@@ -150,7 +150,7 @@ class ProductionController extends Controller
             $databaseConnection = Str::lower($decodedClientName);
             Config::set('database.connections.mysql.database',$databaseConnection);
 
-            if ($loginEmpId && $empDesignation == "Administrator") {
+            if ($loginEmpId && $loginEmpId == "Admin") {
                 $assignedProjectDetails = InventoryWound::where('status','CE_Inprocess')->orderBy('id','desc')->get();
                 $pendingProjectDetails = InventoryWound::where('status','CE_Pending')->orderBy('id','desc')->get();
                 $completedProjectDetails = InventoryWound::where('status','CE_Completed')->orderBy('id','desc')->get();
@@ -161,13 +161,13 @@ class ProductionController extends Controller
                 $completedProjectDetails = InventoryWound::where('status','CE_Completed')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
                 $holdProjectDetails = InventoryWound::where('status','CE_Hold')->where('CE_emp_id',$loginEmpId)->orderBy('id','desc')->get();
             }
-            if ($empDesignation == "Administrator") {
+            if ($loginEmpId == "Admin") {
                $duplicateProjectDetails = InventoryWoundDuplicate::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
             } else {
                 $duplicateProjectDetails = [];
             }
             return view('productions/clientAssignedTab',compact('assignedProjectDetails','completedProjectDetails','holdProjectDetails','duplicateProjectDetails','databaseConnection'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             log::debug($e->getMessage());
         }
     }
@@ -198,7 +198,7 @@ class ProductionController extends Controller
                 $modelClassDatas = "App\\Models\\" .  $modelName.'Datas'; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
                 $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];$assignedProjectDetailsStatus = [];$unAssignedCount = 0;
                 $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                      if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->limit(2000)->get();
@@ -249,7 +249,7 @@ class ProductionController extends Controller
 
                     return view('productions/clientAssignedTab',compact('assignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','assignedProjectDetailsStatus','unAssignedCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -280,7 +280,7 @@ class ProductionController extends Controller
                $modelClass = "App\\Models\\" . $modelName;
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
                $pendingProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;$unAssignedCount = 0;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
                        $pendingProjectDetails = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
@@ -313,7 +313,7 @@ class ProductionController extends Controller
                  $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
                 return view('productions/clientPendingTab',compact('pendingProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','existingCallerChartsWorkLogs','popUpHeader','popupNonEditableFields','popupEditableFields','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
@@ -344,7 +344,7 @@ class ProductionController extends Controller
                $modelClass = "App\\Models\\" . $modelName;
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();$unAssignedCount = 0;
                $holdProjectDetails = collect();$duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
                        $holdProjectDetails = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
@@ -377,7 +377,7 @@ class ProductionController extends Controller
                  $popupEditableFields = formConfiguration::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->whereIn('user_type',[3,$dept])->where('field_type','editable')->where('field_type_3','popup_visible')->get();
                 return view('productions/clientOnholdTab',compact('holdProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','popUpHeader','popupNonEditableFields','popupEditableFields','existingCallerChartsWorkLogs','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
@@ -408,7 +408,7 @@ class ProductionController extends Controller
                $modelClass = "App\\Models\\" . $modelName;
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();$unAssignedCount = 0;
                $completedProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
                        $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('qa_work_status', 'Sampling')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
@@ -440,7 +440,7 @@ class ProductionController extends Controller
 
                 return view('productions/clientCompletedTab',compact('completedProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','popUpHeader','popupNonEditableFields','popupEditableFields','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
@@ -472,7 +472,7 @@ class ProductionController extends Controller
                $modelClass = "App\\Models\\" . $modelName;
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();$yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();$unAssignedCount = 0;
                $revokeProjectDetails = collect(); $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$existingCallerChartsWorkLogs = [];$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClass)) {
                        $revokeProjectDetails = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->orderBy('id','ASC')->limit(2000)->get();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
@@ -507,7 +507,7 @@ class ProductionController extends Controller
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                  return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','existingCallerChartsWorkLogs','popUpHeader','popupNonEditableFields','popupEditableFields','popupQAEditableFields','qaSubStatusListVal','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
@@ -541,7 +541,7 @@ class ProductionController extends Controller
                $modelClass = "App\\Models\\" .$modelName;
                $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();$yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();$unAssignedCount = 0;
                $duplicateProjectDetails = collect();$duplicateCount = 0;$assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                    if (class_exists($modelClassDuplcates)) {
                         //   $duplicateProjectDetails =  $modelClass::whereNotIn('status',['agree','dis_agree'])->orderBy('id','desc')->get();
                         $duplicateProjectDetails =  $modelClassDuplcates::orderBy('id','ASC')->whereBetween('updated_at',[$startDate,$endDate])->limit(2000)->get();
@@ -566,7 +566,7 @@ class ProductionController extends Controller
 
                 return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
@@ -598,7 +598,7 @@ class ProductionController extends Controller
                     $duplicateRecord->update(['duplicate_status' => $status]);
                 }
                 return response()->json(['success' => true]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -728,7 +728,7 @@ class ProductionController extends Controller
                     $callChartWorkLogExistingRecord->update( ['record_status' => $data['chart_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
                 }
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -761,7 +761,7 @@ class ProductionController extends Controller
                     $existingRecord->update(['CE_emp_id' => $assigneeId]);
                 }
                 return response()->json(['success' => true]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -803,7 +803,7 @@ class ProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -847,7 +847,7 @@ class ProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -978,7 +978,7 @@ class ProductionController extends Controller
                 }
                 $tabUrl = $data['record_old_status'] == "Revoke" ? $data['record_old_status'] : lcfirst(str_replace('CE_', '', $data['record_old_status']));
                 return redirect('/projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
-             } catch (Exception $e) {
+             } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -1009,7 +1009,7 @@ class ProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -1046,7 +1046,7 @@ class ProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -1117,7 +1117,7 @@ class ProductionController extends Controller
                 return redirect('/projects_Revoke/'.$clientName.'/'.$subProjectName);
                 // $tabUrl = $data['record_old_status'] == "Revoke" ? $data['record_old_status'] : lcfirst(str_replace('CE_', '', $data['record_old_status']));
                 // return redirect('/projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -1152,7 +1152,7 @@ class ProductionController extends Controller
                $modelClassDatas = "App\\Models\\" .  $modelName.'Datas'; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
                $unAssignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];$unAssignedProjectDetailsStatus = [];$unAssignedCount = 0;
                $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-               if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+               if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $unAssignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->orderBy('id','ASC')->limit(2000)->get();
@@ -1203,7 +1203,7 @@ class ProductionController extends Controller
 
                    return view('productions/clientUnAssignedTab',compact('unAssignedProjectDetails','columnsHeader','popUpHeader','popupNonEditableFields','popupEditableFields','modelClass','clientName','subProjectName','assignedDropDown','existingCallerChartsWorkLogs','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','unAssignedProjectDetailsStatus','unAssignedCount'));
 
-           } catch (Exception $e) {
+           } catch (\Exception $e) {
                log::debug($e->getMessage());
            }
        } else {
