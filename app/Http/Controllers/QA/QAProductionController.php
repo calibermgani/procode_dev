@@ -21,7 +21,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\QualitySampling;
 use App\Models\QASubStatus;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerRebuttalMail;
 
 class QAProductionController extends Controller
@@ -46,7 +46,7 @@ class QAProductionController extends Controller
                 }
                 $projects = $data['clientList'];
                 return view('QAProduction/clients', compact('projects'));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -113,7 +113,7 @@ class QAProductionController extends Controller
 
             }
             return response()->json(['subprojects' => $subProjectsWithCount]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             log::debug($e->getMessage());
         }
 
@@ -217,7 +217,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAssignedTab', compact('assignedProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -290,7 +290,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientPendingTab', compact('pendingProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'existingCallerChartsWorkLogs', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -363,7 +363,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientOnholdTab', compact('holdProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'existingCallerChartsWorkLogs','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -434,7 +434,7 @@ class QAProductionController extends Controller
                 $qaStatusList = Helpers::qaStatusList();
                 return view('QAProduction/qaClientCompletedTab', compact('completedProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields','popupQAEditableFields','qaSubStatusListVal','qaStatusList','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -492,7 +492,7 @@ class QAProductionController extends Controller
 
                 return view('QAProduction/qaClientReworkTab', compact('revokeProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -550,7 +550,7 @@ class QAProductionController extends Controller
 
                 return view('QAProduction/qaClientDuplicateTab', compact('duplicateProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -594,7 +594,7 @@ class QAProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -628,7 +628,7 @@ class QAProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -735,7 +735,7 @@ class QAProductionController extends Controller
 
                 }
                 return redirect('qa_production/qa_projects_assigned/'.$clientName.'/'.$subProjectName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -827,7 +827,7 @@ class QAProductionController extends Controller
                 }
                 $tabUrl = lcfirst(str_replace('QA_', '', $data['record_old_status']));
                 return redirect('qa_production/qa_projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
-             } catch (Exception $e) {
+             } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -840,7 +840,7 @@ class QAProductionController extends Controller
             try {
                 $data = QASubStatus::where('status_code_id', $request['status_code_id'])->pluck('sub_status_code', 'id')->toArray();
                 return response()->json(["subStatus" => $data]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -947,7 +947,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAutoClose', compact('autoCloseProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -976,7 +976,7 @@ class QAProductionController extends Controller
                     $existingModelClassDatasRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
                 }
                 return response()->json(['success' => true]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
