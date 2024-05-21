@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Models\DynamicModel;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Log;
 class FormController extends Controller
 {
     public function formConfigurationList() {
@@ -24,8 +24,8 @@ class FormController extends Controller
                                             ->select('project_id', 'sub_project_id', DB::raw('GROUP_CONCAT(label_name) as label_names'))
                                             ->get();
                return view('Form.formConfigList',compact('formConfiguration'));
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -35,8 +35,8 @@ class FormController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
                return view('Form.formIndex');
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -50,8 +50,8 @@ class FormController extends Controller
                 // $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'id')->prepend(trans('Select'), '')->toArray();
                 $data = subproject::where('project_id', $request->project_id)->pluck('sub_project_name', 'sub_project_id')->toArray();
                 return response()->json(["subProject" => $data, "existingSubProject" => $existingSubProject]);
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -127,7 +127,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
@@ -180,7 +180,7 @@ class FormController extends Controller
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                    updated_at TIMESTAMP DEFAULT NULL,
+                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
@@ -231,7 +231,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
@@ -282,7 +282,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableHistoryName);
@@ -305,8 +305,8 @@ class FormController extends Controller
                     }
 
                     return redirect('/form_configuration_list' . '?parent=' . request()->parent . '&child=' . request()->child);
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -333,8 +333,8 @@ class FormController extends Controller
                     ->get();
                 }
                return view('Form.formEdit',compact('projectDetails','formDetails'));
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -429,7 +429,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
@@ -481,7 +481,7 @@ class FormController extends Controller
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                    updated_at TIMESTAMP DEFAULT NULL,
+                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
@@ -531,7 +531,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
@@ -582,7 +582,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT NULL,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                          DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableHistoryName);
@@ -604,8 +604,8 @@ class FormController extends Controller
                         }
                     }
                     return redirect('/form_configuration_list' . '?parent=' . request()->parent . '&child=' . request()->child);
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -665,8 +665,8 @@ class FormController extends Controller
                     }
 
 
-                } catch (Exception $e) {
-                    log::debug($e->getMessage());
+                } catch (\Exception $e) {
+                    Log::debug($e->getMessage());
                 }
         } else {
             return redirect('/');
