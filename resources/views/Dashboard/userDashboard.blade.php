@@ -226,7 +226,7 @@
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
                                                         $modelTFlag += $modelFlag;
-                                                    }
+                                                    }dd($modelTFlag);
                                                 @endphp
                                                 @if($modelTFlag > 0)
                                                     <tr class="clickable-client cursor_hand">
