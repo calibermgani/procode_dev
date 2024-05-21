@@ -128,7 +128,7 @@ class FormController extends Controller
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                            deleted_at TIMESTAMP NULL)";dd($createTableSQL);
+                                            deleted_at TIMESTAMP NULL)";//dd($createTableSQL);
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
                     } else {
