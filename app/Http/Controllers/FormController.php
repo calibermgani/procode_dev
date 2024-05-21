@@ -127,7 +127,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
@@ -180,7 +180,7 @@ class FormController extends Controller
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
@@ -231,7 +231,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
@@ -282,7 +282,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableHistoryName);
@@ -429,7 +429,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableName);
@@ -481,7 +481,7 @@ class FormController extends Controller
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                                     deleted_at TIMESTAMP NULL)";
                         DB::statement($createDuplicateTableSQL);
                         $dynamicDuplicateModel = new DynamicModel($duplicateTableName);
@@ -531,7 +531,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                         DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableDataName);
@@ -582,7 +582,7 @@ class FormController extends Controller
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL)";
                          DB::statement($createTableSQL);
                         $dynamicModel = new DynamicModel($tableHistoryName);
