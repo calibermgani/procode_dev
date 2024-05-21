@@ -191,8 +191,8 @@
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
-                                                        $holdCount = 0; $modelFlag = 0;dd($modelClass,class_exists($modelClass));
-                                                        if (class_exists($modelClass)) {
+                                                        $holdCount = 0; $modelFlag = 0;
+                                                        if (class_exists($modelClass)) {dd($modelClass,class_exists($modelClass));
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->where('CE_emp_id', $loginEmpId)
