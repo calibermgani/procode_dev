@@ -33,7 +33,7 @@
         </div>
         {{-- <input type="text" name="g-recaptcha-response" id="g-recaptcha-response"> --}}
     </div>
-
+    <input type="hidden" id="pro_code_url" value={{config("constants.PRO_CODE_URL")}}>
     <div class="g-recaptcha ml-8" data-type="image" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div>
 
     @if (session()->has('error'))
@@ -264,7 +264,7 @@
                     var token = "1a32e71a46317b9cc6feb7388238c95d";
                     var userId = $('#emp_id').val();
                     var userPassword = $('#password').val();
-
+                    var proCodeUrl = $('#pro_code_url').val();
                     console.log('in login', userId, userPassword);
                     if (userId == '' || userPassword == '') {
                         e.preventDefault();
@@ -283,7 +283,8 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "https://aims.officeos.in/api/v1_users/login_authentication",
+                        url: proCodeUrl+ '/api/v1_users/login_authentication',
+                        // url: "https://aims.officeos.in/api/v1_users/login_authentication",
                         data: {
                             token: token,
                             emp_id: userId,
