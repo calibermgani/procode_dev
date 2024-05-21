@@ -169,7 +169,7 @@
                                                                 );
                                                             })
                                                             ->all();
-                                                    } else {
+                                                    } else {dd($model_name);
                                                         $model_name = collect(
                                                             Str::studly(
                                                                 Str::slug(Str::lower($projectName) . '_project', '_'),
