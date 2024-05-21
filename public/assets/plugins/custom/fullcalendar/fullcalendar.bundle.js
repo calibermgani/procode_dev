@@ -9800,6 +9800,7 @@ Docs & License: https://fullcalendar.io/
         // `row` is the row number.
         // `levelLimit` is a number for the maximum (inclusive) number of levels allowed.
         DayGrid.prototype.limitRow = function (row, levelLimit) {
+            var levelLimit = 1; //intiailized by viji for all rows need be show commone + more
             var _this = this;
             var colCnt = this.colCnt;
             var isRtl = this.context.isRtl;
@@ -9842,7 +9843,8 @@ Docs & License: https://fullcalendar.io/
                 limitedNodes.forEach(function (node) {
                     node.classList.add('fc-limited'); // hide elements and get a simple DOM-nodes array
                 });
-                // iterate though segments in the last allowable level
+        
+                // iterate through segments in the last allowable level
                 for (i = 0; i < levelSegs.length; i++) {
                     seg = levelSegs[i];
                     var leftCol = isRtl ? (colCnt - 1 - seg.lastCol) : seg.firstCol;
