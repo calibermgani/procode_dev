@@ -21,7 +21,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\QualitySampling;
 use App\Models\QASubStatus;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerRebuttalMail;
 
 class QAProductionController extends Controller
@@ -36,7 +36,7 @@ class QAProductionController extends Controller
                     'user_id' => $userId,
                 ];
                 $client = new Client();
-                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_clients_on_user', [
+                $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_clients_on_user', [
                     'json' => $payload,
                 ]);
                 if ($response->getStatusCode() == 200) {
@@ -46,7 +46,7 @@ class QAProductionController extends Controller
                 }
                 $projects = $data['clientList'];
                 return view('QAProduction/clients', compact('projects'));
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -64,7 +64,7 @@ class QAProductionController extends Controller
                 'client_id' => $request->project_id,
             ];
             $client = new Client();
-            $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_practice_on_client', [
+            $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_practice_on_client', [
                 'json' => $payload,
             ]);
             if ($response->getStatusCode() == 200) {
@@ -85,7 +85,7 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($projectName) . '_' . Str::lower($subProjectsWithCount[$key]['sub_project_name'])), '_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $subProjectsWithCount[$key]['assignedCount'] = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
                         $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status', 'QA_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -113,7 +113,7 @@ class QAProductionController extends Controller
 
             }
             return response()->json(['subprojects' => $subProjectsWithCount]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             log::debug($e->getMessage());
         }
 
@@ -164,7 +164,7 @@ class QAProductionController extends Controller
                 //     $qasamplingDetails = QualitySampling::where('project_id',$decodedProjectName)->where('sub_project_id',$decodedPracticeName)->first();//dd($qasamplingDetails,$decodedProjectName,$decodedPracticeName,'else');
                 // }
 
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName . 'Duplicates';
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->orderBy('id', 'ASC')->limit(2000)->get();
@@ -184,7 +184,7 @@ class QAProductionController extends Controller
                             'user_id' => $userId,
                         ];
 
-                        $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name', [
+                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
                             'json' => $payload,
                         ]);
                         if ($response->getStatusCode() == 200) {
@@ -217,7 +217,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAssignedTab', compact('assignedProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -254,7 +254,7 @@ class QAProductionController extends Controller
                 $autoCloseCount = 0;
                 $existingCallerChartsWorkLogs = [];
                 $subProjectId = $subProjectName == '--' ? null : $decodedPracticeName;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $pendingProjectDetails = $modelClass::where('chart_status', 'QA_Pending')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id', 'ASC')->limit(2000)->get();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
@@ -290,7 +290,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientPendingTab', compact('pendingProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'existingCallerChartsWorkLogs', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -327,7 +327,7 @@ class QAProductionController extends Controller
                 $autoCloseCount = 0;
                 $existingCallerChartsWorkLogs = [];
                 $subProjectId = $subProjectName == '--' ? null : $decodedPracticeName;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $holdProjectDetails = $modelClass::where('chart_status', 'QA_Hold')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id', 'ASC')->limit(2000)->get();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
@@ -363,7 +363,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal =  Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientOnholdTab', compact('holdProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'existingCallerChartsWorkLogs','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -399,7 +399,7 @@ class QAProductionController extends Controller
                 $reworkCount = 0;
                 $autoCloseCount = 0;
                 $subProjectId = $subProjectName == '--' ? null : $decodedPracticeName;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $completedProjectDetails = $modelClass::where('chart_status', 'QA_Completed')->orderBy('id', 'ASC')->whereBetween('updated_at',[$startDate,$endDate])->limit(2000)->get();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
@@ -434,7 +434,7 @@ class QAProductionController extends Controller
                 $qaStatusList = Helpers::qaStatusList();
                 return view('QAProduction/qaClientCompletedTab', compact('completedProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields','popupQAEditableFields','qaSubStatusListVal','qaStatusList','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -468,7 +468,7 @@ class QAProductionController extends Controller
                 $pendingCount = 0;
                 $holdCount = 0;
                 $reworkCount = 0;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $revokeProjectDetails = $modelClass::where('chart_status', 'Revoke')->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id', 'ASC')->limit(2000)->get();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
@@ -492,7 +492,7 @@ class QAProductionController extends Controller
 
                 return view('QAProduction/qaClientReworkTab', compact('revokeProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -527,7 +527,7 @@ class QAProductionController extends Controller
                 $pendingCount = 0;
                 $holdCount = 0;
                 $reworkCount = 0;$startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString();
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClassDuplcates)) {
                         $duplicateProjectDetails = $modelClassDuplcates::orderBy('id', 'ASC')->whereBetween('updated_at',[$startDate,$endDate])->limit(2000)->get();
                         $assignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->count();
@@ -550,7 +550,7 @@ class QAProductionController extends Controller
 
                 return view('QAProduction/qaClientDuplicateTab', compact('duplicateProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -594,7 +594,7 @@ class QAProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -628,7 +628,7 @@ class QAProductionController extends Controller
                 } else {
                     return response()->json(['success' => false]);
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -705,7 +705,7 @@ class QAProductionController extends Controller
                         'token' => '1a32e71a46317b9cc6feb7388238c95d',
                         'client_id' => $decodedProjectName
                     ];
-                     $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
+                     $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_emails_above_tl_level', [
                         'json' => $payload
                     ]);
                     if ($response->getStatusCode() == 200) {
@@ -735,7 +735,7 @@ class QAProductionController extends Controller
 
                 }
                 return redirect('qa_production/qa_projects_assigned/'.$clientName.'/'.$subProjectName);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -795,7 +795,7 @@ class QAProductionController extends Controller
                         'token' => '1a32e71a46317b9cc6feb7388238c95d',
                         'client_id' => $decodedProjectName
                     ];
-                     $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_emails_above_tl_level', [
+                     $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_emails_above_tl_level', [
                         'json' => $payload
                     ]);
                     if ($response->getStatusCode() == 200) {
@@ -827,7 +827,7 @@ class QAProductionController extends Controller
                 }
                 $tabUrl = lcfirst(str_replace('QA_', '', $data['record_old_status']));
                 return redirect('qa_production/qa_projects_'.$tabUrl.'/'.$clientName.'/'.$subProjectName);
-             } catch (Exception $e) {
+             } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -840,7 +840,7 @@ class QAProductionController extends Controller
             try {
                 $data = QASubStatus::where('status_code_id', $request['status_code_id'])->pluck('sub_status_code', 'id')->toArray();
                 return response()->json(["subStatus" => $data]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -897,7 +897,7 @@ class QAProductionController extends Controller
                     'client_id' => $decodedProjectName,
                  ];
 
-                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_resource_name_on_designation', [
+                $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name_on_designation', [
                     'json' => $payload,
                 ]);
                 if ($response->getStatusCode() == 200) {
@@ -906,7 +906,7 @@ class QAProductionController extends Controller
                     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                 }
                 $userDetail  = array_filter($data['userDetail']);
-                if ($loginEmpId && ($empDesignation == "Administrator" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
+                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     if (class_exists($modelClass)) {
                         $modelClassDuplcates = "App\\Models\\" . $modelName . 'Duplicates';
                         $autoCloseProjectDetails = $modelClass::where('qa_work_status', 'Auto_Close')->orderBy('id', 'ASC')->limit(2000)->get();
@@ -947,7 +947,7 @@ class QAProductionController extends Controller
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
                 return view('QAProduction/qaClientAutoClose', compact('autoCloseProjectDetails', 'columnsHeader', 'popUpHeader', 'popupNonEditableFields', 'popupEditableFields', 'modelClass', 'clientName', 'subProjectName', 'assignedDropDown', 'existingCallerChartsWorkLogs', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount', 'assignedProjectDetailsStatus','popupQAEditableFields','qaSubStatusListVal','autoCloseCount'));
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {
@@ -976,7 +976,7 @@ class QAProductionController extends Controller
                     $existingModelClassDatasRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
                 }
                 return response()->json(['success' => true]);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 log::debug($e->getMessage());
             }
         } else {

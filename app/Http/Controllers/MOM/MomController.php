@@ -8,9 +8,10 @@ use App\Models\Event;
 use App\Models\MomChild;
 use App\Models\MomParent;
 use App\Models\Timezone;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class MomController extends Controller
 {
@@ -72,8 +73,8 @@ class MomController extends Controller
             // $calendar_data = $calendar_data->toJson();
 
             return view('MOM/dashboard', compact('calendar_data'));
-        } catch (Exception $e) {
-            log::debug($e->getMessage());
+        } catch (\Exception $e) {
+            Log::debug($e->getMessage());
         }
     } else {
         return redirect('/');
@@ -126,8 +127,8 @@ class MomController extends Controller
                 // }
                 $timezones = Timezone::select('id', DB::raw("concat('(',diff_from_gtm,')',name) as timeZone"))->Orderby('offset')->pluck('timeZone', 'id')->prepend(trans('Select'), '')->toArray();
                 return view('MOM/momAdd', compact('timezones', 'clickedDate'));
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -180,8 +181,8 @@ class MomController extends Controller
                 }
                 return redirect('mom/mom_dashboard');
                 //    return view('MOM/dashboard');
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -197,8 +198,8 @@ class MomController extends Controller
                 $timezones = Timezone::select('id', DB::raw("concat('(',diff_from_gtm,')',name) as timeZone"))->Orderby('offset')->pluck('timeZone', 'id')->prepend(trans('Select'), '')->toArray();
                 $reqDescription = $momParent->req_description;
                 return view('MOM/momEdit', compact('momParent', 'momChild', 'timezones', 'reqDescription'));
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -252,8 +253,8 @@ class MomController extends Controller
                 }
                 return redirect('mom/mom_dashboard');
                 //    return view('MOM/dashboard');
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -263,13 +264,13 @@ class MomController extends Controller
     {
         if (Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
             try {
-                if ($request->ajax()) {dd('stop');
+                if ($request->ajax()) {
                     $momParent = MomParent::find($request->id)->delete();
                     $momChild = MomChild::where('mom_id', $request->id)->delete();
                     return response()->json($momParent);
                 }
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');

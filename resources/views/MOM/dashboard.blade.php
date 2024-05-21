@@ -1,6 +1,5 @@
 @extends('layouts.app3')
 @section('content')
-    <script src="{{ asset('plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
     <div class="card card-custom custom-card">
         <div class="card-body pt-4 pb-0 px-2">
             <div class="my-client-div">
@@ -83,7 +82,7 @@
     <script>
         $(document).ready(function() {
 
-            var MOMCalendar = function() {
+            var KTAppsEducationSchoolCalendar = function() {
 
                 return {
                     init: function() {
@@ -158,7 +157,7 @@
                                             .event.title + '</span>' + ' - ' +
                                             '<span class="fc-time">' + startDate + ' to ' +
                                             endDate + '</span>';
-                                            //  + '<span class="float-right"><i class="fa fa-times pr-3 fa_times_class" aria-hidden="true"></i></span>';
+                                        //  + '<span class="float-right"><i class="fa fa-times pr-3 fa_times_class" aria-hidden="true"></i></span>';
                                         element.find('.fc-content').html(eventContent);
                                         if (info.event.extendedProps) {
                                             var eventtooltip = info.event.extendedProps
@@ -222,8 +221,8 @@
                                                 '<p><span class="eta">Time Zone: </span>' +
                                                 timeZone + '</p>' +
                                                 '<p><span class="eta">Time: </span>' +
-                                                start_time +
-                                                ' - ' + end_time + '</p>' +
+                                                startDate +
+                                                ' - ' + endDate + '</p>' +
                                                 '<p><span class="eta">ETA: </span>' + eta +
                                                 '</p>' +
                                                 '<span class="eta">Description: </span>' +
@@ -254,7 +253,7 @@
                 };
             }();
             jQuery(document).ready(function() {
-                MOMCalendar.init();
+                KTAppsEducationSchoolCalendar.init();
             });
 
         });

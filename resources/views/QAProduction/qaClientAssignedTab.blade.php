@@ -26,7 +26,7 @@
                         <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
 
                             @if (
-                                $empDesignation == 'Administrator' ||
+                                $loginEmpId == 'Admin' ||
                                     strpos($empDesignation, 'Manager') !== false ||
                                     strpos($empDesignation, 'VP') !== false ||
                                     strpos($empDesignation, 'Leader') !== false ||
@@ -135,7 +135,7 @@
                             </div>
                         </div> --}}
                         @if (
-                            $empDesignation == 'Administrator' ||
+                            $loginEmpId == 'Admin' ||
                                 strpos($empDesignation, 'Manager') !== false ||
                                 strpos($empDesignation, 'VP') !== false ||
                                 strpos($empDesignation, 'Leader') !== false ||
@@ -170,7 +170,7 @@
                                 @if (!empty($columnsHeader))
                                     <tr>
                                         @if (
-                                            $empDesignation == 'Administrator' ||
+                                            $loginEmpId == 'Admin' ||
                                                 strpos($empDesignation, 'Manager') !== false ||
                                                 strpos($empDesignation, 'VP') !== false ||
                                                 strpos($empDesignation, 'Leader') !== false ||
@@ -204,7 +204,7 @@
                                     @foreach ($assignedProjectDetails as $data)
                                         <tr>
                                             @if (
-                                                $empDesignation == 'Administrator' ||
+                                                $loginEmpId == 'Admin' ||
                                                     strpos($empDesignation, 'Manager') !== false ||
                                                     strpos($empDesignation, 'VP') !== false ||
                                                     strpos($empDesignation, 'Leader') !== false ||
@@ -217,7 +217,7 @@
                                             @endif
                                             <td>
                                                 @if (
-                                                    ($empDesignation !== 'Administrator' ||
+                                                    ($loginEmpId !== 'Admin' ||
                                                         strpos($empDesignation, 'Manager') !== true ||
                                                         strpos($empDesignation, 'VP') !== true ||
                                                         strpos($empDesignation, 'Leader') !== true ||
