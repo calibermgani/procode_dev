@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +103,7 @@ Route::group(['prefix' => 'qa_production'], function () {
         Route::any('users_sub_projects', 'App\Http\Controllers\DashboardController@getUsersWithSubProjects');
         Route::any('calendar_filter','App\Http\Controllers\DashboardController@getCalendarFilter');
         Route::any('projects_calendar_filter','App\Http\Controllers\DashboardController@prjCalendarFilter');
+        Route::any('mgr_projects_calendar_filter','App\Http\Controllers\DashboardController@mgrPrjCalendarFilter');
 
     });
 Auth::routes();

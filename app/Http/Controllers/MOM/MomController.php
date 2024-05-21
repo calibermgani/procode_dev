@@ -179,7 +179,7 @@ class MomController extends Controller
                         // ]);
                     }
                 }
-                return redirect('mom/mom_dashboard');
+                return redirect('mom/mom_dashboard'.'?parent=' . request()->parent . '&child=' . request()->child);
                 //    return view('MOM/dashboard');
             } catch (\Exception $e) {
                 Log::debug($e->getMessage());
@@ -251,7 +251,7 @@ class MomController extends Controller
                         }
                     }
                 }
-                return redirect('mom/mom_dashboard');
+                return redirect('mom/mom_dashboard'.'?parent=' . request()->parent . '&child=' . request()->child);
                 //    return view('MOM/dashboard');
             } catch (\Exception $e) {
                 Log::debug($e->getMessage());

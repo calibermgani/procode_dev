@@ -560,9 +560,9 @@ color: #FFFFFF !important;
     height: 40px;
 }
 .dash_card {
-    width: 140px;
-    height: 200px;
-    padding: 24px 14px 24px 14px;
+    width: -webkit-fill-available !important;
+    height: 160px;
+    padding: 20px 8px 20px 14px;
     border-radius: 10px;
     gap: 17px;
 }
@@ -783,8 +783,8 @@ font-size: 10px;
 .dash_card_font {
     font-family: "poppins";
     font-size: 16px;
-    font-weight: 500;
-    line-height: 29.71px;
+    font-weight: 650;
+    line-height: 10.71px;
     text-align: left;
     color: #191C24;
 }
