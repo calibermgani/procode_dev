@@ -196,7 +196,7 @@
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->count();
+                                                                ->count();dd($modelTFlag,$assignedCount,$loginEmpId);
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                 ->where('qa_work_status', 'Sampling')
@@ -226,7 +226,7 @@
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
                                                         $modelTFlag += $modelFlag;
-                                                    }dd($modelTFlag);
+                                                    }
                                                 @endphp
                                                 @if($modelTFlag > 0)
                                                     <tr class="clickable-client cursor_hand">
