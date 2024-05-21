@@ -9866,7 +9866,7 @@ Docs & License: https://fullcalendar.io/
                         // make a replacement <td> for each column the segment occupies. will be one for each colspan
                         for (j = 0; j < colSegsBelow.length; j++) {
                             moreTd = core.createElement('td', { className: 'fc-more-cell', rowSpan: rowSpan });
-                            segsBelow = colSegsBelow[j];console.log(levelLimit,totalSegsBelow,segsBelow,'row',seg);
+                            segsBelow = colSegsBelow[j];
                             moreLink = this.renderMoreLink(row, leftCol + j, [seg].concat(segsBelow) // count seg as hidden too
                             );
                             moreWrap = core.createElement('div', null, moreLink);
