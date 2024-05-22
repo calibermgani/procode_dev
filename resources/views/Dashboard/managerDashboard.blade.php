@@ -180,8 +180,9 @@
                                                     $holdTotalCount = 0;  $modelTFlag=0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
+                                                        $days =  Carbon\Carbon::now()->daysInMonth;
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays(30)
+                                                            ->subDays($days)
                                                             ->startOfDay()
                                                             ->toDateTimeString();
                                                         $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
@@ -354,8 +355,9 @@
                                                     $holdTotalCount = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
+                                                        $days =  Carbon\Carbon::now()->daysInMonth;
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays(30)
+                                                            ->subDays($days)
                                                             ->startOfDay()
                                                             ->toDateTimeString();
                                                         $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
@@ -400,27 +402,25 @@
                                                         } elseif ($loginEmpId) {
                                                             if (class_exists($modelClass)) {
                                                                 $assignedCount = $modelClass
-                                                                    ::whereIn('chart_status', [
-                                                                        'CE_Assigned',
-                                                                        'CE_Inprocess',
-                                                                    ])
-                                                                    ->where('CE_emp_id', $loginEmpId)
+                                                                    ::where('chart_status', 'CE_Assigned')
+                                                                    ->whereNotNull('CE_emp_id')
+                                                                   // ->where('CE_emp_id', $loginEmpId)
                                                                     ->count();
                                                                 $completedCount = $modelClass
                                                                     ::where('chart_status', 'CE_Completed')
                                                                     ->where('qa_work_status', 'Sampling')
-                                                                    ->where('CE_emp_id', $loginEmpId)
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                   // ->where('CE_emp_id', $loginEmpId)
+                                                                   // ->whereBetween('updated_at', [$startDate, $endDate])
                                                                     ->count();
                                                                 $pendingCount = $modelClass
                                                                     ::where('chart_status', 'CE_Pending')
-                                                                    ->where('CE_emp_id', $loginEmpId)
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                   // ->where('CE_emp_id', $loginEmpId)
+                                                                   // ->whereBetween('updated_at', [$startDate, $endDate])
                                                                     ->count();
                                                                 $holdCount = $modelClass
                                                                     ::where('chart_status', 'CE_Hold')
-                                                                    ->where('CE_emp_id', $loginEmpId)
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                    //->where('CE_emp_id', $loginEmpId)
+                                                                    //->whereBetween('updated_at', [$startDate, $endDate])
                                                                     ->count();
                                                             } else {
                                                                 $assignedCount = 0;

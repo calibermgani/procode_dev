@@ -117,7 +117,7 @@
                         </div>
 
                         {{-- <div class="card-body" data-scroll="true" data-height="300"> --}}
-                        <div class="card-body" style="padding-top: 0.25rem;"> 
+                        <div class="card-body" style="padding-top: 0.25rem;">
                             <div class="table-responsive" id="reportTable">
                                 <table class="table table-separate table-head-custom no-footer"
                                     id="uDashboard_clients_list">
@@ -180,18 +180,23 @@
                                                     $assignedTotalCount = 0;
                                                     $completedTotalCount = 0;
                                                     $pendingTotalCount = 0;
-                                                    $holdTotalCount = 0;$modelTFlag=0;
+                                                    $holdTotalCount = 0;
+                                                    $modelTFlag = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
+                                                        $days = Carbon\Carbon::now()->daysInMonth;
+                                                        $startOfMonth = Carbon\Carbon::now()->startOfMonth()->toDateTimeString();
+                                                        $endOfMonth = Carbon\Carbon::now()->endOfMonth()->toDateTimeString();
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays(30)
+                                                            ->subDays($days)
                                                             ->startOfDay()
                                                             ->toDateTimeString();
                                                         $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
-                                                        $holdCount = 0; $modelFlag = 0;
+                                                        $holdCount = 0;
+                                                        $modelFlag = 0;
                                                         if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
@@ -228,7 +233,7 @@
                                                         $modelTFlag += $modelFlag;
                                                     }
                                                 @endphp
-                                                @if($modelTFlag > 0)
+                                                @if ($modelTFlag > 0)
                                                     <tr class="clickable-client cursor_hand">
                                                         <td class="details-control"></td>
                                                         <td>{{ $data['client_name'] }} <input type="hidden"
@@ -251,7 +256,7 @@
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>On hold</b></span>
                         {{-- <div class="card-body" data-scroll="true" data-height="300"> --}}
-                            <div class="card-body">
+                        <div class="card-body">
                             <div class="table-responsive" id="reportHoldTable">
                                 <table class="table table-separate table-head-custom no-footer"
                                     id="uDashboard_on_hold_clients_list">
@@ -314,8 +319,9 @@
                                                     $holdTotalCount = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
+                                                        $days = Carbon\Carbon::now()->daysInMonth;
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays(30)
+                                                            ->subDays($days)
                                                             ->startOfDay()
                                                             ->toDateTimeString();
                                                         $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
@@ -332,17 +338,17 @@
                                                                 ::where('chart_status', 'CE_Completed')
                                                                 ->where('qa_work_status', 'Sampling')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->count();
                                                         } else {
                                                             $assignedCount = 0;
