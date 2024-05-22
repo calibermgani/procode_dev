@@ -192,11 +192,11 @@
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
                                                         $holdCount = 0; $modelFlag = 0;
-                                                        if (class_exists($modelClass) == true) {dd($modelClass,class_exists($modelClass));
+                                                        if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->count();dd($modelTFlag,$assignedCount,$loginEmpId);
+                                                                ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                 ->where('qa_work_status', 'Sampling')
