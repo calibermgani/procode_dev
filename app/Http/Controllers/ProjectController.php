@@ -7,7 +7,7 @@ use App\Models\project;
 use GuzzleHttp\Client;
 use App\Models\subproject;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Log;
 class ProjectController extends Controller
 {
     public function clientTableUpdate() {
@@ -55,8 +55,8 @@ class ProjectController extends Controller
                     }
                 }
 
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
         return redirect('/');
