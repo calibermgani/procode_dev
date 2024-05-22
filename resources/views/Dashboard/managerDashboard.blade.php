@@ -293,7 +293,7 @@
                 <div class="col-md-6 pl-2">
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>On hold</b></span>
-                        <div class="card-body" data-scroll="true" data-height="300">
+                        <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-separate table-head-custom no-footer"
                                     id="uDashboard_on_hold_clients_list">
