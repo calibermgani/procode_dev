@@ -433,7 +433,7 @@
                                                         $completedTotalCount += $completedCount;
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
-                                                    }
+                                                    }dd($holdTotalCount);
                                                 @endphp
                                                 @if ($holdTotalCount > 0)
                                                     <tr class="clickable-client cursor_hand">
