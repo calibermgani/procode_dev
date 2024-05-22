@@ -374,7 +374,7 @@
                                                                 strpos($empDesignation, 'Team Lead') !== false ||
                                                                 strpos($empDesignation, 'CEO') !== false ||
                                                                 strpos($empDesignation, 'Vice') !== false)
-                                                        ) {dd($modelClass);
+                                                        ) {//dd($modelClass);
                                                             if (class_exists($modelClass)) {
                                                                 $assignedCount = $modelClass
                                                                     ::where('chart_status','CE_Assigned')
@@ -433,7 +433,7 @@
                                                         $completedTotalCount += $completedCount;
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
-                                                    }dd($holdTotalCount);
+                                                    }//dd($holdTotalCount);
                                                 @endphp
                                                 @if ($holdTotalCount > 0)
                                                     <tr class="clickable-client cursor_hand">
