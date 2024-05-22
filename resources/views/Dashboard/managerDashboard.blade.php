@@ -177,10 +177,11 @@
                                                     $assignedTotalCount = 0;
                                                     $completedTotalCount = 0;
                                                     $pendingTotalCount = 0;
-                                                    $holdTotalCount = 0;  $modelTFlag=0;
+                                                    $holdTotalCount = 0;
+                                                    $modelTFlag = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
-                                                        $days =  Carbon\Carbon::now()->daysInMonth;
+                                                        $days = Carbon\Carbon::now()->daysInMonth;
                                                         $startDate = Carbon\Carbon::now()
                                                             ->subDays($days)
                                                             ->startOfDay()
@@ -201,32 +202,32 @@
                                                         //         strpos($empDesignation, 'CEO') !== false ||
                                                         //         strpos($empDesignation, 'Vice') !== false)
                                                         // ) {
-                                                            if (class_exists($modelClass)) {
-                                                                $assignedCount = $modelClass
-                                                                    ::where('chart_status','CE_Assigned')
-                                                                    ->whereNotNull('CE_emp_id')
-                                                                    ->count();
-                                                                $completedCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Completed')
-                                                                    ->where('qa_work_status', 'Sampling')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $pendingCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Pending')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $holdCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Hold')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                    $modelFlag = 1;
-                                                            } else {
-                                                                $assignedCount = 0;
-                                                                $completedCount = 0;
-                                                                $pendingCount = 0;
-                                                                $holdCount = 0;
-                                                                $modelFlag = 0; 
-                                                            }
+                                                        if (class_exists($modelClass)) {
+                                                            $assignedCount = $modelClass
+                                                                ::where('chart_status', 'CE_Assigned')
+                                                                ->whereNotNull('CE_emp_id')
+                                                                ->count();
+                                                            $completedCount = $modelClass
+                                                                ::where('chart_status', 'CE_Completed')
+                                                                ->where('qa_work_status', 'Sampling')
+                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->count();
+                                                            $pendingCount = $modelClass
+                                                                ::where('chart_status', 'CE_Pending')
+                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->count();
+                                                            $holdCount = $modelClass
+                                                                ::where('chart_status', 'CE_Hold')
+                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->count();
+                                                            $modelFlag = 1;
+                                                        } else {
+                                                            $assignedCount = 0;
+                                                            $completedCount = 0;
+                                                            $pendingCount = 0;
+                                                            $holdCount = 0;
+                                                            $modelFlag = 0;
+                                                        }
                                                         // } elseif ($loginEmpId) {
                                                         //     if (class_exists($modelClass)) {
                                                         //         $assignedCount = $modelClass
@@ -267,19 +268,19 @@
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
                                                         $modelTFlag += $modelFlag;
-                                                    } //dd($modelTFlag,$data['client_name']); 
+                                                    } //dd($modelTFlag,$data['client_name']);
                                                 @endphp
-                                              
-                                                @if($modelTFlag > 0)
-                                                <tr class="clickable-client cursor_hand">
-                                                    <td class="details-control"></td>
-                                                    <td>{{ $data['client_name'] }} <input type="hidden"
-                                                            value={{ $data['id'] }}></td>
-                                                    <td>{{ $assignedTotalCount }}</td>
-                                                    <td>{{ $completedTotalCount }}</td>
-                                                    <td>{{ $pendingTotalCount }}</td>
-                                                    <td>{{ $holdTotalCount }}</td>
-                                                </tr>
+
+                                                @if ($modelTFlag > 0)
+                                                    <tr class="clickable-client cursor_hand">
+                                                        <td class="details-control"></td>
+                                                        <td>{{ $data['client_name'] }} <input type="hidden"
+                                                                value={{ $data['id'] }}></td>
+                                                        <td>{{ $assignedTotalCount }}</td>
+                                                        <td>{{ $completedTotalCount }}</td>
+                                                        <td>{{ $pendingTotalCount }}</td>
+                                                        <td>{{ $holdTotalCount }}</td>
+                                                    </tr>
                                                 @endif
                                             @endforeach
                                         @endif
@@ -355,7 +356,7 @@
                                                     $holdTotalCount = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
-                                                        $days =  Carbon\Carbon::now()->daysInMonth;
+                                                        $days = Carbon\Carbon::now()->daysInMonth;
                                                         $startDate = Carbon\Carbon::now()
                                                             ->subDays($days)
                                                             ->startOfDay()
@@ -364,76 +365,35 @@
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
-                                                        $holdCount = 0; 
-                                                        if (
-                                                            $loginEmpId &&
-                                                            ($loginEmpId  == 'Admin' ||
-                                                                strpos($empDesignation, 'Manager') !== false ||
-                                                                strpos($empDesignation, 'VP') !== false ||
-                                                                strpos($empDesignation, 'Leader') !== false ||
-                                                                strpos($empDesignation, 'Team Lead') !== false ||
-                                                                strpos($empDesignation, 'CEO') !== false ||
-                                                                strpos($empDesignation, 'Vice') !== false)
-                                                        ) {//dd($modelClass);
-                                                            if (class_exists($modelClass)) {
-                                                                $assignedCount = $modelClass
-                                                                    ::where('chart_status','CE_Assigned')
-                                                                    ->whereNotNull('CE_emp_id')
-                                                                    ->count();
-                                                                $completedCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Completed')
-                                                                    ->where('qa_work_status', 'Sampling')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $pendingCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Pending')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $holdCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Hold')
-                                                                    ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                            } else {
-                                                                $assignedCount = 0;
-                                                                $completedCount = 0;
-                                                                $pendingCount = 0;
-                                                                $holdCount = 0;
-                                                            }
-                                                        } elseif ($loginEmpId) {
-                                                            if (class_exists($modelClass)) {
-                                                                $assignedCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Assigned')
-                                                                    ->whereNotNull('CE_emp_id')
-                                                                   // ->where('CE_emp_id', $loginEmpId)
-                                                                    ->count();
-                                                                $completedCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Completed')
-                                                                    ->where('qa_work_status', 'Sampling')
-                                                                   // ->where('CE_emp_id', $loginEmpId)
-                                                                   // ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $pendingCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Pending')
-                                                                   // ->where('CE_emp_id', $loginEmpId)
-                                                                   // ->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                                $holdCount = $modelClass
-                                                                    ::where('chart_status', 'CE_Hold')
-                                                                    //->where('CE_emp_id', $loginEmpId)
-                                                                    //->whereBetween('updated_at', [$startDate, $endDate])
-                                                                    ->count();
-                                                            } else {
-                                                                $assignedCount = 0;
-                                                                $completedCount = 0;
-                                                                $pendingCount = 0;
-                                                                $holdCount = 0;
-                                                            }
+                                                        $holdCount = 0;
+
+                                                        if (class_exists($modelClass)) {
+                                                            $assignedCount = $modelClass
+                                                                ::where('chart_status', 'CE_Assigned')
+                                                                ->whereNotNull('CE_emp_id')
+                                                                ->count();
+                                                            $completedCount = $modelClass
+                                                                ::where('chart_status', 'CE_Completed')
+                                                                ->where('qa_work_status', 'Sampling')
+                                                                ->count();
+                                                            $pendingCount = $modelClass
+                                                                ::where('chart_status', 'CE_Pending')
+                                                                ->count();
+                                                            $holdCount = $modelClass
+                                                                ::where('chart_status', 'CE_Hold')
+                                                                ->count();
+                                                        } else {
+                                                            $assignedCount = 0;
+                                                            $completedCount = 0;
+                                                            $pendingCount = 0;
+                                                            $holdCount = 0;
                                                         }
+
                                                         $assignedTotalCount += $assignedCount;
                                                         $completedTotalCount += $completedCount;
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
-                                                    }//dd($holdTotalCount);
+                                                    }
                                                 @endphp
                                                 @if ($holdTotalCount > 0)
                                                     <tr class="clickable-client cursor_hand">
@@ -536,30 +496,30 @@
             function format(data, subProjects) {
                 console.log(subProjects, 'subprojectCountData', subprojectCountData);
                 // if (subprojectCountData > 0) {
-                    var html =
-                        '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
-                        '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
-                    $.each(subProjects, function(index, val) {
-                        $.each(val, function(valIndex, data) {
-                            html +=
-                                '<tbody><tr class="clickable-row cursor_hand">' +
-                                '<td><input type="hidden" value=' + data.client_id + '></td>' +
-                                '<td>' + data.resource_emp_id + '<input type="hidden" value=' + data
-                                .resource_emp_id + '></td>' +
-                                '<td>' + data.sub_project_name + '<input type="hidden" value=' +
-                                data
-                                .sub_project_id + '></td>' +
-                                
-                                '<td>' + data.assignedCount + '</td>' +
-                                '<td>' + data.CompletedCount + '</td>' +
-                                '<td>' + data.PendingCount + '</td>' +
-                                '<td>' + data.holdCount + '</td>' +
-                                '</tr></tbody>';
-                        });
-                        console.log(html, 'html');
+                var html =
+                    '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
+                    '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
+                $.each(subProjects, function(index, val) {
+                    $.each(val, function(valIndex, data) {
+                        html +=
+                            '<tbody><tr class="clickable-row cursor_hand">' +
+                            '<td><input type="hidden" value=' + data.client_id + '></td>' +
+                            '<td>' + data.resource_emp_id + '<input type="hidden" value=' + data
+                            .resource_emp_id + '></td>' +
+                            '<td>' + data.sub_project_name + '<input type="hidden" value=' +
+                            data
+                            .sub_project_id + '></td>' +
+
+                            '<td>' + data.assignedCount + '</td>' +
+                            '<td>' + data.CompletedCount + '</td>' +
+                            '<td>' + data.PendingCount + '</td>' +
+                            '<td>' + data.holdCount + '</td>' +
+                            '</tr></tbody>';
                     });
-                    html += '</table>';
-                    return html;
+                    console.log(html, 'html');
+                });
+                html += '</table>';
+                return html;
                 // }
             }
 
@@ -649,27 +609,28 @@
 
             function holdFormat(data, subProjects) {
                 // if (subprojectCountData > 0) {
-                    var html =
-                        '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
-                        '<tr><th></th><th>Employee</th><th>Sub Project</th><th>On Hold</th> </tr>';
+                var html =
+                    '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
+                    '<tr><th></th><th>Employee</th><th>Sub Project</th><th>On Hold</th> </tr>';
 
-                    $.each(subProjects, function(index, val) {
-                        $.each(val, function(valIndex, data) {
-                            html +=
-                                '<tbody><tr class="hold-clickable-row cursor_hand">' +
-                                '<td><input type="hidden" value=' + data.client_id + '></td>' +
-                                 '<td>' + data.resource_emp_id +
-                                '<input type="hidden" value=' + data
-                                .resource_emp_id + '></td>' +'<td>' + data.sub_project_name + '<input type="hidden" value=' +
-                                data
-                                .sub_project_id + '></td>' +
-                                '<td>' + data.holdCount + '</td>' +
-                                '</tr></tbody>';
-                        });
-                        console.log(html, 'html');
+                $.each(subProjects, function(index, val) {
+                    $.each(val, function(valIndex, data) {
+                        html +=
+                            '<tbody><tr class="hold-clickable-row cursor_hand">' +
+                            '<td><input type="hidden" value=' + data.client_id + '></td>' +
+                            '<td>' + data.resource_emp_id +
+                            '<input type="hidden" value=' + data
+                            .resource_emp_id + '></td>' + '<td>' + data.sub_project_name +
+                            '<input type="hidden" value=' +
+                            data
+                            .sub_project_id + '></td>' +
+                            '<td>' + data.holdCount + '</td>' +
+                            '</tr></tbody>';
                     });
-                    html += '</table>';
-                    return html;
+                    console.log(html, 'html');
+                });
+                html += '</table>';
+                return html;
                 // }
             }
 
