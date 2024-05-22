@@ -526,7 +526,7 @@
                 var tr = $(this).closest('tr');
                 var row = holdTable.row(tr);
                 var subProjectName = '--';
-                var CalendarId = $('#prj_calendar_id').val();
+                var CalendarId = 'hold';
                 if (row.child.isShown()) {
                     row.child.hide();
                     tr.removeClass('shown');
