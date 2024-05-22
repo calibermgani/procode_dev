@@ -453,6 +453,7 @@
                     var tr = $(this).closest('tr');
                     var row = table.row(tr);
                     var subProjectName = '--';
+                    var CalendarId = $('#prj_calendar_id').val();
                     if (row.child.isShown()) {
                         row.child.hide();
                         tr.removeClass('shown');
@@ -467,11 +468,11 @@
                             url: "{{ url('dashboard/users_sub_projects') }}",
                             data: {
                                 project_id: client_id,
+                                CalendarId: CalendarId,
                             },
                             success: function(res) {
                                 subProjects = res.subprojects;
-                                console.log(subProjects, 'subProjects len');
-                                subprojectCountData = Object.keys(subProjects).length;
+                                        subprojectCountData = Object.keys(subProjects).length;
                                 row.child(format(row.data(), subProjects)).show();
                                 // if (typeof subprojectCountData !== 'undefined' &&
                                 //     subprojectCountData > 0) {
@@ -494,8 +495,7 @@
             }
 
             function format(data, subProjects) {
-                console.log(subProjects, 'subprojectCountData', subprojectCountData);
-                // if (subprojectCountData > 0) {
+                  // if (subprojectCountData > 0) {
                 var html =
                     '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
                     '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
@@ -516,7 +516,6 @@
                             '<td>' + data.holdCount + '</td>' +
                             '</tr></tbody>';
                     });
-                    console.log(html, 'html');
                 });
                 html += '</table>';
                 return html;
@@ -569,6 +568,7 @@
                 var tr = $(this).closest('tr');
                 var row = holdTable.row(tr);
                 var subProjectName = '--';
+                var CalendarId = 'hold';
                 if (row.child.isShown()) {
                     row.child.hide();
                     tr.removeClass('shown');
@@ -583,6 +583,7 @@
                         url: "{{ url('dashboard/users_sub_projects') }}",
                         data: {
                             project_id: client_id,
+                            CalendarId: CalendarId,
                         },
                         success: function(res) {
                             subProjects = res.subprojects;
@@ -627,8 +628,7 @@
                             '<td>' + data.holdCount + '</td>' +
                             '</tr></tbody>';
                     });
-                    console.log(html, 'html');
-                });
+                 });
                 html += '</table>';
                 return html;
                 // }
@@ -666,8 +666,6 @@
             $(document).on('change', '#calendar_id', function(e) {
                 var CalendarId = $('#calendar_id').val();
                 var CalendarText = $('#calendar_id option:selected').text();
-
-                console.log(CalendarId, 'CalendarId', $('#calendar_id').text());
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -709,7 +707,6 @@
                     },
                     success: function(res) {
                         if (res.body_info) {
-                            console.log(res, 'res');
                             $('#mgrDashProjects').html('');
                             $('#mgrDashProjects').html(res.body_info);
                             clientList();
