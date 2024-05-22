@@ -374,8 +374,8 @@
                                                                 strpos($empDesignation, 'Team Lead') !== false ||
                                                                 strpos($empDesignation, 'CEO') !== false ||
                                                                 strpos($empDesignation, 'Vice') !== false)
-                                                        ) {
-                                                            if (class_exists($modelClass)) {dd($modelClass);
+                                                        ) {dd($modelClass);
+                                                            if (class_exists($modelClass)) {
                                                                 $assignedCount = $modelClass
                                                                     ::where('chart_status','CE_Assigned')
                                                                     ->whereNotNull('CE_emp_id')
