@@ -200,6 +200,7 @@
                                                         if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
+                                                                ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->where('CE_emp_id', $loginEmpId)
                                                                 ->count();
                                                             $completedCount = $modelClass

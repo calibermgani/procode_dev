@@ -206,6 +206,7 @@
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->whereNotNull('CE_emp_id')
+                                                                ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')

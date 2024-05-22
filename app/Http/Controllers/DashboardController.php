@@ -584,6 +584,7 @@ class DashboardController extends Controller
                                         'CE_Assigned'
                                     )
                                     ->where('CE_emp_id', $loginEmpId)
+                                    ->whereBetween('updated_at', [$startDate, $endDate])
                                     ->count();
                                 $completedCount = $modelClass
                                     ::where('chart_status', 'CE_Completed')
@@ -736,6 +737,7 @@ class DashboardController extends Controller
                                     $assignedCount = $modelClass
                                         ::where('chart_status', 'CE_Assigned')
                                         ->whereNotNull('CE_emp_id')
+                                        ->whereBetween('updated_at', [$startDate, $endDate])
                                         ->count();
                                     $completedCount = $modelClass
                                         ::where('chart_status', 'CE_Completed')
