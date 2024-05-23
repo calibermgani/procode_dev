@@ -399,7 +399,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('agingChart').getContext('2d');
-            const agingData = @json($agingData);
+            const agingData = @json($agingCount);
             // const labels = ['5', '10', '15', '20', '25', '30', '35', '40', '45'];
             const labels = [];
             $.each(@json($agingHeader), function(key, val) {
