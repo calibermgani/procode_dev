@@ -16,6 +16,7 @@ class CreateAgingsTable extends Migration
         Schema::create('agings', function (Blueprint $table) {
             $table->id();
             $table->string('days')->nullable();
+            $table->text('days_range')->nullable();
             $table->string('added_by')->nullable();
             $table->timestamps();
             $table->softDeletes();

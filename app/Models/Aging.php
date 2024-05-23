@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Aging extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['days','added_by'];
+    protected $fillable = ['days','days_range','added_by'];
 }

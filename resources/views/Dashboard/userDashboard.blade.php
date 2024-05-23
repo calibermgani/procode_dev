@@ -77,7 +77,7 @@
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
                         <div class="card-body">
-                            <table class="table table-separate table-head-custom no-footer" id="agingList">
+                            {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
                                 <thead>
                                     <tr>
                                         <th>Aging</th>
@@ -98,7 +98,8 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                            </table>
+                            </table> --}}
+                            <canvas id="agingChart" width="1200" height="300"></canvas>
                         </div>
                     </div>
                 </div>
@@ -184,14 +185,18 @@
                                                     $modelTFlag = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
-                                                        $days = Carbon\Carbon::now()->daysInMonth;
-                                                        $startOfMonth = Carbon\Carbon::now()->startOfMonth()->toDateTimeString();
-                                                        $endOfMonth = Carbon\Carbon::now()->endOfMonth()->toDateTimeString();
+                                                        // $days = Carbon\Carbon::now()->daysInMonth;
+                                                        // $startDate = Carbon\Carbon::now()
+                                                        //     ->subDays($days)
+                                                        //     ->startOfDay()
+                                                        //     ->toDateTimeString();
+                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays($days)
-                                                            ->startOfDay()
+                                                            ->startOfMonth()
                                                             ->toDateTimeString();
-                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                        $endDate = Carbon\Carbon::now()
+                                                            ->endOfMonth()
+                                                            ->toDateTimeString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
@@ -392,7 +397,75 @@
 @push('view.scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('agingChart').getContext('2d');
+            const agingData = @json($agingCount);
+            // const labels = ['5', '10', '15', '20', '25', '30', '35', '40', '45'];
+            const labels = [];
+            $.each(@json($agingHeader), function(key, val) {
+                labels.push(val.days_range);
+            });
+            const datasets = [];
+            Object.keys(agingData).forEach((key) => {
+                datasets.push({
+                    label: key,
+                    data: agingData[key],
+                    backgroundColor: getRandomColor(),
+                    borderColor: getRandomColor(),
+                    borderWidth: 1,
+                    fontSize: 1
+                });
+            });
+            console.log(datasets, 'datasets');
+            const agingChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Custom Chart Title',
+                            padding: {
+                                top: 0,
+                                bottom: 10,
+                            }
+                        },
+                        legend: {
+                            position: 'right' // Move legend to the right
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            ticks: {
+                                stepSize: 10
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+
+                            }
+                        }
+                    }
+                }
+            });
+
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        });
         $(document).ready(function() {
             var subprojectCountData;
             clientList();

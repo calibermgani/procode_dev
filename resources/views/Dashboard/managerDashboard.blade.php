@@ -12,8 +12,8 @@
                                     'calendar_id',
                                     [
                                         '0' => 'Today',
-                                        '7' => 'Week',
-                                        '30' => 'Month',
+                                        'week' => 'Week',
+                                        'month' => 'Month',
                                     ],
                                     null,
                                     [
@@ -75,7 +75,7 @@
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
                         <div class="card-body">
-                            <table class="table table-separate table-head-custom no-footer" id="agingList">
+                            {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
                                 <thead>
                                     <tr>
                                         <th>Aging</th>
@@ -96,7 +96,10 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                            </table>
+                            </table> --}}
+                            {{-- <div class="chart-container"> --}}
+                            <canvas id="agingChart" width="1200" height="300"></canvas>
+                            {{-- </div> --}}
                         </div>
                     </div>
                 </div>
@@ -173,7 +176,6 @@
                                                             ),
                                                         );
                                                     }
-
                                                     $assignedTotalCount = 0;
                                                     $completedTotalCount = 0;
                                                     $pendingTotalCount = 0;
@@ -181,27 +183,23 @@
                                                     $modelTFlag = 0;
                                                     foreach ($model_name as $model) {
                                                         $modelClass = 'App\\Models\\' . $model;
-                                                        $days = Carbon\Carbon::now()->daysInMonth;
+                                                        // $days = Carbon\Carbon::now()->daysInMonth;
+                                                        // $startDate = Carbon\Carbon::now()
+                                                        //     ->subDays($days)
+                                                        //     ->startOfDay()
+                                                        //     ->toDateTimeString();
+                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
                                                         $startDate = Carbon\Carbon::now()
-                                                            ->subDays($days)
-                                                            ->startOfDay()
+                                                            ->startOfMonth()
                                                             ->toDateTimeString();
-                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                        $endDate = Carbon\Carbon::now()
+                                                            ->endOfMonth()
+                                                            ->toDateTimeString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
                                                         $holdCount = 0;
                                                         $modelFlag = 0;
-                                                        // if (
-                                                        //     $loginEmpId &&
-                                                        //     ($empDesignation == 'Administrator' ||
-                                                        //         strpos($empDesignation, 'Manager') !== false ||
-                                                        //         strpos($empDesignation, 'VP') !== false ||
-                                                        //         strpos($empDesignation, 'Leader') !== false ||
-                                                        //         strpos($empDesignation, 'Team Lead') !== false ||
-                                                        //         strpos($empDesignation, 'CEO') !== false ||
-                                                        //         strpos($empDesignation, 'Vice') !== false)
-                                                        // ) {
                                                         if (class_exists($modelClass)) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
@@ -229,47 +227,12 @@
                                                             $holdCount = 0;
                                                             $modelFlag = 0;
                                                         }
-                                                        // } elseif ($loginEmpId) {
-                                                        //     if (class_exists($modelClass)) {
-                                                        //         $assignedCount = $modelClass
-                                                        //             ::whereIn('chart_status', [
-                                                        //                 'CE_Assigned',
-                                                        //                 'CE_Inprocess',
-                                                        //             ])
-                                                        //             ->where('CE_emp_id', $loginEmpId)
-                                                        //             ->count();
-                                                        //         $completedCount = $modelClass
-                                                        //             ::where('chart_status', 'CE_Completed')
-                                                        //             ->where('qa_work_status', 'Sampling')
-                                                        //             ->where('CE_emp_id', $loginEmpId)
-                                                        //             ->whereBetween('updated_at', [$startDate, $endDate])
-                                                        //             ->count();
-                                                        //         $pendingCount = $modelClass
-                                                        //             ::where('chart_status', 'CE_Pending')
-                                                        //             ->where('CE_emp_id', $loginEmpId)
-                                                        //             ->whereBetween('updated_at', [$startDate, $endDate])
-                                                        //             ->count();
-                                                        //         $holdCount = $modelClass
-                                                        //             ::where('chart_status', 'CE_Hold')
-                                                        //             ->where('CE_emp_id', $loginEmpId)
-                                                        //             ->whereBetween('updated_at', [$startDate, $endDate])
-                                                        //             ->count();
-                                                        //             $modelFlag = 1;
-                                                        //     } else {
-                                                        //         $assignedCount = 0;
-                                                        //         $completedCount = 0;
-                                                        //         $pendingCount = 0;
-                                                        //         $holdCount = 0;
-                                                        //         $modelFlag = 0;
-
-                                                        //     }
-                                                        // }
                                                         $assignedTotalCount += $assignedCount;
                                                         $completedTotalCount += $completedCount;
                                                         $pendingTotalCount += $pendingCount;
                                                         $holdTotalCount += $holdCount;
                                                         $modelTFlag += $modelFlag;
-                                                    } //dd($modelTFlag,$data['client_name']);
+                                                    }
                                                 @endphp
 
                                                 @if ($modelTFlag > 0)
@@ -416,12 +379,91 @@
         </div>
     </div>
 @endsection
-
+<style>
+    .chart-container {
+        width: 100%;
+        height: 100%;
+        max-width: 1000px;
+        /* You can adjust this as needed */
+        max-height: 300px;
+        /* You can adjust this as needed */
+        overflow: scroll;
+        position: relative;
+    }
+</style>
 
 @push('view.scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('agingChart').getContext('2d');
+            const agingData = @json($agingData);
+            // const labels = ['5', '10', '15', '20', '25', '30', '35', '40', '45'];
+            const labels = [];
+            $.each(@json($agingHeader), function(key, val) {
+                labels.push(val.days_range);
+            });
+            const datasets = [];
+            Object.keys(agingData).forEach((key) => {
+                datasets.push({
+                    label: key,
+                    data: agingData[key],
+                    backgroundColor: getRandomColor(),
+                    borderColor: getRandomColor(),
+                    borderWidth: 1,
+                    fontSize: 1
+                });
+            });
+            console.log(datasets, 'datasets');
+            const agingChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Custom Chart Title',
+                            padding: {
+                                top: 0,
+                                bottom: 10,
+                            }
+                        },
+                        legend: {
+                            position: 'right' // Move legend to the right
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                            ticks: {
+                                stepSize: 10
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false,
+
+                            }
+                        }
+                    }
+                }
+            });
+
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        });
         $(document).ready(function() {
             var subprojectCountData;
             clientList();
@@ -473,7 +515,7 @@
                             },
                             success: function(res) {
                                 subProjects = res.subprojects;
-                                        subprojectCountData = Object.keys(subProjects).length;
+                                subprojectCountData = Object.keys(subProjects).length;
                                 row.child(format(row.data(), subProjects)).show();
                                 // if (typeof subprojectCountData !== 'undefined' &&
                                 //     subprojectCountData > 0) {
@@ -496,7 +538,7 @@
             }
 
             function format(data, subProjects) {
-                  // if (subprojectCountData > 0) {
+                // if (subprojectCountData > 0) {
                 var html =
                     '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
                     '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
@@ -533,7 +575,8 @@
                     return;
                 }
 
-                var url = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(subProjectName);
+                var url = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(
+                    subProjectName);
                 var params = {
                     parent: getUrlVars()["parent"],
                     child: getUrlVars()["child"],
@@ -629,7 +672,7 @@
                             '<td>' + data.holdCount + '</td>' +
                             '</tr></tbody>';
                     });
-                 });
+                });
                 html += '</table>';
                 return html;
                 // }

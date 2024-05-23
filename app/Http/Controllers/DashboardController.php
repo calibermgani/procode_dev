@@ -49,7 +49,7 @@ class DashboardController extends Controller
             try {
                 $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
                 $userId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
-                $agingHeader = Aging::select('days')->get()->toArray();
+                $agingHeader = Aging::select('days','days_range')->get()->toArray();
                 $projects = $this->getProjects();
                 $startDate = Carbon::now()->startOfDay()->toDateTimeString();
                 $endDate = Carbon::now()->endOfDay()->toDateTimeString();
@@ -93,7 +93,7 @@ class DashboardController extends Controller
                             $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
                             $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
                             $dataCount = $model::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->whereBetween('created_at', [$startDate, $endDate])->count();
-                            $agingArr1[$modelKey][$data["days"]] = $dataCount;
+                            $agingArr1[$modelKey][$data["days_range"]] = $dataCount;
                             $agingArr2[$modelKey] = $projectIds[$modelKey];
                         }
                     }
@@ -116,7 +116,21 @@ class DashboardController extends Controller
                 $totalHoldCount = array_sum($holdCounts);
                 $totalReworkCount = array_sum($reworkCounts);
                 $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
+                function allValuesAreZero($array)
+                {
+                    foreach ($array as $value) {
+                        if ($value !== 0) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
 
+                foreach ($agingCount as $key => $subArray) {
+                    if (allValuesAreZero($subArray)) {
+                        unset($agingCount[$key]);
+                    }
+                }
                 return view('Dashboard/userDashboard', compact('projects', 'totalAssignedCount', 'totalCompleteCount', 'totalPendingCount', 'totalHoldCount', 'totalReworkCount', 'totalCount', 'agingHeader', 'agingCount'));
             } catch (\Exception $e) {
                 Log::debug($e->getMessage());
@@ -158,13 +172,19 @@ class DashboardController extends Controller
                 $modelClass = "App\\Models\\" . $modelName;
                 if ($calendarId == "year") {
                     $days = Carbon::now()->daysInYear;
+                    $startDate = Carbon::now()->startOfYear()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfYear()->toDateTimeString();
                 } else if ($calendarId == "month") {
                     $days =  Carbon::now()->daysInMonth;
+                    $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                 } else {
                     $days = 0;
+                    $startDate = Carbon::now()->startOfDay()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 }
-                $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 if (class_exists($modelClass)) {
                     $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->count();
                     $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id', $loginEmpId)->whereBetween('updated_at', [$startDate, $endDate])->count();
@@ -176,7 +196,7 @@ class DashboardController extends Controller
                             } else {
                                 $query->whereBetween('updated_at', [$startDate, $endDate]);
                             }
-                        });
+                        })->count();
                 } else {
                     $subProjectsWithCount[$key]['assignedCount'] = '--';
                     $subProjectsWithCount[$key]['CompletedCount'] = '--';
@@ -196,7 +216,7 @@ class DashboardController extends Controller
         if (Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
             try {
                 $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-                $agingHeader = Aging::select('days')->get()->toArray();
+                $agingHeader = Aging::select('days', 'days_range')->get()->toArray();
                 $userId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
                 $projects = $this->getProjects();
                 $startDate = Carbon::now()->startOfDay()->toDateTimeString();
@@ -240,7 +260,7 @@ class DashboardController extends Controller
                             $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
                             $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
                             $dataCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('created_at', [$startDate, $endDate])->count();
-                            $agingArr1[$modelKey][$data["days"]] = $dataCount;
+                            $agingArr1[$modelKey][$data["days_range"]] = $dataCount;
                             $agingArr2[$modelKey] = $projectIds[$modelKey];
                         }
                     }
@@ -264,7 +284,33 @@ class DashboardController extends Controller
                 $totalHoldCount = array_sum($holdCounts);
                 $totalReworkCount = array_sum($reworkCounts);
                 $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
-                return view('Dashboard/managerDashboard', compact('projects', 'totalAssignedCount', 'totalCompleteCount', 'totalPendingCount', 'totalHoldCount', 'totalReworkCount', 'totalCount', 'agingHeader', 'agingCount'));
+
+                $agingData = [
+                    'AMBC' => [0, 0, 0, 0, 0, 100, 0, 113, 0, 45, 45],
+                    'Cancer Care Specialists' => [0, 0, 0, 0, 0, 0, 0, 11, 0, 45, 45],
+                    "Saco River Medical Group" => [0, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
+                    "AIG" => [0, 0, 0, 0, 0, 70, 0, 12, 0, 45, 45],
+                    "Ash Meomorial Hospital" => [0, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "MDCSp" => [30, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
+                ];
+                function allValuesAreZero($array)
+                {
+                    foreach ($array as $value) {
+                        if ($value !== 0) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+                foreach ($agingCount as $key => $subArray) {
+                    if (allValuesAreZero($subArray)) {
+                        unset($agingCount[$key]);
+                    }
+                }
+                // dd($agingCount);
+                return view('Dashboard/managerDashboard', compact('projects', 'totalAssignedCount', 'totalCompleteCount', 'totalPendingCount', 'totalHoldCount', 'totalReworkCount', 'totalCount', 'agingHeader', 'agingCount', 'agingData'));
             } catch (\Exception $e) {
                 Log::debug($e->getMessage());
             }
@@ -303,14 +349,20 @@ class DashboardController extends Controller
                     $modelClass = "App\\Models\\" . $modelName;
                     $calendarId = $request->CalendarId;
                     if ($calendarId == "year") {
+                        $startDate = Carbon::now()->startOfYear()->toDateTimeString();
+                        $endDate = Carbon::now()->endOfYear()->toDateTimeString();
                         $days = Carbon::now()->daysInYear;
                     } else if ($calendarId == "month") {
                         $days =  Carbon::now()->daysInMonth;
+                        $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                        $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                     } else {
+                        $startDate = Carbon::now()->startOfDay()->toDateTimeString();
+                        $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                         $days = 0;
                     }
-                    $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                    $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                    // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                    // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                     if (class_exists($modelClass)) {
                         $resourceData = $modelClass::whereIn('CE_emp_id', $resourceList)->select('CE_emp_id')->groupBy('CE_emp_id')->get()->toArray();
                         foreach ($resourceData as $resourceKey => $resourceDataVal) {
@@ -350,14 +402,20 @@ class DashboardController extends Controller
                 $modelClass = "App\\Models\\" . $modelName;
                 $calendarId = $request->CalendarId;
                 if ($calendarId == "year") {
+                    $startDate = Carbon::now()->startOfYear()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfYear()->toDateTimeString();
                     $days = Carbon::now()->daysInYear;
                 } else if ($calendarId == "month") {
                     $days =  Carbon::now()->daysInMonth;
+                    $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                 } else {
                     $days = 0;
+                    $startDate = Carbon::now()->startOfDay()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 }
-                $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 if (class_exists($modelClass)) {
                     $key = 0;
                     $resourceData = $modelClass::whereIn('CE_emp_id', $resourceList)->select('CE_emp_id')->groupBy('CE_emp_id')->get()->toArray();
@@ -409,13 +467,19 @@ class DashboardController extends Controller
                 $userType = $request->type;
                 if ($calendarId == "week") {
                     $days = 7;
+                    $startDate = Carbon::now()->startOfWeek()->startOfDay()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfWeek()->endOfDay()->toDateTimeString();
                 } else if ($calendarId == "month") {
                     $days =  Carbon::now()->daysInMonth;
+                    $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                 } else {
                     $days = $calendarId;
+                    $startDate = Carbon::now()->startOfDay()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 }
-                $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 $models = [];
                 $projects = $this->getProjects();
                 foreach ($projects as $project) {
@@ -512,12 +576,16 @@ class DashboardController extends Controller
                 $calendarId = $request->CalendarId;
                 $projects = $this->getProjects();
                 if ($calendarId == "year") {
-                    $days = Carbon::now()->daysInYear;
+                    // $days = Carbon::now()->daysInYear;
+                    $startDate = Carbon::now()->startOfYear()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfYear()->toDateTimeString();
                 } else if ($calendarId == "month") {
-                    $days =  Carbon::now()->daysInMonth;
+                    // $days =  Carbon::now()->daysInMonth;
+                    $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                 }
-                $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 $body_info = '<table class="table table-separate table-head-custom no-footer" id="uDashboard_clients_list">
                 <thead>
                     <tr>
@@ -537,12 +605,6 @@ class DashboardController extends Controller
                             Session::get('loginDetails')['userDetail'] &&
                             Session::get('loginDetails')['userDetail']['emp_id'] != null
                             ? Session::get('loginDetails')['userDetail']['emp_id']
-                            : '';
-                        $empDesignation =
-                            Session::get('loginDetails') &&
-                            Session::get('loginDetails')['userDetail']['user_hrdetails'] &&
-                            Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null
-                            ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']
                             : '';
                         $projectName = $data['client_name'];
                         if (isset($data['subprject_name']) && !empty($data['subprject_name'])) {
@@ -629,10 +691,6 @@ class DashboardController extends Controller
                 }
 
                 $body_info .= '</tbody></table>';
-                // } else {
-                //     $body_info = '<p>No data available</p>';
-                // }
-
                 return response()->json([
                     'success' => true,
                     'body_info' => $body_info,
@@ -654,16 +712,16 @@ class DashboardController extends Controller
                 $calendarId = $request->CalendarId;
                 $projects = $this->getProjects();
                 if ($calendarId == "year") {
-                    // $currentYear =  Carbon::now()->year;
-                    // $startOfYear = Carbon::create($currentYear, 1, 1);
-                    // $endOfYear = Carbon::create($currentYear, 12, 31);
-                    // $days = $startOfYear->diffInDays($endOfYear) + 1;
-                    $days = Carbon::now()->daysInYear;
+                    // $days = Carbon::now()->daysInYear;
+                    $startDate = Carbon::now()->startOfYear()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfYear()->toDateTimeString();
                 } else if ($calendarId == "month") {
-                    $days =  Carbon::now()->daysInMonth;
+                    // $days =  Carbon::now()->daysInMonth;
+                    $startDate = Carbon::now()->startOfMonth()->toDateTimeString();
+                    $endDate = Carbon::now()->endOfMonth()->toDateTimeString();
                 }
-                $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
-                $endDate = Carbon::now()->endOfDay()->toDateTimeString();
+                // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
+                // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 $body_info = '<table class="table table-separate table-head-custom no-footer" id="mDashboard_clients_list">
                 <thead>
                     <tr>
@@ -678,18 +736,6 @@ class DashboardController extends Controller
                 <tbody>';
                 if (isset($projects) && count($projects) > 0) {
                     foreach ($projects as $data) {
-                        $loginEmpId =
-                            Session::get('loginDetails') &&
-                            Session::get('loginDetails')['userDetail'] &&
-                            Session::get('loginDetails')['userDetail']['emp_id'] != null
-                            ? Session::get('loginDetails')['userDetail']['emp_id']
-                            : '';
-                        $empDesignation =
-                            Session::get('loginDetails') &&
-                            Session::get('loginDetails')['userDetail']['user_hrdetails'] &&
-                            Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null
-                            ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']
-                            : '';
                         $projectName = $data['client_name'];
                         if (isset($data['subprject_name']) && !empty($data['subprject_name'])) {
                             $subproject_name = $data['subprject_name'];
@@ -723,74 +769,35 @@ class DashboardController extends Controller
                             $pendingCount = 0;
                             $holdCount = 0;
                             $modelFlag = 0;
-                            if (
-                                $loginEmpId &&
-                                ($loginEmpId == 'Admin' ||
-                                    strpos($empDesignation, 'Manager') !== false ||
-                                    strpos($empDesignation, 'VP') !== false ||
-                                    strpos($empDesignation, 'Leader') !== false ||
-                                    strpos($empDesignation, 'Team Lead') !== false ||
-                                    strpos($empDesignation, 'CEO') !== false ||
-                                    strpos($empDesignation, 'Vice') !== false)
-                            ) {
-                                if (class_exists($modelClass)) {
-                                    $assignedCount = $modelClass
-                                        ::where('chart_status', 'CE_Assigned')
-                                        ->whereNotNull('CE_emp_id')
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $completedCount = $modelClass
-                                        ::where('chart_status', 'CE_Completed')
-                                        ->where('qa_work_status', 'Sampling')
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $pendingCount = $modelClass
-                                        ::where('chart_status', 'CE_Pending')
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $holdCount = $modelClass
-                                        ::where('chart_status', 'CE_Hold')
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $modelFlag = 1;
-                                } else {
-                                    $assignedCount = 0;
-                                    $completedCount = 0;
-                                    $pendingCount = 0;
-                                    $holdCount = 0;
-                                    $modelFlag = 0;
-                                }
-                            } elseif ($loginEmpId) {
-                                if (class_exists($modelClass)) {
-                                    $assignedCount = $modelClass
-                                        ::where('chart_status', 'CE_Assigned')
-                                        ->where('CE_emp_id', $loginEmpId)
-                                        ->count();
-                                    $completedCount = $modelClass
-                                        ::where('chart_status', 'CE_Completed')
-                                        ->where('qa_work_status', 'Sampling')
-                                        ->where('CE_emp_id', $loginEmpId)
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $pendingCount = $modelClass
-                                        ::where('chart_status', 'CE_Pending')
-                                        ->where('CE_emp_id', $loginEmpId)
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $holdCount = $modelClass
-                                        ::where('chart_status', 'CE_Hold')
-                                        ->where('CE_emp_id', $loginEmpId)
-                                        ->whereBetween('updated_at', [$startDate, $endDate])
-                                        ->count();
-                                    $modelFlag = 1;
-                                } else {
-                                    $assignedCount = 0;
-                                    $completedCount = 0;
-                                    $pendingCount = 0;
-                                    $holdCount = 0;
-                                    $modelFlag = 0;
-                                }
+
+                            if (class_exists($modelClass)) {
+                                $assignedCount = $modelClass
+                                    ::where('chart_status', 'CE_Assigned')
+                                    ->whereNotNull('CE_emp_id')
+                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                    ->count();
+                                $completedCount = $modelClass
+                                    ::where('chart_status', 'CE_Completed')
+                                    ->where('qa_work_status', 'Sampling')
+                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                    ->count();
+                                $pendingCount = $modelClass
+                                    ::where('chart_status', 'CE_Pending')
+                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                    ->count();
+                                $holdCount = $modelClass
+                                    ::where('chart_status', 'CE_Hold')
+                                    ->whereBetween('updated_at', [$startDate, $endDate])
+                                    ->count();
+                                $modelFlag = 1;
+                            } else {
+                                $assignedCount = 0;
+                                $completedCount = 0;
+                                $pendingCount = 0;
+                                $holdCount = 0;
+                                $modelFlag = 0;
                             }
+
                             $assignedTotalCount += $assignedCount;
                             $completedTotalCount += $completedCount;
                             $pendingTotalCount += $pendingCount;
@@ -810,10 +817,6 @@ class DashboardController extends Controller
                 }
 
                 $body_info .= '</tbody></table>';
-                // } else {
-                //     $body_info = '<p>No data available</p>';
-                // }
-
                 return response()->json([
                     'success' => true,
                     'body_info' => $body_info,
