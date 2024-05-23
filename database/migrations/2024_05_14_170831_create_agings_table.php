@@ -13,14 +13,16 @@ class CreateAgingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('agings', function (Blueprint $table) {
-            $table->id();
-            $table->string('days')->nullable();
-            $table->text('days_range')->nullable();
-            $table->string('added_by')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('agings')) {
+            Schema::create('agings', function (Blueprint $table) {
+                $table->id();
+                $table->string('days')->nullable();
+                $table->text('days_range')->nullable();
+                $table->string('added_by')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
