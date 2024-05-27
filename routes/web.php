@@ -106,6 +106,7 @@ Route::group(['prefix' => 'qa_production'], function () {
         Route::any('mgr_projects_calendar_filter','App\Http\Controllers\DashboardController@mgrPrjCalendarFilter');
 
     });
+    Route::any('project_work_mail', 'App\Http\Controllers\ProjectController@projectWorkMail');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
