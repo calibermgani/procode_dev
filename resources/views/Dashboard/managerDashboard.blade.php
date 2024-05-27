@@ -393,8 +393,8 @@
     .chart-container {
         position: relative;
         margin: auto;
-        height: auto;
-        width: 1000;
+        height: 500;
+        width: auto;
         /* overflow:scroll; */
     }
 
@@ -459,7 +459,7 @@
                             }
                         },
                         legend: {
-                            position: 'right',
+                            position: 'bottom',
                             labels: {
                                 font: {
                                     size: 8
