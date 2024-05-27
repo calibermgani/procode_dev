@@ -74,7 +74,7 @@
                 <div class="col-md-6 pl-2">
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
-                        <div class="card-body scrollable">
+                        <div class="scrollable">
                             {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
                                 <thead>
                                     <tr>
