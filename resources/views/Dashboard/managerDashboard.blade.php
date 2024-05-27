@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 pl-2">
-                    <div class="card" style="height:252px">
+                    <div class="card" style="height:352px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
                         <div class="scrollable">
                             {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-md-6 pr-0">
+                <div class="col-md-6 pr-0" style="margin-top:-8rem">
                     <div class="card" style="height:252px">
                         <div class="dash_card3_filter mt-4 ml-4">
                             <span><b>Projects</b></span>
@@ -423,7 +423,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('agingChart').getContext('2d');
-            const agingData = @json($agingData);
+            const agingData = @json($agingCount);
             // const labels = ['5', '10', '15', '20', '25', '30', '35', '40', '45'];
             const labels = [];
             $.each(@json($agingHeader), function(key, val) {
@@ -483,17 +483,23 @@
                                 display: true,
                                 text: 'Count'
                             },
+                            grid: {
+                                display: true // Keep vertical grid lines for y-axis
+                            }
                         },
                         x: {
                             ticks: {
                                 autoSkip: false,
                                 font: {
-                                    size: 10 
+                                    size: 10
                                 }
                             },
                             title: {
                                 display: true,
                                 text: 'Days Range'
+                            },
+                            grid: {
+                                display: false 
                             }
                         }
                     }

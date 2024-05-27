@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 pl-2">
-                    <div class="card" style="height:252px">
+                    <div class="card" style="height:352px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
                         <div class="card-body scrollable">
                             {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-md-6 pr-0">
+                <div class="col-md-6 pr-0" style="margin-top:-8rem">
                     <div class="card" style="height:252px">
                         <div class="dash_card3_filter mt-4 ml-4">
                             <span><b>Projects</b></span>
@@ -401,8 +401,8 @@
     .chart-container {
         position: relative;
         margin: auto;
-        height: auto;
-        width: 1000;
+        height: 300;
+        width: auto;
     }
 
     .scrollable::-webkit-scrollbar {
@@ -486,6 +486,9 @@
                                 display: true,
                                 text: 'Count'
                             },
+                            grid: {
+                                display: true // Keep vertical grid lines for y-axis
+                            }
                         },
                         x: {
                             ticks: {
@@ -497,6 +500,9 @@
                             title: {
                                 display: true,
                                 text: 'Days Range'
+                            },
+                            grid: {
+                                display: false 
                             }
                         }
                     }
