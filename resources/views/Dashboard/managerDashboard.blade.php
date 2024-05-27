@@ -74,7 +74,7 @@
                 <div class="col-md-6 pl-2">
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
-                        <div class="card-body">
+                        <div class="card-body scrollable">
                             {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
                                 <thead>
                                     <tr>
@@ -97,9 +97,9 @@
                                     @endif
                                 </tbody>
                             </table> --}}
-                            {{-- <div class="chart-container"> --}}
-                            <canvas id="agingChart" width="1200" height="300"></canvas>
-                            {{-- </div> --}}
+                            <div class="chart-container">
+                                <canvas id="agingChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -380,15 +380,39 @@
     </div>
 @endsection
 <style>
+    .scrollable {
+        overflow: auto;
+        /* height: 200;
+        width: 705px; */
+        /* scrollbar-width: thin; */
+        /* Thin scrollbar */
+        scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+        scrollbar-width: thin;
+    }
+
     .chart-container {
-        width: 100%;
-        height: 100%;
-        max-width: 1000px;
-        /* You can adjust this as needed */
-        max-height: 300px;
-        /* You can adjust this as needed */
-        overflow: scroll;
         position: relative;
+        margin: auto;
+        height: auto;
+        width: 1000;
+        /* overflow:scroll; */
+    }
+
+    .scrollable::-webkit-scrollbar {
+        width: 2px;
+        /* Width of vertical scrollbar */
+        height: 2px;
+        /* Height of horizontal scrollbar */
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+    }
+
+    .scrollable::-webkit-scrollbar-track {
+        background: transparent;
+        /* Scrollbar track color */
     }
 </style>
 
@@ -424,6 +448,7 @@
                     datasets: datasets
                 },
                 options: {
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -434,7 +459,14 @@
                             }
                         },
                         legend: {
-                            position: 'right' // Move legend to the right
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 8
+                                },
+                                boxWidth: 10,
+                                boxHeight: 5
+                            }
                         }
                     },
                     scales: {
@@ -442,13 +474,26 @@
                             beginAtZero: true,
                             suggestedMin: 0,
                             ticks: {
-                                stepSize: 10
-                            }
+                                stepSize: 10,
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            },
                         },
                         x: {
                             ticks: {
                                 autoSkip: false,
-
+                                font: {
+                                    size: 10 
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Days Range'
                             }
                         }
                     }
@@ -457,9 +502,15 @@
 
             function getRandomColor() {
                 const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
+                let labelColors = ['#dc3545', '#fd7e14', '#d63384', '#20c997', '#6f42c1', '#ffc107', '#0dcaf0',
+                    '#adb5bd'
+                ]
+                let color = '';
+                // let color = '#';
+                // for (let i = 0; i < 6; i++) {
+                //     color += letters[Math.floor(Math.random() * 16)];
+                for (let i = 0; i < agingData.length; i++) {
+                    color = labelColors[i];
                 }
                 return color;
             }

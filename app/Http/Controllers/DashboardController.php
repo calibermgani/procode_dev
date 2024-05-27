@@ -286,13 +286,25 @@ class DashboardController extends Controller
                 $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
 
                 $agingData = [
-                    'AMBC' => [0, 0, 0, 0, 0, 100, 0, 113, 0, 45, 45],
+                    'AMBC' => [0, 0, 0, 0, 0, 100, 0, 253, 0, 45, 45],
                     'Cancer Care Specialists' => [0, 0, 0, 0, 0, 0, 0, 11, 0, 45, 45],
                     "Saco River Medical Group" => [0, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
                     "AIG" => [0, 0, 0, 0, 0, 70, 0, 12, 0, 45, 45],
                     "Ash Meomorial Hospital" => [0, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
-                    "Advanced Gastro" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
                     "MDCSp" => [30, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro1" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro2" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro3" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro4" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro5" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro6" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro7" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro8" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro9" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro10" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro11" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
+                    "Advanced Gastro12" => [0, 0, 0, 60, 0, 0, 0, 12, 0, 45, 45],
                 ];
                 function allValuesAreZero($array)
                 {

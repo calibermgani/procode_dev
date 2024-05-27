@@ -76,7 +76,7 @@
                 <div class="col-md-6 pl-2">
                     <div class="card" style="height:252px">
                         <span class="mt-4 ml-4"><b>Aging</b></span>
-                        <div class="card-body">
+                        <div class="card-body scrollable">
                             {{-- <table class="table table-separate table-head-custom no-footer" id="agingList">
                                 <thead>
                                     <tr>
@@ -99,7 +99,9 @@
                                     @endif
                                 </tbody>
                             </table> --}}
-                            <canvas id="agingChart" width="1200" height="300"></canvas>
+                            <div class="chart-container">
+                                <canvas id="agingChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -388,12 +390,35 @@
         </div>
     </div>
 @endsection
-{{-- 
+
 <style>
-    .dataTables_scrollBody {
-        height: 173px !important;
+    .scrollable {
+        overflow: auto;
+        scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+        scrollbar-width: thin;
     }
-</style> --}}
+
+    .chart-container {
+        position: relative;
+        margin: auto;
+        height: auto;
+        width: 1000;
+    }
+
+    .scrollable::-webkit-scrollbar {
+        width: 2px;
+        height: 2px;
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 20px;
+    }
+
+    .scrollable::-webkit-scrollbar-track {
+        background: transparent;
+    }
+</style>
 @push('view.scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -426,6 +451,7 @@
                     datasets: datasets
                 },
                 options: {
+                    maintainAspectRatio: false,
                     plugins: {
                         title: {
                             display: true,
@@ -436,7 +462,14 @@
                             }
                         },
                         legend: {
-                            position: 'right' // Move legend to the right
+                            position: 'right',
+                            labels: {
+                                font: {
+                                    size: 8
+                                },
+                                boxWidth: 10,
+                                boxHeight: 5
+                            }
                         }
                     },
                     scales: {
@@ -444,13 +477,26 @@
                             beginAtZero: true,
                             suggestedMin: 0,
                             ticks: {
-                                stepSize: 10
-                            }
+                                stepSize: 10,
+                                font: {
+                                    size: 10
+                                },
+                            },
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            },
                         },
                         x: {
                             ticks: {
                                 autoSkip: false,
-
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Days Range'
                             }
                         }
                     }
@@ -459,9 +505,9 @@
 
             function getRandomColor() {
                 const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
+                let color = '';
+                for (let i = 0; i < agingData.length; i++) {
+                    color = labelColors[i];
                 }
                 return color;
             }
