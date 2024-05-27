@@ -393,7 +393,7 @@
     .chart-container {
         position: relative;
         margin: auto;
-        height: 500;
+        height: 300;
         width: auto;
         /* overflow:scroll; */
     }
@@ -423,7 +423,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('agingChart').getContext('2d');
-            const agingData = @json($agingCount);
+            const agingData = @json($agingData);
             // const labels = ['5', '10', '15', '20', '25', '30', '35', '40', '45'];
             const labels = [];
             $.each(@json($agingHeader), function(key, val) {
