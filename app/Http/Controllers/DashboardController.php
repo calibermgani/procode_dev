@@ -87,12 +87,22 @@ class DashboardController extends Controller
                         $holdCounts[] = $hCount;
                         $reworkCounts[] = $rCount;
                         foreach ($agingHeader as $key => $data) {
-                            $startDay = $data["days"] - 1;
-                            $endDumDay = isset($agingHeader[$key - 1]) &&  isset($agingHeader[$key - 1]["days"]) ? $agingHeader[$key - 1]["days"]  : "0";
-                            // $endDay = $startDay-5;
-                            $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
-                            $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
-                            $dataCount = $model::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->whereBetween('created_at', [$startDate, $endDate])->count();
+                            // $startDay = $data["days"] - 1;
+                            // $endDumDay = isset($agingHeader[$key - 1]) &&  isset($agingHeader[$key - 1]["days"]) ? $agingHeader[$key - 1]["days"]  : "0";
+                            if(str_contains($data["days_range"],'-')) {
+                                $splitRange = explode('-', $data["days_range"]);
+                                $startDay = $splitRange[1]-1;
+                                $endDumDay =  $splitRange[0]-1;
+                                $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
+                                $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
+                                $dataCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('created_at', [$startDate, $endDate])->count();
+                            } else {
+                                $splitRange = explode('+', $data["days_range"]);
+                                $endDumDay =  $splitRange[0]-1;
+                                $startDay =  $splitRange[1] != "" ? $splitRange[1]-1 : $endDumDay +1;
+                                $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
+                                $dataCount = $model::where('chart_status', 'CE_Assigned')->where('created_at', '<=', $endDate)->count();
+                                }
                             $agingArr1[$modelKey][$data["days_range"]] = $dataCount;
                             $agingArr2[$modelKey] = $projectIds[$modelKey];
                         }
@@ -254,12 +264,22 @@ class DashboardController extends Controller
                         $holdCounts[] = $hCount;
                         $reworkCounts[] = $rCount;
                         foreach ($agingHeader as $key => $data) {
-                            $startDay = $data["days"] - 1;
-                            $endDumDay = isset($agingHeader[$key - 1]) &&  isset($agingHeader[$key - 1]["days"]) ? $agingHeader[$key - 1]["days"]  : "0";
-                            // $endDay = $startDay-5;
-                            $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
-                            $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
-                            $dataCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('created_at', [$startDate, $endDate])->count();
+                            // $startDay = $data["days"] - 1;
+                            // $endDumDay = isset($agingHeader[$key - 1]) &&  isset($agingHeader[$key - 1]["days"]) ? $agingHeader[$key - 1]["days"]  : "0";
+                           if(str_contains($data["days_range"],'-')) {
+                                $splitRange = explode('-', $data["days_range"]);
+                                $startDay = $splitRange[1]-1;
+                                $endDumDay =  $splitRange[0]-1;
+                                $startDate = Carbon::now()->subDays($startDay)->startOfDay()->toDateTimeString();
+                                $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
+                                $dataCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('created_at', [$startDate, $endDate])->count();
+                            } else {
+                                $splitRange = explode('+', $data["days_range"]);
+                                $endDumDay =  $splitRange[0]-1;
+                                $startDay =  $splitRange[1] != "" ? $splitRange[1]-1 : $endDumDay +1;
+                                $endDate = Carbon::now()->subDays($endDumDay)->endOfDay()->toDateTimeString();
+                                $dataCount = $model::where('chart_status', 'CE_Assigned')->where('created_at', '<=', $endDate)->count();
+                            }
                             $agingArr1[$modelKey][$data["days_range"]] = $dataCount;
                             $agingArr2[$modelKey] = $projectIds[$modelKey];
                         }
@@ -286,7 +306,7 @@ class DashboardController extends Controller
                 $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
 
                 $agingData = [
-                    'AMBC' => [0, 0, 0, 0, 0, 100, 0, 253, 0, 45, 45],
+                    'AMBC' => [0, 0, 0, 0, 0, 100, 0, 153, 0, 45, 45],
                     'Cancer Care Specialists' => [0, 0, 0, 0, 0, 0, 0, 11, 0, 45, 45],
                     "Saco River Medical Group" => [0, 0, 0, 0, 0, 0, 0, 12, 0, 45, 45],
                     "AIG" => [0, 0, 0, 0, 0, 70, 0, 12, 0, 45, 45],

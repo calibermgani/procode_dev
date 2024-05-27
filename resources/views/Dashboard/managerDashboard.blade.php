@@ -464,7 +464,7 @@
                                 font: {
                                     size: 8
                                 },
-                                boxWidth: 10,
+                                boxWidth: 5,
                                 boxHeight: 5
                             }
                         }
