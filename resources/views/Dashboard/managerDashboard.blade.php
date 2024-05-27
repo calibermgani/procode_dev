@@ -452,7 +452,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Custom Chart Title',
+                            text: 'Aging - Analysis',
                             padding: {
                                 top: 0,
                                 bottom: 10,
