@@ -441,6 +441,26 @@
                 });
             });
             console.log(datasets, 'datasets');
+
+            const noDataPlugin = {
+                id: 'noDataPlugin',
+                beforeDraw: (chart) => {
+                    if (chart.data.datasets.length === 0) {
+                        const ctx = chart.ctx;
+                        const width = chart.width;
+                        const height = chart.height;
+                        chart.clear();
+
+                        ctx.save();
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.font = '13px Poppins';
+                        ctx.fillText('Data not available', width / 2, height / 2);
+                        ctx.restore();
+                    }
+                }
+            };
+
             const agingChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -499,11 +519,12 @@
                                 text: 'Days Range'
                             },
                             grid: {
-                                display: false 
+                                display: false
                             }
                         }
                     }
-                }
+                },
+                plugins: [noDataPlugin]
             });
 
             function getRandomColor() {
