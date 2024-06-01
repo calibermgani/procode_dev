@@ -810,3 +810,9 @@ font-size: 10px;
     align-items: center;
     flex-wrap: wrap;
 }
+
+.btn.btn-light-green { 
+    color: #139AB3;
+    background-color: #b8eaf3;
+    border-color: transparent;
+}

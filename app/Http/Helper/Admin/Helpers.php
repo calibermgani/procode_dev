@@ -307,10 +307,11 @@ class Helpers
 			$priority = '-';
 		return @$priority;
 	}
-	public static function getPermission() {
-        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] !=null) {
-		   $main_menu = MainMenuPermission::select('parent_id')->where('user_id',Session::get('loginDetails')['userInfo']['user_id'])->first();
-        }
+	public static function getPermission()
+	{
+		if (Session::get('loginDetails') &&  Session::get('loginDetails')['userInfo'] && Session::get('loginDetails')['userInfo']['user_id'] != null) {
+			$main_menu = MainMenuPermission::select('parent_id')->where('user_id', Session::get('loginDetails')['userInfo']['user_id'])->first();
+		}
 		if (!empty($main_menu)) {
 			$main_menu = explode(",", $main_menu->parent_id);
 			$menus = Menu::whereIn('id', $main_menu)->orderBy('menu_order', 'asc')->get();
@@ -321,7 +322,8 @@ class Helpers
 		}
 	}
 
-	public static function getSubmenuListByuser($user_id, $parent_id) {
+	public static function getSubmenuListByuser($user_id, $parent_id)
+	{
 
 		DB::enableQueryLog();
 		$sub_menu_list = SubMenuPermission::join('sub_menus', 'sub_menus.id', '=', 'sub_menu_permissions.sub_menu_id')
@@ -333,7 +335,8 @@ class Helpers
 		return $sub_menu_list;
 	}
 
-	public static function getPermissionPage() {
+	public static function getPermissionPage()
+	{
 		$permission_tables = [
 			'' => '-- Select --',
 			'users' => 'Users'
@@ -343,7 +346,8 @@ class Helpers
 		return $permission_tables;
 	}
 
-	public static function getDocumentReason() {
+	public static function getDocumentReason()
+	{
 		$documentReason = [
 			'' => '-- Select --',
 			'Submit' => 'Submitted',
@@ -371,7 +375,8 @@ class Helpers
 		return $sourceDetails;
 	}
 
-	public static function getSpecialtyInterview() {
+	public static function getSpecialtyInterview()
+	{
 		$speciality = [
 			'' => '-- Select --',
 			'Surgery - Facility' => 'Surgery - Facility',
@@ -396,7 +401,8 @@ class Helpers
 		return $speciality;
 	}
 
-	public static function getBgvData() {
+	public static function getBgvData()
+	{
 		$bgv_data = [
 			'' => '-- Select --',
 			'1' => 'Annexmed Team',
@@ -412,11 +418,6 @@ class Helpers
 		return $getWhm;
 	}
 
-	public static function UserDocumentType()
-	{
-		$data = UserDocumentTypeModel::where('type_of_doc', 'manual')->where('template_group', '0')->pluck('document_type', 'id')->toArray();
-		return array('' => '-- Select --') + $data;
-	}
 
 	public static function getEmployeedetailsbyId($user_id)
 	{
@@ -503,150 +504,168 @@ class Helpers
 		];
 		return $source_data;
 	}
-    public static function projectList()
+	public static function projectList()
 	{
 		// $data = project::where('status', 'Active')->pluck('project_name', 'id')->prepend(trans('Select Project'), '')->toArray();
-        $data = project::where('status', 'Active')->pluck('project_name', 'project_id')->prepend(trans('Select Project'), '')->toArray();
+		$data = project::where('status', 'Active')->pluck('project_name', 'project_id')->prepend(trans('Select Project'), '')->toArray();
 		return $data;
 	}
 
-    public static function subProjectList($project_id)
+	public static function subProjectList($project_id)
 	{
 		// $data = subproject::where('project_id', $project_id)->where('status', 'Active')->pluck('sub_project_name', 'id')->prepend(trans('Select Sub Project'), '')->toArray();
-        $data = subproject::where('project_id', $project_id)->pluck('sub_project_name', 'sub_project_id')->prepend(trans('Select Sub Project'), '')->toArray();
-        return $data;
+		$data = subproject::where('project_id', $project_id)->pluck('sub_project_name', 'sub_project_id')->prepend(trans('Select Sub Project'), '')->toArray();
+		return $data;
 	}
-    public static function projectName($id)
+	public static function projectName($id)
 	{
 		// $data = project::where('status', 'Active')->where('id',$id)->first();
-        $data = project::where('status', 'Active')->where('project_id',$id)->first();
+		$data = project::where('status', 'Active')->where('project_id', $id)->first();
 		return $data;
 	}
-    public static function subProjectName($projectId,$subProjectId)
+	public static function subProjectName($projectId, $subProjectId)
 	{
 		// $data = subproject::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
-        $data = subproject::where('project_id',$projectId)->where('sub_project_id',$subProjectId)->first();
+		$data = subproject::where('project_id', $projectId)->where('sub_project_id', $subProjectId)->first();
 		return $data;
 	}
-    public static function formConfig($projectId,$subProjectId)
+	public static function formConfig($projectId, $subProjectId)
 	{
-		$data = formConfiguration::where('status', 'Active')->where('project_id',$projectId)->where('id',$subProjectId)->first();
+		$data = formConfiguration::where('status', 'Active')->where('project_id', $projectId)->where('id', $subProjectId)->first();
 		return $data;
 	}
-    public static function getUserNameById($id)
+	public static function getUserNameById($id)
 	{
-        $payload = [
-            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-            'user_id' => $id
-        ];
-        $client = new Client();
-        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_username_by_id', [
-            'json' => $payload
-        ]);
-        if ($response->getStatusCode() == 200) {
-            $data = json_decode($response->getBody(), true);
-        } else {
-            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-        }
-        $userName = $data['user_name']['user_name'];
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d',
+			'user_id' => $id
+		];
+		$client = new Client();
+		$response = $client->request('POST', config("constants.PRO_CODE_URL") . '/api/v1_users/get_username_by_id', [
+			'json' => $payload
+		]);
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
+		$userName = $data['user_name']['user_name'];
 		return $userName;
 	}
 
-    public static function getUserEmpIdById($id)
+	public static function getUserEmpIdById($id)
 	{
-        $payload = [
-            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-            'user_id' => $id
-        ];
-        $client = new Client();
-        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_user_emp_id_by_id', [
-            'json' => $payload
-        ]);//http://dev.aims.officeos.in/api/v1_users/cache_get_username_by_id(once integrated cache shall we use this url)
-        if ($response->getStatusCode() == 200) {
-            $data = json_decode($response->getBody(), true);
-        } else {
-            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-        }
-        $userName = $data['user_list']['emp_id'];
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d',
+			'user_id' => $id
+		];
+		$client = new Client();
+		$response = $client->request('POST', config("constants.PRO_CODE_URL") . '/api/v1_users/get_user_emp_id_by_id', [
+			'json' => $payload
+		]); //http://dev.aims.officeos.in/api/v1_users/cache_get_username_by_id(once integrated cache shall we use this url)
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
+		$userName = $data['user_list']['emp_id'];
 		return $userName;
 	}
-    public static function qaStatusList()
+	public static function qaStatusList()
 	{
-        $data = QAStatus::where('status', 'Active')->pluck('status_code', 'id')->prepend(trans('Select Status'), '')->toArray();
+		$data = QAStatus::where('status', 'Active')->pluck('status_code', 'id')->prepend(trans('Select Status'), '')->toArray();
 		return $data;
 	}
-    public static function qaSubStatusList()
+	public static function qaSubStatusList()
 	{
-        $data = QASubStatus::where('status', 'Active')->pluck('sub_status_code', 'id')->prepend(trans('Select Sub Status'), '')->toArray();
-    	return $data;
-	}
-    public static function qaStatusById($id)
-	{
-        $data = QAStatus::where('status', 'Active')->where('id',$id)->first('status_code');
+		$data = QASubStatus::where('status', 'Active')->pluck('sub_status_code', 'id')->prepend(trans('Select Sub Status'), '')->toArray();
 		return $data;
 	}
-    public static function qaSubStatusById($id)
+	public static function qaStatusById($id)
 	{
-        $data = QASubStatus::where('status', 'Active')->where('id',$id)->first('sub_status_code');
+		$data = QAStatus::where('status', 'Active')->where('id', $id)->first('status_code');
+		return $data;
+	}
+	public static function qaSubStatusById($id)
+	{
+		$data = QASubStatus::where('status', 'Active')->where('id', $id)->first('sub_status_code');
 		return $data;
 	}
 
-    public static function getUserNameByEmpId($id)
+	public static function getUserNameByEmpId($id)
 	{
-        $payload = [
-            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-            'user_emp_id' => $id
-        ];
-        $client = new Client();
-        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_username_by_empid', [
-            'json' => $payload
-        ]);
-        if ($response->getStatusCode() == 200) {
-            $data = json_decode($response->getBody(), true);
-        } else {
-            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-        }
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d',
+			'user_emp_id' => $id
+		];
+		$client = new Client();
+		$response = $client->request('POST', config("constants.PRO_CODE_URL") . '/api/v1_users/get_username_by_empid', [
+			'json' => $payload
+		]);
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
 
-        $userName = $data['user_name']['user_name'];
+		$userName = $data['user_name']['user_name'];
 		return $userName;
 	}
-    public static function getprojectResourceList($clientId)
+	public static function getprojectResourceList($clientId)
 	{
-        $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
-        $payload = [
-            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-            'client_id' => $clientId,
-            'user_id' => $userId
-        ];
-         $client = new Client();
-         $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
-            'json' => $payload
-        ]);
-        if ($response->getStatusCode() == 200) {
-             $data = json_decode($response->getBody(), true);
-        } else {
-            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-        }
-        $projectResource = array_filter($data['userDetail']);
-        return $projectResource;
+		$userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d',
+			'client_id' => $clientId,
+			'user_id' => $userId
+		];
+		$client = new Client();
+		$response = $client->request('POST', config("constants.PRO_CODE_URL") . '/api/v1_users/get_resource_name', [
+			'json' => $payload
+		]);
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
+		$projectResource = array_filter($data['userDetail']);
+		return $projectResource;
+	}
+	public static function getMomAttendiesList()
+	{
+		$userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d'
+		];
+		$client = new Client();
+		$response = $client->request('POST', config("constants.PRO_CODE_URL") . '/api/v1_users/get_mom_attendies_list', [
+			'json' => $payload
+		]);
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
+		$getMomAttendiesList = $data['attendiesList'];
+		return $getMomAttendiesList;
+	}
 
-    }
-    public static function getMomAttendiesList()
+	public static function getEmpListPermission()
 	{
-        $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
-        $payload = [
-            'token' => '1a32e71a46317b9cc6feb7388238c95d'
-        ];
-        $client = new Client();
-        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_mom_attendies_list', [
-            'json' => $payload
-        ]);
-        if ($response->getStatusCode() == 200) {
-            $data = json_decode($response->getBody(), true);
-        } else {
-            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-        }
-        $getMomAttendiesList = $data['attendiesList'];
-        return $getMomAttendiesList;
-    }
+		$payload = [
+			'token' => '1a32e71a46317b9cc6feb7388238c95d'
+		];
+		$client = new Client();
+		$response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_emp_list', [
+			'json' => $payload
+		]);
+		if ($response->getStatusCode() == 200) {
+			$data = json_decode($response->getBody(), true);
+		} else {
+			return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+		}
+		$coderList = $data['coderList'];
+		asort($coderList);
+		return array('' => '-- Select --') + $coderList;
+	}
 }
