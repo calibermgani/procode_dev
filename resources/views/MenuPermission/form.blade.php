@@ -70,7 +70,7 @@
                             </label>
                             <br>
                             <?php
-                            $sub_menu = App\Models\Submenu::where('menu_id', $m_permission->id)->get();
+                            $sub_menu = App\Models\SubMenu::where('menu_id', $m_permission->id)->get();
                             ?>
                             <div class="row mb-3 mt-2" style="border-bottom:1px dashed #ccc;padding-bottom:5px;">
                                 @foreach ($sub_menu as $s_menu)
