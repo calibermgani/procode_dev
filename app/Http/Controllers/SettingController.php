@@ -128,7 +128,7 @@ class SettingController extends Controller
     public function sopDocStore(Request $request)
     {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
-            try {
+            try {dd('hi');
                 DB::beginTransaction();
                 $userId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
                 $data = $request->all();
