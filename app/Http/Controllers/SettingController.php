@@ -140,8 +140,8 @@ class SettingController extends Controller
                     $sopDisplayName = pathinfo($attachmentName, PATHINFO_FILENAME);
                     $onlyFileName = str_replace(' ', '_', $sopDisplayName);
                     $fileNames = $onlyFileName . '_' . date('YmdHis') . '.' . $extension6;
-
-                    if (!Storage::exists('public/pdf_folder/')) {dd('if');
+                    dd(Storage::exists('public/pdf_folder/'));
+                    if (!Storage::exists('public/pdf_folder/')) {
                         $storage_path = Storage::makeDirectory('/pdf_folder/', 0775, true);
                         $attachment->storeAs('public/pdf_folder/', $fileNames);
                     } else {
