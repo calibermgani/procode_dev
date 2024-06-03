@@ -9,7 +9,7 @@ use App\Models\QualitySampling;
 use App\Models\QualitySamplingHistory;
 use Illuminate\Support\Str;
 use App\Http\Helper\Admin\Helpers as Helpers;
-
+use Illuminate\Support\Facades\Log;
 class SettingController extends Controller
 {
     public function qualitySampling(Request $request) {
@@ -42,8 +42,8 @@ class SettingController extends Controller
                     $qaSamplingList = QualitySampling::orderBy('id','desc')->get()->toArray();
 
                     return view('settings/qualitySampling',compact('coderList','qaList','qaSamplingList'));
-                } catch (Exception $e) {
-                    log::debug($e->getMessage());
+                } catch (\Exception $e) {
+                    Log::debug($e->getMessage());
                 }
         } else {
                 return redirect('/');
@@ -56,8 +56,8 @@ class SettingController extends Controller
                 $data['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                  QualitySampling::create($data);
                 return redirect('/sampling' . '?parent=' . request()->parent . '&child=' . request()->child);
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');
@@ -80,8 +80,8 @@ class SettingController extends Controller
                    QualitySampling::create($data);
                 }
                 return redirect('/sampling' . '?parent=' . request()->parent . '&child=' . request()->child);
-            } catch (Exception $e) {
-                log::debug($e->getMessage());
+            } catch (\Exception $e) {
+                Log::debug($e->getMessage());
             }
         } else {
             return redirect('/');

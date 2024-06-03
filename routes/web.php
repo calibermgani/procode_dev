@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,7 +103,25 @@ Route::group(['prefix' => 'qa_production'], function () {
         Route::any('users_sub_projects', 'App\Http\Controllers\DashboardController@getUsersWithSubProjects');
         Route::any('calendar_filter','App\Http\Controllers\DashboardController@getCalendarFilter');
         Route::any('projects_calendar_filter','App\Http\Controllers\DashboardController@prjCalendarFilter');
+        Route::any('mgr_projects_calendar_filter','App\Http\Controllers\DashboardController@mgrPrjCalendarFilter');
 
+    });
+    Route::any('project_work_mail', 'App\Http\Controllers\ProjectController@projectWorkMail');
+
+    Route::group(['prefix' => 'sop'], function () {
+        Route::any('sop_upload', 'App\Http\Controllers\SettingController@sopImportData');
+        Route::any('sub_project_list', 'App\Http\Controllers\SettingController@getSubProjectList');
+        Route::any('sop_doc_store', 'App\Http\Controllers\SettingController@sopDocStore');
+        Route::any('sop_List', 'App\Http\Controllers\SettingController@sopList');
+    });
+
+    Route::group(['prefix' => 'permission'], function () {
+        Route::any('', 'App\Http\Controllers\MenuPermissionController@index');
+        Route::any('grand_permission', 'App\Http\Controllers\MenuPermissionController@store');
+        Route::any('table_permission/{table}', 'MenuPermissionController@getColumnListPermission');
+        Route::any('user_page_permission/{user_id}/{page}', 'MenuPermissionController@userPermissionSettings');
+        Route::any('user_grand_page_permission', 'MenuPermissionController@page_permission_store');
+        Route::any('side_menu_list', 'MenuPermissionController@SideMenuList');
     });
 Auth::routes();
 
