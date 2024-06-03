@@ -142,7 +142,7 @@ class SettingController extends Controller
                     $fileNames = $onlyFileName . '_' . date('YmdHis') . '.' . $extension6;
 
                     if (!Storage::exists('/pdf_folder/')) {
-                        $storage_path = Storage::makeDirectory('/pdf_folder/', 0775, true);
+                        $storage_path = Storage::makeDirectory('public/pdf_folder/', 0775, true);
                         $attachment->storeAs('public/pdf_folder', $fileNames);
                     } else {
                         $attachment->storeAs('public/pdf_folder', $fileNames); //dd($attachment,'el',$path,$fileNames);
