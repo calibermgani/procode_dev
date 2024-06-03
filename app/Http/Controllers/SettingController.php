@@ -128,7 +128,7 @@ class SettingController extends Controller
     public function sopDocStore(Request $request)
     {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
-            try {dd('hi');
+            try {
                 DB::beginTransaction();
                 $userId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
                 $data = $request->all();
@@ -139,8 +139,8 @@ class SettingController extends Controller
                     $extension6 = $attachment->getClientOriginalExtension();
                     $sopDisplayName = pathinfo($attachmentName, PATHINFO_FILENAME);
                     $onlyFileName = str_replace(' ', '_', $sopDisplayName);
-                    $fileNames = $onlyFileName . '_' . date('YmdHis') . '.' . $extension6;dd($fileNames);
-                    dd(Storage::exists('public/pdf_folder/'));
+                    $fileNames = $onlyFileName . '_' . date('YmdHis') . '.' . $extension6;
+
                     if (!Storage::exists('public/pdf_folder/')) {
                         $storage_path = Storage::makeDirectory('/pdf_folder/', 0775, true);
                         $attachment->storeAs('public/pdf_folder/', $fileNames);
