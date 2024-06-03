@@ -53,14 +53,16 @@
                                                 $clientNameDetails = App\Http\Helper\Admin\Helpers::projectName(
                                                     $popUpHeader->project_id,
                                                 );
-                                                $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientNameDetails->project_name);
+                                                $sopDetails = App\Models\SopDoc::where('project_id',$popUpHeader->project_id)->where('sub_project_id',$popUpHeader->sub_project_id)->latest()->first('sop_path');
+                                                // $pdfName =  preg_replace('/[^A-Za-z0-9]/', '_',$clientNameDetails->project_name);
                                         @endphp
                                         @else
                                         @php
-                                            $pdfName = '';
+                                            $sopDetails = '';
+                                            // $pdfName = '';
                                         @endphp
                                     @endif
-                                <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank">
+                                <a href= {{ asset($sopDetails->sop_path) }} target="_blank">
                                 <button type="button" class="btn text-white mr-3" style="background-color:#139AB3">SOP</button>
                                 </a>
                              </div>
@@ -1120,16 +1122,18 @@
                 @if ($popUpHeader != null)
                     @php
                         $clientName = App\Http\Helper\Admin\Helpers::projectName($popUpHeader->project_id);
-                        $pdfName = preg_replace('/[^A-Za-z0-9]/', '_', $clientName->project_name);
+                        $sopDetails = App\Models\SopDoc::where('project_id',$popUpHeader->project_id)->where('sub_project_id',$popUpHeader->sub_project_id)->latest()->first('sop_path');
+                        // $pdfName = preg_replace('/[^A-Za-z0-9]/', '_', $clientName->project_name);
                     @endphp
                 @else
                     @php
-                        $pdfName = '';
+                        $sopDetails = '';
+                        // $pdfName = '';
                     @endphp
                 @endif
                 <div class="modal-header" style="background-color: #139AB3;height: 84px">
                     <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;">SOP</h5>
-                    <a href={{ asset('/pdf_folder/' . $pdfName . '.pdf') }} target="_blank">
+                    <a href={{ asset($sopDetails->sop_path) }} target="_blank">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-arrow-up-right-square" viewBox="0 0 16 16"
                             style="color: #ffffff; margin-left: 365px;">
@@ -1141,7 +1145,7 @@
                         aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <iframe src={{ asset('/pdf_folder/' . $pdfName . '.pdf') }} style="width: 100%; height: 418px;"
+                    <iframe src={{ asset($sopDetails->sop_path) }} style="width: 100%; height: 418px;"
                         frameborder="0" type="application/pdf"></iframe>
                 </div>
                 <div class="modal-footer">
