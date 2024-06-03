@@ -43,7 +43,7 @@
                                                     @endphp
                                                 @endif
                                             {{-- <a href= {{ asset('/pdf_folder/'.$pdfName.'.pdf') }} target="_blank"> --}}
-                                                <a href= {{ asset($sopDetails->sop_path) }} target="_blank">
+                                                <a href= {{ asset(isset($sopDetails) && isset($sopDetails->) ? $sopDetails->sop_path : null) }} target="_blank">
                                             <button type="button" class="btn text-white mr-3" style="background-color:#139AB3">SOP</button>
                                             </a>
                                          </div>
