@@ -112,6 +112,7 @@ Route::group(['prefix' => 'qa_production'], function () {
         Route::any('sop_upload', 'App\Http\Controllers\SettingController@sopImportData');
         Route::any('sub_project_list', 'App\Http\Controllers\SettingController@getSubProjectList');
         Route::any('sop_doc_store', 'App\Http\Controllers\SettingController@sopDocStore');
+        Route::any('sop_List', 'App\Http\Controllers\SettingController@sopList');
     });
 
     Route::group(['prefix' => 'permission'], function () {
