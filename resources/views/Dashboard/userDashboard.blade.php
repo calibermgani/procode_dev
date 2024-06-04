@@ -599,16 +599,18 @@
                         '<table id="practice_list" class="inv_head" cellpadding="5" cellspacing="0" border="0" style="width:97%;border-radius: 10px !important;overflow: hidden;margin-left: 1.5rem;">' +
                         '<tr><th></th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
                     $.each(subProjects, function(index, val) {
-                        html +=
-                            '<tbody><tr class="clickable-row cursor_hand">' +
-                            '<td><input type="hidden" value=' + val.client_id + '></td>' +
-                            '<td>' + val.sub_project_name + '<input type="hidden" value=' + val
-                            .sub_project_id + '></td>' +
-                            '<td>' + val.assignedCount + '</td>' +
-                            '<td>' + val.CompletedCount + '</td>' +
-                            '<td>' + val.PendingCount + '</td>' +
-                            '<td>' + val.holdCount + '</td>' +
-                            '</tr></tbody>';
+                        if(val.assignedCount > 0 || val.CompletedCount > 0 || val.PendingCount > 0 || val.holdCount > 0) {
+                            html +=
+                                '<tbody><tr class="clickable-row cursor_hand">' +
+                                '<td><input type="hidden" value=' + val.client_id + '></td>' +
+                                '<td>' + val.sub_project_name + '<input type="hidden" value=' + val
+                                .sub_project_id + '></td>' +
+                                '<td>' + val.assignedCount + '</td>' +
+                                '<td>' + val.CompletedCount + '</td>' +
+                                '<td>' + val.PendingCount + '</td>' +
+                                '<td>' + val.holdCount + '</td>' +
+                                '</tr></tbody>';
+                        }
                     });
                     html += '</table>';
                     return html;

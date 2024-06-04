@@ -622,20 +622,22 @@
                     '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
                 $.each(subProjects, function(index, val) {
                     $.each(val, function(valIndex, data) {
-                        html +=
-                            '<tbody><tr class="clickable-row cursor_hand">' +
-                            '<td><input type="hidden" value=' + data.client_id + '></td>' +
-                            '<td>' + data.resource_emp_id + '<input type="hidden" value=' + data
-                            .resource_emp_id + '></td>' +
-                            '<td>' + data.sub_project_name + '<input type="hidden" value=' +
-                            data
-                            .sub_project_id + '></td>' +
+                        if(data.assignedCount > 0 || data.CompletedCount > 0 || data.PendingCount > 0 || data.holdCount > 0) {
+                            html +=
+                                '<tbody><tr class="clickable-row cursor_hand">' +
+                                '<td><input type="hidden" value=' + data.client_id + '></td>' +
+                                '<td>' + data.resource_emp_id + '<input type="hidden" value=' + data
+                                .resource_emp_id + '></td>' +
+                                '<td>' + data.sub_project_name + '<input type="hidden" value=' +
+                                data
+                                .sub_project_id + '></td>' +
 
-                            '<td>' + data.assignedCount + '</td>' +
-                            '<td>' + data.CompletedCount + '</td>' +
-                            '<td>' + data.PendingCount + '</td>' +
-                            '<td>' + data.holdCount + '</td>' +
-                            '</tr></tbody>';
+                                '<td>' + data.assignedCount + '</td>' +
+                                '<td>' + data.CompletedCount + '</td>' +
+                                '<td>' + data.PendingCount + '</td>' +
+                                '<td>' + data.holdCount + '</td>' +
+                                '</tr></tbody>';
+                        }
                     });
                 });
                 html += '</table>';
