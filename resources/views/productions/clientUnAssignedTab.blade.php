@@ -59,7 +59,7 @@
                                         <div class="wizard-wrapper py-2">
                                             <div class="wizard-label p-2 mt-2">
                                                 <div class="wizard-title" style="display: flex; align-items: center;">
-                                                    <h6 style="margin-right: 5px;">Total Inventory</h6>
+                                                    <h6 style="margin-right: 5px;">Assigned</h6>
                                                     @include('CountVar.countRectangle', ['count' => $assignedCount])
                                                 </div>
 
