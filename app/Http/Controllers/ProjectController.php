@@ -71,7 +71,7 @@ class ProjectController extends Controller
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
             $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $reportingPerson = "Test";
-            $mailHeader = "Project Assigned Records";
+            $mailHeader = "Daily Production Inventory Update - ".Carbon::now()->format('m/d/Y');
             $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
             $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
             $projects = $this->getProjects();

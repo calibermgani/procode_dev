@@ -33,9 +33,12 @@
 
     <div class="table-responsive pb-2">
 
-        {{-- <p>Hi {{ $reportingPerson != null ? App\Http\Helper\Admin\Helpers::getUserNameById($reportingPerson) : 'All' }}, </p> --}}
+        <h4>
+            <p>Dear Team, </p>
+        </h4>
 
-        <p>These are yesterday pending records</p>
+        <p>Please find below the daily update for the production inventory : {{Carbon\Carbon::now()->format('m/d/Y')}}</p>
+       
         <table class="table" border="1" style="border-collapse: collapse">
             <thead>
                 <tr>
@@ -62,6 +65,7 @@
 
             </tbody>
         </table>
+        <p>Thank you for your attention.</p>
         <br>
         @include('emails.emailFooter')
     </div>
