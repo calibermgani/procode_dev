@@ -660,7 +660,7 @@
                 var params = {
                     parent: getUrlVars()["parent"],
                     child: getUrlVars()["child"],
-                    resourceName: resourceName // Append resourceName as a query parameter
+                    resourceName: btoa(resourceName) // Append resourceName as a query parameter
                 };
 
                 // Construct the URL with query parameters
