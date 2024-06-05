@@ -196,7 +196,7 @@ class DashboardController extends Controller
                 // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateTimeString();
                 // $endDate = Carbon::now()->endOfDay()->toDateTimeString();
                 if (class_exists($modelClass)) {
-                    $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->count();
+                    $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->whereBetween('updated_at', [$startDate, $endDate])->count();
                     $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id', $loginEmpId)->whereBetween('updated_at', [$startDate, $endDate])->count();
                     $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('chart_status', 'CE_Pending')->where('CE_emp_id', $loginEmpId)->whereBetween('updated_at', [$startDate, $endDate])->count();
                     $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $loginEmpId)
@@ -403,7 +403,7 @@ class DashboardController extends Controller
                             $subProjectsWithCount[$key][$resourceKey]['sub_project_id'] = $data['id'];
                             $subProjectsWithCount[$key][$resourceKey]['sub_project_name'] = $data['name'];
                             $subProjectsWithCount[$key][$resourceKey]['resource_emp_id'] = $resourceDataVal["CE_emp_id"];
-                            $subProjectsWithCount[$key][$resourceKey]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->count();
+                            $subProjectsWithCount[$key][$resourceKey]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                             $subProjectsWithCount[$key][$resourceKey]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                             $subProjectsWithCount[$key][$resourceKey]['PendingCount'] = $modelClass::where('chart_status', 'CE_Pending')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                             $subProjectsWithCount[$key][$resourceKey]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])
@@ -457,7 +457,7 @@ class DashboardController extends Controller
                         $subProjectsWithCount[$key][$resourceKey]['sub_project_id'] = '--';
                         $subProjectsWithCount[$key][$resourceKey]['sub_project_name'] = '--';
                         $subProjectsWithCount[$key][$resourceKey]['resource_emp_id'] = $resourceDataVal["CE_emp_id"];
-                        $subProjectsWithCount[$key][$resourceKey]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->count();
+                        $subProjectsWithCount[$key][$resourceKey]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $subProjectsWithCount[$key][$resourceKey]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('qa_work_status', 'Sampling')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $subProjectsWithCount[$key][$resourceKey]['PendingCount'] = $modelClass::where('chart_status', 'CE_Pending')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $subProjectsWithCount[$key][$resourceKey]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])

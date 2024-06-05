@@ -622,7 +622,7 @@
                     '<tr><th></th><th>Employee</th><th>Sub Project</th><th>Assigned</th> <th>Completed</th> <th>Pending</th><th>On Hold</th> </tr>';
                 $.each(subProjects, function(index, val) {
                     $.each(val, function(valIndex, data) {
-                        if(data.assignedCount > 0 || data.CompletedCount > 0 || data.PendingCount > 0 || data.holdCount > 0) {
+                        // if(data.assignedCount > 0 || data.CompletedCount > 0 || data.PendingCount > 0 || data.holdCount > 0) {
                             html +=
                                 '<tbody><tr class="clickable-row cursor_hand">' +
                                 '<td><input type="hidden" value=' + data.client_id + '></td>' +
@@ -637,7 +637,7 @@
                                 '<td>' + data.PendingCount + '</td>' +
                                 '<td>' + data.holdCount + '</td>' +
                                 '</tr></tbody>';
-                        }
+                        // }
                     });
                 });
                 html += '</table>';
@@ -827,7 +827,7 @@
                     url: "{{ url('dashboard/mgr_projects_calendar_filter') }}",
                     data: {
                         CalendarId: CalendarId,
-                        type: "user",
+                        // type: "user",
                     },
                     success: function(res) {
                         if (res.body_info) {
