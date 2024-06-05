@@ -46,7 +46,7 @@
                     <th style="text-align: left;padding: 5px;">Chats</th>
                     <th style="text-align: left;padding: 5px;">Coder</th>
                     <th style="text-align: left;padding: 5px;">QA</th>
-                    <th style="text-align: left;padding: 5px;">Balance</th>
+                    {{-- <th style="text-align: left;padding: 5px;">Balance</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                             <td style="text-align: left;padding: 5px;">{{ $data['Chats'] }}</td>
                             <td style="text-align: left;padding: 5px;">{{ $data['Coder'] }}</td>
                             <td style="text-align: left;padding: 5px;">{{ $data['QA'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $data['Balance'] }}</td>
+                            {{-- <td style="text-align: left;padding: 5px;">{{ $data['Balance'] }}</td> --}}
                         </tr>
                     @endforeach
                 @endif

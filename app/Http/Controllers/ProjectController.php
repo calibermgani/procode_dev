@@ -70,7 +70,6 @@ class ProjectController extends Controller
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
             $ccMailId = ["vijayalaxmi@caliberfocus.com"];
-            $reportingPerson = "Test";
             $mailHeader = "Daily Production Inventory Update - ".Carbon::now()->format('m/d/Y');
             $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
             $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
@@ -97,23 +96,19 @@ class ProjectController extends Controller
             foreach ($models as $key => $model) {
                 if (class_exists($model)) {
                     $aCount = $model::whereBetween('created_at', [$yesterDayStartDate, $yesterDayEndDate])->count();
-                    $cCount = $model::whereBetween('created_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Completed')->count();
-                    $qCount = $model::whereBetween('created_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'QA_Completed')->count();
-                    $pCount = $aCount - $cCount;
-                    // $assignedCounts[] = $aCount;
-                    // $coderCompleteCounts[] = $cCount;
-                    // $QACounts[] = $qCount;
-                    // $pendingCounts[] = $pCount;
+                    $cCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Completed')->count();
+                    $qCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'QA_Completed')->count();
+                    // $pCount = $aCount - $cCount;
                     $prjoectsPending[$key]['project'] = $prjoectName[$key];
                     $prjoectsPending[$key]['Chats'] = $aCount;
                     $prjoectsPending[$key]['Coder'] = $cCount;
                     $prjoectsPending[$key]['QA'] = $qCount;
-                    $prjoectsPending[$key]['Balance'] = $pCount;
+                    // $prjoectsPending[$key]['Balance'] = $pCount;
                 }
             }
 
             $mailBody = $prjoectsPending;
-            Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody, $reportingPerson));
+            Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody));
             Log::info('ProjectWorkMail executed successfully.');
         } catch (\Exception $e) {
             Log::error('Error in ProjectWorkMail: ' . $e->getMessage());
