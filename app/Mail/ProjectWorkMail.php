@@ -30,6 +30,6 @@ class ProjectWorkMail extends Mailable
      */
     public function build()
     {
-        return $this->subject("Pro-Code - ".$this->mailHeader)->view('emails.projectWorkMail');
+        return $this->subject($this->mailHeader)->view('emails.projectWorkMail');
     }
 }
