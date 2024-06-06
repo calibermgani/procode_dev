@@ -37,7 +37,7 @@
             <p>Dear Team, </p>
         </h4>
 
-        <p>Please find below the daily update for the production inventory : {{Carbon\Carbon::now()->format('m/d/Y')}}</p>
+        <p>Please find below the daily update for the production inventory : {{Carbon\Carbon::yesterday()->format('m/d/Y')}}</p>
        
         <table class="table" border="1" style="border-collapse: collapse">
             <thead>
@@ -55,9 +55,9 @@
                     @foreach ($mailBody as $data)
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ $data['project'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $data['Chats'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $data['Coder'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $data['QA'] }}</td>
+                            <td style="text-align: left;padding: 5px;">{{ $data['Chats'] == 0 ? 'No Activity' : $data['Chats'] }}</td>
+                            <td style="text-align: left;padding: 5px;">{{ $data['Coder'] == 0 ? 'No Activity' : $data['Coder']}}</td>
+                            <td style="text-align: left;padding: 5px;">{{ $data['QA'] == 0 ? 'No Activity' : $data['QA']}}</td>
                             {{-- <td style="text-align: left;padding: 5px;">{{ $data['Balance'] }}</td> --}}
                         </tr>
                     @endforeach
