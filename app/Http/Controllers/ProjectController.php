@@ -68,7 +68,7 @@ class ProjectController extends Controller
         try {
             Log::info('Executing ProjectWorkMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $toMailId = ["elanchezhian@annexmed.net"];
             $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com"];
             $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
             $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
