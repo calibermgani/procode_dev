@@ -261,16 +261,16 @@
                                                         <td
                                                             style="max-width: 300px;
                                                                         white-space: normal;">
-                                                            @if ($columnName == 'chart_status' && is_null($data->QA_emp_id))
+                                                            @if ($columnName == 'chart_status' && is_null($data->QA_emp_id)  && is_null($data->qa_work_status))
                                                                 <b>
                                                                     <p style="color: red;">UnAssigned</p>
                                                                 </b>
                                                             @else
                                                                 @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                     {{ date('m/d/Y', strtotime($columnValue)) }}
-                                                                @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'CE_'))
+                                                                @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'CE_') && $data->qa_work_status !== null)
                                                                     {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
-                                                                Assigned
+                                                                    {{ str_replace('_', ' ', $data->qa_work_status) }}
                                                                 @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'QA_'))
                                                                 {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
                                                                 In process
@@ -2256,7 +2256,7 @@
                     }
                 });
                 swal.fire({
-                    text: "Do you want to change assignee?",
+                    text: "Do you want to assign?",
                     icon: "success",
                     buttonsStyling: false,
                     showCancelButton: true,
@@ -2270,7 +2270,7 @@
                 }).then(function(result) {
                     if (result.value == true) {
                         $.ajax({
-                            url: "{{ url('assignee_change') }}",
+                            url: "{{ url('qa_production/sampling_assignee') }}",
                             method: 'POST',
                             data: {
                                 assigneeId: assigneeId,
