@@ -247,9 +247,13 @@
                             $modalRow.append($selectAllCheckbox);
                             $.each(columns, function(index, columnName) {
                                 if (columnName !== 'id') {
-                                    var displayName = columnName.split('_').map(function(word) {
-                                        return word.charAt(0).toUpperCase() + word.slice(1);
-                                    }).join(' ');
+                                    if(columnName === "chart_status") {
+                                        var displayName = "Charge Status";
+                                    } else {console.log(columnName,'if else');
+                                        var displayName = columnName.split('_').map(function(word) {
+                                            return word.charAt(0).toUpperCase() + word.slice(1);
+                                        }).join(' ');
+                                   }
                                     var $checkbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" name="project_columns" value="' + columnName + '">' + displayName + '<span></span></label></div></div>');
                                     $modalRow.append($checkbox);
                                 }

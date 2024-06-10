@@ -122,7 +122,11 @@ class ReportsController extends Controller
                     $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
                     $checkedValues[] = 'work_hours';
                     foreach ($checkedValues as $key => $header) {
+                      if ($header == 'chart_status') {
+                        $body_info .= '<th>Charge Status </th>';
+                      } else {
                         $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
+                      }
                     }
                     $body_info .= '</tr></thead><tbody>';
 
