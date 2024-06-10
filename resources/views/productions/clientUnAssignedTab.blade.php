@@ -1377,7 +1377,7 @@
                     }
                 });
                 swal.fire({
-                    text: "Do you want to assign the charts ?",
+                    text: "Do you want to assign?",
                     icon: "success",
                     buttonsStyling: false,
                     showCancelButton: true,
