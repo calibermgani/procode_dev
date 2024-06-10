@@ -208,7 +208,7 @@
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
-                                                                ->where('qa_work_status', 'Sampling')
+                                                               
                                                                 ->whereBetween('updated_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
@@ -338,7 +338,7 @@
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
-                                                                ->where('qa_work_status', 'Sampling')
+                                                              
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
