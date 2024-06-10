@@ -162,12 +162,20 @@
                                                             @if ($columnValue != 'id')
                                                                 <th><input type="hidden"
                                                                         value={{ $columnValue }}>
-                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                      @if ($columnValue == 'chart_status')
+                                                                        Charge Status
+                                                                      @else
+                                                                        {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                      @endif
                                                                 </th>
                                                             @else
                                                                 <th style="display:none" class='notexport'><input type="hidden"
                                                                         value={{ $columnValue }}>
-                                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                      @if ($columnValue == 'chart_status')
+                                                                        Charge Status
+                                                                      @else
+                                                                        {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                      @endif
                                                                 </th>
                                                             @endif
                                                         @endforeach
@@ -499,7 +507,7 @@
                                                                             <input type="hidden" name="CE_emp_id">
                                                                             <div class="form-group row">
                                                                                 <label class="col-md-12 required">
-                                                                                    Chart Status
+                                                                                    Charge Status
                                                                                 </label>
                                                                                 <div class="col-md-10">
                                                                                     {!! Form::Select(
@@ -691,7 +699,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group row" style="margin-left: -2rem">
                                                                         <label class="col-md-12 required">
-                                                                            Chart Status
+                                                                            Charge Status
                                                                         </label>
                                                                         <label class="col-md-12 pop-non-edt-val"
                                                                         id="chart_status">

@@ -169,7 +169,12 @@
                                                           <th class='notexport' style="color:white !important"><input type="checkbox" id="ckbCheckAll"></th>
                                                         @if (!in_array($columnName, $columnsToExclude))
                                                             <th><input type="hideen"
-                                                                    value={{ $columnValue }}>{{ str_replace(['_', '_or_'], [' ', '/'], ucwords(str_replace('_', ' ', $columnValue))) }}
+                                                                    value={{ $columnValue }}>
+                                                                    @if ($columnValue == 'chart_status')
+                                                                          Charge Status
+                                                                    @else
+                                                                        {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                                    @endif
                                                             </th>
                                                         @endif
                                                     @endforeach
@@ -178,7 +183,11 @@
                                                     @foreach ($columnsHeader as $columnName => $columnValue)
                                                         <th><input type="hidden"
                                                                 value={{ $columnValue }}>
-                                                            {{ ucwords(str_replace(['_or_', '_'], ['/', ' '], $columnValue)) }}
+                                                            @if ($columnValue == 'chart_status')
+                                                                Charge Status
+                                                              @else
+                                                               {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                             @endif
                                                         </th>
                                                     @endforeach
                                                 @endif
