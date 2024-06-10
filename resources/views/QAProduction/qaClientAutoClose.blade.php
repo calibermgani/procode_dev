@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                         </div> --}}
-                        @if (
+                        {{-- @if (
                             $loginEmpId == 'Admin' ||
                                 strpos($empDesignation, 'Manager') !== false ||
                                 strpos($empDesignation, 'VP') !== false ||
@@ -156,7 +156,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
             </div>
