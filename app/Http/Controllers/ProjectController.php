@@ -68,11 +68,15 @@ class ProjectController extends Controller
         try {
             Log::info('Executing ProjectWorkMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-            $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
-            $ccMailId = ["elanchezhian@annexmed.com"];
+            // $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
+            // $ccMailId = ["elanchezhian@annexmed.com"];
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
-            $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
-            $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
+            // $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
+            // $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
+            $yesterDayStartDate = "2024-06-07 00:00:00";
+            $yesterDayEndDate = "2024-06-07 23:59:59";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
                 if (count($project["subprject_name"]) > 0) {
