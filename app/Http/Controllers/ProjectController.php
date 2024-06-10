@@ -72,12 +72,12 @@ class ProjectController extends Controller
             $ccMailId = ["elanchezhian@annexmed.com"];
             // $toMailId = ["vijayalaxmi@caliberfocus.com"];
             // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
-            // $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
-            // $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
-            // $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
-            $mailHeader = "Procode Utilization Report for 06/07/2024";
-            $yesterDayStartDate = "2024-06-07 00:00:00";
-            $yesterDayEndDate = "2024-06-07 23:59:59";
+            $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
+            $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
+            $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
+            // $mailHeader = "Procode Utilization Report for 06/07/2024";
+            // $yesterDayStartDate = "2024-06-07 00:00:00";
+            // $yesterDayEndDate = "2024-06-07 23:59:59";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
                 if (count($project["subprject_name"]) > 0) {
