@@ -75,7 +75,7 @@ class ProjectController extends Controller
             // $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
             // $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
             // $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
-            $mailHeader = "06/07/2024";
+            $mailHeader = "Procode Utilization Report for 06/07/2024";
             $yesterDayStartDate = "2024-06-07 00:00:00";
             $yesterDayEndDate = "2024-06-07 23:59:59";
             $projects = $this->getProjects();
