@@ -22,7 +22,7 @@ class ReportsController extends Controller
         try {
             $subProject = Helpers::subProjectList($request->project_id);
             $user = Helpers::getprojectResourceList($request->project_id);
-            return response()->json(['success' => true,'subProject'=>$subProject,'resource' => $user]);
+            return response()->json(['success' => true, 'subProject' => $subProject, 'resource' => $user]);
         } catch (Exception $e) {
             log::debug($e->getMessage());
         }
@@ -30,25 +30,34 @@ class ReportsController extends Controller
     public function reportClientAssignedTab(Request $request) {
 
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
-           $client = new Client();
+            $client = new Client();
             try {
+                $subProject = Helpers::subProjectList($request->project_id);
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
                 $decodedsubProjectName = $request->sub_project_id == null ? 'project' :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $columnsHeader=[];
                 if (Schema::hasTable($table_name)) {
-                    $column_names = DB::select("DESCRIBE $table_name");
-                    $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
-                    $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
-                        return !in_array($column, $columnsToExclude);
-                    });
+                    if ($decodedsubProjectName == 'project' && count($subProject) == 1) {
+                        $column_names = DB::select("DESCRIBE $table_name");
+                        $columns = array_column($column_names, 'Field');
+                        $columnsToExclude = ['QA_required_sampling', 'QA_followup_date', 'CE_status_code', 'CE_sub_status_code', 'CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                        $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                            return !in_array($column, $columnsToExclude);
+                        });
+                    } else if ($decodedsubProjectName !== 'project') {
+                        $column_names = DB::select("DESCRIBE $table_name");
+                        $columns = array_column($column_names, 'Field');
+                        $columnsToExclude = ['QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+                        $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
+                            return !in_array($column, $columnsToExclude);
+                        });
+                    }
                 }
                 return response()->json([
                     'success' => true,
                     'columnsHeader' => $columnsHeader,
                 ]);
-
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
@@ -60,7 +69,7 @@ class ReportsController extends Controller
     public function reportClientColumnsList(Request $request) {
 
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
-           $client = new Client();
+            $client = new Client();
             try {
                 $decodedClientName = Helpers::projectName($request->project_id)->project_name;
                 $decodedsubProjectName = $request->sub_project_id == null ? 'project' :Helpers::subProjectName($request->project_id, $request->sub_project_id)->sub_project_name;
@@ -103,7 +112,6 @@ class ReportsController extends Controller
                             }else{
                                 $query;
                             }
-
                         })
                         ->where(function ($query) use ($request) {
 
@@ -119,36 +127,51 @@ class ReportsController extends Controller
                     $client_data = [];
                 }
                 // if (count($client_data) > 0) {
-                    $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
-                    $checkedValues[] = 'work_hours';
-                    foreach ($checkedValues as $key => $header) {
-                      if ($header == 'chart_status') {
+                $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
+                $checkedValues[] = 'work_hours';
+                foreach ($checkedValues as $key => $header) {
+                    if ($header == 'chart_status') {
                         $body_info .= '<th>Charge Status </th>';
-                      } else {
+                    } else {
                         $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
-                      }
                     }
-                    $body_info .= '</tr></thead><tbody>';
+                }
+                $body_info .= '</tr></thead><tbody>';
 
-                    foreach ($client_data as $row) {
-                        $body_info .= '<tr>';
-                        foreach ($checkedValues as $header) {
-                            $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
-                            if ($header === 'chart_status') {
-                                $data = str_replace('_', ' ', $data);
+                foreach ($client_data as $row) {
+                    $body_info .= '<tr>';
+                    foreach ($checkedValues as $header) {
+                        $data = isset($row->{$header}) && !empty($row->{$header}) ? $row->{$header} : "--";
+                        if ($header == 'QA_status_code') {
+                            if ($data != '--') {
+                                $data = Helpers::qaStatusById($data)['status_code'];
+                            } else {
+                                $data;
                             }
-                            if ($header === 'qa_work_status') {
-                                $data = str_replace('_', ' ', $data);
-                            }
-                            if ($header === 'work_hours') {
-                                $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
-                            }
-                            $body_info .= '<td>' . $data . '</td>';
                         }
-                        $body_info .= '</tr>';
-                    }
+                        if ($header == 'QA_sub_status_code') {
+                            if ($data != '--') {
+                                $data = Helpers::qaSubStatusById($data)['sub_status_code'];
+                            } else {
+                                $data;
+                            }
+                        }
 
-                    $body_info .= '</tbody></table>';
+                        if ($header === 'chart_status') {
+                            $data = str_replace('_', ' ', $data);
+                        }
+                        if ($header === 'qa_work_status') {
+                            $data = str_replace('_', ' ', $data);
+                        }
+                        if ($header === 'work_hours') {
+                                $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
+                        }
+                        $body_info .= '<td>' . $data . '</td>';
+                    }
+                    $body_info .= '</tr>';
+                }
+
+                $body_info .= '</tbody></table>';
                 // } else {
                 //     $body_info = '<p>No data available</p>';
                 // }
@@ -157,7 +180,6 @@ class ReportsController extends Controller
                     'success' => true,
                     'body_info' => $body_info,
                 ]);
-
             } catch (Exception $e) {
                 log::debug($e->getMessage());
             }
