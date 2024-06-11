@@ -92,7 +92,7 @@ class ReportsController extends Controller
                     $client_data = DB::table($table_name)
                         ->select([
                             DB::raw($columnsHeader),
-                            "caller_charts_work_logs.work_time",
+                            "caller_charts_work_logs.work_time","caller_charts_work_logs.record_status",
                             // DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
                         ])
                         ->where('caller_charts_work_logs.project_id', '=', $request->project_id)
@@ -158,7 +158,8 @@ class ReportsController extends Controller
                         }
 
                         if ($header === 'chart_status') {
-                            $data = str_replace('_', ' ', $data);
+                            // $data = str_replace('_', ' ', $data);
+                            $data = str_replace('_', ' ', $row->{'record_status'});//here fetching chart status from call charts table
                         }
                         if ($header === 'qa_work_status') {
                             $data = str_replace('_', ' ', $data);
