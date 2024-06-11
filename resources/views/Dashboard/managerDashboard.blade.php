@@ -437,7 +437,8 @@
                     backgroundColor: getRandomColor(),
                     borderColor: getRandomColor(),
                     borderWidth: 1,
-                    fontSize: 1
+                    fontSize: 1,
+                    barThickness: 40
                 });
             });
             console.log(datasets, 'datasets');

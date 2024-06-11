@@ -440,7 +440,8 @@
                     backgroundColor: getRandomColor(),
                     borderColor: getRandomColor(),
                     borderWidth: 1,
-                    fontSize: 1
+                    fontSize: 1,
+                    barThickness: 40
                 });
             });
             console.log(datasets, 'datasets');
@@ -455,14 +456,14 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Custom Chart Title',
+                            text: 'Aging - Analysis',
                             padding: {
                                 top: 0,
                                 bottom: 10,
                             }
                         },
                         legend: {
-                            position: 'right',
+                            position: 'bottom',
                             labels: {
                                 font: {
                                     size: 8
