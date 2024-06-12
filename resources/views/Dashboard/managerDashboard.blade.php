@@ -624,6 +624,7 @@
                 $.each(subProjects, function(index, val) {
                     $.each(val, function(valIndex, data) {
                         // if(data.assignedCount > 0 || data.CompletedCount > 0 || data.PendingCount > 0 || data.holdCount > 0) {
+                            if(data.resource_emp_id !== '--') {
                             html +=
                                 '<tbody><tr class="clickable-row cursor_hand">' +
                                 '<td><input type="hidden" value=' + data.client_id + '></td>' +
@@ -638,7 +639,7 @@
                                 '<td>' + data.PendingCount + '</td>' +
                                 '<td>' + data.holdCount + '</td>' +
                                 '</tr></tbody>';
-                        // }
+                        }
                     });
                 });
                 html += '</table>';
@@ -741,6 +742,7 @@
 
                 $.each(subProjects, function(index, val) {
                     $.each(val, function(valIndex, data) {
+                        if(data.holdCount > 0 && data.holdCount !== '--') {
                         html +=
                             '<tbody><tr class="hold-clickable-row cursor_hand">' +
                             '<td><input type="hidden" value=' + data.client_id + '></td>' +
@@ -752,6 +754,7 @@
                             .sub_project_id + '></td>' +
                             '<td>' + data.holdCount + '</td>' +
                             '</tr></tbody>';
+                        }
                     });
                 });
                 html += '</table>';
