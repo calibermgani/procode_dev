@@ -83,6 +83,7 @@ Route::group(['prefix' => 'qa_production'], function () {
     Route::any('qa_sub_status_list', 'App\Http\Controllers\QA\QAProductionController@qaSubStatusList');
     Route::any('qa_projects_auto_close/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientAutoClose');
     Route::any('sampling_assignee', 'App\Http\Controllers\QA\QAProductionController@samplingAssignee');
+    Route::any('qa_projects_unAssigned/{clientName}/{subProjectName}', 'App\Http\Controllers\QA\QAProductionController@clientUnAssignedTab')->name('qaClientUnAssigned');
 });
 
 

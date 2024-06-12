@@ -81,7 +81,7 @@
                                         ) {
                                             if (class_exists($modelClass)) {
                                                 $assignedCount = $modelClass
-                                                    ::whereIn('chart_status',['CE_Completed','QA_Inprocess'])
+                                                    ::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')
                                                     ->count();
                                                 $completedCount = $modelClass
                                                     ::where('chart_status', 'QA_Completed')->whereBetween('updated_at',[$startDate,$endDate])

@@ -25,14 +25,14 @@
                     <div class="col-md-6">
                         <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
 
-                            {{-- @if (
-                                $empDesignation == 'Administrator' ||
+                            @if (
+                                $loginEmpId == 'Admin' ||
                                     strpos($empDesignation, 'Manager') !== false ||
                                     strpos($empDesignation, 'VP') !== false ||
                                     strpos($empDesignation, 'Leader') !== false ||
                                     strpos($empDesignation, 'Team Lead') !== false ||
                                     strpos($empDesignation, 'CEO') !== false ||
-                                    strpos($empDesignation, 'Vice') !== false) --}}
+                                    strpos($empDesignation, 'Vice') !== false)
                                 <div class="col-lg-3 mb-lg-0 mb-6">
 
                                     <fieldset class="form-group mb-0 white-smoke-disabled">
@@ -45,7 +45,7 @@
                                         ]) !!}
                                     </fieldset>
                                 </div>
-                            {{-- @endif --}}
+                            @endif
                             &nbsp;&nbsp;
                             <div>
                                 @if ($popUpHeader != null)
@@ -94,7 +94,7 @@
                                 strpos($empDesignation, 'Team Lead') !== false ||
                                 strpos($empDesignation, 'CEO') !== false ||
                                 strpos($empDesignation, 'Vice') !== false)
-                            <div class="wizard-step mb-0 five" data-wizard-type="done">
+                            <div class="wizard-step mb-0 five" data-wizard-type="step">
                                 <div class="wizard-wrapper py-2">
                                     <div class="wizard-label p-2 mt-2">
                                         <div class="wizard-title" style="display: flex; align-items: center;">
@@ -137,7 +137,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="wizard-step mb-0 seven" data-wizard-type="step">
+                        <div class="wizard-step mb-0 seven" data-wizard-type="done">
                             <div class="wizard-wrapper py-2">
                                 <div class="wizard-label p-2 mt-2">
                                     <div class="wizard-title" style="display: flex; align-items: center;">
@@ -147,37 +147,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="wizard-step mb-0 five" data-wizard-type="step">
-                            <div class="wizard-wrapper py-2">
-                                <div class="wizard-label p-2 mt-2">
-                                    <div class="wizard-title" style="display: flex; align-items: center;">
-                                        <h6 style="margin-right: 5px;">Rework</h6>
-                                        @include('CountVar.countRectangle', ['count' => $reworkCount])
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-                        {{-- @if (
-                            $loginEmpId == 'Admin' ||
-                                strpos($empDesignation, 'Manager') !== false ||
-                                strpos($empDesignation, 'VP') !== false ||
-                                strpos($empDesignation, 'Leader') !== false ||
-                                strpos($empDesignation, 'Team Lead') !== false ||
-                                strpos($empDesignation, 'CEO') !== false ||
-                                strpos($empDesignation, 'Vice') !== false)
-                            <div class="wizard-step mb-0 six" data-wizard-type="step">
-                                <div class="wizard-wrapper py-2">
-                                    <div class="wizard-label p-2 mt-2">
-                                        <div class="wizard-title" style="display: flex; align-items: center;">
-                                            <h6 style="margin-right: 5px;">Duplicate</h6>
-                                            @include('CountVar.countRectangle', [
-                                                'count' => $duplicateCount,
-                                            ])
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif --}}
                     </div>
                 </div>
             </div>
@@ -192,36 +161,36 @@
                             <thead>
                                 @if (!empty($columnsHeader))
                                     <tr>
-                                        {{-- @if (
-                                            $empDesignation == 'Administrator' ||
+                                        @if (
+                                            $loginEmpId == 'Admin' ||
                                                 strpos($empDesignation, 'Manager') !== false ||
                                                 strpos($empDesignation, 'VP') !== false ||
                                                 strpos($empDesignation, 'Leader') !== false ||
                                                 strpos($empDesignation, 'Team Lead') !== false ||
                                                 strpos($empDesignation, 'CEO') !== false ||
-                                                strpos($empDesignation, 'Vice') !== false) --}}
+                                                strpos($empDesignation, 'Vice') !== false)
                                             <th class='notexport'><input type="checkbox" id="ckbCheckAll"
                                                     class="cursor_hand">
                                             </th>
-                                        {{-- @endif --}}
+                                        @endif
                                         <th class='notexport' style="color:white !important">Action</th>
                                         @foreach ($columnsHeader as $columnName => $columnValue)
                                             @if ($columnValue != 'id')
                                                 <th><input type="hidden" value={{ $columnValue }}>
-                                                    @if ($columnValue == 'chart_status')
-                                                        Charge Status
-                                                    @else
-                                                    {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                    @endif
+                                                  @if ($columnValue == 'chart_status')
+                                                    Charge Status
+                                                  @else
+                                                   {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                  @endif
                                                 </th>
                                             @else
                                                 <th style="display:none" class='notexport'><input type="hidden"
                                                         value={{ $columnValue }}>
-                                                        @if ($columnValue == 'chart_status')
-                                                            Charge Status
-                                                        @else
-                                                            {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
-                                                        @endif
+                                                       @if ($columnValue == 'chart_status')
+                                                         Charge Status
+                                                       @else
+                                                         {{ ucwords(str_replace(['_else_', '_'], ['/', ' '], $columnValue)) }}
+                                                       @endif
                                                 </th>
                                             @endif
                                         @endforeach
@@ -231,25 +200,24 @@
 
                             </thead>
                             <tbody>
-
-                                @if (isset($autoCloseProjectDetails))
-                                    @foreach ($autoCloseProjectDetails as $data)
+                                @if (isset($unAssignedProjectDetails))
+                                    @foreach ($unAssignedProjectDetails as $data)
                                         <tr>
-                                            {{-- @if (
-                                                $empDesignation == 'Administrator' ||
+                                            @if (
+                                                $loginEmpId == 'Admin' ||
                                                     strpos($empDesignation, 'Manager') !== false ||
                                                     strpos($empDesignation, 'VP') !== false ||
                                                     strpos($empDesignation, 'Leader') !== false ||
                                                     strpos($empDesignation, 'Team Lead') !== false ||
                                                     strpos($empDesignation, 'CEO') !== false ||
-                                                    strpos($empDesignation, 'Vice') !== false) --}}
+                                                    strpos($empDesignation, 'Vice') !== false)
                                                 <td><input type="checkbox" class="checkBoxClass cursor_hand" name='check[]'
                                                         value="{{ $data->id }}">
                                                 </td>
-                                            {{-- @endif --}}
+                                            @endif
                                             <td>
-                                                {{-- @if (
-                                                    ($empDesignation !== 'Administrator' ||
+                                                @if (
+                                                    ($loginEmpId !== 'Admin' ||
                                                         strpos($empDesignation, 'Manager') !== true ||
                                                         strpos($empDesignation, 'VP') !== true ||
                                                         strpos($empDesignation, 'Leader') !== true ||
@@ -258,7 +226,8 @@
                                                         strpos($empDesignation, 'Vice') !== true) &&
                                                         $loginEmpId != $data->QA_emp_id)
                                                 @else
-                                                     @if (empty($existingCallerChartsWorkLogs))
+                                                    {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array('QA_Inprocess', $assignedProjectDetailsStatus)) --}}
+                                                    @if (empty($existingCallerChartsWorkLogs))
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
@@ -267,7 +236,7 @@
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
                                                     @endif
-                                                @endif --}}
+                                                @endif
                                                 <button class="task-start clickable-view" title="View"><i
                                                         class="fa far fa-eye text-eye icon-circle1 mt-0"></i></button>
                                             </td>
@@ -276,9 +245,6 @@
                                                     $columnsToExclude = [
 
                                                         'ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
-                                                        'coder_rework_status',
-                                                        'QA_status_code',
-                                                        'QA_sub_status_code',
                                                         'created_at',
                                                         'updated_at',
                                                         'deleted_at',
@@ -293,12 +259,16 @@
                                                         <td
                                                             style="max-width: 300px;
                                                                         white-space: normal;">
-                                                          
+                                                            @if ($columnName == 'chart_status' && is_null($data->QA_emp_id)  && is_null($data->qa_work_status))
+                                                                <b>
+                                                                    <p style="color: red;">UnAssigned</p>
+                                                                </b>
+                                                            @else
                                                                 @if (str_contains($columnValue, '-') && strtotime($columnValue))
                                                                     {{ date('m/d/Y', strtotime($columnValue)) }}
                                                                 @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'CE_') && $data->qa_work_status !== null)
                                                                     {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
-                                                                {{-- Assigned --}} {{ str_replace('_', ' ', $data->qa_work_status) }}
+                                                                    {{ str_replace('_', ' ', $data->qa_work_status) }}
                                                                 @elseif ($columnName == 'chart_status' && str_contains($columnValue, 'QA_'))
                                                                 {{-- {{ str_replace('CE_', '', $columnValue) }} --}}
                                                                 In process
@@ -324,7 +294,7 @@
                                                                 @else
                                                                     {{ $columnValue }}
                                                                 @endif
-                                                            
+                                                            @endif
                                                         </td>
                                                     @else
                                                         <td style="display:none;max-width: 300px;
@@ -529,6 +499,7 @@
                                                                                                         {!! Form::$inputType($columnName . '[]', $options[$i], false, [
                                                                                                             'class' => $columnName,
                                                                                                             'id' => $columnName,
+                                                                                                            $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                         ]) !!}{{ $options[$i] }}
                                                                                                         <span></span>
                                                                                                     </label>
@@ -550,6 +521,8 @@
                                                                                                         style="word-break: break-all;">
                                                                                                         {!! Form::$inputType($columnName, $options[$i], false, [
                                                                                                             'class' => $columnName,
+                                                                                                            'id' => $columnName,
+                                                                                                            $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                         ]) !!}{{ $options[$i] }}
                                                                                                         <span></span>
                                                                                                     </label>
@@ -616,7 +589,7 @@
                                                         @if ($count % 2 == 0)
                                                             <div class="row" id={{ $columnName }}>
                                                         @endif
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 dynamic-field">
                                                             <div class="form-group row row_mar_bm">
                                                                 <label class="col-md-12 {{ $data->field_type_2 == 'mandatory' ? 'required' : '' }}">
                                                                     {{ $labelName }}
@@ -625,7 +598,7 @@
                                                                     @if ($options == null)
                                                                         @if ($inputType != 'date_range')
                                                                             {!! Form::$inputType($columnName . '[]', null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'rows' => 3,
@@ -634,7 +607,7 @@
                                                                             ]) !!}
                                                                         @else
                                                                             {!! Form::text($columnName . '[]', null, [
-                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control date_range daterange_' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => 'date_range',
@@ -644,7 +617,7 @@
                                                                     @else
                                                                         @if ($inputType == 'select')
                                                                             {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
-                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
+                                                                                'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val exclude',
                                                                                 'autocomplete' => 'none',
                                                                                 'style' => 'cursor:pointer',
                                                                                 'id' => $columnName,
@@ -661,8 +634,9 @@
                                                                                             <label class="checkbox pop-non-edt-val"
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName . '[]', $options[$i], false, [
-                                                                                                    'class' => $columnName,
+                                                                                                    'class' => 'exclude '.$columnName,
                                                                                                     'id' => $columnName,
+                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
@@ -673,7 +647,7 @@
                                                                         @elseif ($inputType == 'radio')
                                                                             <p id="radio_p1" style="display: none; color: red; margin-left: 3px;">
                                                                                 Radio
-                                                                                is not selected</p>
+                                                                                is not selcted</p>
                                                                             <div class="form-group row">
                                                                                 @for ($i = 0; $i < count($options); $i++)
                                                                                     <div class="col-md-6">
@@ -681,8 +655,9 @@
                                                                                             <label class="radio pop-non-edt-val"
                                                                                                 style="word-break: break-all;">
                                                                                                 {!! Form::$inputType($columnName, $options[$i], false, [
-                                                                                                    'class' => $columnName,
+                                                                                                    'class' => $columnName.' exclude',
                                                                                                     'id' => $columnName,
+                                                                                                    $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                                                 ]) !!}{{ $options[$i] }}
                                                                                                 <span></span>
                                                                                             </label>
@@ -701,7 +676,7 @@
                                                                         class="add_options">
 
                                                                     @if ($data->field_type_1 == 'multiple')
-                                                                        <i class="fa fa-plus add_more" id="add_more_{{ $columnName }}"
+                                                                        <i class="fa fa-plus add_more exclude" id="add_more_{{ $columnName }}"
                                                                             style="{{ $data->field_type_1 == 'multiple' ? 'visibility: visible;' : 'visibility: hidden;' }}"></i>
                                                                         <input type="hidden"
                                                                             value="{{ $data->field_type_1 == 'multiple' ? $labelName : '' }}"
@@ -1062,7 +1037,26 @@
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="row mt-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="qa_status_label">
+                                                        QA Status
+                                                    </label>
+                                                    <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-12" id="qa_sub_status_label">
+                                                        QA Sub Status
+                                                    </label>
+                                                    <label class="col-md-12 pop-non-edt-val" id="qa_sub_status_view">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr style="display:none" id="hr_view">
                                         <div class="row mt-4">
                                             <div class="col-md-12">
@@ -1248,6 +1242,13 @@
 
             var uniqueId = 0;
             $('.modal-body').on('click', '.add_more', function() {
+                var addBtnClasses = $(this).attr('class');
+                var btnLastClass = '';
+                if (addBtnClasses) {
+                    var classArray = addBtnClasses.split(' ');
+                    var btnLastClass = classArray[classArray.length - 1];
+                }
+                btnLastClass = btnLastClass == 'exclude' ? btnLastClass : 'include';
                 var ids = [];
                 clumnClassName = $(this).attr('id').replace(/^add_more_/, '');
                 $('.' + clumnClassName).each(function() {
@@ -1273,33 +1274,33 @@
                     if (inputType !== 'date_range') {
                         if (inputType == 'textarea') {
                             newElement = '<textarea name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
+                                '[]"  class="form-control ' + columnName + ' '+ btnLastClass +' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                 columnName +
                                 uniqueId +
-                                '"></textarea>';
+                                '" '+ addMandatory +'></textarea>';
 
                         } else {
                             newElement = '<input type="' + inputType + '" name="' + columnName +
-                                '[]"  class="form-control ' + columnName + ' white-smoke pop-non-edt-val "  id="' +
+                                '[]"  class="form-control ' + columnName +' '+ btnLastClass + ' white-smoke pop-non-edt-val "  id="' +
                                 columnName +
                                 uniqueId +
-                                '">';
+                                '" '+ addMandatory +'>';
                         }
                     } else {
                         newElement = '<input type="text" name="' + columnName +
-                            '[]" class="form-control date_range ' + columnName +
+                            '[]" class="form-control date_range ' + columnName +' '+ btnLastClass +
                             ' white-smoke pop-non-edt-val"  style="cursor:pointer" autocomplete="none" id="' +
                             columnName +
                             uniqueId +
-                            '">';
+                            '" '+ addMandatory +'>';
                     }
                 } else if (inputType === 'select') {
 
                     newElement = '<select name="' + columnName + '[]"  class="form-control ' +
-                        columnName + ' white-smoke pop-non-edt-val" id="' +
+                        columnName +' '+ btnLastClass + ' white-smoke pop-non-edt-val" id="' +
                         columnName +
                         uniqueId +
-                        '">';
+                        '" '+ addMandatory +'>';
 
                     optionsArray.unshift('-- Select --');
                     optionsArray.forEach(function(option) {
@@ -1321,8 +1322,8 @@
                             columnName +
                             uniqueId +
                             '" class="' +
-                            columnName +
-                            '">' + option +
+                            columnName +' '+ btnLastClass +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1339,12 +1340,10 @@
                             '<label class="radio pop-non-edt-val" style="word-break: break-all;" ' + addMandatory +
                             '>' +
                             '<input type="radio" name="' + columnName + '_' + uniqueId +
-                            '" value="' + option + '" class="' + columnName + '" id="' +
+                            '" value="' + option + '" class="' + columnName +' '+ btnLastClass +'" id="' +
                             columnName +
                             uniqueId +
-                            '" class="' +
-                            columnName +
-                            '">' + option +
+                            '" '+ addMandatory +'>' + option +
                             '<span></span>' +
                             '</label>' +
                             '</div>' +
@@ -1506,6 +1505,7 @@
                                 '.add_options').val();
                             var optionsObject = optionsJson ? JSON.parse(optionsJson) : null;
                             var optionsArray = optionsObject ? Object.values(optionsObject) : null;
+                            var addMandatory =  $('.'+header).closest('.dynamic-field').find('.add_mandatory').val();
                             var inputType;
                             $('select[name="' + header + '[]"]').val(values[0]).trigger('change');
                             $('textarea[name="' + header + '[]"]').val(values[0]);
@@ -1536,7 +1536,8 @@
                                         name: header + '[]',
                                         class: 'form-control ' + header +
                                             ' white-smoke pop-non-edt-val',
-                                        id: header + i
+                                        id: header + i,
+                                        addMandatory
                                     });
                                     selectType.append($('<option>', {
                                         value: '',
@@ -1577,7 +1578,7 @@
                                 } else if ($('textarea[name="' + header + '[]"]').prop(
                                     'nodeName') != undefined) {
                                     inputType = '<textarea name="' + header +
-                                        '[]" class="form-control ' + header +
+                                        '[]" '+addMandatory+' class="form-control ' + header +
                                         ' white-smoke pop-non-edt-val mt-0" rows="3" id="' +
                                         header + i + '">' + values[i] + '</textarea>';
                                     if (i === values.length - 1) {
@@ -1606,7 +1607,7 @@
                                             '<div class="checkbox-inline mt-2">' +
                                             '<label class="checkbox pop-non-edt-val" style="word-break: break-all;" >' +
                                             '<input type="checkbox" name="' + header +
-                                            '[]" value="' + option + '" class="' + header +
+                                            '[]" value="' + option + '" '+addMandatory+' class="' + header +
                                             '" id="' + header + i + '" ' + checked + '>' +
                                             option +
                                             '<span></span>' +
@@ -1643,7 +1644,7 @@
                                             '<div class="radio-inline mt-2">' +
                                             '<label class="radio pop-non-edt-val" style="word-break: break-all;" >' +
                                             '<input type="radio" name="' + header + '_' +
-                                            i + '" class="' + header + '" value="' +
+                                            i + '" '+addMandatory+' class="' + header + '" value="' +
                                             option + '" id="' +
                                             header + i + '" ' + checked + '>' + option +
                                             '<span></span>' +
@@ -1681,7 +1682,7 @@
                                     if (dateRangeClass == 'date_range') {
 
                                         inputType = '<input type="' + fieldType + '" name="' +
-                                            header + '[]"  class="form-control date_range ' +
+                                            header + '[]"  '+addMandatory+' class="form-control date_range ' +
                                             header +
                                             ' white-smoke pop-non-edt-val" autocomplete="none" style="cursor:pointer" value="' +
                                             values[i] + '" id="' + header + i + '">';
@@ -1696,7 +1697,7 @@
                                         }
                                     } else {
                                         inputType = '<input type="' + fieldType + '" name="' +
-                                            header + '[]"  class="form-control ' + header +
+                                            header + '[]"  '+addMandatory+' class="form-control ' + header +
                                             ' white-smoke pop-non-edt-val"  value="' + values[i] +
                                             '" id="' + header + i + '">';
                                         if (i === values.length - 1) {
@@ -1732,12 +1733,12 @@
                                 $(this).prop('checked', checkboxValues.includes($(this)
                                 .val()));
                             });
-                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {
-                            if(value.length > 0) {
+                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {console.log(value,'radio');
+                          if(value.length > 0) {
                                 $('input[name="' + header + '"]').filter('[value="' + value + '"]')
                                     .prop(
                                         'checked', true);
-                            }
+                          }
                         } else if ($('select[name="' + header + '[]"]').length) {
                             $('select[name="' + header + '[]"]').val(value).trigger('change');
                         } else {
@@ -1796,9 +1797,11 @@
                                 }
                             }
                             $('textarea[name="' + header + '[]"]').val(value);
-                            $('input[name="' + header + '[]"]').val(value);
                             $('label[id="' + header + '"]').text(value);
-                            $('input[name="' + header + '"]').val(value);
+                            if(value != null) {
+                                $('input[name="' + header + '[]"]').val(value);
+                                $('input[name="' + header + '"]').val(value);
+                            }
                         }
                     });
 
@@ -1915,10 +1918,14 @@
                                 // value = value.replace('CE_', '');
                                 value = "Assigned";
                                 $('#title_status_view').text("Assigned");
-                            } else if (header === 'chart_status' && value == "QA_Completed") {
-                                value = "Completed";
-                                $('#title_status_view').text("Completed");
+                            } else if (header === 'chart_status' && value.includes('QA_')) {
+                                value = "In Process";
+                                $('#title_status_view').text("In Process");
                             }
+                             $('#chart_status').text() == "Assigned" ? $('#qa_status_label').css('display','none') : $('#qa_status_label').css('display','block');
+                            $('#chart_status').text() == "Assigned" ? $('#qa_sub_status_label').css('display','none') : $('#qa_sub_status_label').css('display','block');
+                            $('#chart_status').text() == "Assigned" ? $('#qa_status_view').css('display','none') : $('#qa_status_view').css('display','block');
+                            $('#chart_status').text() == "Assigned" ? $('#qa_sub_status_view').css('display','none') : $('#qa_sub_status_view').css('display','block');
 
                             if (header == 'QA_status_code') {
                                 var statusName = '';
@@ -2004,7 +2011,7 @@
 
             $(document).on('click', '#project_assign_save', function(e) {
                 e.preventDefault();
-                var inputTypeValue = 0;
+                var inputTypeValue = 0;var inputTypeRadioValue = 0;
                 var claimStatus = $('#chart_status_start').val();
                 if (claimStatus == "QA_Hold") {
                     var ceHoldReason = $('#qa_hold_reason');
@@ -2073,24 +2080,27 @@
 
                 $('input[type="radio"]').each(function() {
                     var groupName = $(this).attr("name");
-                    if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0) {
+                    var mandatory = $(this).prop('required');console.log(mandatory,'mandatory');
+                    if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
                         $('#radio_p1').css('display', 'block');
-                        inputTypeValue = 1;
+                        inputTypeRadioValue = 1;
+                        return false;
                     } else {
                         $('#radio_p1').css('display', 'none');
-                        inputTypeValue = 0;
+                        inputTypeRadioValue = 0;
                     }
                 });
 
 
                 $('input[type="checkbox"]').each(function() {
                     var groupName = $(this).attr("id");
+                    var mandatory = $(this).prop('required');
                     if ($(this).attr("name") !== 'check[]' && $(this).attr("name") !== undefined) {
                         if ($('input[type="checkbox"][id="' + groupName + '"]:checked').length ===
                             0) {
                             if ($('input[type="checkbox"][id="' + groupName + '"]:checked')
                                 .length ===
-                                0) {
+                                0 && mandatory === true) {
                                 $('#check_p1').css('display', 'block');
                                 inputTypeValue = 1;
                             } else {
@@ -2143,7 +2153,7 @@
                 var fieldValuesByFieldName = {};
 
                 $('input[type="radio"]:checked').each(function() {
-                    var fieldName = $(this).attr('class');
+                    var fieldName = $(this).attr('class').split(' ')[0];
                     var fieldValue = $(this).val();
                     if (!fieldValuesByFieldName[fieldName]) {
                         fieldValuesByFieldName[fieldName] = [];
@@ -2171,8 +2181,7 @@
                 });
 
 
-
-                if (inputTypeValue == 0) {
+                if (inputTypeValue == 0 && inputTypeRadioValue == 0) {
 
                     swal.fire({
                         text: "Do you want to update?",
@@ -2245,7 +2254,7 @@
                     }
                 });
                 swal.fire({
-                    text: "Do you want to move the sampling?",
+                    text: "Do you want to assign?",
                     icon: "success",
                     buttonsStyling: false,
                     showCancelButton: true,
@@ -2270,7 +2279,7 @@
                             success: function(response) {
                                 if (response.success == true) {
                                     js_notification('success',
-                                        'The claim has been moved to sampling successfully.');
+                                        'Assignee Updated Successfully');
                                 } else {
                                     js_notification('error', 'Something went wrong');
                                 }
@@ -2287,12 +2296,14 @@
             })
 
             $(document).on('click', '.one', function() {
-                window.location.href = baseUrl + 'qa_production/qa_projects_assigned/' + clientName + '/' + subProjectName +
+                window.location.href = baseUrl + 'qa_production/qa_projects_assigned/' + clientName + '/' +
+                    subProjectName +
                     "?parent=" +
                     getUrlVars()[
                         "parent"] +
                     "&child=" + getUrlVars()["child"];
             })
+
             $(document).on('click', '.two', function() {
                 window.location.href = baseUrl + 'qa_production/qa_projects_pending/' + clientName + '/' +
                     subProjectName +
@@ -2315,11 +2326,7 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.five', function() {
-                window.location.href = baseUrl + 'qa_production/qa_projects_unAssigned/' + clientName + '/' +
-                    subProjectName +
-                    "?parent=" +
-                    getUrlVars()[
-                        "parent"] + "&child=" + getUrlVars()["child"];
+                window.location.href = "{{ url('#') }}";
             })
             $(document).on('click', '.six', function() {
                 window.location.href = baseUrl + 'qa_production/qa_projects_duplicate/' + clientName + '/' +
@@ -2329,7 +2336,11 @@
                         "parent"] + "&child=" + getUrlVars()["child"];
             })
             $(document).on('click', '.seven', function() {
-                window.location.href ="{{ url('#') }}";
+                window.location.href = baseUrl + 'qa_production/qa_projects_auto_close/' + clientName + '/' +
+                    subProjectName +
+                    "?parent=" +
+                    getUrlVars()[
+                        "parent"] + "&child=" + getUrlVars()["child"];
             })
 
             $(document).on('change', '#chart_status_start', function() {
@@ -2349,28 +2360,72 @@
 
             // Exclude fields you don't want to track
             var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
+
+            // $('#formConfiguration').on('focusout', 'input, select, textarea', function() {
+            //     var fieldName = $(this).attr('id');
+            //     var trimmedFiled = $(this).attr('id');
+            //     var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
+            //     var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+            //     var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+
+            //     if (excludedFields.indexOf(fieldName) === -1) {
+            //         var currentValue = '';
+            //         if ($(this).is('input[type="checkbox"]')) {
+            //             currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+            //         } else if ($(this).is('input[type="radio"]')) {
+            //             currentValue = $(`input[name="${fieldName}"]:checked`).val();
+            //         } else if ($(this).is('input[type="date"]')) {
+            //             currentValue = $(this).val();
+            //         } else {
+            //             currentValue = $(this).val();
+            //         }
+            //         var prevValue = prevValues[trimmedFiled1] || '';
+
+            //          var newLine = prevValue != '' ? formattedValue1 + ' '+prevValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+            //         var textAreaValue = $('#QA_rework_comments').val();
+
+            //         if (textAreaValue.includes(formattedValue)) {
+            //             var regex = new RegExp(formattedValue1 + ' .*', 'g');
+            //             textAreaValue = textAreaValue.replace(regex, newLine);
+            //         } else {
+            //             if(textAreaValue == "") {
+            //               textAreaValue += newLine;
+            //             } else {
+            //                 newLine = '\n'+newLine;
+            //                 textAreaValue += newLine;
+            //             }
+            //         }
+
+            //         // Set the updated value back to the textarea
+            //         $('#QA_rework_comments').val(textAreaValue);
+            //     }
+            // });
                  var previousValue;
-                $('#formConfiguration').on('focus', 'input, select, textarea', function() {
+                $('#formConfiguration').on('focus', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     previousValue = $(this).val();
-                }).on('focusout', 'input, select, textarea', function() {
-                //   var currentValue = $(this).val();
+                }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
+                    //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
-                        var trimmedFiled = $(this).attr('id');
-                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');
-                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
+                        var trimmedFiled = $(this).attr('id') !== undefined ? $(this).attr('id') : $(this).attr('class');
+                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');console.log(fieldName,trimmedFiled,trimmedFiled1);
+                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');console.log(fieldName,trimmedFiled,trimmedFiled1,formattedValue,formattedValue1);
                         var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
                     if (excludedFields.indexOf(fieldName) === -1) {
                         var currentValue = '';
                         if ($(this).is('input[type="checkbox"]')) {
-                            currentValue = $(this).is(':checked') ? 'Checked' : 'Unchecked';
+                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();
                         } else if ($(this).is('input[type="radio"]')) {
-                            currentValue = $(`input[name="${fieldName}"]:checked`).val();
+                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();console.log(currentValue,'currentValue',$(this).closest('label').text());
                         } else if ($(this).is('input[type="date"]')) {
                             currentValue = $(this).val();
                         } else {
                             currentValue = $(this).val();
                         }
-                        var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
+                            var newLine =  formattedValue1 + currentValue;
+                        }  else {
+                            var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        }
                         var textAreaValue = $('#QA_rework_comments').val();
                         // if (textAreaValue.includes(formattedValue)) {
                         //     var regex = new RegExp(formattedValue1 + ' .*', 'g');
