@@ -250,7 +250,7 @@ class DashboardController extends Controller
                         $projectIds[] = $project["client_name"];
                     }
                 }
-                $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = [];
+                $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = $unAssignedCounts = [];
                 foreach ($models as $modelKey => $model) {
                     if (class_exists($model)) {
                         $aCount = $model::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->whereBetween('updated_at', [$startDate, $endDate])->count();
@@ -258,11 +258,13 @@ class DashboardController extends Controller
                         $pCount = $model::where('chart_status', 'CE_Pending')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $hCount = $model::where('chart_status', 'CE_Hold')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $rCount = $model::where('chart_status', 'Revoke')->whereBetween('updated_at', [$startDate, $endDate])->count();
+                        $uACount = $model::where('chart_status', 'CE_Assigned')->whereNull('CE_emp_id')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $assignedCounts[] = $aCount;
                         $completeCounts[] = $cCount;
                         $pendingCounts[] = $pCount;
                         $holdCounts[] = $hCount;
                         $reworkCounts[] = $rCount;
+                        $unAssignedCounts[] = $uACount;
                         foreach ($agingHeader as $key => $data) {
                             // $startDay = $data["days"] - 1;
                             // $endDumDay = isset($agingHeader[$key - 1]) &&  isset($agingHeader[$key - 1]["days"]) ? $agingHeader[$key - 1]["days"]  : "0";
@@ -303,7 +305,8 @@ class DashboardController extends Controller
                 $totalPendingCount = array_sum($pendingCounts);
                 $totalHoldCount = array_sum($holdCounts);
                 $totalReworkCount = array_sum($reworkCounts);
-                $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
+                $totalUnAssignedCounts = array_sum($unAssignedCounts);
+                $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount + $totalUnAssignedCounts;
 
                 $agingData = [
                     'AMBC' => [50, 0, 0, 0, 0, 100, 0, 153, 0, 45, 45],
@@ -530,7 +533,7 @@ class DashboardController extends Controller
                         $models[] = $modelClass;
                     }
                 }
-                $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = [];
+                $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $unAssignedCounts = [];
                 foreach ($models as $model) {
                     if (class_exists($model) && $userType == "user") {
                         $aCount = $model::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->whereBetween('updated_at', [$startDate, $endDate])->count();
@@ -549,11 +552,13 @@ class DashboardController extends Controller
                         $pCount = $model::where('chart_status', 'CE_Pending')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $hCount = $model::where('chart_status', 'CE_Hold')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $rCount = $model::where('chart_status', 'Revoke')->whereBetween('updated_at', [$startDate, $endDate])->count();
+                        $uACount = $model::where('chart_status', 'CE_Assigned')->whereNull('CE_emp_id')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $assignedCounts[] = $aCount;
                         $completeCounts[] = $cCount;
                         $pendingCounts[] = $pCount;
                         $holdCounts[] = $hCount;
                         $reworkCounts[] = $rCount;
+                        $unAssignedCounts[] = $uACount;
                     }
                 }
                 $totalAssignedCount = array_sum($assignedCounts);
@@ -561,7 +566,8 @@ class DashboardController extends Controller
                 $totalPendingCount = array_sum($pendingCounts);
                 $totalHoldCount = array_sum($holdCounts);
                 $totalReworkCount = array_sum($reworkCounts);
-                $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount;
+                $totalUnAssignedCounts = array_sum($unAssignedCounts);
+                $totalCount = $totalAssignedCount + $totalCompleteCount + $totalPendingCount + $totalHoldCount + $totalReworkCount +$totalUnAssignedCounts;
                 return response()->json(['totalCount' => $totalCount, 'totalAssignedCount' => $totalAssignedCount, 'totalCompleteCount' => $totalCompleteCount, 'totalPendingCount' => $totalPendingCount, 'totalHoldCount' => $totalHoldCount, 'totalReworkCount' => $totalReworkCount]);
                 return $totalCount;
             } catch (\Exception $e) {
