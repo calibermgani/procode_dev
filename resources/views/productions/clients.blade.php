@@ -19,7 +19,7 @@
                     <thead>
                         <tr>
                             <th width="15px"></th>
-                            <th>Client Name</th>
+                            <th>Project</th>
                             <th>Assigned</th>
                             <th>Completed</th>
                             <th>Pending</th>

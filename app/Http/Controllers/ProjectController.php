@@ -111,7 +111,7 @@ class ProjectController extends Controller
                     // $prjoectsPending[$key]['Balance'] = $pCount;
                 }
             }
-
+            
             $mailBody = $prjoectsPending;
             Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody));
             Log::info('ProjectWorkMail executed successfully.');
