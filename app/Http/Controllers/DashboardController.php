@@ -253,7 +253,7 @@ class DashboardController extends Controller
                 $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = [];
                 foreach ($models as $modelKey => $model) {
                     if (class_exists($model)) {
-                        $aCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('updated_at', [$startDate, $endDate])->count();
+                        $aCount = $model::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $cCount = $model::where('chart_status', 'CE_Completed')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $pCount = $model::where('chart_status', 'CE_Pending')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $hCount = $model::where('chart_status', 'CE_Hold')->whereBetween('updated_at', [$startDate, $endDate])->count();
@@ -544,7 +544,7 @@ class DashboardController extends Controller
                         $holdCounts[] = $hCount;
                         $reworkCounts[] = $rCount;
                     } else if (class_exists($model) && $userType == "manager") {
-                        $aCount = $model::where('chart_status', 'CE_Assigned')->whereBetween('updated_at', [$startDate, $endDate])->count();
+                        $aCount = $model::where('chart_status', 'CE_Assigned')->whereNotNull('CE_emp_id')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $cCount = $model::where('chart_status', 'CE_Completed')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $pCount = $model::where('chart_status', 'CE_Pending')->whereBetween('updated_at', [$startDate, $endDate])->count();
                         $hCount = $model::where('chart_status', 'CE_Hold')->whereBetween('updated_at', [$startDate, $endDate])->count();
