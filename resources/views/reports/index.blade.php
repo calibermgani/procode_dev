@@ -18,8 +18,8 @@
         </div>
     </div>
 </div>
-<div class="card card-custom custom-card mr-4" style="display: none" id="listData">
-    <div class="card-body py-2 px-4">
+<div class="card card-custom custom-card" style="display: none" id="listData">
+    <div class="card-body  px-4">
         <div class="card-header border-0 px-4">
             <div class="row">
                 <div class="col-md-6">
