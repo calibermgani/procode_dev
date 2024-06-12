@@ -762,14 +762,26 @@
             $(document).on('click', '.hold-clickable-row', function(e) {
                 var clientName = $(this).closest('tr').find('td:eq(0) input').val();
                 var subProjectName = $(this).closest('tr').find('td:eq(2) input').val();
-
+                var resourceName = $(this).closest('tr').find('td:eq(1) input').val();
                 if (!clientName) {
                     console.error('encodedclientname is undefined or empty');
                     return;
                 }
-                window.location.href = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + btoa(
-                        subProjectName) + "?parent=" +
-                    getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                // window.location.href = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + btoa(
+                //         subProjectName) + "?parent=" +
+                //     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                    var url = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + btoa(
+                    subProjectName);
+                    var params = {
+                        parent: getUrlVars()["parent"],
+                        child: getUrlVars()["child"],
+                        resourceName: btoa(resourceName) 
+                    };
+
+             
+                    url += '?' + $.param(params);
+
+                    window.location.href = url
 
             })
 
