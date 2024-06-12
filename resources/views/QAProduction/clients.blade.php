@@ -3,7 +3,7 @@
     <div class="card card-custom custom-card">
         <div class="card-body pt-4 pb-0 px-2">
             <div class="my-client-div">
-                <span class="project_header" style="margin-left: 4px !important">QA Client List</span>
+                <span class="project_header" style="margin-left: 4px !important">QA Project List</span>
             </div>
 
             <div class="table-responsive pb-4">
@@ -11,7 +11,7 @@
                     <thead>
                         <tr>
                             <th width="15px"></th>
-                            <th>Client Name</th>
+                            <th>Project</th>
                             <th>Assigned</th>
                             <th>Completed</th>
                             <th>Pending</th>
