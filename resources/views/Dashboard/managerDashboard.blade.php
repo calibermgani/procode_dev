@@ -105,8 +105,8 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <div class="col-md-6 pr-0" style="margin-top:-8rem">
-                    <div class="card" style="height:252px">
+                <div class="col-md-6 pr-0" style="margin-top:-7.7rem">
+                    <div class="card" style="height:355px">
                         <div class="dash_card3_filter mt-4 ml-4">
                             <span><b>Projects</b></span>
                             <div>
@@ -558,7 +558,7 @@
                     paging: false,
                     scrollCollapse: true,
                     scrollX: true,
-                    scrollY: 100,
+                    scrollY: 200,
                     "initComplete": function(settings, json) {
                         $('body').find('.dataTables_scrollBody').addClass("scrollbar");
                     },
