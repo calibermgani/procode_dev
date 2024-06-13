@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\CallerChartsWorkLogs;
 use App\Models\QualitySampling;
 
+ini_set('memory_limit', '256M');
 class ProductionController extends Controller
 {
     public function dashboard() {
