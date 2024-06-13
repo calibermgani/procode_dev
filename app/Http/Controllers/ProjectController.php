@@ -148,8 +148,8 @@ class ProjectController extends Controller
             Log::info('Executing procodeProjectOnHoldMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $client = new Client();
-            $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
@@ -202,8 +202,8 @@ class ProjectController extends Controller
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
                 if($data["email_id"] != null) {
-                    // $toMailId = $data["email_id"];
-                    // $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
+                    $toMailId = $data["email_id"];
+                    $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
                 }
