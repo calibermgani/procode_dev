@@ -71,7 +71,7 @@ class ProjectController extends Controller
             // $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
             // $ccMailId = ["mgani@caliberfocus.com"];
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["mgani@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
             $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
             $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
