@@ -204,7 +204,7 @@ class ProductionController extends Controller
                     if (class_exists($modelClass)) {
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                            if($resourceName != null) {
-                                $assignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->orderBy('id','ASC')->limit(2000)->get();
+                                $assignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->orderBy('id','ASC')->get();
                                 $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                                 $assignedCount = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->count();
                                 $completedCount = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$resourceName)->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -215,7 +215,7 @@ class ProductionController extends Controller
                                 $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                                 $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->limit(2000)->pluck('chart_status')->toArray(); 
                                } else {
-                               $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->limit(2000)->get();
+                               $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->get();
                                $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                                $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
                                $completedCount = $modelClass::where('chart_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
