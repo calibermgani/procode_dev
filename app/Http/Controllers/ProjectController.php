@@ -142,7 +142,7 @@ class ProjectController extends Controller
         }
     }
 
-    public function procodeProjectOnHoldMail($id)
+    public function procodeProjectOnHoldMail()
     {
         try {
             Log::info('Executing procodeProjectOnHoldMail logic.');
@@ -192,9 +192,6 @@ class ProjectController extends Controller
             //  $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_details_above_tl_level', [
                 'json' => $payload
             ]);
-            $host = $_SERVER['HTTP_HOST'] ?? null;
-          
-            dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$host);
             if ($response->getStatusCode() == 200) {
                 $apiData = json_decode($response->getBody(), true);
             } else {
@@ -204,7 +201,7 @@ class ProjectController extends Controller
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
-                if($data["email_id"] != null) {dd($toMailId,$data);
+                if($data["email_id"] != null) {
                     // $toMailId = $data["email_id"];
                     // $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));

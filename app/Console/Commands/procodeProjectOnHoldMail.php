@@ -40,11 +40,10 @@ class procodeProjectOnHoldMail extends Command
         Log::info('Procode Project On Hold Mail Cron started.');
         try {
             $controller = app(\App\Http\Controllers\ProjectController::class);
-            $id=0;
-            $controller->procodeProjectOnHoldMail($id);
+            $controller->procodeProjectOnHoldMail();
             Log::info('Procode Project On Hold Mail Cron finished successfully.');
         } catch (\Exception $e) {
-            Log::error('Project Work Mail Cron failed: ' . $e->getMessage());
+            Log::error('Procode Project On Hold Mail Cron failed: ' . $e->getMessage());
         }
         $this->info('Procode Project On Hold Mail worked successfully.');
     }
