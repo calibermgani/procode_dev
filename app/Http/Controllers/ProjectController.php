@@ -202,7 +202,7 @@ class ProjectController extends Controller
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
                 if($data["email_id"] != null) {
-                    $toMailId = $data["email_id"];dd($toMailId,$data);
+                    $toMailId = $data["email_id"];
                     $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
