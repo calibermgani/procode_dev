@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ProjectWorkMail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use App\Mail\ProcodeProjectOnHoldMail;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -138,6 +138,77 @@ class ProjectController extends Controller
             }
             return $data['clientList'];
         } catch (\Exception $e) {
+            Log::debug($e->getMessage());
+        }
+    }
+
+    public function procodeProjectOnHoldMail()
+    {
+        try {
+            Log::info('Executing procodeProjectOnHoldMail logic.');
+            $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
+            $client = new Client();
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            $mailHeader = "Procode - Project Hold Charges reminder";
+            $projects = $this->getProjects();
+            foreach ($projects as $project) {
+                if (count($project["subprject_name"]) > 0) {
+                    foreach ($project["subprject_name"] as $key => $subProject) {
+                        $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        $modelName = Str::studly($table_name);
+                        $modelClass = "App\\Models\\" . $modelName;
+                        $models[] = $modelClass;
+                        $prjoectName[] = $project["client_name"] . '-' . $subProject;
+                     $projectId[] = $project["id"]; 
+                    }
+                } else {
+                    $subProjectText = "project";
+                    $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
+                    $modelName = Str::studly($table_name);
+                    $modelClass = "App\\Models\\" . $modelName;
+                    $models[] = $modelClass;
+                    $prjoectName[] = $project["client_name"];
+                    $projectId[] = $project["id"]; 
+                }
+            }
+            $prjoectsPending = $projectsIds = [];
+            foreach ($models as $key => $model) {
+                if (class_exists($model)) {
+                     $hCount = $model::where('chart_status', 'CE_Hold')->count();
+                        if($hCount > 0){
+                            $prjoectsPending[$projectId[$key]]['project'] = $prjoectName[$key];
+                            $prjoectsPending[$projectId[$key]]['Hold'] = $hCount;
+                            // $prjoectsPending[$key]['project_id'] = $projectId[$key];
+                            $projectsIds[] = $projectId[$key];  
+                        }
+                }
+            }
+            $payload = [
+                'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                'client_id' => $projectsIds
+            ];
+            // $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
+             $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_details_above_tl_level', [
+                'json' => $payload
+            ]);
+            if ($response->getStatusCode() == 200) {
+                $apiData = json_decode($response->getBody(), true);
+            } else {
+                return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+            }
+            $projectsHolding = $apiData['people_details'];
+            foreach($projectsHolding as $data) {
+                $clientIds = $data['client_ids'];
+                $mailBody = $prjoectsPending;
+                if($data["email_id"] != null) {
+                    // $toMailId = $data["email_id"];
+                    Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
+                    Log::info('Procode Project On Hold Mail executed successfully.');
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in ProjectOnHoldMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
         }
     }
