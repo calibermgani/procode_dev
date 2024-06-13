@@ -149,7 +149,7 @@ class ProjectController extends Controller
             Log::info('Executing procodeProjectOnHoldMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $client = new Client();
-             $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            //  $toMailId = ["vijayalaxmi@caliberfocus.com"];
             // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
