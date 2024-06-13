@@ -191,7 +191,7 @@ class ProjectController extends Controller
              $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
             //  $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_details_above_tl_level', [
                 'json' => $payload
-            ]);dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level');
+            ]);dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$_SERVER['HTTP_HOST']);
             if ($response->getStatusCode() == 200) {
                 $apiData = json_decode($response->getBody(), true);
             } else {
