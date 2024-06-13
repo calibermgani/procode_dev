@@ -194,7 +194,7 @@ class ProjectController extends Controller
             ]);
             $host = $_SERVER['HTTP_HOST'] ?? null;
           
-            dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$_SERVER['HTTP_HOST']);
+            dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$host);
             if ($response->getStatusCode() == 200) {
                 $apiData = json_decode($response->getBody(), true);
             } else {
