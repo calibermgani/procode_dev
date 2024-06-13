@@ -188,10 +188,10 @@ class ProjectController extends Controller
                 'token' => '1a32e71a46317b9cc6feb7388238c95d',
                 'client_id' => $projectsIds
             ];
-            //  $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
-             $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
+             $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
+            //  $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_details_above_tl_level', [
                 'json' => $payload
-            ]);
+            ]);dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level');
             if ($response->getStatusCode() == 200) {
                 $apiData = json_decode($response->getBody(), true);
             } else {
@@ -202,7 +202,7 @@ class ProjectController extends Controller
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
                 if($data["email_id"] != null) {
-                    $toMailId = $data["email_id"];
+                    $toMailId = $data["email_id"];dd($toMailId,$data);
                     $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
