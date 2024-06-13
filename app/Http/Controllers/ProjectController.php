@@ -148,8 +148,8 @@ class ProjectController extends Controller
             Log::info('Executing procodeProjectOnHoldMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $client = new Client();
-            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
@@ -191,7 +191,10 @@ class ProjectController extends Controller
              $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
             //  $response = $client->request('POST', 'http://dev.aims.officeos.in/api/v1_users/get_details_above_tl_level', [
                 'json' => $payload
-            ]);dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$_SERVER['HTTP_HOST']);
+            ]);
+            $host = $_SERVER['HTTP_HOST'] ?? null;
+            dd($host); 
+            dd(config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level',$_SERVER['HTTP_HOST']);
             if ($response->getStatusCode() == 200) {
                 $apiData = json_decode($response->getBody(), true);
             } else {
@@ -201,9 +204,9 @@ class ProjectController extends Controller
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
-                if($data["email_id"] != null) {
-                    $toMailId = $data["email_id"];dd($toMailId,$data);
-                    $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
+                if($data["email_id"] != null) {dd($toMailId,$data);
+                    // $toMailId = $data["email_id"];
+                    // $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
                 }
