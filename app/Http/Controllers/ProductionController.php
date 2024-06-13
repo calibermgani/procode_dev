@@ -236,12 +236,13 @@ class ProductionController extends Controller
                         $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
                            'json' => $payload
                        ]);
-                       if ($response->getStatusCode() == 200) {
-                            $data = json_decode($response->getBody(), true);
-                       } else {
-                           return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                       }
-                       $assignedDropDown = array_filter($data['userDetail']);
+                    //    if ($response->getStatusCode() == 200) {
+                    //         $data = json_decode($response->getBody(), true);
+                    //    } else {
+                    //        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                    //    }
+                    //    $assignedDropDown = array_filter($data['userDetail']);
+                       $assignedDropDown = [];
                    }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
