@@ -68,10 +68,10 @@ class ProjectController extends Controller
         try {
             Log::info('Executing ProjectWorkMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-            $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
+            // $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
+            // $ccMailId = ["mgani@caliberfocus.com"];
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
             $ccMailId = ["mgani@caliberfocus.com"];
-            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
             $yesterDayStartDate = Carbon::yesterday()->startOfDay()->toDateTimeString();
             $yesterDayEndDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
@@ -172,14 +172,14 @@ class ProjectController extends Controller
                     $projectId[] = $project["id"]; 
                 }
             }
-            $prjoectsPending = $projectsIds = [];
+            $prjoectsHolding = $projectsIds = [];
             foreach ($models as $key => $model) {
                 if (class_exists($model)) {
                      $hCount = $model::where('chart_status', 'CE_Hold')->count();
                         if($hCount > 0){
-                            $prjoectsPending[$projectId[$key]]['project'] = $prjoectName[$key];
-                            $prjoectsPending[$projectId[$key]]['Hold'] = $hCount;
-                            // $prjoectsPending[$key]['project_id'] = $projectId[$key];
+                            $prjoectsHolding[$projectId[$key]]['project'] = $prjoectName[$key];
+                            $prjoectsHolding[$projectId[$key]]['Hold'] = $hCount;
+                            // $prjoectsHolding[$key]['project_id'] = $projectId[$key];
                             $projectsIds[] = $projectId[$key];  
                         }
                 }
@@ -200,9 +200,9 @@ class ProjectController extends Controller
             $projectsHolding = $apiData['people_details'];
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
-                $mailBody = $prjoectsPending;
+                $mailBody = $prjoectsHolding;
                 if($data["email_id"] != null) {
-                    $toMailId = $data["email_id"];
+                    $toMailId = $data["email_id"];dd($toMailId,$data);
                     $ccMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","mgani@caliberfocus.com"];
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
