@@ -167,6 +167,11 @@ class ReportsController extends Controller
                         if ($header === 'work_hours') {
                                 $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
                         }
+                        if (strpos($data, '_el_') !== false) {
+                              $data = str_replace('_el_', ' , ', $data);
+                        } else {
+                            $data = $data;
+                        }
                         $body_info .= '<td>' . $data . '</td>';
                     }
                     $body_info .= '</tr>';
