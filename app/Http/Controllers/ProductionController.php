@@ -239,7 +239,7 @@ class ProductionController extends Controller
                        if ($response->getStatusCode() == 200) {
                             $data = json_decode($response->getBody(), true);
                        } else {
-                            return response()->json(['error' => 'API request failed'], $response->getStatusCode()); 
+                             return response()->json(['error' => 'API request failed'], $response->getStatusCode()); 
                        }
                        $assignedDropDown = array_filter($data['userDetail']);
                    }
