@@ -439,7 +439,7 @@
             <div class="col-md-6">
                 <div class="form-group row">
                     <label class="col-md-12">
-                        QA Status
+                         Category
                     </label>
                     <label class="col-md-12 pop-non-edt-val" id="qa_status_view"></label>
                 </div>
@@ -447,7 +447,7 @@
             <div class="col-md-6">
                 <div class="form-group row">
                     <label class="col-md-12">
-                        QA Sub Status
+                        Sub Category
                     </label>
                     <label class="col-md-12 pop-non-edt-val" id="qa_sub_status_view"></label>
                 </div>

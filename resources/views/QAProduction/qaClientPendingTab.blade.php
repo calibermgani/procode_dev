@@ -663,7 +663,7 @@
                                                     <input type="hidden" name="QA_emp_id">
                                                     <div class="form-group row">
                                                         <label class="col-md-12 required">
-                                                            QA Status
+                                                             Category
                                                         </label>
                                                         @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
                                                         <div class="col-md-10">
@@ -685,7 +685,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-md-12 required">
-                                                            QA Sub Status
+                                                             Sub Category
                                                         </label>
                                                         @php
                                                              $qaSubStatusList = [];
@@ -950,7 +950,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12" id="qa_status_label">
-                                                                        QA Status
+                                                                         Category
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
                                                                     id="qa_status_view"></label>
@@ -959,7 +959,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12">
-                                                                        QA Sub Status
+                                                                         Sub Category
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
                                                                     id="qa_sub_status_view"></label>
@@ -1815,6 +1815,21 @@
                                     inputTypeValue = 0;
                             }
                         }
+
+                    var qaStatus = $('#qa_status');
+                    var qaSubStatus =  $('#qa_sub_status');
+                    if (qaStatus.val() == '' || qaStatus.val() == null) {
+                        qaStatus.next('.select2').find(".select2-selection").css('border-color', 'red','important');
+                        inputTypeValue = 1;
+                        return false;
+                    }
+
+                    if (qaSubStatus.val() == '' || qaSubStatus.val() == null) {
+                        qaSubStatus.next('.select2').find(".select2-selection").css('border-color', 'red','important');
+                        inputTypeValue = 1;
+                        return false;
+                    }
+                    
                     $('#pendingFormConfiguration').serializeArray().map(function(input) {
                         labelName = input.name;
                             if(labelName.substring(0, 3).toLowerCase() == "cpt") {

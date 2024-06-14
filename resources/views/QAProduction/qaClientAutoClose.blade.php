@@ -779,7 +779,7 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        QA Status
+                                                         Category
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
 

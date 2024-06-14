@@ -754,7 +754,7 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        QA Status
+                                                         Category
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
 
@@ -777,7 +777,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        QA Sub Status
+                                                         Sub Category
                                                     </label>
                                                     @php $qaSubStatusList = []; @endphp
                                                     <div class="col-md-10">
@@ -1041,7 +1041,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12" id="qa_status_label">
-                                                        QA Status
+                                                         Category
                                                     </label>
                                                     <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
                                                     </label>
@@ -1050,7 +1050,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12" id="qa_sub_status_label">
-                                                        QA Sub Status
+                                                         Sub Category
                                                     </label>
                                                     <label class="col-md-12 pop-non-edt-val" id="qa_sub_status_view">
                                                     </label>

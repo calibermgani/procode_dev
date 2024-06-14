@@ -786,7 +786,7 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        QA Status
+                                                        Category
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
 
@@ -809,7 +809,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        QA Sub Status
+                                                        Sub Category
                                                     </label>
                                                     @php $qaSubStatusList = []; @endphp
                                                     <div class="col-md-10">
@@ -1073,7 +1073,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12" id="qa_status_label">
-                                                        QA Status
+                                                        Category
                                                     </label>
                                                     <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
                                                     </label>
@@ -1082,7 +1082,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12" id="qa_sub_status_label">
-                                                        QA Sub Status
+                                                        Sub Category
                                                     </label>
                                                     <label class="col-md-12 pop-non-edt-val" id="qa_sub_status_view">
                                                     </label>
@@ -1236,6 +1236,10 @@
         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
+            $('#myModal_status').on('shown.bs.modal', function () {
+                $('#qa_status').val(7).change(); 
+                $('#qa_sub_status').val(12).change();
+            });
             var qaSubStatusList = @json($qaSubStatusListVal);
             var qaStatusList = @json( $qaStatusList);
             var prevValues;
@@ -1859,6 +1863,7 @@
                                     '</option>';
                             });
                             $('select[name="QA_sub_status_code"]').html(sla_options);
+                            $('select[name="QA_sub_status_code"]').val(12).change();
                             if (value) {
                                 $('select[name="QA_sub_status_code"]').val(value);
                             }
