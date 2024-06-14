@@ -414,7 +414,7 @@
                                         </div>
                                         <div class="col-md-9" style="border-left: 1px solid #ccc;" data-scroll="true"
                                             data-height="400">
-                                                <h6 class="title-h6">Coder
+                                                {{-- <h6 class="title-h6">Coder
                                                     <span type = "button" id="expandButton" class="float-right">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                             fill="currentColor" class="bi bi-arrow-counterclockwise"
@@ -425,7 +425,7 @@
                                                                 d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
                                                         </svg></span>
 
-                                                </h6>&nbsp;&nbsp;
+                                                </h6>&nbsp;&nbsp; --}}
                                                 @if (count($popupEditableFields) > 0)
                                                         @php $count = 0; @endphp
                                                         @foreach ($popupEditableFields as $key => $data)
