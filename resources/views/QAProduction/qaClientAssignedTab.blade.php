@@ -264,8 +264,11 @@
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
-                                                                {{-- @elseif((in_array($data->id, $existingCallerChartsWorkLogs) && strpos($data->chart_status, 'CE_') === false && in_array('QA_Inprocess', $assignedProjectDetailsStatus)) || $data->chart_status == 'QA_Inprocess') --}}
-                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->chart_status == 'QA_Inprocess')
+                                                    @elseif($data->chart_status == 'QA_Inprocess')
+                                                        <button class="task-start clickable-row start" title="Start"><i
+                                                                class="fa fa-play-circle icon-circle1 mt-0"
+                                                                aria-hidden="true" style="color:#ffffff"></i></button>
+                                                    @elseif(in_array($data->id, $existingCallerChartsWorkLogs))
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
