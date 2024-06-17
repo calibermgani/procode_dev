@@ -2087,28 +2087,24 @@
                     }
                     var newLine = '';
                     if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
-                        if(previousValue !== currentValue) {
                             newLine =  formattedValue1 + currentValue;
-                        }
                     }  else {
-                         if(previousValue !== currentValue && currentValue != '') {
+                         if(currentValue != '') {
                             newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
                         } else if (previousValue !== currentValue && currentValue == ''){
                             newLine = previousValue != '' ? formattedValue1 + ' '+previousValue+ ' removed' : formattedValue1 + '  added ' + currentValue;
                         }
                     }
                     var textAreaValue = $('#QA_rework_comments').val();
-                    if (textAreaValue.includes(previousValue) && previousValue != '') {
-                        var lines = textAreaValue.split('\n');
-                        var matchedLine = lines.find(line => line.includes(previousValue));
-                        textAreaValue = newLine !== '' ?? textAreaValue.replace(matchedLine, newLine);
+                    if (textAreaValue.includes(previousValue) && previousValue !== currentValue) {
+                         var lines = textAreaValue.split('\n');
+                         var matchedLine = lines.find(line => line.includes(previousValue));
+                         textAreaValue = textAreaValue.replace(matchedLine, newLine);
                     } else {
-                        if(textAreaValue == "") {
-                           if(newLine !== '') {
-                              textAreaValue += newLine;
-                           }
+                        if(textAreaValue == "" && previousValue !== currentValue) {
+                            textAreaValue += newLine;
                         } else {
-                            if(newLine !== '') {
+                            if(previousValue !== currentValue) {
                                 newLine = '\n'+newLine;
                                 textAreaValue += newLine;
                             }

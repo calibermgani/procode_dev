@@ -1774,7 +1774,7 @@
                                 $(this).prop('checked', checkboxValues.includes($(this)
                                 .val()));
                             });
-                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {console.log(value,'radio');
+                        } else if ($('input[name="' + header + '"]').is(':radio') && value !== '' && value !== null) {
                           if(value.length > 0) {
                                 $('input[name="' + header + '"]').filter('[value="' + value + '"]')
                                     .prop(
@@ -2122,7 +2122,7 @@
 
                 $('input[type="radio"]').each(function() {
                     var groupName = $(this).attr("name");
-                    var mandatory = $(this).prop('required');console.log(mandatory,'mandatory');
+                    var mandatory = $(this).prop('required');
                     if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
                         $('#radio_p1').css('display', 'block');
                         inputTypeRadioValue = 1;
@@ -2448,15 +2448,15 @@
                     //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
                         var trimmedFiled = $(this).attr('id') !== undefined ? $(this).attr('id') : $(this).attr('class');
-                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');console.log(fieldName,trimmedFiled,trimmedFiled1);
-                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');console.log(fieldName,trimmedFiled,trimmedFiled1,formattedValue,formattedValue1);
+                        var trimmedFiled1 = $(this).attr('name').replace(/\[\]$/, '');//console.log(fieldName,trimmedFiled,trimmedFiled1);
+                        var formattedValue = trimmedFiled.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');//console.log(fieldName,trimmedFiled,trimmedFiled1,formattedValue,formattedValue1);
                         var formattedValue1 = trimmedFiled1.toUpperCase().replace(/_else_/g, '/').replace(/_/g, ' ');
                     if (excludedFields.indexOf(fieldName) === -1) {
                         var currentValue = '';
                         if ($(this).is('input[type="checkbox"]')) {
                             currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();
                         } else if ($(this).is('input[type="radio"]')) {
-                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();console.log(currentValue,'currentValue',$(this).closest('label').text());
+                            currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();//console.log(currentValue,'currentValue',$(this).closest('label').text());
                         } else if ($(this).is('input[type="date"]')) {
                             currentValue = $(this).val();
                         } else {
@@ -2468,27 +2468,25 @@
                                 newLine =  formattedValue1 + currentValue;
                             }
                         }  else {
-                            if(previousValue !== currentValue && currentValue != '') {
+                            if(currentValue != '') {
                                 newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
                             } else if (previousValue !== currentValue && currentValue == ''){
-                                 newLine = previousValue != '' ? formattedValue1 + ' '+previousValue+ ' removed' : formattedValue1 + '  added ' + currentValue;
+                                newLine = previousValue != '' ? formattedValue1 + ' '+previousValue+ ' removed' : formattedValue1 + '  added ' + currentValue;
                             }
                         }
                         var textAreaValue = $('#QA_rework_comments').val();
                         // if (textAreaValue.includes(formattedValue)) {
                         //     var regex = new RegExp(formattedValue1 + ' .*', 'g');
                         //     textAreaValue = textAreaValue.replace(regex, newLine);
-                        if (textAreaValue.includes(previousValue) && previousValue != '') {
+                        if (textAreaValue.includes(previousValue) && previousValue !== currentValue) {
                             var lines = textAreaValue.split('\n');
                             var matchedLine = lines.find(line => line.includes(previousValue));
-                            textAreaValue = newLine !== '' ?? textAreaValue.replace(matchedLine, newLine);
+                            textAreaValue = textAreaValue.replace(matchedLine, newLine);
                         } else {
-                            if(textAreaValue == "") {
-                                if(newLine !== '') {
-                                    textAreaValue += newLine;
-                                }
+                            if(textAreaValue == "" && previousValue !== currentValue) {
+                                textAreaValue += newLine;
                             } else {
-                                if(newLine !== '') {
+                                if(previousValue !== currentValue) {
                                     newLine = '\n'+newLine;
                                     textAreaValue += newLine;
                                 }
