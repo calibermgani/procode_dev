@@ -439,7 +439,7 @@
             <div class="col-md-6">
                 <div class="form-group row">
                     <label class="col-md-12">
-                         Category
+                        Error Category
                     </label>
                     <label class="col-md-12 pop-non-edt-val" id="qa_status_view"></label>
                 </div>

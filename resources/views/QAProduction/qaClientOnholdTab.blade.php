@@ -705,7 +705,7 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                         Category
+                                                        Error Category
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
                                                     <div class="col-md-10">
@@ -995,7 +995,7 @@
                                                             <div class="col-md-6">
                                                                 <div class="form-group row">
                                                                     <label class="col-md-12" id="qa_status_label">
-                                                                         Category
+                                                                        Error Category
                                                                     </label>
                                                                     <label class="col-md-12 pop-non-edt-val"
                                                                     id="qa_status_view"></label>
@@ -2109,22 +2109,33 @@
                     } else {
                         currentValue = $(this).val();
                     }
+                    var newLine = '';
                     if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
-                        var newLine =  formattedValue1 + currentValue;
+                        if(previousValue !== currentValue) {
+                                newLine =  formattedValue1 + currentValue;
+                        }
                     }  else {
-                        var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        if(previousValue !== currentValue && currentValue != '') {
+                            newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                        } else if (previousValue !== currentValue && currentValue == ''){
+                            newLine = previousValue != '' ? formattedValue1 + ' '+previousValue+ ' removed' : formattedValue1 + '  added ' + currentValue;
+                        }
                     }
                     var textAreaValue = $('#QA_rework_comments').val();
                     if (textAreaValue.includes(previousValue) && previousValue != '') {
                         var lines = textAreaValue.split('\n');
                         var matchedLine = lines.find(line => line.includes(previousValue));
-                        textAreaValue = textAreaValue.replace(matchedLine, newLine);
-                    } else {console.log(previousValue,formattedValue,currentValue,formattedValue1,'else');
+                        textAreaValue = newLine !== '' ?? textAreaValue.replace(matchedLine, newLine);
+                    } else {
                         if(textAreaValue == "") {
-                        textAreaValue += newLine;
+                            if(newLine !== '') {
+                              textAreaValue += newLine;
+                            }
                         } else {
-                            newLine = '\n'+newLine;
-                            textAreaValue += newLine;
+                            if(newLine !== '') {
+                                newLine = '\n'+newLine;
+                                textAreaValue += newLine;
+                            }
                         }
                     }
 

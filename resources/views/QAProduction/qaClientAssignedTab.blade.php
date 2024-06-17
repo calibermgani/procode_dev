@@ -258,11 +258,13 @@
                                                         strpos($empDesignation, 'Vice') !== true) &&
                                                         $loginEmpId != $data->QA_emp_id)
                                                 @else
+                                                
                                                     {{-- @if (empty($existingCallerChartsWorkLogs) && !in_array('QA_Inprocess', $assignedProjectDetailsStatus)) --}}
                                                     @if (empty($existingCallerChartsWorkLogs))
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
                                                                 aria-hidden="true" style="color:#ffffff"></i></button>
+                                                                {{-- @elseif((in_array($data->id, $existingCallerChartsWorkLogs) && strpos($data->chart_status, 'CE_') === false && in_array('QA_Inprocess', $assignedProjectDetailsStatus)) || $data->chart_status == 'QA_Inprocess') --}}
                                                     @elseif(in_array($data->id, $existingCallerChartsWorkLogs) || $data->chart_status == 'QA_Inprocess')
                                                         <button class="task-start clickable-row start" title="Start"><i
                                                                 class="fa fa-play-circle icon-circle1 mt-0"
@@ -786,7 +788,7 @@
                                                 <input type="hidden" name="QA_emp_id">
                                                 <div class="form-group row">
                                                     <label class="col-md-12 required">
-                                                        Category
+                                                        Error Category
                                                     </label>
                                                     @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
 
@@ -1073,7 +1075,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-md-12" id="qa_status_label">
-                                                        Category
+                                                        Error Category
                                                     </label>
                                                     <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
                                                     </label>
@@ -2457,11 +2459,18 @@
                         } else {
                             currentValue = $(this).val();
                         }
+                        var newLine = '';
                         if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
-                            var newLine =  formattedValue1 + currentValue;
-                        }  else {
-                            var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                            if(previousValue !== currentValue) {
+                                newLine =  formattedValue1 + currentValue;
                             }
+                        }  else {
+                            if(previousValue !== currentValue && currentValue != '') {
+                                newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
+                            } else if (previousValue !== currentValue && currentValue == ''){
+                                 newLine = previousValue != '' ? formattedValue1 + ' '+previousValue+ ' removed' : formattedValue1 + '  added ' + currentValue;
+                            }
+                        }
                         var textAreaValue = $('#QA_rework_comments').val();
                         // if (textAreaValue.includes(formattedValue)) {
                         //     var regex = new RegExp(formattedValue1 + ' .*', 'g');
@@ -2469,13 +2478,17 @@
                         if (textAreaValue.includes(previousValue) && previousValue != '') {
                             var lines = textAreaValue.split('\n');
                             var matchedLine = lines.find(line => line.includes(previousValue));
-                            textAreaValue = textAreaValue.replace(matchedLine, newLine);
+                            textAreaValue = newLine !== '' ?? textAreaValue.replace(matchedLine, newLine);
                         } else {
                             if(textAreaValue == "") {
-                            textAreaValue += newLine;
+                                if(newLine !== '') {
+                                    textAreaValue += newLine;
+                                }
                             } else {
-                                newLine = '\n'+newLine;
-                                textAreaValue += newLine;
+                                if(newLine !== '') {
+                                    newLine = '\n'+newLine;
+                                    textAreaValue += newLine;
+                                }
                             }
                         }
 

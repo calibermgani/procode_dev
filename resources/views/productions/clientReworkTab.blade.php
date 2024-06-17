@@ -726,7 +726,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-md-12 required">
-                                                            Category
+                                                            Error Category
                                                         </label>
                                                         @php $qaStatusList = App\Http\Helper\Admin\Helpers::qaStatusList(); @endphp
                                                         <div class="col-md-10">
@@ -978,7 +978,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group row">
                                                 <label class="col-md-12" id="qa_status_label">
-                                                    Category
+                                                    Error Category
                                                 </label>
                                                 <label class="col-md-12 pop-non-edt-val" id="qa_status_view">
                                                 </label>
