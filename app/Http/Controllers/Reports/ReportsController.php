@@ -173,12 +173,15 @@ class ReportsController extends Controller
                             $data = $data;
                         }
                         if ($header === 'qa_work_date' && ($row->{'record_status'} == "QA_Completed")) {
-                            $data = $data != '--' ? $data : '--';
+                            $data = $data != '--' ? date('m/d/y',strtotime($data)) : '--';
                         } else if ($header === 'qa_work_date') {
                             $data =  '--';
                         }
+                        if ($header === 'invoke_date') {
+                             $data = date('m/d/y',strtotime($data));
+                        }
                         if ($header === 'coder_work_date' && ($row->{'record_status'} == "CE_Completed")) {
-                            $data = $data != '--' ? $data : '--';
+                            $data = $data != '--' ? date('m/d/y',strtotime($data)) : '--';
                         } else if ($header === 'coder_work_date') {
                             $data =  '--';
                         }
