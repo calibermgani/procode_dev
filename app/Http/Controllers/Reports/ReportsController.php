@@ -172,6 +172,16 @@ class ReportsController extends Controller
                         } else {
                             $data = $data;
                         }
+                        if ($header === 'qa_work_date' && ($row->{'record_status'} == "QA_Completed")) {
+                            $data = $data != '--' ? $data : '--';
+                        } else if ($header === 'qa_work_date') {
+                            $data =  '--';
+                        }
+                        if ($header === 'coder_work_date' && ($row->{'record_status'} == "CE_Completed")) {
+                            $data = $data != '--' ? $data : '--';
+                        } else if ($header === 'coder_work_date') {
+                            $data =  '--';
+                        }
                         $body_info .= '<td>' . $data . '</td>';
                     }
                     $body_info .= '</tr>';

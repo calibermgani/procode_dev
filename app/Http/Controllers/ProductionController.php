@@ -665,6 +665,7 @@ class ProductionController extends Controller
                 $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['chart_status'] == "CE_Completed") {
+                    $data['coder_work_date'] = Carbon::now()->format('Y-m-d');
                     if($decodedPracticeName == NULL) {
                         $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
                          ->where(function($query) use ($loginEmpId) {
@@ -913,6 +914,7 @@ class ProductionController extends Controller
                 $coderCompletedRecords = $originalModelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->get();
                 $coderCompletedRecordsCount = count($coderCompletedRecords);
                 if( $data['chart_status'] == "CE_Completed") {
+                    $data['coder_work_date'] = Carbon::now()->format('Y-m-d');
                     if($decodedPracticeName == NULL) {
                         $qasamplingDetailsList = QualitySampling::where('project_id', $decodedProjectName)
                                                 ->where(function($query) use ($loginEmpId) {

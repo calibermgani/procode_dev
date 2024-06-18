@@ -126,6 +126,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";//dd($createTableSQL);
@@ -179,6 +182,9 @@ class FormController extends Controller
                                                     CE_status_code VARCHAR(255) NULL,
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
+                                                    QA_comments_count VARCHAR(255) NULL,
+                                                    coder_work_date DATE NULL,
+                                                    qa_work_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP NULL,
                                                     deleted_at TIMESTAMP NULL)";
@@ -230,6 +236,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";
@@ -281,6 +290,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";
@@ -428,6 +440,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";
@@ -480,6 +495,9 @@ class FormController extends Controller
                                                     CE_status_code VARCHAR(255) NULL,
                                                     CE_sub_status_code VARCHAR(255) NULL,
                                                     CE_followup_date DATE NULL,
+                                                    QA_comments_count VARCHAR(255) NULL,
+                                                    coder_work_date DATE NULL,
+                                                    qa_work_date DATE NULL,
                                                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                                     updated_at TIMESTAMP NULL,
                                                     deleted_at TIMESTAMP NULL)";
@@ -530,6 +548,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";
@@ -581,6 +602,9 @@ class FormController extends Controller
                                             CE_status_code VARCHAR(255) NULL,
                                             CE_sub_status_code VARCHAR(255) NULL,
                                             CE_followup_date DATE NULL,
+                                            QA_comments_count VARCHAR(255) NULL,
+                                            coder_work_date DATE NULL,
+                                            qa_work_date DATE NULL,
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP NULL,
                                             deleted_at TIMESTAMP NULL)";

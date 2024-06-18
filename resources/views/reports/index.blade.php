@@ -1,6 +1,6 @@
 @extends('layouts.app3')
 @section('content')
-<div class="card card-custom custom-card" id="generateReportClass">
+<div class="card card-custom custom-card" id="generateReportClass" style = "height:100%">
     <div class="card-body py-2 px-2">
         <div class="d-flex justify-content-between align-items-center m-2">
             <span class="project_header">Report</span>
@@ -10,8 +10,8 @@
                 </button>
             </div>
         </div>
-        <div class="text-center" style="height:600px">
-            <div style="margin-top: 170px;">
+        <div class="text-center" style="height:100%">
+            <div>
                 <img src="{{ asset('assets/svg/green_human_image.svg') }}">
                 <p style="margin-top: 30px">Click Generate report to get response</p>
             </div>
@@ -155,7 +155,7 @@
     .table.table-separate .inv_lft th:last-child,
     .table.table-separate td:last-child {
         padding-right: 10 !important;
-    }
+        }
 </style>
 @push('view.scripts')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
@@ -187,6 +187,12 @@
             });
 
             $(document).on('change', '#project_id', function() {
+                KTApp.block('#reportModal', {
+                    overlayColor: '#000000',
+                    state: 'danger',
+                    opacity: 0.1,
+                    message: 'Fetching...',
+                });
                 var project_id = $(this).val();
                 $.ajaxSetup({
                     headers: {
@@ -214,6 +220,7 @@
                                 '</option>';
                         });
                         $("#user").html(user_options);
+                        KTApp.unblock('#reportModal');
                     },
                     error: function(jqXHR, exception) {}
                 });
