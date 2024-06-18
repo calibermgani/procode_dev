@@ -15,7 +15,7 @@
                                 <div class="col-md-6">
                                     <div class="row" style="justify-content: flex-end;margin-right:1.4rem">
                                      @if ($loginEmpId  == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)
-                                        <div class="col-lg-3 mb-lg-0 mb-6">
+                                        <div class="col-lg-3 mb-lg-0 mb-6" id="assign_div">
                                             <fieldset class="form-group mb-0 white-smoke-disabled">
                                                 {!! Form::select('assignee_name', ['' => '--Assignee--'] + $assignedDropDown, null, [
                                                     'class' => 'form-control kt_select2_assignee',
@@ -1360,6 +1360,7 @@
                 }
                 if ($(this).prop('checked') == true && $('.checkBoxClass:checked').length > 0) {
                     $('#assigneeDropdown').prop('disabled', false);
+                    assigneeDropdown();
                 } else {
                     $('#assigneeDropdown').prop('disabled', true);
 
@@ -1377,8 +1378,42 @@
                 }
                 console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
                 $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
+                if ($(this).prop('checked') == true) {
+                  assigneeDropdown();
+                }
             });
-
+            function assigneeDropdown() {
+               KTApp.block('#assign_div', {
+                    overlayColor: '#000000',
+                    state: 'danger',
+                    opacity: 0.1,
+                    message: 'Fetching...',
+                });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content')
+                    }
+                });
+                  
+                $.ajax({
+                    url: "{{ url('assignee_drop_down') }}",
+                    method: 'POST',
+                    data: {
+                        clientName: clientName,
+                    },
+                    success: function(response) {
+                        console.log(response, 'response');
+                       var sla_options = '<option value="">-- Select --</option>';
+                        $.each(response.assignedDropDown, function(key, value) {
+                            sla_options += '<option value="' + key + '">' + value +
+                                '</option>';
+                        });
+                        $('select[name="assignee_name"]').html(sla_options);
+                        KTApp.unblock('#assign_div');
+                    },
+                });
+            }
 
             $('#assigneeDropdown').change(function() {
                 assigneeId = $(this).val();

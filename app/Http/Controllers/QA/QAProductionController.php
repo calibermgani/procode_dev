@@ -181,21 +181,21 @@ class QAProductionController extends Controller
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
                         $unAssignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->whereNull('QA_emp_id')->count();
-                        $payload = [
-                            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                            'client_id' => $decodedProjectName,
-                            'user_id' => $userId,
-                        ];
+                        // $payload = [
+                        //     'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        //     'client_id' => $decodedProjectName,
+                        //     'user_id' => $userId,
+                        // ];
 
-                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
-                            'json' => $payload,
-                        ]);
-                        if ($response->getStatusCode() == 200) {
-                            $data = json_decode($response->getBody(), true);
-                        } else {
-                            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                        }
-                        $assignedDropDown = array_filter($data['userDetail']);
+                        // $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                        //     'json' => $payload,
+                        // ]);
+                        // if ($response->getStatusCode() == 200) {
+                        //     $data = json_decode($response->getBody(), true);
+                        // } else {
+                        //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                        // }
+                        // $assignedDropDown = array_filter($data['userDetail']);
                     }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
@@ -1064,21 +1064,21 @@ class QAProductionController extends Controller
                         $duplicateCount = $modelClassDuplcates::count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
-                        $payload = [
-                            'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                            'client_id' => $decodedProjectName,
-                            'user_id' => $userId,
-                        ];
+                        // $payload = [
+                        //     'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        //     'client_id' => $decodedProjectName,
+                        //     'user_id' => $userId,
+                        // ];
 
-                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
-                            'json' => $payload,
-                        ]);
-                        if ($response->getStatusCode() == 200) {
-                            $data = json_decode($response->getBody(), true);
-                        } else {
-                            return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                        }
-                        $assignedDropDown = array_filter($data['userDetail']);
+                        // $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                        //     'json' => $payload,
+                        // ]);
+                        // if ($response->getStatusCode() == 200) {
+                        //     $data = json_decode($response->getBody(), true);
+                        // } else {
+                        //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                        // }
+                        // $assignedDropDown = array_filter($data['userDetail']);
                     }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
@@ -1110,4 +1110,34 @@ class QAProductionController extends Controller
             return redirect('/');
         }
     }
+
+    public function assigneeDropdown(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            $client = new Client();
+            try {
+                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
+                $decodedProjectName = Helpers::encodeAndDecodeID($request->clientName, 'decode');
+                    $payload = [
+                        'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        'client_id' => $decodedProjectName,
+                        'user_id' => $userId,
+                    ];
+
+                    $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                        'json' => $payload,
+                    ]);
+                    if ($response->getStatusCode() == 200) {
+                        $data = json_decode($response->getBody(), true);
+                    } else {
+                        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                    }
+                    $assignedDropDown = array_filter($data['userDetail']);
+                    return response()->json(['assignedDropDown' => $assignedDropDown]);
+                } catch (\Exception $e) {
+                    log::debug($e->getMessage());
+                }
+        } else {
+            return redirect('/');
+        }
+   }
 }

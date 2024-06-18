@@ -226,22 +226,22 @@ class ProductionController extends Controller
                                $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                                $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->pluck('chart_status')->toArray();      
                            }
-                           $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
-                        $payload = [
-                           'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                           'client_id' => $decodedProjectName,
-                           'user_id' => $userId
-                       ];
+                        //    $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
+                            // $payload = [
+                            //     'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                            //     'client_id' => $decodedProjectName,
+                            //     'user_id' => $userId
+                            // ];
 
-                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
-                           'json' => $payload
-                       ]);
-                       if ($response->getStatusCode() == 200) {
-                            $data = json_decode($response->getBody(), true);
-                       } else {
-                             return response()->json(['error' => 'API request failed'], $response->getStatusCode()); 
-                       }
-                       $assignedDropDown = array_filter($data['userDetail']);
+                            // $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                            //     'json' => $payload
+                            // ]);
+                            // if ($response->getStatusCode() == 200) {
+                            //         $data = json_decode($response->getBody(), true);
+                            // } else {
+                            //         return response()->json(['error' => 'API request failed'], $response->getStatusCode()); 
+                            // }
+                            // $assignedDropDown = array_filter($data['userDetail']);
                    }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
@@ -1189,7 +1189,7 @@ class ProductionController extends Controller
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $unAssignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->orderBy('id','ASC')->get();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
-                       $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
+                    //    $assignedDropDownIds = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->select('CE_emp_id')->groupBy('CE_emp_id')->pluck('CE_emp_id')->toArray();
                        $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
                        $completedCount = $modelClass::where('chart_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -1198,21 +1198,21 @@ class ProductionController extends Controller
                        $duplicateCount = $modelClassDuplcates::count();
                        $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                        $unAssignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->pluck('chart_status')->toArray();
-                       $payload = [
-                           'token' => '1a32e71a46317b9cc6feb7388238c95d',
-                           'client_id' => $decodedProjectName,
-                           'user_id' => $userId
-                       ];
+                    //    $payload = [
+                    //        'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                    //        'client_id' => $decodedProjectName,
+                    //        'user_id' => $userId
+                    //    ];
 
-                        $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
-                           'json' => $payload
-                       ]);
-                       if ($response->getStatusCode() == 200) {
-                            $data = json_decode($response->getBody(), true);
-                       } else {
-                           return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                       }
-                       $assignedDropDown = array_filter($data['userDetail']);
+                    //     $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                    //        'json' => $payload
+                    //    ]);
+                    //    if ($response->getStatusCode() == 200) {
+                    //         $data = json_decode($response->getBody(), true);
+                    //    } else {
+                    //        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                    //    }
+                    //    $assignedDropDown = array_filter($data['userDetail']);
                    }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
@@ -1241,5 +1241,35 @@ class ProductionController extends Controller
        } else {
            return redirect('/');
        }
+   }
+
+   public function assigneeDropdown(Request $request) {
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
+            $client = new Client();
+            try {
+                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
+                $decodedProjectName = Helpers::encodeAndDecodeID($request->clientName, 'decode');
+                    $payload = [
+                        'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                        'client_id' => $decodedProjectName,
+                        'user_id' => $userId
+                    ];
+
+                    $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_resource_name', [
+                        'json' => $payload
+                    ]);
+                    if ($response->getStatusCode() == 200) {
+                        $data = json_decode($response->getBody(), true);
+                    } else {
+                        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                    }
+                    $assignedDropDown = array_filter($data['userDetail']);
+                    return response()->json(['assignedDropDown' => $assignedDropDown]);
+                } catch (\Exception $e) {
+                    log::debug($e->getMessage());
+                }
+        } else {
+            return redirect('/');
+        }
    }
 }
