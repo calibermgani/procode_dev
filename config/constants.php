@@ -9,7 +9,7 @@ if (php_sapi_name() == 'cli') {
     // In web context, use the actual HTTP_HOST
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
 }
-
+echo 'Host: ' . $host . PHP_EOL;
 if ($host === '35.208.83.145' || $host === 'procode.officeos.in') {
     return [
         'PRO_CODE_URL' => 'https://aims.officeos.in',
