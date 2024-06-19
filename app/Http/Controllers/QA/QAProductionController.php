@@ -991,13 +991,14 @@ class QAProductionController extends Controller
                 $modelHistory = "App\\Models\\" . $modelName.'History';
                 foreach($request['checkedRowValues'] as $data) {
                     $existingRecord = $modelClass::where('id',$data['value'])->first();
-                    $existingModelClassDatasRecord = $modelClassDatas::where('parent_id',$data['value'])->first();
-                    $existingRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
-                    $existingModelClassDatasRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
                     $historyRecord = $existingRecord->toArray();
                     $historyRecord['parent_id']= $historyRecord['id'];
                     unset($historyRecord['id']);
                     $modelHistory::create($historyRecord);
+                    $existingModelClassDatasRecord = $modelClassDatas::where('parent_id',$data['value'])->first();
+                    $existingRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
+                    $existingModelClassDatasRecord->update(['QA_emp_id' => $assigneeId,'qa_work_status' => 'Sampling','chart_status' => 'CE_Completed']);
+                    
                 }
                 return response()->json(['success' => true]);
             } catch (\Exception $e) {
