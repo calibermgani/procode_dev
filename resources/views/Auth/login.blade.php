@@ -34,7 +34,8 @@
         {{-- <input type="text" name="g-recaptcha-response" id="g-recaptcha-response"> --}}
     </div>
     <input type="hidden" id="pro_code_url" value={{config("constants.PRO_CODE_URL")}}>
-    <div class="g-recaptcha ml-8" data-type="image" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div>
+    {{-- <div class="g-recaptcha ml-8" data-type="image" data-sitekey="{{ env('NOCAPTCHA_SITEKEY') }}"></div> --}}
+    <div class="g-recaptcha ml-8" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
 
     @if (session()->has('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 10000)" x-show="show">
