@@ -21,7 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CallerChartsWorkLogs;
 use App\Models\QualitySampling;
-use Illuminate\Support\Facades\Cache;
+
 ini_set('memory_limit', '1024M');
 class ProductionController extends Controller
 {
@@ -200,29 +200,11 @@ class ProductionController extends Controller
                $modelClassDatas = "App\\Models\\" .  $modelName.'Datas'; $startDate = Carbon::now()->subDays(30)->startOfDay()->toDateTimeString();$endDate = Carbon::now()->endOfDay()->toDateTimeString(); $yesterDayDate = Carbon::yesterday()->endOfDay()->toDateTimeString();
                $assignedProjectDetails = collect();$assignedDropDown=[];$dept= Session::get('loginDetails')['userInfo']['department']['id'];$existingCallerChartsWorkLogs = [];$assignedProjectDetailsStatus = [];$unAssignedCount = 0;
                $duplicateCount = 0; $assignedCount=0; $completedCount = 0; $pendingCount = 0;   $holdCount =0;$reworkCount = 0;$subProjectId = $subProjectName == '--' ?  NULL : $decodedPracticeName;
-               $cacheKey = "assignedProjectDetails_{$decodedProjectName}_{$subProjectName}_{$resourceName}_{$loginEmpId}";
-               $cacheDuration = 60;
                if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
-                $assignedProjectDetails = Cache::remember($cacheKey, $cacheDuration, function () use ($modelClass, $resourceName, $loginEmpId, $startDate, $endDate, $yesterDayDate) {
                     if (class_exists($modelClass)) {
-                        if ($resourceName != null) {
-                            return $modelClass::where('chart_status', 'CE_Assigned')
-                                ->where('CE_emp_id', $resourceName)
-                                ->orderBy('id', 'ASC')
-                                ->get();
-                        } else {
-                            return $modelClass::whereIn('chart_status', ['CE_Assigned', 'CE_Inprocess'])
-                                ->whereNotNull('CE_emp_id')
-                                ->orderBy('id', 'ASC')
-                                ->get();
-                        }
-                    }
-                    return collect();
-                });    
-                if (class_exists($modelClass)) {
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                            if($resourceName != null) {
-                                // $assignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->orderBy('id','ASC')->get();
+                                $assignedProjectDetails = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->orderBy('id','ASC')->get();
                                 $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                                 $assignedCount = $modelClass::where('chart_status','CE_Assigned')->where('CE_emp_id',$resourceName)->count();
                                 $completedCount = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$resourceName)->whereBetween('updated_at',[$startDate,$endDate])->count();
@@ -233,7 +215,7 @@ class ProductionController extends Controller
                                 $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                                 $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','ASC')->pluck('chart_status')->toArray(); 
                                } else {
-                            //    $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->get();
+                               $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->orderBy('id','ASC')->get();
                                $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->whereIn('record_status',['CE_Assigned','CE_Inprocess'])->orderBy('id','desc')->pluck('record_id')->toArray();
                                $assignedCount = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->whereNotNull('CE_emp_id')->count();
                                $completedCount = $modelClass::where('chart_status','CE_Completed')->whereBetween('updated_at',[$startDate,$endDate])->count();
