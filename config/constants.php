@@ -8,6 +8,6 @@ if (strcmp($host, '35.208.83.145') == 0 || strcmp($host, 'procode.officeos.in') 
     ];
 } else {
     return [
-        'PRO_CODE_URL' => 'http://dev.aims.officeos.in',
+        'PRO_CODE_URL' => 'https://aims.officeos.in',
     ];
 }
