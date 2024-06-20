@@ -185,6 +185,12 @@
                     row.child.hide();
                     tr.removeClass('shown');
                 } else {
+                    KTApp.block('#clients_list', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        opacity: 0.1,
+                        message: 'Fetching...',
+                    });
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -211,6 +217,7 @@
                                 }
                             }
                             tr.addClass('shown');
+                            KTApp.unblock('#clients_list');
                         },
                         error: function(jqXHR, exception) {}
                     });
@@ -258,9 +265,17 @@
 
                 // window.location.href = baseUrl + 'projects/' + encodedId + '/' + clientName + "?parent=" +
                 //     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                KTApp.block('#clients_list', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        opacity: 0.1,
+                        message: 'Fetching...',
+                    });
                 window.location.href = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(
                         subProjectName) + "?parent=" +
                     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
+                    KTApp.unblock('#clients_list');
+
 
             })
 

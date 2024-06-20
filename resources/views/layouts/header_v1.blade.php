@@ -409,7 +409,18 @@
     <script>
         $(document).ready(function() {
             Times();
+            $('a.main_menu').on('click', function(e) {
+                KTApp.block('#kt_header', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        opacity: 0.1,
+                        message: 'Fetching...',
+                    });
+            });
 
+            $(window).on('load', function() {
+                KTApp.unblock('#kt_header');
+            });
         });
 
         function Times() {
