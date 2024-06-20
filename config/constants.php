@@ -8,14 +8,15 @@ if (php_sapi_name() == 'cli') {
     // For web context, use the actual HTTP_HOST if available, otherwise default to 'localhost'
     $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
 }
-dd($host);
+// dd($host);
 // Use the value of $host to determine the PRO_CODE_URL
 if ($host === '35.208.83.145' || $host === 'procode.officeos.in') {
     return [
-        'PRO_CODE_URL' => 'https://aims.officeos.in',
+        'PRO_CODE_URL' => 'http://dev.aims.officeos.in',
+        
     ];
 } else {
     return [
-        'PRO_CODE_URL' => 'http://dev.aims.officeos.in',  // Change this URL as needed
+        'PRO_CODE_URL' => 'https://aims.officeos.in',
     ];
 }
