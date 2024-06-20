@@ -1,6 +1,7 @@
 @extends('layouts.app3')
 @section('content')
 
+<div class="loader" id="loader"></div>
                 <div class="card card-custom custom-card">
                     <div class="card-body p-0">
                         @php
@@ -769,6 +770,25 @@
 @endsection
 
 <style>
+     .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none; /* Hide the loader by default */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     .dropdown-item.active {
         color: #ffffff;
         text-decoration: none;
@@ -816,6 +836,14 @@
         $('.date_range').val('');
         var startTime_db;
         $(document).ready(function() {
+            $('#loader').show();
+            setTimeout(function() {
+            // Hide loader once data is loaded
+            $('#loader').hide();
+        }, 2000);
+            $(window).on('load', function() {
+            $('#loader').hide();
+        });
             $("#expandButton").click(function() {
                 var modalContent = $(".modal-content");console.log(modalContent.width(),'modalContent');
             if (modalContent.width() === 800) {
