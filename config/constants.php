@@ -16,6 +16,6 @@ if ($host === '35.208.83.145' || $host === 'procode.officeos.in') {
     ];
 } else {
     return [
-        'PRO_CODE_URL' => 'https://aims.officeos.in',  // Change this URL as needed
+        'PRO_CODE_URL' => 'http://dev.aims.officeos.in',  // Change this URL as needed
     ];
 }
