@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Mail\ProcodeProjectOnHoldMail;
 use App\Models\CCEmailIds;
+use App\Models\SiouxlandMentalHealthCenterProject;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -221,5 +222,19 @@ class ProjectController extends Controller
             Log::error('Error in ProjectOnHoldMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
         }
+    }
+
+    public function siouxlandMentalHealth(Request $request){
+            try{
+                SiouxlandMentalHealthCenterProject::insert([
+                    'patient_name' =>$request->patient_name,
+                    'dob' =>  $request->dob,
+                    'claim_acct_number' => $request->claim_acct_number,
+                    'mrn_number' =>$request->mrn_number,
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            }catch(\Exception $e){
+                $e->getMessage();
+            }
     }
 }

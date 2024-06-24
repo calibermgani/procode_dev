@@ -25,3 +25,6 @@ Route::group(['prefix' => 'v1_projects'], function() {
     Route::any('duplicate_entry_mail', 'App\Http\Controllers\AIGController@duplicateEntryMail')->name('duplicateEntryMail');
     Route::any('file_format_not_match', 'App\Http\Controllers\AIGController@fileFormatNotMatch')->name('fileFormatNotMatch');
 });
+Route::group(['prefix' => 'projects'], function() {
+    Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectController@siouxlandMentalHealth');
+});
