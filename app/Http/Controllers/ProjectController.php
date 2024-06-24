@@ -75,7 +75,6 @@ class ProjectController extends Controller
             // $ccMailId = ["mgani@caliberfocus.com"];
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
             $ccMailId = ["mgani@caliberfocus.com"];
-            $mailHeader = "Procode Utilization Report for ".Carbon::yesterday()->format('m/d/Y');
                 $yesterday = Carbon::yesterday();
                 if ($yesterday->isSaturday()) {
                     $yesterday = $yesterday->subDay(1); // Friday

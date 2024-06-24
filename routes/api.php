@@ -27,4 +27,5 @@ Route::group(['prefix' => 'v1_projects'], function() {
 });
 Route::group(['prefix' => 'projects'], function() {
     Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectController@siouxlandMentalHealth');
+    Route::any('project_file_not_in_folder', 'App\Http\Controllers\AIGController@projectFileNotInFolder');
 });
