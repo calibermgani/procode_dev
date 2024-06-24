@@ -80,6 +80,7 @@ class ProjectController extends Controller
                 } elseif ($yesterday->isSunday()) {
                     $yesterday = $yesterday->subDay(2); // Friday
                 }
+                $mailHeader = "Procode Utilization Report for ".$yesterday->format('m/d/Y');
                 $yesterDayStartDate = $yesterday->startOfDay()->toDateTimeString();
                 $yesterDayEndDate = $yesterday->endOfDay()->toDateTimeString();        
             // $mailHeader = "Procode Utilization Report for 06/07/2024";
@@ -120,7 +121,7 @@ class ProjectController extends Controller
             }
             
             $mailBody = $prjoectsPending;
-            Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody));
+            Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody, $yesterday));
             Log::info('ProjectWorkMail executed successfully.');
         } catch (\Exception $e) {
             Log::error('Error in ProjectWorkMail: ' . $e->getMessage());
