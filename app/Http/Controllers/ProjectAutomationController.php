@@ -40,8 +40,8 @@ class ProjectAutomationController extends Controller
                     'dx2' => isset($request->dx2) ? $request->dx2 : null,
                     'dx3' => isset($request->dx3) ? $request->dx3 : null,
                     'dx4' => isset($request->dx4) ? $request->dx4 : null,
-                    'units' => isset($request->units) ? $request->units : null, //Billed($)
-                    'billed' => isset($request->billed) ? $request->billed : null, //Allowed($)
+                    'units' => isset($request->units) ? $request->units : null,
+                    'billed' => isset($request->billed) ? $request->billed : null, //Billed($)
                     'provider' => isset($request->provider) ? $request->provider : null,
                     'service_provider' => isset($request->service_provider) ? $request->service_provider : null,
                     'place_of_service' => isset($request->place_of_service) ? $request->place_of_service : null,
@@ -71,8 +71,8 @@ class ProjectAutomationController extends Controller
                     'dx2' => isset($request->dx2) ? $request->dx2 : null,
                     'dx3' => isset($request->dx3) ? $request->dx3 : null,
                     'dx4' => isset($request->dx4) ? $request->dx4 : null,
-                    'units' => isset($request->units) ? $request->units : null, //Billed($)
-                    'billed' => isset($request->billed) ? $request->billed : null, //Allowed($)
+                    'units' => isset($request->units) ? $request->units : null,
+                    'billed' => isset($request->billed) ? $request->billed : null, //Billed($)
                     'provider' => isset($request->provider) ? $request->provider : null,
                     'service_provider' => isset($request->service_provider) ? $request->service_provider : null,
                     'place_of_service' => isset($request->place_of_service) ? $request->place_of_service : null,
