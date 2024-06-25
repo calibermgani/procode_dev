@@ -71,10 +71,10 @@ class ProjectController extends Controller
         try {
             Log::info('Executing ProjectWorkMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-            // $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
-            // $ccMailId = ["mgani@caliberfocus.com"];
-            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $toMailId = ["elanchezhian@annexmed.net","fabian@annexmed.com","ushashree@annexmed.com"];
             $ccMailId = ["mgani@caliberfocus.com"];
+            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            // $ccMailId = ["mgani@caliberfocus.com"];
                 $yesterday = Carbon::yesterday();
                 if ($yesterday->isSaturday()) {
                     $yesterday = $yesterday->subDay(1); // Friday
@@ -157,8 +157,8 @@ class ProjectController extends Controller
             Log::info('Executing procodeProjectOnHoldMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $client = new Client();
-            $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["mgani@caliberfocus.com"];
+            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            // $ccMailId = ["mgani@caliberfocus.com"];
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
@@ -211,9 +211,9 @@ class ProjectController extends Controller
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
                 if($data["email_id"] != null) {
-                    // $toMailId = $data["email_id"];
-                    // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
-                    // $ccMailId = explode(",",$ccMail->cc_emails);
+                    $toMailId = $data["email_id"];
+                    $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
+                    $ccMailId = explode(",",$ccMail->cc_emails);
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                     Log::info('Procode Project On Hold Mail executed successfully.');
                 }
