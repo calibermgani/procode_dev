@@ -216,22 +216,16 @@ class AIGController extends Controller {
     public function projectFileNotInFolder(Request $request)
     {
                 $project_information = $request->all();
-                if(empty($project_information['project_name']) == true) {
-                    $fileStatus = "The  xxx inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
-                    $mailHeader = "xxx File not in Specific folder";
+              
+                    $fileStatus = "The " .$project_information['project_name']." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
+                    $mailHeader = $project_information['project_name']." File not in Specific folder";
                     $toMailId = ["mgani@caliberfocus.com"];
-                //  $toMailId = $toMailId != null ? explode(",",$toMailId) : [];
                     Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus));
                     Log::info('ProjectFileNotThere executed successfully.');
                     return response()->json([
                         "message" => "file is not there"
                         ]);
-                } else {
-                    return response()->json([
-                        "message" => "file is there",
-    
-                        ]);
-                }
+               
              
     }
 }
