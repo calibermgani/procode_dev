@@ -26,6 +26,8 @@ Route::group(['prefix' => 'v1_projects'], function() {
     Route::any('file_format_not_match', 'App\Http\Controllers\AIGController@fileFormatNotMatch')->name('fileFormatNotMatch');
 });
 Route::group(['prefix' => 'projects'], function() {
-    Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectController@siouxlandMentalHealth');
+    // Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectController@siouxlandMentalHealth');
     Route::any('project_file_not_in_folder', 'App\Http\Controllers\AIGController@projectFileNotInFolder');
+    Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealth');
+    Route::any('saco_river_medical_group', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroup');
 });
