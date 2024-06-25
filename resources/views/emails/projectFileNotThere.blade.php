@@ -35,7 +35,7 @@
 
             <p>Hi All, </p>
 
-            <p>The project file is not found in the specified location.</p>
+            <p>{{$fileStatus}}</p>
            
            @include('emails.emailFooter')
     </div>
