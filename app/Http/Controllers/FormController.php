@@ -645,7 +645,7 @@ class FormController extends Controller
                     $table_name= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName)),'_');
                     $table_name_datas= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName). '_datas'),'_');
                     $table_name_duplicates= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName). '_duplicates'),'_');
-                    $table_name_history= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName).'_history'),'_');
+                    $table_name_history= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName).'_history'),'_');dd($table_name);
                     $dataCount = DB::table($table_name)->count();dd($dataCount,$table_name);
                     $modelName = Str::studly($table_name);
                     $modelNameDatas = Str::studly($table_name_datas);
