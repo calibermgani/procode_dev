@@ -22,7 +22,7 @@ class ProjectAutomationController extends Controller
             $existing = SiouxlandMentalHealthCenterProject::where('cliam_no', $request->cliam_no)->first();
             if ($existing) {
                 SiouxlandMentalHealthCenterProjectDuplicates::insert([
-                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,
+                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,//Claim #
                     'mrn' => isset($request->mrn) ? $request->mrn : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
                     'dob' => isset($request->dob) ? $request->dob : null,
@@ -53,7 +53,7 @@ class ProjectAutomationController extends Controller
                 ]);
             } else {
                 SiouxlandMentalHealthCenterProject::insert([
-                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,
+                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,//Claim #
                     'mrn' => isset($request->mrn) ? $request->mrn : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
                     'dob' => isset($request->dob) ? $request->dob : null,
