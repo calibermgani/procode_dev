@@ -641,7 +641,7 @@ class FormController extends Controller
               try {
                     $data = $request->all();
                     $projectName = $decodedClientName = Helpers::projectName($data['projectId'])->project_name;
-                    $subProjectName = $data['sub_project_id'] != null ? Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name : 'project';
+                    $subProjectName = $data['subProjectId'] != null ? Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name : 'project';
                     // $subProjectName = $data['subProjectId'] == null ? Helpers::projectName($data['projectId'])->project_name :Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name;
                     $table_name= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName)),'_');
                     $table_name_datas= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName). '_datas'),'_');
