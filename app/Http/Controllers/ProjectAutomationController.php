@@ -19,10 +19,10 @@ class ProjectAutomationController extends Controller
     public function siouxlandMentalHealth(Request $request)
     {
         try {
-            $existing = SiouxlandMentalHealthCenterProject::where('cliam_no', $request->cliam_no)->first();
+            $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();dd($existing);
             if ($existing) {
                 SiouxlandMentalHealthCenterProjectDuplicates::insert([
-                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,//Claim #
+                    'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
                     'mrn' => isset($request->mrn) ? $request->mrn : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
                     'dob' => isset($request->dob) ? $request->dob : null,
@@ -53,7 +53,7 @@ class ProjectAutomationController extends Controller
                 ]);
             } else {
                 SiouxlandMentalHealthCenterProject::insert([
-                    'cliam_no' => isset($request->cliam_no) ? $request->cliam_no : null,//Claim #
+                    'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
                     'mrn' => isset($request->mrn) ? $request->mrn : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
                     'dob' => isset($request->dob) ? $request->dob : null,
