@@ -19,38 +19,74 @@ class ProjectAutomationController extends Controller
     public function siouxlandMentalHealth(Request $request)
     {
         try {
+            $currentDate = Carbon::now()->format('Y-m-d');
             $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();
+            $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
             if ($existing !== null) {
-                SiouxlandMentalHealthCenterProjectDuplicates::insert([
-                    'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
-                    'mrn' => isset($request->mrn) ? $request->mrn : null,
-                    'patient' => isset($request->patient) ? $request->patient : null,
-                    'dob' => isset($request->dob) ? $request->dob : null,
-                    'visit_date' => isset($request->visit_date) ? $request->visit_date : null,
-                    'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : null,
-                    'primary_insurance' => isset($request->primary_insurance) ? $request->primary_insurance : null,
-                    'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : null,
-                    'rev_code' => isset($request->rev_code) ? $request->rev_code : null, //Rev. Code
-                    'cpt' => isset($request->cpt) ? $request->cpt : null,
-                    'm1' => isset($request->m1) ? $request->m1 : null,
-                    'm2' => isset($request->m2) ? $request->m2 : null,
-                    'm3' => isset($request->m3) ? $request->m3 : null,
-                    'm4' => isset($request->m4) ? $request->m4 : null,
-                    'dx1' => isset($request->dx1) ? $request->dx1 : null,
-                    'dx2' => isset($request->dx2) ? $request->dx2 : null,
-                    'dx3' => isset($request->dx3) ? $request->dx3 : null,
-                    'dx4' => isset($request->dx4) ? $request->dx4 : null,
-                    'units' => isset($request->units) ? $request->units : null,
-                    'billed' => isset($request->billed) ? $request->billed : null, //Billed($)
-                    'provider' => isset($request->provider) ? $request->provider : null,
-                    'service_provider' => isset($request->service_provider) ? $request->service_provider : null,
-                    'place_of_service' => isset($request->place_of_service) ? $request->place_of_service : null,
-                    'invoke_date' => carbon::now()->format('Y-m-d'),
-                    'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
-                    'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
-                    'chart_status' => "CE_Assigned",
-                    'duplicate_status' => "Yes"
-                ]);
+                    if($duplicateRecord != null) {
+                            $duplicateRecord->update([
+                                'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
+                                'mrn' => isset($request->mrn) ? $request->mrn : null,
+                                'patient' => isset($request->patient) ? $request->patient : null,
+                                'dob' => isset($request->dob) ? $request->dob : null,
+                                'visit_date' => isset($request->visit_date) ? $request->visit_date : null,
+                                'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : null,
+                                'primary_insurance' => isset($request->primary_insurance) ? $request->primary_insurance : null,
+                                'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : null,
+                                'rev_code' => isset($request->rev_code) ? $request->rev_code : null, //Rev. Code
+                                'cpt' => isset($request->cpt) ? $request->cpt : null,
+                                'm1' => isset($request->m1) ? $request->m1 : null,
+                                'm2' => isset($request->m2) ? $request->m2 : null,
+                                'm3' => isset($request->m3) ? $request->m3 : null,
+                                'm4' => isset($request->m4) ? $request->m4 : null,
+                                'dx1' => isset($request->dx1) ? $request->dx1 : null,
+                                'dx2' => isset($request->dx2) ? $request->dx2 : null,
+                                'dx3' => isset($request->dx3) ? $request->dx3 : null,
+                                'dx4' => isset($request->dx4) ? $request->dx4 : null,
+                                'units' => isset($request->units) ? $request->units : null,
+                                'billed' => isset($request->billed) ? $request->billed : null, //Billed($)
+                                'provider' => isset($request->provider) ? $request->provider : null,
+                                'service_provider' => isset($request->service_provider) ? $request->service_provider : null,
+                                'place_of_service' => isset($request->place_of_service) ? $request->place_of_service : null,
+                                'invoke_date' => carbon::now()->format('Y-m-d'),
+                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
+                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
+                                'chart_status' => "CE_Assigned",
+                                'duplicate_status' => "Yes"
+                            ]);
+                    } else {
+                            SiouxlandMentalHealthCenterProjectDuplicates::insert([
+                                'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
+                                'mrn' => isset($request->mrn) ? $request->mrn : null,
+                                'patient' => isset($request->patient) ? $request->patient : null,
+                                'dob' => isset($request->dob) ? $request->dob : null,
+                                'visit_date' => isset($request->visit_date) ? $request->visit_date : null,
+                                'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : null,
+                                'primary_insurance' => isset($request->primary_insurance) ? $request->primary_insurance : null,
+                                'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : null,
+                                'rev_code' => isset($request->rev_code) ? $request->rev_code : null, //Rev. Code
+                                'cpt' => isset($request->cpt) ? $request->cpt : null,
+                                'm1' => isset($request->m1) ? $request->m1 : null,
+                                'm2' => isset($request->m2) ? $request->m2 : null,
+                                'm3' => isset($request->m3) ? $request->m3 : null,
+                                'm4' => isset($request->m4) ? $request->m4 : null,
+                                'dx1' => isset($request->dx1) ? $request->dx1 : null,
+                                'dx2' => isset($request->dx2) ? $request->dx2 : null,
+                                'dx3' => isset($request->dx3) ? $request->dx3 : null,
+                                'dx4' => isset($request->dx4) ? $request->dx4 : null,
+                                'units' => isset($request->units) ? $request->units : null,
+                                'billed' => isset($request->billed) ? $request->billed : null, //Billed($)
+                                'provider' => isset($request->provider) ? $request->provider : null,
+                                'service_provider' => isset($request->service_provider) ? $request->service_provider : null,
+                                'place_of_service' => isset($request->place_of_service) ? $request->place_of_service : null,
+                                'invoke_date' => carbon::now()->format('Y-m-d'),
+                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
+                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
+                                'chart_status' => "CE_Assigned",
+                                'duplicate_status' => "Yes"
+                            ]);
+                    }
+                
             } else {
                 SiouxlandMentalHealthCenterProject::insert([
                     'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
