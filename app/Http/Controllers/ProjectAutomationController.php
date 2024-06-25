@@ -19,8 +19,8 @@ class ProjectAutomationController extends Controller
     public function siouxlandMentalHealth(Request $request)
     {
         try {
-            $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();dd($existing);
-            if ($existing) {
+            $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();
+            if ($existing !== null) {
                 SiouxlandMentalHealthCenterProjectDuplicates::insert([
                     'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
                     'mrn' => isset($request->mrn) ? $request->mrn : null,
