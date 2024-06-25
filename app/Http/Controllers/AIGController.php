@@ -16,6 +16,7 @@ use App\Models\MailNotification;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 class AIGController extends Controller {
     public function projectDetails(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
@@ -216,7 +217,8 @@ class AIGController extends Controller {
     public function projectFileNotInFolder(Request $request)
     {
                 $project_information = $request->all();
-              
+                $current_time = Carbon::now();
+                if ($current_time->hour >= 11) {
                     $fileStatus = "The " .$project_information['project_name']." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
                     $mailHeader = $project_information['project_name']." File not in Specific folder";
                     $toMailId = ["mgani@caliberfocus.com"];
@@ -225,6 +227,7 @@ class AIGController extends Controller {
                     return response()->json([
                         "message" => "file is not there"
                         ]);
+                }
                
              
     }
