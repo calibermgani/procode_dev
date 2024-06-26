@@ -13,8 +13,8 @@ use App\Models\SiouxlandMentalHealthCenterProject;
 use App\Models\SiouxlandMentalHealthCenterProjectDuplicates;
 use App\Models\SacoRiverMedicalGroupCoding;
 use App\Models\SacoRiverMedicalGroupCodingDuplicates;
-use App\Models\cancerCareSpecialistsProject;
-use App\Models\cancerCareSpecialistsProjectDuplicates;
+use App\Models\CancerCareSpecialistsProject;
+use App\Models\CancerCareSpecialistsProjectDuplicates;
 class ProjectAutomationController extends Controller
 {
     public function siouxlandMentalHealth(Request $request)
@@ -132,8 +132,8 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-            $existing = cancerCareSpecialistsProject::where('claim_no', $request->claim_no)->first();
-            $duplicateRecord =  cancerCareSpecialistsProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+            $existing = CancerCareSpecialistsProject::where('claim_no', $request->claim_no)->first();
+            $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
             if(isset($request->date_of_service_range)) {
                 $dateOfService = explode('-',$request->date_of_service_range);
                 $dateOfService1 = date('y-m-d',strtotime($dateOfService[0]));
@@ -165,7 +165,7 @@ class ProjectAutomationController extends Controller
                             ]);
                             return response()->json(['message' => 'Duplicate Record Updated Successfully']);
                     } else {
-                        cancerCareSpecialistsProjectDuplicates::insert([
+                        CancerCareSpecialistsProjectDuplicates::insert([
                                'encounter' => isset($request->encounter) ? $request->encounter : null,
                                 'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
                                 'patient' => isset($request->patient) ? $request->patient : null,
@@ -188,7 +188,7 @@ class ProjectAutomationController extends Controller
                     }
                 
             } else {
-                cancerCareSpecialistsProject::insert([
+                CancerCareSpecialistsProject::insert([
                    'encounter' => isset($request->encounter) ? $request->encounter : null,
                     'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
