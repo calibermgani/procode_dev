@@ -138,7 +138,7 @@ class ProjectAutomationController extends Controller
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
                     if(isset($request->encounter)) {
-                        $existing = CancerCareSpecialistsProject::where('encounter', $request->encounter)->first();
+                        $existing = CancerCareSpecialistsProject::where('encounter', $request->encounter)->where('invoke_date',$currentDate)->first();
                         $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('encounter', $request->encounter)->whereDate('created_at',$currentDate)->first();
                     } else {
                         $existing = null;
