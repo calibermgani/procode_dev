@@ -54,6 +54,7 @@ class ProjectAutomationController extends Controller
                                 'chart_status' => "CE_Assigned",
                                 'duplicate_status' => "Yes"
                             ]);
+                            return response()->json(['message' => 'Duplicate Record Updated Successfully']);
                     } else {
                             SiouxlandMentalHealthCenterProjectDuplicates::insert([
                                 'claim_no' => isset($request->claim_no) ? $request->claim_no : null,//Claim #
@@ -85,6 +86,7 @@ class ProjectAutomationController extends Controller
                                 'chart_status' => "CE_Assigned",
                                 'duplicate_status' => "Yes"
                             ]);
+                            return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
                     }
                 
             } else {
@@ -117,8 +119,9 @@ class ProjectAutomationController extends Controller
                     'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
                     'chart_status' => "CE_Assigned",
                 ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
             }
-            return response()->json(['message' => 'Record Inserted Successfully']);
+            
         } catch (\Exception $e) {
             $e->getMessage();
         }
