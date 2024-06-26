@@ -134,6 +134,14 @@ class ProjectAutomationController extends Controller
             $currentDate = Carbon::now()->format('Y-m-d');
             $existing = cancerCareSpecialistsProject::where('claim_no', $request->claim_no)->first();
             $duplicateRecord =  cancerCareSpecialistsProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+            if(isset($request->date_of_service_range)) {
+                $dateOfService = explode('-',$request->date_of_service_range);
+                $dateOfService1 = date('y-m-d',strtotime($dateOfService[0]));
+                $dateOfService2 = date('y-m-d',strtotime($dateOfService[1]));
+                $changedDateOfService =  $dateOfService1.'-'. $dateOfService2;
+            } else {
+                $changedDateOfService = null;
+            }
             if ($existing !== null) {
                     if($duplicateRecord != null) {
                             $duplicateRecord->update([
@@ -141,7 +149,7 @@ class ProjectAutomationController extends Controller
                                 'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
                                 'patient' => isset($request->patient) ? $request->patient : null,
                                 'rule' => isset($request->rule) ? $request->rule : null,
-                                'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                                'date_of_service_range' => $changedDateOfService,
                                 'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
                                 'facility' => isset($request->facility) ? $request->facility : null,
                                 'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
@@ -162,7 +170,7 @@ class ProjectAutomationController extends Controller
                                 'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
                                 'patient' => isset($request->patient) ? $request->patient : null,
                                 'rule' => isset($request->rule) ? $request->rule : null,
-                                'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                                'date_of_service_range' => $changedDateOfService,
                                 'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
                                 'facility' => isset($request->facility) ? $request->facility : null,
                                 'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
@@ -185,7 +193,7 @@ class ProjectAutomationController extends Controller
                     'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
                     'patient' => isset($request->patient) ? $request->patient : null,
                     'rule' => isset($request->rule) ? $request->rule : null,
-                    'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                    'date_of_service_range' => $changedDateOfService,
                     'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
                     'facility' => isset($request->facility) ? $request->facility : null,
                     'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
