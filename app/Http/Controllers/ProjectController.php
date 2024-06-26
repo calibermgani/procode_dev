@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Mail\ProcodeProjectOnHoldMail;
 use App\Models\CCEmailIds;
+use App\Mail\ProcodeProjectFile;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -220,5 +221,23 @@ class ProjectController extends Controller
             Log::error('Error in ProjectOnHoldMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
         }
+    }
+
+    public function projectFileNotInFolder(Request $request)
+    {
+                $project_information = $request->all();
+                $current_time = Carbon::now();
+                if ($current_time->hour >= 11) {
+                    $fileStatus = "The " .$project_information['project_name']." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
+                    $mailHeader = $project_information['project_name']." File not in Specific folder";
+                    $toMailId = ["mgani@caliberfocus.com"];
+                    Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus));
+                    Log::info('ProjectFileNotThere executed successfully.');
+                    return response()->json([
+                        "message" => "file is not there"
+                        ]);
+                }
+               
+             
     }
 }
