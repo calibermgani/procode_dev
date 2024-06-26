@@ -13,7 +13,8 @@ use App\Models\SiouxlandMentalHealthCenterProject;
 use App\Models\SiouxlandMentalHealthCenterProjectDuplicates;
 use App\Models\SacoRiverMedicalGroupCoding;
 use App\Models\SacoRiverMedicalGroupCodingDuplicates;
-
+use App\Models\cancerCareSpecialistsProject;
+use App\Models\cancerCareSpecialistsProjectDuplicates;
 class ProjectAutomationController extends Controller
 {
     public function siouxlandMentalHealth(Request $request)
@@ -127,6 +128,83 @@ class ProjectAutomationController extends Controller
         }
     }
 
+    public function cancerCareSpecialist(Request $request)
+    {
+        try {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $existing = cancerCareSpecialistsProject::where('claim_no', $request->claim_no)->first();
+            $duplicateRecord =  cancerCareSpecialistsProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+            if ($existing !== null) {
+                    if($duplicateRecord != null) {
+                            $duplicateRecord->update([
+                                'encounter' => isset($request->encounter) ? $request->encounter : null,
+                                'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
+                                'patient' => isset($request->patient) ? $request->patient : null,
+                                'rule' => isset($request->rule) ? $request->rule : null,
+                                'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                                'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
+                                'facility' => isset($request->facility) ? $request->facility : null,
+                                'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
+                                'supervising_provider' => isset($request->supervising_provider) ? $request->supervising_provider : null, 
+                                'referring_provider' => isset($request->referring_provider) ? $request->referring_provider : null,
+                                'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : null,
+                                'modifiers' => isset($request->modifiers) ? $request->modifiers : null,
+                                'invoke_date' => carbon::now()->format('Y-m-d'),
+                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
+                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
+                                'chart_status' => "CE_Assigned",
+                                'duplicate_status' => "Yes"
+                            ]);
+                            return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                    } else {
+                        cancerCareSpecialistsProjectDuplicates::insert([
+                               'encounter' => isset($request->encounter) ? $request->encounter : null,
+                                'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
+                                'patient' => isset($request->patient) ? $request->patient : null,
+                                'rule' => isset($request->rule) ? $request->rule : null,
+                                'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                                'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
+                                'facility' => isset($request->facility) ? $request->facility : null,
+                                'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
+                                'supervising_provider' => isset($request->supervising_provider) ? $request->supervising_provider : null, 
+                                'referring_provider' => isset($request->referring_provider) ? $request->referring_provider : null,
+                                'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : null,
+                                'modifiers' => isset($request->modifiers) ? $request->modifiers : null,
+                                'invoke_date' => carbon::now()->format('Y-m-d'),
+                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
+                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
+                                'chart_status' => "CE_Assigned",
+                                'duplicate_status' => "Yes"
+                            ]);
+                            return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                    }
+                
+            } else {
+                cancerCareSpecialistsProject::insert([
+                   'encounter' => isset($request->encounter) ? $request->encounter : null,
+                    'charge_code' => isset($request->charge_code) ? $request->charge_code : null,
+                    'patient' => isset($request->patient) ? $request->patient : null,
+                    'rule' => isset($request->rule) ? $request->rule : null,
+                    'date_of_service_range' => isset($request->date_of_service_range) ? $request->date_of_service_range : null,
+                    'rendering_provider' => isset($request->rendering_provider) ? $request->rendering_provider : null,
+                    'facility' => isset($request->facility) ? $request->facility : null,
+                    'primary_policy' => isset($request->primary_policy) ? $request->primary_policy : null,
+                    'supervising_provider' => isset($request->supervising_provider) ? $request->supervising_provider : null, //Rev. Code
+                    'referring_provider' => isset($request->referring_provider) ? $request->referring_provider : null,
+                    'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : null,
+                    'modifiers' => isset($request->modifiers) ? $request->modifiers : null,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : null,
+                    'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : null,
+                    'chart_status' => "CE_Assigned",
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            }
+            
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
     public function sacoRiverMedicalGroup(Request $request)
     {
         try {

@@ -30,4 +30,5 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('project_file_not_in_folder', 'App\Http\Controllers\AIGController@projectFileNotInFolder');
     Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealth');
     Route::any('saco_river_medical_group', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroup');
+    Route::any('cancer_care_specialist', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialist');
 });
