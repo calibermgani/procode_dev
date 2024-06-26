@@ -21,8 +21,13 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-            $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();
-            $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+                if(isset($request->encounter)) {
+                    $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();
+                    $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+                } else {
+                    $existing = null;
+                    $duplicateRecord = null;
+                }
             if ($existing !== null) {
                     if($duplicateRecord != null) {
                             $duplicateRecord->update([
@@ -132,8 +137,13 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-            $existing = CancerCareSpecialistsProject::where('claim_no', $request->claim_no)->first();
-            $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
+                    if(isset($request->encounter)) {
+                        $existing = CancerCareSpecialistsProject::where('encounter', $request->encounter)->first();
+                        $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('encounter', $request->encounter)->whereDate('created_at',$currentDate)->first();
+                    } else {
+                        $existing = null;
+                        $duplicateRecord = null;
+                    }
                 if ($existing !== null) {
                     if($duplicateRecord != null) {
                             $duplicateRecord->update([
