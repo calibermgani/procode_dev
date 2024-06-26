@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Mail\ProcodeProjectOnHoldMail;
 use App\Models\CCEmailIds;
-use App\Models\SiouxlandMentalHealthCenterProject;
-use App\Models\SiouxlandMentalHealthCenterProjectDuplicates;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -222,58 +220,5 @@ class ProjectController extends Controller
             Log::error('Error in ProjectOnHoldMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
         }
-    }
-
-    public function siouxlandMentalHealth(Request $request){
-            try{
-                $existing = SiouxlandMentalHealthCenterProject::where('claim_acct_number',$request->claim_acct_number)->first();
-                if($existing) {
-                    SiouxlandMentalHealthCenterProjectDuplicates::insert([
-                    'patient_name' =>isset($request->patient_name) ? $request->patient_name : null,
-                    'dob' =>isset($request->dob) ? $request->dob : null,
-                    'claim_acct_number' => isset($request->claim_acct_number) ? $request->claim_acct_number : null,
-                    'mrn_number' =>isset($request->mrn_number) ? $request->mrn_number : null,
-                    'insurance' =>isset($request->insurance) ? $request->insurance : null,
-                    'service_provider' =>isset($request->service_provider) ? $request->service_provider : null,
-                    'visit_date_dos' =>isset($request->visit_date_dos) ? $request->visit_date_dos : null,
-                    'place_of_service' =>isset($request->place_of_service) ? $request->place_of_service : null,
-                    'cpt' =>isset($request->cpt) ? $request->cpt : null,
-                    'modifier' =>isset($request->modifier) ? $request->modifier : null,
-                    'dx_codes' =>isset($request->dx_codes) ? $request->dx_codes : null,
-                    'units' =>isset($request->units) ? $request->units : null,
-                    'billed_$' =>isset($request->billed) ? $request->billed : null,
-                    'total_time_spent' =>isset($request->total_time_spent) ?  $request->total_time_spent : null,
-                    'invoke_date' =>carbon::now()->format('Y-m-d'),
-                    'CE_emp_id'=>isset($request->CE_emp_id) ? $request->CE_emp_id :null,
-                    'QA_emp_id'=>isset($request->QA_emp_id) ? $request->QA_emp_id : null,
-                    'chart_status'=>"CE_Assigned",
-                    'duplicate_status'=>"Yes"
-                ]);
-            } else {
-                SiouxlandMentalHealthCenterProject::insert([
-                    'patient_name' =>isset($request->patient_name) ? $request->patient_name : null,
-                    'dob' =>isset($request->dob) ? $request->dob : null,
-                    'claim_acct_number' => isset($request->claim_acct_number) ? $request->claim_acct_number : null,
-                    'mrn_number' =>isset($request->mrn_number) ? $request->mrn_number : null,
-                    'insurance' =>isset($request->insurance) ? $request->insurance : null,
-                    'service_provider' =>isset($request->service_provider) ? $request->service_provider : null,
-                    'visit_date_dos' =>isset($request->visit_date_dos) ? $request->visit_date_dos : null,
-                    'place_of_service' =>isset($request->place_of_service) ? $request->place_of_service : null,
-                    'cpt' =>isset($request->cpt) ? $request->cpt : null,
-                    'modifier' =>isset($request->modifier) ? $request->modifier : null,
-                    'dx_codes' =>isset($request->dx_codes) ? $request->dx_codes : null,
-                    'units' =>isset($request->units) ? $request->units : null,
-                    'billed_$' =>isset($request->billed) ? $request->billed : null,
-                    'total_time_spent' =>isset($request->total_time_spent) ?  $request->total_time_spent : null,
-                    'invoke_date' =>carbon::now()->format('Y-m-d'),
-                    'CE_emp_id'=>isset($request->CE_emp_id) ? $request->CE_emp_id :null,
-                    'QA_emp_id'=>isset($request->QA_emp_id) ? $request->QA_emp_id : null,
-                    'chart_status'=>"CE_Assigned",
-                ]);
-            }
-                return response()->json(['message' => 'Record Inserted Successfully']);
-            }catch(\Exception $e){
-                $e->getMessage();
-            }
     }
 }
