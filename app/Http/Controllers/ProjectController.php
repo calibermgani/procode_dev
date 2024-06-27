@@ -227,19 +227,92 @@ class ProjectController extends Controller
 
     public function projectFileNotInFolder(Request $request)
     {
-                $project_information = $request->all();
-                $current_time = Carbon::now();
-                if ($current_time->hour >= 11) {
-                    $fileStatus = "The " .$project_information['project_name']." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
-                    $mailHeader = $project_information['project_name']." File not in Specific folder";
-                    $toMailId = ["mgani@caliberfocus.com"];
-                    Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus));
-                    Log::info('ProjectFileNotThere executed successfully.');
-                    return response()->json([
-                        "message" => "file is not there"
-                        ]);
-                }
-               
-             
+        $project_information = $request->all();
+        $current_time = Carbon::now();
+        if ($current_time->hour >= 11) {
+            $fileStatus = "The " .$project_information['project_name']." inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
+            $mailHeader = $project_information['project_name']." File not in Specific folder";
+            $toMailId = ["mgani@caliberfocus.com"];
+            Mail::to($toMailId)->send(new ProcodeProjectFile($mailHeader, $fileStatus));
+            Log::info('ProjectFileNotThere executed successfully.');
+            return response()->json([
+                "message" => "file is not there"
+                ]);
+        }       
     }
+
+    public function procodeProjectInventoryRecords()
+    {
+        try {
+            Log::info('Execute the Procode project current date records check and send mail after 12 PM');
+            $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
+            $client = new Client();
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            $mailHeader = "ProCode - Inventory Upload Successful - ".$currentDate;
+            $projects = $this->getProjects();
+            foreach ($projects as $project) {
+                if (count($project["subprject_name"]) > 0) {
+                    foreach ($project["subprject_name"] as $key => $subProject) {
+                        $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        $modelName = Str::studly($table_name);
+                        $modelClass = "App\\Models\\" . $modelName;
+                        $models[] = $modelClass;
+                        $prjoectName[] = $project["client_name"] . '-' . $subProject;
+                     $projectId[] = $project["id"]; 
+                    }
+                } else {
+                    $subProjectText = "project";
+                    $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
+                    $modelName = Str::studly($table_name);
+                    $modelClass = "App\\Models\\" . $modelName;
+                    $models[] = $modelClass;
+                    $prjoectName[] = $project["client_name"];
+                    $projectId[] = $project["id"]; 
+                }
+            }
+            $procodeProjectsCurrent = $projectsIds = [];
+            foreach ($models as $key => $model) {
+                if (class_exists($model)) {
+                     $currentCount = $model::where('invoke_date',$currentDate)->count();
+                        if($currentCount > 0){
+                            $procodeProjectsCurrent[$projectId[$key]]['project'] = $prjoectName[$key];
+                            $procodeProjectsCurrent[$projectId[$key]]['currentCount'] = $currentCount;
+                           $projectsIds[] = $projectId[$key];  
+                        }
+                }
+            }
+            $payload = [
+                'token' => '1a32e71a46317b9cc6feb7388238c95d',
+                'client_id' => $projectsIds
+            ];
+            if (!empty($procodeProjectsCurrent)) {
+                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
+                    'json' => $payload
+                ]);
+                if ($response->getStatusCode() == 200) {
+                    $apiData = json_decode($response->getBody(), true);
+                } else {
+                    return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                }
+                $projectsHolding = $apiData['people_details'];
+                foreach($projectsHolding as $data) {
+                    $clientIds = $data['client_ids'];
+                    $mailBody = $procodeProjectsCurrent;
+                    if($data["email_id"] != null) {
+                        // $toMailId = $data["email_id"];
+                        // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
+                        // $ccMailId = explode(",",$ccMail->cc_emails);
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
+                        Log::info('Procode Project Inventory Mail executed successfully.');
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in Project Inventory Mail: ' . $e->getMessage());
+            Log::debug($e->getMessage());
+        }
+    }
+
 }
