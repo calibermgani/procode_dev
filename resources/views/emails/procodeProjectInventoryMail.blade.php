@@ -50,8 +50,10 @@
 
                 @if (isset($mailBody) && count($mailBody) > 0)
               
-                    @foreach ($mailBody as $data)
-                
+                    @foreach ($mailBody as $key => $data)
+                @php
+                    dd($$key,$data);
+                @endphp
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ [$data]['project'] }}</td>
                             <td style="text-align: left;padding: 5px;">{{ [$data]['currentCount'] == 0 ? 'No Activity' : [$data]['currentCount']}}</td>
