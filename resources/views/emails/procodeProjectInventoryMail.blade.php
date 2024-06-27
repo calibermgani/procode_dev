@@ -54,14 +54,14 @@
            
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ $data['project'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $data['currentCount'] == 0 ? 'No Activity' : $data['currentCount']}}</td>
+                            <td style="text-align: left;padding: 5px;">{{ $data['currentCount'] == 0 ? 0 : $data['currentCount']}}</td>
                           </tr>
                     @endforeach
                 @endif
 
             </tbody>
         </table>
-        <p>Thank you for your attention.</p>
+        <p>Thank you.</p>
         <br>
         @include('emails.emailFooter')
     </div>
