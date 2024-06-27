@@ -250,8 +250,9 @@ class ProjectController extends Controller
             $client = new Client();
             $currentDate = Carbon::now()->format('Y-m-d');
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
-            $mailHeader = "ProCode - Inventory Upload Successful - ".$currentDate;
+            $ccMailId = ["mgani@caliberfocus.com"];
+            $mailDate =  Carbon::now()->format('m/d/Y');
+            $mailHeader = "ProCode - Inventory Upload Successful - ".$mailDate;
             $projects = $this->getProjects();
             foreach ($projects as $project) {
                 if (count($project["subprject_name"]) > 0) {
