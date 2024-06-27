@@ -180,7 +180,7 @@ class ProjectController extends Controller
                     $projectId[] = $project["id"]; 
                 }
             }
-            $procodeProjectsHolding = $projectsIds = [];dd($procodeProjectsHolding,isset($procodeProjectsHolding));
+            $procodeProjectsHolding = $projectsIds = [];
             foreach ($models as $key => $model) {
                 if (class_exists($model)) {
                      $hCount = $model::where('chart_status', 'CE_Hold')->count();
@@ -205,7 +205,7 @@ class ProjectController extends Controller
             } else {
                 return response()->json(['error' => 'API request failed'], $response->getStatusCode());
             }
-            $projectsHolding = $apiData['people_details'];dd($procodeProjectsHolding);
+            $projectsHolding = $apiData['people_details'];dd($procodeProjectsHolding,isset($procodeProjectsHolding));
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
                 $mailBody = $procodeProjectsHolding;
