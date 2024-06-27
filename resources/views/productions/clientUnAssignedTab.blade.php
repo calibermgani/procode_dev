@@ -1353,22 +1353,31 @@
 
                 }
             });
+            function handleCheckboxChange() {
+                // $('.checkBoxClass').change(function() {
+                        var anyCheckboxChecked = $('.checkBoxClass:checked').length > 0;
+                        var allCheckboxesChecked = $('.checkBoxClass:checked').length === $('.checkBoxClass')
+                            .length;
+                        if (allCheckboxesChecked) {
+                            $("#ckbCheckAll").prop('checked', $(this).prop('checked'));
+                        } else {
+                            $("#ckbCheckAll").prop('checked', false);
+                        }
+                        console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
+                        $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
+                        if ($(this).prop('checked') == true) {
+                            assigneeDropdown();
+                        }
+                // });
+            }
 
-            $('.checkBoxClass').change(function() {
-                var anyCheckboxChecked = $('.checkBoxClass:checked').length > 0;
-                var allCheckboxesChecked = $('.checkBoxClass:checked').length === $('.checkBoxClass')
-                    .length;
-                if (allCheckboxesChecked) {
-                    $("#ckbCheckAll").prop('checked', $(this).prop('checked'));
-                } else {
-                    $("#ckbCheckAll").prop('checked', false);
-                }
-                console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
-                $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
-                if ($(this).prop('checked') == true) {
-                  assigneeDropdown();
-                }
-            });
+            function attachCheckboxHandlers() {
+                $('.checkBoxClass').off('change').on('change', handleCheckboxChange);
+            }
+               attachCheckboxHandlers();
+                table.on('draw', function() {
+                    attachCheckboxHandlers();
+                });
 
             function assigneeDropdown() {
                KTApp.block('#assign_div', {
