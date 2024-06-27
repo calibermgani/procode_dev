@@ -1367,7 +1367,8 @@
                 }
             });
 
-            $('.checkBoxClass').change(function() {
+            function handleCheckboxChange() {
+            // $('.checkBoxClass').change(function() {
                 var anyCheckboxChecked = $('.checkBoxClass:checked').length > 0;
                 var allCheckboxesChecked = $('.checkBoxClass:checked').length === $('.checkBoxClass')
                     .length;
@@ -1381,7 +1382,19 @@
                 if ($(this).prop('checked') == true) {
                   assigneeDropdown();
                 }
-            });
+            }
+            // });
+
+            function attachCheckboxHandlers() {
+                $('.checkBoxClass').off('change').on('change', handleCheckboxChange);
+            }
+            attachCheckboxHandlers();
+
+                table.on('draw', function() {
+                    attachCheckboxHandlers();
+                });
+
+
             function assigneeDropdown() {
                KTApp.block('#assign_div', {
                     overlayColor: '#000000',
