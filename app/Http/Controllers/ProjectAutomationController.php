@@ -15,6 +15,8 @@ use App\Models\SacoRiverMedicalGroupCoding;
 use App\Models\SacoRiverMedicalGroupCodingDuplicates;
 use App\Models\CancerCareSpecialistsProject;
 use App\Models\CancerCareSpecialistsProjectDuplicates;
+use App\Models\ChestnutHealthSystemsClaimEdits;
+use App\Models\ChestnutHealthSystemsClaimEditsDuplicates;
 class ProjectAutomationController extends Controller
 {
     public function siouxlandMentalHealth(Request $request)
@@ -299,6 +301,96 @@ class ProjectAutomationController extends Controller
                     'icd' => isset($request->icd) ? $request->icd : NULL,
                     'am_cpt' => isset($request->am_cpt) ? $request->am_cpt : NULL,
                     'am_icd' => isset($request->am_icd) ? $request->am_icd : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned",
+                ]);
+            }
+            return response()->json(['message' => 'Record Inserted Successfully']);
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function chestnutHealthSystems(Request $request)
+    {
+        try {
+            $currentDate = Carbon::now()->format('Y-m-d');
+              if(isset($request->claims_no) && $request->claims_no != '-') {
+                $existing = ChestnutHealthSystemsClaimEdits::where('claims_no', $request->claims_no)->where('invoke_date',$currentDate)->first();
+                $duplicateRecord =  ChestnutHealthSystemsClaimEditsDuplicates::where('claims_no', $request->claims_no)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
+            } else {
+                $existing = null;
+                $duplicateRecord = null;
+            }
+            if ($existing != null) {
+                if($duplicateRecord != null) {
+                        $duplicateRecord->update([
+                            'claim_type' => isset($request->claim_type) ? $request->claim_type : NULL,
+                            'claims_no' => isset($request->claims_no) ? $request->claims_no : NULL,
+                            'service_date' => isset($request->service_date) ? $request->service_date : NULL,
+                            'pvdr' => isset($request->pvdr) ? $request->pvdr : NULL,
+                            'patient' => isset($request->patient) ? $request->patient : NULL,
+                            'payer' => isset($request->payer) ? $request->payer : NULL,
+                            'status' => isset($request->status) ? $request->status : NULL,
+                            'charges' => isset($request->charges) ? $request->charges : NULL,
+                            'pmts_adjs' => isset($request->pmts_adjs) ? $request->pmts_adjs : NULL,
+                            'adjustment' => isset($request->adjustment) ? $request->adjustment : NULL,
+                            'withheld' => isset($request->withheld) ? $request->withheld : NULL,
+                            'balance' => isset($request->balance) ? $request->balance : NULL,
+                            'account_number' => isset($request->account_number) ? $request->account_number : NULL,
+                            'provider_name' => isset($request->provider_name) ? $request->provider_name : NULL,
+                            'guarantor_name' => isset($request->guarantor_name) ? $request->guarantor_name : NULL,
+                            'invoke_date' => carbon::now()->format('Y-m-d'),
+                            'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                            'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                            'chart_status' => "CE_Assigned",
+                            'duplicate_status' => "Yes"
+                        ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                } else {
+                    ChestnutHealthSystemsClaimEditsDuplicates::insert([
+                        'claim_type' => isset($request->claim_type) ? $request->claim_type : NULL,
+                        'claims_no' => isset($request->claims_no) ? $request->claims_no : NULL,
+                        'service_date' => isset($request->service_date) ? $request->service_date : NULL,
+                        'pvdr' => isset($request->pvdr) ? $request->pvdr : NULL,
+                        'patient' => isset($request->patient) ? $request->patient : NULL,
+                        'payer' => isset($request->payer) ? $request->payer : NULL,
+                        'status' => isset($request->status) ? $request->status : NULL,
+                        'charges' => isset($request->charges) ? $request->charges : NULL,
+                        'pmts_adjs' => isset($request->pmts_adjs) ? $request->pmts_adjs : NULL,
+                        'adjustment' => isset($request->adjustment) ? $request->adjustment : NULL,
+                        'withheld' => isset($request->withheld) ? $request->withheld : NULL,
+                        'balance' => isset($request->balance) ? $request->balance : NULL,
+                        'account_number' => isset($request->account_number) ? $request->account_number : NULL,
+                        'provider_name' => isset($request->provider_name) ? $request->provider_name : NULL,
+                        'guarantor_name' => isset($request->guarantor_name) ? $request->guarantor_name : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned",
+                        'duplicate_status' => "Yes"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                }
+            } else {
+                ChestnutHealthSystemsClaimEdits::insert([
+                    'claim_type' => isset($request->claim_type) ? $request->claim_type : NULL,
+                    'claims_no' => isset($request->claims_no) ? $request->claims_no : NULL,
+                    'service_date' => isset($request->service_date) ? $request->service_date : NULL,
+                    'pvdr' => isset($request->pvdr) ? $request->pvdr : NULL,
+                    'patient' => isset($request->patient) ? $request->patient : NULL,
+                    'payer' => isset($request->payer) ? $request->payer : NULL,
+                    'status' => isset($request->status) ? $request->status : NULL,
+                    'charges' => isset($request->charges) ? $request->charges : NULL,
+                    'pmts_adjs' => isset($request->pmts_adjs) ? $request->pmts_adjs : NULL,
+                    'adjustment' => isset($request->adjustment) ? $request->adjustment : NULL,
+                    'withheld' => isset($request->withheld) ? $request->withheld : NULL,
+                    'balance' => isset($request->balance) ? $request->balance : NULL,
+                    'account_number' => isset($request->account_number) ? $request->account_number : NULL,
+                    'provider_name' => isset($request->provider_name) ? $request->provider_name : NULL,
+                    'guarantor_name' => isset($request->guarantor_name) ? $request->guarantor_name : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,

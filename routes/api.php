@@ -30,4 +30,5 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealth');
     Route::any('saco_river_medical_group', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroup');
     Route::any('cancer_care_specialist', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialist');
+    Route::any('chestnut_health_systems', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystems');
 });
