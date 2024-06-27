@@ -207,24 +207,24 @@
                                                         if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->where('CE_emp_id', $loginEmpId)
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                 
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $modelFlag = 1;
                                                         } else {
@@ -346,17 +346,17 @@
                                                                 ::where('chart_status', 'CE_Completed')
                                                                
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                // ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                         } else {
                                                             $assignedCount = 0;

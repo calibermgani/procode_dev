@@ -204,20 +204,20 @@
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->whereNotNull('CE_emp_id')
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
-                                                                ->whereBetween('updated_at', [$startDate, $endDate])
+                                                                ->whereBetween('created_at', [$startDate, $endDate])
                                                                 ->count();
                                                             $modelFlag = 1;
                                                         } else {
