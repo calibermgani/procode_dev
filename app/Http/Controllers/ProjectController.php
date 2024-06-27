@@ -250,7 +250,7 @@ class ProjectController extends Controller
             $client = new Client();
             $currentDate = Carbon::now()->format('Y-m-d');
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["mgani@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $mailHeader = "ProCode - Inventory Upload Successful - ".$currentDate;
             $projects = $this->getProjects();
             foreach ($projects as $project) {
@@ -289,26 +289,26 @@ class ProjectController extends Controller
                 'client_id' => $projectsIds
             ];
             if (!empty($procodeProjectsCurrent)) {
-                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
-                    'json' => $payload
-                ]);
-                if ($response->getStatusCode() == 200) {
-                    $apiData = json_decode($response->getBody(), true);
-                } else {
-                    return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                }
-                $projectsHolding = $apiData['people_details'];
-                foreach($projectsHolding as $data) {
-                    $clientIds = $data['client_ids'];
+                // $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
+                //     'json' => $payload
+                // ]);
+                // if ($response->getStatusCode() == 200) {
+                //     $apiData = json_decode($response->getBody(), true);
+                // } else {
+                //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                // }
+                // $projectsHolding = $apiData['people_details'];
+                // foreach($projectsHolding as $data) {
+                //     $clientIds = $data['client_ids'];
                     $mailBody = $procodeProjectsCurrent;
-                    if($data["email_id"] != null) {
+                    // if($data["email_id"] != null) {
                         // $toMailId = $data["email_id"];
                         // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
                         // $ccMailId = explode(",",$ccMail->cc_emails);
-                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $clientIds, $mailBody));
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $mailBody));
                         Log::info('Procode Project Inventory Mail executed successfully.');
-                    }
-                }
+                    // }
+                // }
             }
         } catch (\Exception $e) {
             Log::error('Error in Project Inventory Mail: ' . $e->getMessage());
