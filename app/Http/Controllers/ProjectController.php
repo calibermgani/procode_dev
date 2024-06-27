@@ -205,7 +205,7 @@ class ProjectController extends Controller
             } else {
                 return response()->json(['error' => 'API request failed'], $response->getStatusCode());
             }
-            $projectsHolding = $apiData['people_details'];dd($projectsHolding);
+            $projectsHolding = $apiData['people_details'];dd($prjoectsHolding);
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
                 $mailBody = $prjoectsHolding;
