@@ -180,14 +180,14 @@ class ProjectController extends Controller
                     $projectId[] = $project["id"]; 
                 }
             }
-            $prjoectsHolding = $projectsIds = [];
+            $procodeProjectsHolding = $projectsIds = [];
             foreach ($models as $key => $model) {
                 if (class_exists($model)) {
                      $hCount = $model::where('chart_status', 'CE_Hold')->count();
                         if($hCount > 0){
-                            $prjoectsHolding[$projectId[$key]]['project'] = $prjoectName[$key];
-                            $prjoectsHolding[$projectId[$key]]['Hold'] = $hCount;
-                            // $prjoectsHolding[$key]['project_id'] = $projectId[$key];
+                            $procodeProjectsHolding[$projectId[$key]]['project'] = $prjoectName[$key];
+                            $procodeProjectsHolding[$projectId[$key]]['Hold'] = $hCount;
+                            // $procodeProjectsHolding[$key]['project_id'] = $projectId[$key];
                             $projectsIds[] = $projectId[$key];  
                         }
                 }
@@ -205,10 +205,10 @@ class ProjectController extends Controller
             } else {
                 return response()->json(['error' => 'API request failed'], $response->getStatusCode());
             }
-            $projectsHolding = $apiData['people_details'];dd($prjoectsHolding);
+            $projectsHolding = $apiData['people_details'];dd($procodeProjectsHolding);
             foreach($projectsHolding as $data) {
                 $clientIds = $data['client_ids'];
-                $mailBody = $prjoectsHolding;
+                $mailBody = $procodeProjectsHolding;
                 if($data["email_id"] != null) {
                     // $toMailId = $data["email_id"];
                     // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
