@@ -21,7 +21,7 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-                if(isset($request->encounter)) {
+                if(isset($request->claim_no)) {
                     $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->first();
                     $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->whereDate('created_at',$currentDate)->first();
                 } else {
