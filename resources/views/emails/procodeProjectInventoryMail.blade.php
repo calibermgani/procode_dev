@@ -52,7 +52,7 @@
               
                     @foreach ($mailBody as $key => $data)
                 @php
-                    dd($$key,$data);
+                    dd($key,$data,'te');
                 @endphp
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ [$data]['project'] }}</td>
