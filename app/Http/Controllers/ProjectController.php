@@ -196,25 +196,27 @@ class ProjectController extends Controller
                 'token' => '1a32e71a46317b9cc6feb7388238c95d',
                 'client_id' => $projectsIds
             ];
-            //  $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
-              $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
-                'json' => $payload
-            ]);
-            if ($response->getStatusCode() == 200) {
-                $apiData = json_decode($response->getBody(), true);
-            } else {
-                return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-            }
-            $projectsHolding = $apiData['people_details'];dd($procodeProjectsHolding,isset($procodeProjectsHolding),empty($procodeProjectsHolding));
-            foreach($projectsHolding as $data) {
-                $clientIds = $data['client_ids'];
-                $mailBody = $procodeProjectsHolding;
-                if($data["email_id"] != null) {
-                    // $toMailId = $data["email_id"];
-                    // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
-                    // $ccMailId = explode(",",$ccMail->cc_emails);
-                    Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
-                    Log::info('Procode Project On Hold Mail executed successfully.');
+            if (!empty($procodeProjectsHolding)) {
+                //  $response = $client->request('POST',  config("constants.PRO_CODE_URL") . '/api/v1_users/get_details_above_tl_level', [
+                $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
+                    'json' => $payload
+                ]);
+                if ($response->getStatusCode() == 200) {
+                    $apiData = json_decode($response->getBody(), true);
+                } else {
+                    return response()->json(['error' => 'API request failed'], $response->getStatusCode());
+                }
+                $projectsHolding = $apiData['people_details'];
+                foreach($projectsHolding as $data) {
+                    $clientIds = $data['client_ids'];
+                    $mailBody = $procodeProjectsHolding;
+                    if($data["email_id"] != null) {
+                        // $toMailId = $data["email_id"];
+                        // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
+                        // $ccMailId = explode(",",$ccMail->cc_emails);
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
+                        Log::info('Procode Project On Hold Mail executed successfully.');
+                    }
                 }
             }
         } catch (\Exception $e) {
