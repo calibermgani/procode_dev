@@ -53,8 +53,8 @@
                     @foreach ($mailBody as $data)
                 
                         <tr>
-                            <td style="text-align: left;padding: 5px;">{{ $mailBody[$data]['project'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ $mailBody[$data]['currentCount'] == 0 ? 'No Activity' : $mailBody[$data]['currentCount']}}</td>
+                            <td style="text-align: left;padding: 5px;">{{ [$data]['project'] }}</td>
+                            <td style="text-align: left;padding: 5px;">{{ [$data]['currentCount'] == 0 ? 'No Activity' : [$data]['currentCount']}}</td>
                           </tr>
                     @endforeach
                 @endif
