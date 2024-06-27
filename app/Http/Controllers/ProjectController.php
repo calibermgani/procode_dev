@@ -180,7 +180,7 @@ class ProjectController extends Controller
                     $projectId[] = $project["id"]; 
                 }
             }
-            $procodeProjectsHolding = $projectsIds = [];
+            $procodeProjectsHolding = $projectsIds = [];dd($procodeProjectsHolding,isset($procodeProjectsHolding));
             foreach ($models as $key => $model) {
                 if (class_exists($model)) {
                      $hCount = $model::where('chart_status', 'CE_Hold')->count();
