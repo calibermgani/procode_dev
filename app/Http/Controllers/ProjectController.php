@@ -192,7 +192,7 @@ class ProjectController extends Controller
                             $projectsIds[] = $projectId[$key];  
                         }
                 }
-            }dd($projectsIds);
+            }
             $payload = [
                 'token' => '1a32e71a46317b9cc6feb7388238c95d',
                 'client_id' => $projectsIds
