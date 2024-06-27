@@ -21,7 +21,7 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-                if(isset($request->claim_no)) {
+                if(isset($request->claim_no) && $request->claim_no != '-') {
                     $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->where('invoke_date',$currentDate)->first();
                     $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
                 } else {
@@ -31,29 +31,29 @@ class ProjectAutomationController extends Controller
             if ($existing !== null) {
                     if($duplicateRecord != null) {
                             $duplicateRecord->update([
-                                'claim_no' => isset($request->claim_no) && $request->claim_no != '-' ? $request->claim_no : NULL,//Claim #
-                                'mrn' => isset($request->mrn) && $request->mrn != '-' ? $request->mrn : NULL,
-                                'patient' => isset($request->patient) && $request->patient != '-' ? $request->patient : NULL,
-                                'dob' => isset($request->dob) && $request->dob != '-' ? $request->dob : NULL,
-                                'visit_date' => isset($request->visit_date) && $request->visit_date != '-' ? $request->visit_date : NULL,
-                                'dx_codes' => isset($request->dx_codes) && $request->dx_codes != '-' ? $request->dx_codes : NULL,
-                                'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != '-' ? $request->primary_insurance : NULL,
-                                'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != '-' ? $request->secondary_insurance : NULL,
-                                'rev_code' => isset($request->rev_code) && $request->rev_code != '-' ? $request->rev_code : NULL, //Rev. Code
-                                'cpt' => isset($request->cpt) && $request->cpt != '-' ? $request->cpt : NULL,
-                                'm1' => isset($request->m1) && $request->m1 != '-' ? $request->m1 : NULL,
-                                'm2' => isset($request->m2) && $request->m2 != '-' ? $request->m2 : NULL,
-                                'm3' => isset($request->m3) && $request->m3 != '-' ? $request->m3 : NULL,
-                                'm4' => isset($request->m4) && $request->m4 != '-' ? $request->m4 : NULL,
-                                'dx1' => isset($request->dx1) && $request->dx1 != '-' ? $request->dx1 : NULL,
-                                'dx2' => isset($request->dx2) && $request->dx2 != '-' ? $request->dx2 : NULL,
-                                'dx3' => isset($request->dx3) && $request->dx3 != '-' ? $request->dx3 : NULL,
-                                'dx4' => isset($request->dx4) && $request->dx4 != '-' ? $request->dx4 : NULL,
-                                'units' => isset($request->units) && $request->units != '-' ? $request->units : NULL,
-                                'billed' => isset($request->billed) && $request->billed != '-' ? $request->billed : NULL, //Billed($)
-                                'provider' => isset($request->provider) && $request->provider != '-' ? $request->provider : NULL,
-                                'service_provider' => isset($request->service_provider) && $request->service_provider != '-' ? $request->service_provider : NULL,
-                                'place_of_service' => isset($request->place_of_service) && $request->place_of_service != '-' ? $request->place_of_service : NULL,
+                                'claim_no' => isset($request->claim_no) ? $request->claim_no : NULL,//Claim #
+                                'mrn' => isset($request->mrn) ? $request->mrn : NULL,
+                                'patient' => isset($request->patient)  ? $request->patient : NULL,
+                                'dob' => isset($request->dob) ? $request->dob : NULL,
+                                'visit_date' => isset($request->visit_date) ? $request->visit_date : NULL,
+                                'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : NULL,
+                                'primary_insurance' => isset($request->primary_insurance)  ? $request->primary_insurance : NULL,
+                                'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : NULL,
+                                'rev_code' => isset($request->rev_code) ? $request->rev_code : NULL, //Rev. Code
+                                'cpt' => isset($request->cpt) ? $request->cpt : NULL,
+                                'm1' => isset($request->m1)  ? $request->m1 : NULL,
+                                'm2' => isset($request->m2) ? $request->m2 : NULL,
+                                'm3' => isset($request->m3)  ? $request->m3 : NULL,
+                                'm4' => isset($request->m4)  ? $request->m4 : NULL,
+                                'dx1' => isset($request->dx1)  ? $request->dx1 : NULL,
+                                'dx2' => isset($request->dx2) ? $request->dx2 : NULL,
+                                'dx3' => isset($request->dx3) ? $request->dx3 : NULL,
+                                'dx4' => isset($request->dx4)  ? $request->dx4 : NULL,
+                                'units' => isset($request->units) ? $request->units : NULL,
+                                'billed' => isset($request->billed) ? $request->billed : NULL, //Billed($)
+                                'provider' => isset($request->provider)  ? $request->provider : NULL,
+                                'service_provider' => isset($request->service_provider)  ? $request->service_provider : NULL,
+                                'place_of_service' => isset($request->place_of_service)  ? $request->place_of_service : NULL,
                                 'invoke_date' => carbon::now()->format('Y-m-d'),
                                 'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
                                 'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
@@ -63,29 +63,29 @@ class ProjectAutomationController extends Controller
                             return response()->json(['message' => 'Duplicate Record Updated Successfully']);
                     } else {
                             SiouxlandMentalHealthCenterProjectDuplicates::insert([
-                                'claim_no' => isset($request->claim_no) && $request->claim_no != '-' ? $request->claim_no : NULL,//Claim #
-                                'mrn' => isset($request->mrn) && $request->mrn != '-' ? $request->mrn : NULL,
-                                'patient' => isset($request->patient) && $request->patient != '-' ? $request->patient : NULL,
-                                'dob' => isset($request->dob) && $request->dob != '-' ? $request->dob : NULL,
-                                'visit_date' => isset($request->visit_date) && $request->visit_date != '-' ? $request->visit_date : NULL,
-                                'dx_codes' => isset($request->dx_codes) && $request->dx_codes != '-' ? $request->dx_codes : NULL,
-                                'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != '-' ? $request->primary_insurance : NULL,
-                                'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != '-' ? $request->secondary_insurance : NULL,
-                                'rev_code' => isset($request->rev_code) && $request->rev_code != '-' ? $request->rev_code : NULL, //Rev. Code
-                                'cpt' => isset($request->cpt) && $request->cpt != '-' ? $request->cpt : NULL,
-                                'm1' => isset($request->m1) && $request->m1 != '-' ? $request->m1 : NULL,
-                                'm2' => isset($request->m2) && $request->m2 != '-' ? $request->m2 : NULL,
-                                'm3' => isset($request->m3) && $request->m3 != '-' ? $request->m3 : NULL,
-                                'm4' => isset($request->m4) && $request->m4 != '-' ? $request->m4 : NULL,
-                                'dx1' => isset($request->dx1) && $request->dx1 != '-' ? $request->dx1 : NULL,
-                                'dx2' => isset($request->dx2) && $request->dx2 != '-' ? $request->dx2 : NULL,
-                                'dx3' => isset($request->dx3) && $request->dx3 != '-' ? $request->dx3 : NULL,
-                                'dx4' => isset($request->dx4) && $request->dx4 != '-' ? $request->dx4 : NULL,
-                                'units' => isset($request->units) && $request->units != '-' ? $request->units : NULL,
-                                'billed' => isset($request->billed) && $request->billed != '-' ? $request->billed : NULL, //Billed($)
-                                'provider' => isset($request->provider) && $request->provider != '-' ? $request->provider : NULL,
-                                'service_provider' => isset($request->service_provider) && $request->service_provider != '-' ? $request->service_provider : NULL,
-                                'place_of_service' => isset($request->place_of_service) && $request->place_of_service != '-' ? $request->place_of_service : NULL,
+                               'claim_no' => isset($request->claim_no) ? $request->claim_no : NULL,//Claim #
+                                'mrn' => isset($request->mrn) ? $request->mrn : NULL,
+                                'patient' => isset($request->patient)  ? $request->patient : NULL,
+                                'dob' => isset($request->dob) ? $request->dob : NULL,
+                                'visit_date' => isset($request->visit_date) ? $request->visit_date : NULL,
+                                'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : NULL,
+                                'primary_insurance' => isset($request->primary_insurance)  ? $request->primary_insurance : NULL,
+                                'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : NULL,
+                                'rev_code' => isset($request->rev_code) ? $request->rev_code : NULL, //Rev. Code
+                                'cpt' => isset($request->cpt) ? $request->cpt : NULL,
+                                'm1' => isset($request->m1)  ? $request->m1 : NULL,
+                                'm2' => isset($request->m2) ? $request->m2 : NULL,
+                                'm3' => isset($request->m3)  ? $request->m3 : NULL,
+                                'm4' => isset($request->m4)  ? $request->m4 : NULL,
+                                'dx1' => isset($request->dx1)  ? $request->dx1 : NULL,
+                                'dx2' => isset($request->dx2) ? $request->dx2 : NULL,
+                                'dx3' => isset($request->dx3) ? $request->dx3 : NULL,
+                                'dx4' => isset($request->dx4)  ? $request->dx4 : NULL,
+                                'units' => isset($request->units) ? $request->units : NULL,
+                                'billed' => isset($request->billed) ? $request->billed : NULL, //Billed($)
+                                'provider' => isset($request->provider)  ? $request->provider : NULL,
+                                'service_provider' => isset($request->service_provider)  ? $request->service_provider : NULL,
+                                'place_of_service' => isset($request->place_of_service)  ? $request->place_of_service : NULL,
                                 'invoke_date' => carbon::now()->format('Y-m-d'),
                                 'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
                                 'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
@@ -97,29 +97,29 @@ class ProjectAutomationController extends Controller
                 
             } else {
                 SiouxlandMentalHealthCenterProject::insert([
-                    'claim_no' => isset($request->claim_no) && $request->claim_no != '-' ? $request->claim_no : NULL,//Claim #
-                    'mrn' => isset($request->mrn) && $request->mrn != '-' ? $request->mrn : NULL,
-                    'patient' => isset($request->patient) && $request->patient != '-' ? $request->patient : NULL,
-                    'dob' => isset($request->dob) && $request->dob != '-' ? $request->dob : NULL,
-                    'visit_date' => isset($request->visit_date) && $request->visit_date != '-' ? $request->visit_date : NULL,
-                    'dx_codes' => isset($request->dx_codes) && $request->dx_codes != '-' ? $request->dx_codes : NULL,
-                    'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != '-' ? $request->primary_insurance : NULL,
-                    'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != '-' ? $request->secondary_insurance : NULL,
-                    'rev_code' => isset($request->rev_code) && $request->rev_code != '-' ? $request->rev_code : NULL, //Rev. Code
-                    'cpt' => isset($request->cpt) && $request->cpt != '-' ? $request->cpt : NULL,
-                    'm1' => isset($request->m1) && $request->m1 != '-' ? $request->m1 : NULL,
-                    'm2' => isset($request->m2) && $request->m2 != '-' ? $request->m2 : NULL,
-                    'm3' => isset($request->m3) && $request->m3 != '-' ? $request->m3 : NULL,
-                    'm4' => isset($request->m4) && $request->m4 != '-' ? $request->m4 : NULL,
-                    'dx1' => isset($request->dx1) && $request->dx1 != '-' ? $request->dx1 : NULL,
-                    'dx2' => isset($request->dx2) && $request->dx2 != '-' ? $request->dx2 : NULL,
-                    'dx3' => isset($request->dx3) && $request->dx3 != '-' ? $request->dx3 : NULL,
-                    'dx4' => isset($request->dx4) && $request->dx4 != '-' ? $request->dx4 : NULL,
-                    'units' => isset($request->units) && $request->units != '-' ? $request->units : NULL,
-                    'billed' => isset($request->billed) && $request->billed != '-' ? $request->billed : NULL, //Billed($)
-                    'provider' => isset($request->provider) && $request->provider != '-' ? $request->provider : NULL,
-                    'service_provider' => isset($request->service_provider) && $request->service_provider != '-' ? $request->service_provider : NULL,
-                    'place_of_service' => isset($request->place_of_service) && $request->place_of_service != '-' ? $request->place_of_service : NULL,
+                    'claim_no' => isset($request->claim_no) ? $request->claim_no : NULL,//Claim #
+                    'mrn' => isset($request->mrn) ? $request->mrn : NULL,
+                    'patient' => isset($request->patient)  ? $request->patient : NULL,
+                    'dob' => isset($request->dob) ? $request->dob : NULL,
+                    'visit_date' => isset($request->visit_date) ? $request->visit_date : NULL,
+                    'dx_codes' => isset($request->dx_codes) ? $request->dx_codes : NULL,
+                    'primary_insurance' => isset($request->primary_insurance)  ? $request->primary_insurance : NULL,
+                    'secondary_insurance' => isset($request->secondary_insurance) ? $request->secondary_insurance : NULL,
+                    'rev_code' => isset($request->rev_code) ? $request->rev_code : NULL, //Rev. Code
+                    'cpt' => isset($request->cpt) ? $request->cpt : NULL,
+                    'm1' => isset($request->m1)  ? $request->m1 : NULL,
+                    'm2' => isset($request->m2) ? $request->m2 : NULL,
+                    'm3' => isset($request->m3)  ? $request->m3 : NULL,
+                    'm4' => isset($request->m4)  ? $request->m4 : NULL,
+                    'dx1' => isset($request->dx1)  ? $request->dx1 : NULL,
+                    'dx2' => isset($request->dx2) ? $request->dx2 : NULL,
+                    'dx3' => isset($request->dx3) ? $request->dx3 : NULL,
+                    'dx4' => isset($request->dx4)  ? $request->dx4 : NULL,
+                    'units' => isset($request->units) ? $request->units : NULL,
+                    'billed' => isset($request->billed) ? $request->billed : NULL, //Billed($)
+                    'provider' => isset($request->provider)  ? $request->provider : NULL,
+                    'service_provider' => isset($request->service_provider)  ? $request->service_provider : NULL,
+                    'place_of_service' => isset($request->place_of_service)  ? $request->place_of_service : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
@@ -137,7 +137,7 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-                    if(isset($request->encounter)) {
+                    if(isset($request->encounter) && $request->encounter != '-') {
                         $existing = CancerCareSpecialistsProject::where('encounter', $request->encounter)->where('invoke_date',$currentDate)->first();
                         $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('encounter', $request->encounter)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
                     } else {
@@ -160,8 +160,8 @@ class ProjectAutomationController extends Controller
                                 'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : NULL,
                                 'modifiers' => isset($request->modifiers) ? $request->modifiers : NULL,
                                 'invoke_date' => carbon::now()->format('Y-m-d'),
-                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                                 'chart_status' => "CE_Assigned",
                                 'duplicate_status' => "Yes"
                             ]);
@@ -181,8 +181,8 @@ class ProjectAutomationController extends Controller
                                 'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : NULL,
                                 'modifiers' => isset($request->modifiers) ? $request->modifiers : NULL,
                                 'invoke_date' => carbon::now()->format('Y-m-d'),
-                                'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                                'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                                 'chart_status' => "CE_Assigned",
                                 'duplicate_status' => "Yes"
                             ]);
@@ -204,8 +204,8 @@ class ProjectAutomationController extends Controller
                     'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : NULL,
                     'modifiers' => isset($request->modifiers) ? $request->modifiers : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
-                    'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                    'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                     'chart_status' => "CE_Assigned",
                 ]);
                 return response()->json(['message' => 'Record Inserted Successfully']);
@@ -219,7 +219,7 @@ class ProjectAutomationController extends Controller
     {
         try {
             $currentDate = Carbon::now()->format('Y-m-d');
-              if(isset($request->patient_id)) {
+              if(isset($request->patient_id) && $request->patient_id != '-') {
                 $existing = SacoRiverMedicalGroupCoding::where('patient_id', $request->patient_id)->where('invoke_date',$currentDate)->first();
                 $duplicateRecord =  SacoRiverMedicalGroupCodingDuplicates::where('patient_id', $request->patient_id)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
             } else {
@@ -247,8 +247,8 @@ class ProjectAutomationController extends Controller
                             'am_cpt' => isset($request->am_cpt) ? $request->am_cpt : NULL,
                             'am_icd' => isset($request->am_icd) ? $request->am_icd : NULL,
                             'invoke_date' => carbon::now()->format('Y-m-d'),
-                            'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                            'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                            'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                            'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                             'chart_status' => "CE_Assigned",
                             'duplicate_status' => "Yes"
                         ]);
@@ -273,8 +273,8 @@ class ProjectAutomationController extends Controller
                         'am_cpt' => isset($request->am_cpt) ? $request->am_cpt : NULL,
                         'am_icd' => isset($request->am_icd) ? $request->am_icd : NULL,
                         'invoke_date' => carbon::now()->format('Y-m-d'),
-                        'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                        'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                         'chart_status' => "CE_Assigned",
                         'duplicate_status' => "Yes"
                     ]);
@@ -300,8 +300,8 @@ class ProjectAutomationController extends Controller
                     'am_cpt' => isset($request->am_cpt) ? $request->am_cpt : NULL,
                     'am_icd' => isset($request->am_icd) ? $request->am_icd : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
-                    'CE_emp_id' => isset($request->CE_emp_id) ? $request->CE_emp_id : NULL,
-                    'QA_emp_id' => isset($request->QA_emp_id) ? $request->QA_emp_id : NULL,
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
                     'chart_status' => "CE_Assigned",
                 ]);
             }
