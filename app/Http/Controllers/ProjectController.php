@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Mail\ProcodeProjectOnHoldMail;
 use App\Models\CCEmailIds;
 use App\Mail\ProcodeProjectFile;
+use App\Mail\ProcodeProjectInventory;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -304,7 +305,7 @@ class ProjectController extends Controller
                         // $toMailId = $data["email_id"];
                         // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
                         // $ccMailId = explode(",",$ccMail->cc_emails);
-                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $clientIds, $mailBody));
                         Log::info('Procode Project Inventory Mail executed successfully.');
                     }
                 }
