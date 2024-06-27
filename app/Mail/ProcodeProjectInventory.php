@@ -11,17 +11,17 @@ class ProcodeProjectInventory extends Mailable
 {
     use Queueable, SerializesModels;
     public $mailHeader;
-    public $clientIds;
+    // public $clientIds;
     public $mailBody;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mailHeader, $clientIds,$mailBody)
+    public function __construct($mailHeader, $mailBody)
     {
         $this->mailHeader = $mailHeader;
-        $this->clientIds = $clientIds;
+        // $this->clientIds = $clientIds;
         $this->mailBody = $mailBody;
     }
 

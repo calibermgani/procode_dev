@@ -48,9 +48,9 @@
             </thead>
             <tbody>
 
-                @if (isset($clientIds) && count($clientIds) > 0)
+                @if (isset($mailBody) && count($mailBody) > 0)
               
-                    @foreach ($clientIds as $data)
+                    @foreach ($mailBody as $data)
                 
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ $mailBody[$data]['project'] }}</td>
