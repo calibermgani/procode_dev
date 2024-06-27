@@ -51,9 +51,7 @@
                 @if (isset($clientIds) && count($clientIds) > 0)
               
                     @foreach ($clientIds as $data)
-                @php
-                    dd($clientIds,$mailBody,$data);
-                @endphp
+                
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ $mailBody[$data]['project'] }}</td>
                             <td style="text-align: left;padding: 5px;">{{ $mailBody[$data]['Hold'] == 0 ? 'No Activity' : $mailBody[$data]['Hold']}}</td>
