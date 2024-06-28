@@ -306,8 +306,11 @@ class ProjectController extends Controller
                         // $toMailId = $data["email_id"];
                         // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
                         // $ccMailId = explode(",",$ccMail->cc_emails);
-                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $mailBody));
-                        Log::info('Procode Project Inventory Mail executed successfully.');
+                        $current_time = Carbon::now();
+                        if ($current_time->hour >= 12) {
+                            Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $mailBody));
+                            Log::info('Procode Project Inventory Mail executed successfully.');
+                        }
                     // }
                 // }
             }
