@@ -22,7 +22,7 @@ class ProjectAutomationController extends Controller
     public function siouxlandMentalHealth(Request $request)
     {
         try {
-            $currentDate = Carbon::now()->format('Y-m-d 08:00:00');
+            $currentDate = Carbon::now()->format('Y-m-d');
                 if(isset($request->claim_no) && $request->claim_no != '-') {
                     $existing = SiouxlandMentalHealthCenterProject::where('claim_no', $request->claim_no)->where('invoke_date',$currentDate)->first();
                     $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where('claim_no', $request->claim_no)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
@@ -138,7 +138,7 @@ class ProjectAutomationController extends Controller
     public function cancerCareSpecialist(Request $request)
     {
         try {
-            $currentDate = Carbon::now()->format('Y-m-d 08:00:00');
+            $currentDate = Carbon::now()->format('Y-m-d');
                     if(isset($request->encounter) && $request->encounter != '-') {
                         $existing = CancerCareSpecialistsProject::where('encounter', $request->encounter)->where('invoke_date',$currentDate)->first();
                         $duplicateRecord =  CancerCareSpecialistsProjectDuplicates::where('encounter', $request->encounter)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
@@ -220,7 +220,7 @@ class ProjectAutomationController extends Controller
     public function sacoRiverMedicalGroup(Request $request)
     {
         try {
-            $currentDate = Carbon::now()->format('Y-m-d 08:00:00');
+            $currentDate = Carbon::now()->format('Y-m-d');
               if(isset($request->patient_id) && $request->patient_id != '-') {
                 $existing = SacoRiverMedicalGroupCoding::where('patient_id', $request->patient_id)->where('invoke_date',$currentDate)->first();
                 $duplicateRecord =  SacoRiverMedicalGroupCodingDuplicates::where('patient_id', $request->patient_id)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
@@ -316,7 +316,7 @@ class ProjectAutomationController extends Controller
     public function chestnutHealthSystems(Request $request)
     {
         try {
-            $currentDate = Carbon::now()->format('Y-m-d 08:00:00');
+            $currentDate = Carbon::now()->format('Y-m-d');
               if(isset($request->claims_no) && $request->claims_no != '-') {
                 $existing = ChestnutHealthSystemsClaimEdits::where('claims_no', $request->claims_no)->where('invoke_date',$currentDate)->first();
                 $duplicateRecord =  ChestnutHealthSystemsClaimEditsDuplicates::where('claims_no', $request->claims_no)->where('invoke_date',$currentDate)->whereDate('created_at',$currentDate)->first();
