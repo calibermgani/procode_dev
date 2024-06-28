@@ -187,14 +187,14 @@
                                                         // $startDate = Carbon\Carbon::now()
                                                         //     ->subDays($days)
                                                         //     ->startOfDay()
-                                                        //     ->toDateTimeString();
-                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                        //     ->toDateString();
+                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateString();
                                                         $startDate = Carbon\Carbon::now()
                                                             ->startOfMonth()
-                                                            ->toDateTimeString();
+                                                            ->toDateString();
                                                         $endDate = Carbon\Carbon::now()
                                                             ->endOfMonth()
-                                                            ->toDateTimeString();
+                                                            ->toDateString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
@@ -204,20 +204,20 @@
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
                                                                 ->whereNotNull('CE_emp_id')
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $modelFlag = 1;
                                                         } else {
@@ -324,8 +324,8 @@
                                                         $startDate = Carbon\Carbon::now()
                                                             ->subDays($days)
                                                             ->startOfDay()
-                                                            ->toDateTimeString();
-                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                            ->toDateString();
+                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;

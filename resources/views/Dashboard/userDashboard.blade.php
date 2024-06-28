@@ -191,14 +191,14 @@
                                                         // $startDate = Carbon\Carbon::now()
                                                         //     ->subDays($days)
                                                         //     ->startOfDay()
-                                                        //     ->toDateTimeString();
-                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                        //     ->toDateString();
+                                                        // $endDate = Carbon\Carbon::now()->endOfDay()->toDateString();
                                                         $startDate = Carbon\Carbon::now()
                                                             ->startOfMonth()
-                                                            ->toDateTimeString();
+                                                            ->toDateString();
                                                         $endDate = Carbon\Carbon::now()
                                                             ->endOfMonth()
-                                                            ->toDateTimeString();
+                                                            ->toDateString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
@@ -207,24 +207,24 @@
                                                         if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Assigned')
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->where('CE_emp_id', $loginEmpId)
                                                                 ->count();
                                                             $completedCount = $modelClass
                                                                 ::where('chart_status', 'CE_Completed')
                                                                 
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                ->whereBetween('created_at', [$startDate, $endDate])
+                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $modelFlag = 1;
                                                         } else {
@@ -331,8 +331,8 @@
                                                         $startDate = Carbon\Carbon::now()
                                                             ->subDays($days)
                                                             ->startOfDay()
-                                                            ->toDateTimeString();
-                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateTimeString();
+                                                            ->toDateString();
+                                                        $endDate = Carbon\Carbon::now()->endOfDay()->toDateString();
                                                         $assignedCount = 0;
                                                         $completedCount = 0;
                                                         $pendingCount = 0;
@@ -346,17 +346,17 @@
                                                                 ::where('chart_status', 'CE_Completed')
                                                                
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('created_at', [$startDate, $endDate])
+                                                                // ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $pendingCount = $modelClass
                                                                 ::where('chart_status', 'CE_Pending')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('created_at', [$startDate, $endDate])
+                                                                // ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                             $holdCount = $modelClass
                                                                 ::where('chart_status', 'CE_Hold')
                                                                 ->where('CE_emp_id', $loginEmpId)
-                                                                // ->whereBetween('created_at', [$startDate, $endDate])
+                                                                // ->whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->count();
                                                         } else {
                                                             $assignedCount = 0;
