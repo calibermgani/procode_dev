@@ -215,7 +215,6 @@ class ProjectController extends Controller
                         $toMailId = $data["email_id"];
                         $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
                         $ccMailId = explode(",",$ccMail->cc_emails);
-                        array_push($ccMailId, 'mgani@caliberfocus.com');dd($ccMailId);
                         Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectOnHoldMail($mailHeader, $clientIds, $mailBody));
                         Log::info('Procode Project On Hold Mail executed successfully.');
                     }
