@@ -172,9 +172,7 @@ class ProjectAutomationController extends Controller
                 'referring_provider' => isset($request->referring_provider) ? $request->referring_provider : NULL,
                 'supporting_providers' => isset($request->supporting_providers) ? $request->supporting_providers : NULL,
                 'modifiers' => isset($request->modifiers) ? $request->modifiers : NULL,
-                'invoke_date' => carbon::now()->format('Y-m-d'),
-                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
-                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
             $existing = CancerCareSpecialistsProject::where($attributes)->exists();
