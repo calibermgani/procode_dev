@@ -733,7 +733,9 @@ class QAProductionController extends Controller
                     //$mailHeader = $decodedClientName." Rebuttal Mail";
                     $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
-                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader, $mailBody, $reportingPerson));
+                    if(isset($toMailId) && !empty($toMailId)) {
+                       Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader, $mailBody, $reportingPerson));
+                    }
                 }
                  $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
@@ -825,7 +827,9 @@ class QAProductionController extends Controller
                     $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
                     $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
-                    Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader, $mailBody, $reportingPerson));
+                    if(isset($toMailId) && !empty($toMailId)) {
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ManagerRebuttalMail($mailHeader, $mailBody, $reportingPerson));
+                    }
                 }
                 $currentTime = Carbon::now();
                 $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
