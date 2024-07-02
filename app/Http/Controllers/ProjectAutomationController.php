@@ -48,9 +48,7 @@ class ProjectAutomationController extends Controller
                 'provider' => isset($request->provider)  ? $request->provider : NULL,
                 'service_provider' => isset($request->service_provider)  ? $request->service_provider : NULL,
                 'place_of_service' => isset($request->place_of_service)  ? $request->place_of_service : NULL,
-                'invoke_date' => carbon::now()->format('Y-m-d'),
-                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
-                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
             ];
             $existing = SiouxlandMentalHealthCenterProject::where($attributes)->exists();
             if (!$existing) {
@@ -266,9 +264,7 @@ class ProjectAutomationController extends Controller
                 'icd' => isset($request->icd) ? $request->icd : NULL,
                 'am_cpt' => isset($request->am_cpt) ? $request->am_cpt : NULL,
                 'am_icd' => isset($request->am_icd) ? $request->am_icd : NULL,
-                'invoke_date' => carbon::now()->format('Y-m-d'),
-                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
-                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
             $existing = SacoRiverMedicalGroupCoding::where($attributes)->exists();
@@ -376,9 +372,7 @@ class ProjectAutomationController extends Controller
                 'account_number' => isset($request->account_number) ? $request->account_number : NULL,
                 'provider_name' => isset($request->provider_name) ? $request->provider_name : NULL,
                 'guarantor_name' => isset($request->guarantor_name) ? $request->guarantor_name : NULL,
-                'invoke_date' => carbon::now()->format('Y-m-d'),
-                'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' ? $request->CE_emp_id : NULL,
-                'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' ? $request->QA_emp_id : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
             $existing = ChestnutHealthSystemsClaimEdits::where($attributes)->exists();
