@@ -339,9 +339,4 @@ class ProjectController extends Controller
             Log::debug($e->getMessage());
         }
     }
-
-    public function inventoryUploadErrorLog(Request $request) {
-
-    }
-
 }
