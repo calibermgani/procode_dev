@@ -18,6 +18,10 @@ use App\Models\CancerCareSpecialistsProjectDuplicates;
 use App\Models\ChestnutHealthSystemsClaimEdits;
 use App\Models\ChestnutHealthSystemsClaimEditsDuplicates;
 use App\Models\InventoryExeFile;
+use GuzzleHttp\Client;
+use App\Models\CCEmailIds;
+use App\Mail\ProcodeInventoryExeFile;
+use App\Http\Helper\Admin\Helpers as Helpers;
 
 class ProjectAutomationController extends Controller
 {
@@ -457,7 +461,6 @@ class ProjectAutomationController extends Controller
 
     public function inventoryExeFile(Request $request)
     {
-
         try {
             $attributes = [
                 'project_id' => isset($request->project_id) ? $request->project_id : NULL,
@@ -467,18 +470,57 @@ class ProjectAutomationController extends Controller
             ];
             $whereAttributes = [
                 'project_id' => isset($request->project_id) ? $request->project_id : NULL,
-                'sub_project_id' => isset($request->sub_project_id) ? $request->sub_project_id : NULL,
+                'sub_project_id' => isset($request->sub_project_id) && $request->sub_project_id != "NULL" ? $request->sub_project_id : NULL,
                 'file_name' => isset($request->file_name) ? $request->file_name : NULL
             ];
-
-            $exists = InventoryExeFile::where($whereAttributes)->whereDate('exe_date',now()->format('Y-m-d'))->exists();
+            $exists = InventoryExeFile::where($whereAttributes)->whereDate('exe_date', now()->format('Y-m-d'))->exists();
             if (!$exists) {
                 InventoryExeFile::create($attributes);
-                return response()->json(['message' => 'Inventory File Inserted Successfully']);
-              } else {
+                $currentDate = Carbon::now()->format('Y-m-d');
+                if (isset($request->project_id)) {
+                    $projectId = $request->project_id;
+                    $clientName = Helpers::projectName($projectId)->project_name;
+                    if (isset($request->sub_project_id) && $request->sub_project_id != "NULL" && $request->sub_project_id != NULL) {
+                        $subProjectId = $request->sub_project_id;
+                        $subProjectName = Helpers::subProjectName($projectId, $subProjectId)->sub_project_name;
+                        $table_name = Str::slug((Str::lower($clientName) . '_' . Str::lower($subProjectName)), '_');
+                        $prjoectName = $clientName . ' - ' . $subProjectName;
+                    } else {
+                        $subProjectId = NULL;
+                        $subProjectText = "project";
+                        $table_name = Str::slug((Str::lower($clientName) . '_' . Str::lower($subProjectText)), '_');
+                        $prjoectName = $clientName;
+                    }
+                } else {
+                    $projectId = NULL;
+                }
+
+                $modelName = Str::studly($table_name);
+                $modelClass = "App\\Models\\" . $modelName;
+                $currentCount = 0;
+                if (class_exists($modelClass)) {
+                    $currentCount = $modelClass::where('invoke_date', $currentDate)->count();
+                }
+                $procodeProjectsCurrent = [];
+                 if ($currentCount > 0) {
+                    $procodeProjectsCurrent['project'] = $prjoectName;
+                    $procodeProjectsCurrent['currentCount'] = $currentCount;
+                    $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
+                    $toMailId = explode(",", $toMail->cc_emails);
+                    $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file')->first();
+                    $ccMailId = explode(",", $ccMail->cc_emails);
+
+                    $mailDate = Carbon::now()->format('m/d/Y');
+                    $mailHeader = $prjoectName . " - Inventory Upload Successful - " . $mailDate;
+                    if (isset($toMailId) && !empty($toMailId)) {
+                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeInventoryExeFile($mailHeader, $procodeProjectsCurrent));
+                    }
+                    return response()->json(['message' => 'Inventory File Inserted Successfully']);
+                 }
+                return response()->json(['message' => 'Inventory mail was not sent because the count is zero']);
+            } else {
                 return response()->json(['message' => 'Inventory File already exists']);
-              }
-           
+            }
         } catch (\Exception $e) {
             $e->getMessage();
         }
