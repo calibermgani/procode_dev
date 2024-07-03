@@ -15,8 +15,8 @@ class CreateInventoryExeFilesTable extends Migration
     {
         Schema::create('inventory_exe_files', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id')->nullable();
-            $table->integer('sub_project_id')->nullable();
+            $table->string('project_id')->nullable();
+            $table->string('sub_project_id')->nullable();
             $table->string('file_name')->nullable();
             $table->dateTime('exe_date')->nullable();
             $table->timestamps();
