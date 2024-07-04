@@ -131,8 +131,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -196,7 +198,9 @@ class QAProductionController extends Controller
                         //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                         // }
                         // $assignedDropDown = array_filter($data['userDetail']);
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->get();//dd($assignedProjectDetails);
@@ -208,7 +212,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
@@ -236,8 +242,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -271,7 +279,9 @@ class QAProductionController extends Controller
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('emp_id', $loginEmpId)->where('end_time', null)->where('record_status', 'QA_Pending')->orderBy('id', 'desc')->pluck('record_id')->toArray();
                         $unAssignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->whereNull('QA_emp_id')->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $pendingProjectDetails = $modelClass::where('chart_status', 'QA_Pending')->orderBy('id', 'ASC')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->get();
@@ -282,7 +292,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'Revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('emp_id', $loginEmpId)->where('end_time', null)->where('record_status', 'QA_Pending')->orderBy('id', 'desc')->pluck('record_id')->toArray();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $dept = Session::get('loginDetails')['userInfo']['department']['id'];
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -311,8 +323,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -346,7 +360,9 @@ class QAProductionController extends Controller
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('emp_id', $loginEmpId)->where('end_time', null)->where('record_status', 'QA_Hold')->orderBy('id', 'desc')->pluck('record_id')->toArray();
                         $unAssignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->whereNull('QA_emp_id')->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $holdProjectDetails = $modelClass::where('chart_status', 'QA_Hold')->orderBy('id', 'ASC')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->get();
@@ -357,7 +373,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'Revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('emp_id', $loginEmpId)->where('end_time', null)->where('record_status', 'QA_Hold')->orderBy('id', 'desc')->pluck('record_id')->toArray();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $dept = Session::get('loginDetails')['userInfo']['department']['id'];
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -386,8 +404,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -419,7 +439,9 @@ class QAProductionController extends Controller
                         $duplicateCount = $modelClassDuplcates::count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $unAssignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->whereNull('QA_emp_id')->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $completedProjectDetails = $modelClass::where('chart_status', 'QA_Completed')->orderBy('id', 'ASC')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->get();
@@ -429,7 +451,9 @@ class QAProductionController extends Controller
                         $holdCount = $modelClass::where('chart_status', 'QA_Hold')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('chart_status', 'Revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $dept = Session::get('loginDetails')['userInfo']['department']['id'];
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -459,8 +483,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -487,7 +513,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'Revoke')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $modelClassDuplcates = "App\\Models\\" . $modelName;
                         $duplicateCount = $modelClassDuplcates::count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $revokeProjectDetails = $modelClass::where('chart_status', 'Revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id', 'ASC')->get();
@@ -496,7 +524,9 @@ class QAProductionController extends Controller
                         $pendingCount = $modelClass::where('chart_status', 'QA_Pending')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $holdCount = $modelClass::where('chart_status', 'QA_Hold')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $reworkCount = $modelClass::where('chart_status', 'Revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
 
                 return view('QAProduction/qaClientReworkTab', compact('revokeProjectDetails', 'columnsHeader', 'clientName', 'subProjectName', 'modelClass', 'assignedCount', 'completedCount', 'pendingCount', 'holdCount', 'reworkCount', 'duplicateCount'));
@@ -517,8 +547,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -575,8 +607,10 @@ class QAProductionController extends Controller
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
-                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
+                $decodedClientName = Helpers::projectName($data['project_id']);
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id']);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = 'QA_'.ucwords($data['urlDynamicValue']);
                  $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
@@ -617,9 +651,10 @@ class QAProductionController extends Controller
                 $data =  $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
                 $decodedPracticeName = $data['subProjectName'] == '--' ? '--' : Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -651,9 +686,10 @@ class QAProductionController extends Controller
                 // $data = $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName.'Datas';
@@ -760,11 +796,13 @@ class QAProductionController extends Controller
     public function clientsUpdate(Request $request,$clientName,$subProjectName) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
             try {
-                 $data = $request->all();//dd($data);
+                 $data = $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $originalModelClass = "App\\Models\\" . $modelName;
@@ -880,8 +918,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -943,7 +983,9 @@ class QAProductionController extends Controller
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
                         $assignedDropDown = $userDetail;
                         $unAssignedCount = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->whereNull('qa_work_status')->whereNull('QA_emp_id')->count();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $autoCloseProjectDetails = $modelClass::where('qa_work_status', 'Auto_Close')->orderBy('id', 'ASC')->get();
@@ -958,7 +1000,9 @@ class QAProductionController extends Controller
                         if (isset($userDetail[$loginEmpId])) {
                             $assignedDropDown[$loginEmpId] = $userDetail[$loginEmpId];
                           }
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
@@ -986,8 +1030,10 @@ class QAProductionController extends Controller
                 $assigneeId = $request['assigneeId'];
                 $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $decodedPracticeName = $request['subProjectName'] == '--' ? '--' : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -1024,8 +1070,10 @@ class QAProductionController extends Controller
                 $empDesignation = Session::get('loginDetails') && Session::get('loginDetails')['userDetail']['user_hrdetails'] && Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] != null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation'] : "";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedClientName = Helpers::projectName($decodedProjectName);
+                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -1089,7 +1137,9 @@ class QAProductionController extends Controller
                         //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                         // }
                         // $assignedDropDown = array_filter($data['userDetail']);
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $unAssignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->get();//dd($assignedProjectDetails);
@@ -1101,7 +1151,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
-                    }
+                    } else {
+                        return redirect()->back();
+                      }
                 }
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
