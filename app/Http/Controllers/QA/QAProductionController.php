@@ -134,7 +134,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -245,7 +245,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -326,7 +326,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -407,7 +407,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -486,7 +486,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -550,7 +550,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
@@ -610,7 +610,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($data['project_id']);
                 $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id']);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = 'QA_'.ucwords($data['urlDynamicValue']);
                  $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
@@ -654,7 +654,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -689,7 +689,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName.'Datas';
@@ -802,7 +802,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $originalModelClass = "App\\Models\\" . $modelName;
@@ -921,7 +921,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -1033,7 +1033,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -1073,7 +1073,7 @@ class QAProductionController extends Controller
                 $decodedClientName = Helpers::projectName($decodedProjectName);
                 $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
                 $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
