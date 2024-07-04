@@ -505,9 +505,9 @@ class ProjectAutomationController extends Controller
                  if ($currentCount > 0) {
                     $procodeProjectsCurrent['project'] = $prjoectName;
                     $procodeProjectsCurrent['currentCount'] = $currentCount;
-                    // $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
-                    // $toMailId = explode(",", $toMail->cc_emails);
-                    $toMailId = "mgani@caliberfocus.com";
+                    $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
+                    $toMailId = explode(",", $toMail->cc_emails);
+                    // $toMailId = "mgani@caliberfocus.com";
                     $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file')->first();
                     $ccMailId = explode(",", $ccMail->cc_emails);
 
