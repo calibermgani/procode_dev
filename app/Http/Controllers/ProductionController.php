@@ -183,10 +183,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -246,7 +244,7 @@ class ProductionController extends Controller
                             // $assignedDropDown = array_filter($data['userDetail']);
                    }  else {
                     return redirect()->back();
-                  }
+                   }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->get();
@@ -285,10 +283,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -315,9 +311,7 @@ class ProductionController extends Controller
                        $duplicateCount = $modelClassDuplcates::count();
                        $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
-                    } else {
-                        return redirect()->back();
-                    }
+                   }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $pendingProjectDetails = $modelClass::where('chart_status','CE_Pending')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->get();
@@ -327,8 +321,6 @@ class ProductionController extends Controller
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Pending')->orderBy('id','desc')->pluck('record_id')->toArray();
-                   } else {
-                    return redirect()->back();
                    }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
@@ -356,10 +348,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -400,9 +390,7 @@ class ProductionController extends Controller
                             $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                             $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
                         }
-                    } else {
-                        return redirect()->back();
-                      }
+                    }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $holdProjectDetails = $modelClass::where('chart_status','CE_Hold')->whereBetween('updated_at',[$startDate,$endDate])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->get();
@@ -412,9 +400,7 @@ class ProductionController extends Controller
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','CE_Hold')->orderBy('id','desc')->pluck('record_id')->toArray();
-                    } else {
-                        return redirect()->back();
-                      }
+                   }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
                  $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -440,10 +426,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -469,9 +453,7 @@ class ProductionController extends Controller
                        $modelClassDuplcates = "App\\Models\\" . $modelName.'Duplicates';
                        $duplicateCount = $modelClassDuplcates::count();
                        $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
-                   } else {
-                    return redirect()->back();
-                  }
+                   }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $completedProjectDetails = $modelClass::where('chart_status','CE_Completed')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->get();
@@ -480,9 +462,7 @@ class ProductionController extends Controller
                       $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
-                    } else {
-                        return redirect()->back();
-                    }
+                   }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
                  $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -510,10 +490,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -540,9 +518,7 @@ class ProductionController extends Controller
                        $duplicateCount = $modelClassDuplcates::count();
                        $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                        $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','Revoke')->orderBy('id','desc')->pluck('record_id')->toArray();
-                   } else {
-                    return redirect()->back();
-                  }
+                   }
                 } else if ($loginEmpId) {
                     if (class_exists($modelClass)) {
                       $revokeProjectDetails = $modelClass::where('chart_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->where('updated_at','<=',$yesterDayDate)->orderBy('id','ASC')->get();
@@ -552,9 +528,7 @@ class ProductionController extends Controller
                       $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                       $reworkCount = $modelClass::where('chart_status','Revoke')->whereNull('tl_error_count')->where('CE_emp_id',$loginEmpId)->where('updated_at','<=',$yesterDayDate)->count();
                       $existingCallerChartsWorkLogs = CallerChartsWorkLogs::where('project_id',$decodedProjectName)->where('sub_project_id',$subProjectId)->where('emp_id',$loginEmpId)->where('end_time',NULL)->where('record_status','Revoke')->orderBy('id','desc')->pluck('record_id')->toArray();
-                    } else {
-                        return redirect()->back();
-                      }
+                   }
                  }
                  $dept= Session::get('loginDetails')['userInfo']['department']['id'];
                  $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
@@ -582,10 +556,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -614,9 +586,7 @@ class ProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status','Revoke')->where('updated_at','<=',$yesterDayDate)->count();
                         $duplicateCount = $modelClassDuplcates::count();
                         $unAssignedCount = $modelClass::where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
-                   } else {
-                    return redirect()->back();
-                  }
+                   }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClassDuplcates)) {
                        $duplicateProjectDetails = $modelClassDuplcates::where('chart_status','CE_Assigned')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->orderBy('id','ASC')->get();
@@ -625,9 +595,7 @@ class ProductionController extends Controller
                        $pendingCount = $modelClass::where('chart_status','CE_Pending')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
-                    } else {
-                        return redirect()->back();
-                      }
+                    }
                 }
 
                 return view('productions/clientDuplicateTab',compact('duplicateProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','unAssignedCount'));
@@ -647,10 +615,9 @@ class ProductionController extends Controller
                 $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 // $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $decodedPracticeName = $request['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClassDuplcates = "App\\Models\\" .$modelName."Duplicates";
@@ -680,10 +647,9 @@ class ProductionController extends Controller
                 $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                // $decodedsubProjectName = Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project':Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName.'Datas';
@@ -813,10 +779,8 @@ class ProductionController extends Controller
                 $decodedProjectName = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 // $decodedPracticeName = Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
                 $decodedPracticeName = $request['subProjectName'] == '--' ? '--' : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -848,10 +812,8 @@ class ProductionController extends Controller
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($data['project_id']);
-                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id']);
-                $decodedClientName = $decodedClientName != NULL ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedsubProjectName != NULL ? $decodedsubProjectName->sub_project_name : 'project1';
+                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -892,10 +854,8 @@ class ProductionController extends Controller
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($data['project_id']);
-                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id']);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = $data['urlDynamicValue'] == "Revoke" ? "Revoke" : 'CE_'.ucwords($data['urlDynamicValue']) ;//dd($data['urlDynamicValue'],$data['record_status']);
                 $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
@@ -937,10 +897,8 @@ class ProductionController extends Controller
                  $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $originalModelClass = "App\\Models\\" . $modelName;
@@ -1070,10 +1028,8 @@ class ProductionController extends Controller
                 $data =  $request->all();
                 $decodedProjectName = Helpers::encodeAndDecodeID($data['clientName'], 'decode');
                 $decodedPracticeName = $data['subProjectName'] == '--' ? '--' : Helpers::encodeAndDecodeID($data['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -1105,10 +1061,8 @@ class ProductionController extends Controller
                 $data['emp_id'] = Session::get('loginDetails')['userDetail']['emp_id'];
                 $data['project_id'] = Helpers::encodeAndDecodeID($request['clientName'], 'decode');
                 $data['sub_project_id'] = $data['subProjectName'] == '--' ? NULL : Helpers::encodeAndDecodeID($request['subProjectName'], 'decode');
-                $decodedClientName = Helpers::projectName($data['project_id']);
-                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id']);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($data['project_id'])->project_name;
+                $decodedsubProjectName = $data['sub_project_id'] == NULL ? 'project' :Helpers::subProjectName($data['project_id'] ,$data['sub_project_id'])->sub_project_name;
                 $data['start_time'] = $currentTime->format('Y-m-d H:i:s');
                 $data['record_status'] = $data['urlDynamicValue'] == "Revoke" ? "Revoke" : 'CE_'.ucwords($data['urlDynamicValue']) ;//dd($data['urlDynamicValue'],$data['record_status']);
                 $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
@@ -1143,10 +1097,8 @@ class ProductionController extends Controller
                  $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName =  $subProjectName == '--' ? NULL : Helpers::encodeAndDecodeID($subProjectName, 'decode');
-                $decodedClientName = Helpers::projectName($decodedProjectName);
-                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-                $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-                $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+                $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+                $decodedsubProjectName = $decodedPracticeName == NULL ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                 $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                 $modelName = Str::studly($table_name);
                 $originalModelClass = "App\\Models\\" . $modelName;
@@ -1219,10 +1171,8 @@ class ProductionController extends Controller
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName);
-               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
-               $decodedsubProjectName = $decodedsubProjectName != null && $decodedPracticeName ==  'project' ? $decodedsubProjectName->sub_project_name : 'project';
+               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -1267,9 +1217,7 @@ class ProductionController extends Controller
                     //        return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                     //    }
                     //    $assignedDropDown = array_filter($data['userDetail']);
-                   } else {
-                    return redirect()->back();
-                  }
+                   }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
                        $unAssignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->get();
@@ -1280,8 +1228,6 @@ class ProductionController extends Controller
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
                        $unAssignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->pluck('chart_status')->toArray();
-                  } else {
-                    return redirect()->back();
                   }
                }
                $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
