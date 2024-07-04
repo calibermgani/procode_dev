@@ -176,15 +176,17 @@ class ProductionController extends Controller
 
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
            $client = new Client();
-           try {
+           try { 
                $resourceName = request('resourceName') != null ? Helpers::encodeAndDecodeID(request('resourceName'), 'decode') : null;
                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
                $empDesignation = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail']['user_hrdetails'] &&  Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']  !=null ? Session::get('loginDetails')['userDetail']['user_hrdetails']['current_designation']: "";
                $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                $decodedPracticeName = $subProjectName == '--' ? '--' :Helpers::encodeAndDecodeID($subProjectName, 'decode');
-               $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName)->sub_project_name;
+               $decodedClientName = Helpers::projectName($decodedProjectName);
+               $decodedClientName = $decodedClientName != null ? $decodedClientName->project_name : 'project1';
+               $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' :Helpers::subProjectName($decodedProjectName,$decodedPracticeName);
+               $decodedsubProjectName = $decodedsubProjectName != null ? $decodedsubProjectName->sub_project_name : 'project1';
                $table_name= Str::slug((Str::lower($decodedClientName).'_'.Str::lower($decodedsubProjectName)),'_');
                $columnsHeader=[];
                if (Schema::hasTable($table_name)) {
@@ -242,7 +244,9 @@ class ProductionController extends Controller
                             //         return response()->json(['error' => 'API request failed'], $response->getStatusCode()); 
                             // }
                             // $assignedDropDown = array_filter($data['userDetail']);
-                   }
+                   }  else {
+                    return redirect()->back();
+                  }
                } elseif ($loginEmpId) {
                    if (class_exists($modelClass)) {
                        $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->get();
@@ -253,6 +257,8 @@ class ProductionController extends Controller
                        $holdCount = $modelClass::where('chart_status','CE_Hold')->where('CE_emp_id',$loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                        $reworkCount = $modelClass::where('chart_status','Revoke')->where('CE_emp_id',$loginEmpId)->whereNull('tl_error_count')->where('updated_at','<=',$yesterDayDate)->count();
                        $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Assigned','CE_Inprocess'])->where('CE_emp_id',$loginEmpId)->orderBy('id','ASC')->pluck('chart_status')->toArray();
+                  } else {
+                    return redirect()->back();
                   }
                }
                $popUpHeader =  formConfiguration::groupBy(['project_id', 'sub_project_id'])
