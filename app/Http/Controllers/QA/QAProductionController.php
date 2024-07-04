@@ -132,7 +132,10 @@ class QAProductionController extends Controller
                 $decodedProjectName = Helpers::encodeAndDecodeID($clientName, 'decode');
                 $decodedPracticeName = $subProjectName == '--' ? '--' : Helpers::encodeAndDecodeID($subProjectName, 'decode');
                 $decodedClientName = Helpers::projectName($decodedProjectName)->project_name;
-                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName)->sub_project_name;
+                $decodedsubProjectName = $decodedPracticeName == '--' ? 'project' : Helpers::subProjectName($decodedProjectName, $decodedPracticeName);
+                if($decodedsubProjectName != null &&  $decodedsubProjectName != 'project') {
+                    $decodedsubProjectName= $decodedsubProjectName->sub_project_name;
+                   }
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $columnsHeader = [];
                 if (Schema::hasTable($table_name)) {
@@ -196,7 +199,9 @@ class QAProductionController extends Controller
                         //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
                         // }
                         // $assignedDropDown = array_filter($data['userDetail']);
-                    }
+                    } else {
+                        return redirect()->back();
+                       }
                 } elseif ($loginEmpId) {
                     if (class_exists($modelClass)) {
                         $assignedProjectDetails = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->get();//dd($assignedProjectDetails);
@@ -208,7 +213,9 @@ class QAProductionController extends Controller
                         $reworkCount = $modelClass::where('chart_status', 'revoke')->where('QA_emp_id', $loginEmpId)->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $autoCloseCount = $modelClass::where('qa_work_status', 'Auto_Close')->whereBetween('updated_at',[$startDate,$endDate])->count();
                         $assignedProjectDetailsStatus = $modelClass::whereIn('chart_status',['CE_Completed','QA_Inprocess'])->where('qa_work_status','Sampling')->where('QA_emp_id', $loginEmpId)->orderBy('id', 'ASC')->pluck('chart_status')->toArray();
-                    }
+                    } else {
+                        return redirect()->back();
+                       }
                 }
                 $popUpHeader = formConfiguration::groupBy(['project_id', 'sub_project_id'])
                     ->where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)
