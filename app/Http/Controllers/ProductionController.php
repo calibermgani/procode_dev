@@ -828,13 +828,13 @@ class ProductionController extends Controller
                 $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
 
                 if(empty($existingRecordId)) {
-                    $startTimeVal = $data['start_time'];dd($existingRecordId,empty($existingRecordId),$startTimeVal);
+                    $startTimeVal = $data['start_time'];
                     $save_flag = CallerChartsWorkLogs::create($data);
                 } else {
                     $startTimeVal = $existingRecordId->start_time;
                     $save_flag = 1;
                 }
-
+                dd($save_flag,empty($existingRecordId),$startTimeVal);
              //   dd($data);
                 if($save_flag) {
                    return response()->json(['success' => true,'startTimeVal'=>$startTimeVal]);
