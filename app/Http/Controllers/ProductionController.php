@@ -829,7 +829,10 @@ class ProductionController extends Controller
 
                 if(empty($existingRecordId)) {
                     $startTimeVal = $data['start_time'];
-                    $save_flag = CallerChartsWorkLogs::create($data);dd($existingRecordId,empty($existingRecordId),$startTimeVal,$data,$save_flag);
+                    unset($data['clientName']);
+                    unset($data['subProjectName']);
+                    
+                    $save_flag = CallerChartsWorkLogs::create($data);dd($existingRecordId,empty($existingRecordId),$startTimeVal,$data);
                 } else {
                     $startTimeVal = $existingRecordId->start_time;
                     $save_flag = 1;
