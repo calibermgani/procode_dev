@@ -32,4 +32,5 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('cancer_care_specialist', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialist');
     Route::any('chestnut_health_systems', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystems');
     Route::any('inventory_exe_file', 'App\Http\Controllers\ProjectAutomationController@inventoryExeFile');
+    Route::any('saco_river_medical_group_duplicate', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroupDuplicates');
 });

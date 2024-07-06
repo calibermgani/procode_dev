@@ -526,4 +526,88 @@ class ProjectAutomationController extends Controller
             $e->getMessage();
         }
     }
+
+    public function sacoRiverMedicalGroupDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
+                'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                'patient_id' => isset($request->patient_id) && $request->patient_id != "NULL" ? $request->patient_id : NULL,
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
+                'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
+                'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
+                'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
+                'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
+                'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
+                'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
+                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
+                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+          
+                $duplicateRecordExisting  =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    SacoRiverMedicalGroupCodingDuplicates::insert([
+                        'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'patient_id' => isset($request->patient_id) && $request->patient_id != "NULL" ? $request->patient_id : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
+                        'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
+                        'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
+                        'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
+                        'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
+                        'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
+                        'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned",
+                    ]);
+                    return response()->json(['message' => 'Saco Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'patient_id' => isset($request->patient_id) && $request->patient_id != "NULL" ? $request->patient_id : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
+                        'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
+                        'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
+                        'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
+                        'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
+                        'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
+                        'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned",
+                    ]);
+                    return response()->json(['message' => 'Saco Duplicate Record Updated Successfully']);
+               
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
 }
