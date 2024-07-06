@@ -17,6 +17,7 @@ use App\Models\CCEmailIds;
 use App\Mail\ProcodeProjectFile;
 use App\Mail\ProcodeProjectInventory;
 use App\Mail\ProcodeProjectError;
+use App\Models\InventoryErrorLogs;
 
 class ProjectController extends Controller
 {
@@ -368,17 +369,20 @@ class ProjectController extends Controller
     public function projectErrorMail(Request $request)
     {
         $project_information = $request->all();
-        $fileStatus = "The " . $project_information['project_name'] . " Containing below errors";
-        $mailHeader = $project_information['project_name'] . " Error Description";
-        $error_description = $project_information['error_desc'];
-        $toMailId = ["mgani@caliberfocus.com"];
-        $ccMailId = ["vijayalaxmi@caliberfocus.com"];
-        if (isset($toMailId) && !empty($toMailId)) {
-            Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectError($mailHeader, $fileStatus, $error_description));
+        if ($project_information['project_id']) {
+            $fileStatus = "The " . $project_information['project_name'] . " Containing below errors";
+            $mailHeader = $project_information['project_name'] . " Error Description";
+            $error_description = $project_information['error_description'];
+            $project_information["error_date"] = now()->format('Y-m-d H:i:s');
+            InventoryErrorLogs::create($project_information);
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            if (isset($toMailId) && !empty($toMailId)) {
+                Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectError($mailHeader, $fileStatus, $error_description));
+            }
+            Log::info('Project Error Mail Send Successfully.');
         }
-        Log::info('Project Error Mail Send Successfully.');
-        return response()->json([
-            "message" => "file is not there"
-        ]);
+        Log::info('Project Error Details: ' . print_r($project_information, true));
+        return response()->json(["message" => "Error Mail Sent by ProCode"]);
     }
 }
