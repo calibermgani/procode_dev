@@ -499,7 +499,7 @@ class ProjectAutomationController extends Controller
                 $modelClass = "App\\Models\\" . $modelName;
                 $currentCount = 0;
                 if (class_exists($modelClass)) {
-                    $currentCount = $modelClass::where('invoke_date', $currentDate)->count();
+                    $currentCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->count();
                 }
                 $procodeProjectsCurrent = [];
                  if ($currentCount > 0) {
