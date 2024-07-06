@@ -16,6 +16,8 @@ use App\Mail\ProcodeProjectOnHoldMail;
 use App\Models\CCEmailIds;
 use App\Mail\ProcodeProjectFile;
 use App\Mail\ProcodeProjectInventory;
+use App\Mail\ProcodeProjectError;
+
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -361,5 +363,22 @@ class ProjectController extends Controller
             Log::error('Error in Project Inventory Mail: ' . $e->getMessage());
             Log::debug($e->getMessage());
         }
+    }
+
+    public function projectErrorMail(Request $request)
+    {
+        $project_information = $request->all();
+        $fileStatus = "The " . $project_information['project_name'] . " Containing below errors";
+        $mailHeader = $project_information['project_name'] . " Error Description";
+        $error_description = $project_information['error_desc'];
+        $toMailId = ["mgani@caliberfocus.com"];
+        $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+        if (isset($toMailId) && !empty($toMailId)) {
+            Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectError($mailHeader, $fileStatus, $error_description));
+        }
+        Log::info('Project Error Mail Send Successfully.');
+        return response()->json([
+            "message" => "file is not there"
+        ]);
     }
 }
