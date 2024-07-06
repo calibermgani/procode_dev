@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class InventoryErrorLogs extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['project_id','sub_project_id','error_description','error_date'];
+    protected $fillable = ['project_id','sub_project_id','error_description','error_status_code','error_date'];
 }

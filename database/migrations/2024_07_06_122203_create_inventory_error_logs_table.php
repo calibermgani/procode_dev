@@ -18,6 +18,7 @@ class CreateInventoryErrorLogsTable extends Migration
             $table->string('project_id')->nullable();
             $table->string('sub_project_id')->nullable();
             $table->text('error_description')->nullable();
+            $table->string('error_status_code')->nullable();
             $table->dateTime('error_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
