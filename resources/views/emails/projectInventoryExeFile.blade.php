@@ -44,6 +44,7 @@
                 <tr>
                     <th style="text-align: left;padding: 5px;">Project</th>
                     <th style="text-align: left;padding: 5px;">Count</th>
+                    <th style="text-align: left;padding: 5px;">Inventory Upload Date & Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +53,7 @@
                         <td style="text-align: left;padding: 5px;">{{ $mailBody['project'] }}</td>
                         <td style="text-align: left;padding: 5px;">
                             {{ $mailBody['currentCount'] == 0 ? 0 : $mailBody['currentCount'] }}</td>
+                            <td style="text-align: left;padding: 5px;">{{ Carbon\Carbon::now()->format('m/d/Y g:i A')}}</td>
                     </tr>
                 @endif
             </tbody>
