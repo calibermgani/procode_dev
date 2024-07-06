@@ -35,7 +35,7 @@
 
             <p>Hi, </p>
 
-            <p>{{$fileStatus}}</p><br>
+            <p>{{$fileStatus}}</p>
             <p>{{$error_description}}</p>
            
            @include('emails.emailFooter')
