@@ -497,19 +497,23 @@ class ProjectAutomationController extends Controller
 
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
+                $modelClassDuplicate = "App\\Models\\" . $modelName.'Duplicates';
                 $currentCount = 0;
                 if (class_exists($modelClass)) {
                     $currentCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->count();
+                    $duplicateCount = $modelClassDuplicate::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->count();
                 }
                 $procodeProjectsCurrent = [];
                  if ($currentCount > 0) {
                     $procodeProjectsCurrent['project'] = $prjoectName;
                     $procodeProjectsCurrent['currentCount'] = $currentCount;
-                    $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
-                    $toMailId = explode(",", $toMail->cc_emails);
-                    // $toMailId = "mgani@caliberfocus.com";
-                    $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file')->first();
-                    $ccMailId = explode(",", $ccMail->cc_emails);
+                    $procodeProjectsCurrent['duplicateCount'] = $duplicateCount;
+                    // $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
+                    // $toMailId = explode(",", $toMail->cc_emails);
+                     $toMailId = "mgani@caliberfocus.com";
+                     $ccMailId = "vijayalaxmi@caliberfocus.com";
+                    // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file')->first();
+                    // $ccMailId = explode(",", $ccMail->cc_emails);
 
                     $mailDate = Carbon::now()->format('m/d/Y');
                     $mailHeader = $prjoectName . " - Inventory Upload Successful - " . $mailDate;

@@ -44,6 +44,9 @@
                 <tr>
                     <th style="text-align: left;padding: 5px;">Project</th>
                     <th style="text-align: left;padding: 5px;">Count</th>
+                    @if ($mailBody['duplicateCount'] > 0)
+                        <th style="text-align: left;padding: 5px;">Duplicate Count</th>
+                    @endif
                     <th style="text-align: left;padding: 5px;">Inventory Upload Date & Time</th>
                 </tr>
             </thead>
@@ -53,7 +56,11 @@
                         <td style="text-align: left;padding: 5px;">{{ $mailBody['project'] }}</td>
                         <td style="text-align: left;padding: 5px;">
                             {{ $mailBody['currentCount'] == 0 ? 0 : $mailBody['currentCount'] }}</td>
-                            <td style="text-align: left;padding: 5px;">{{ Carbon\Carbon::now()->format('m/d/Y g:i A')}}</td>
+                        @if ($mailBody['duplicateCount'] > 0)
+                            <td>{{ $mailBody['duplicateCount'] == 0 ? 0 : $mailBody['duplicateCount'] }}</td>
+                        @endif
+                        <td style="text-align: left;padding: 5px;">{{ Carbon\Carbon::now()->format('m/d/Y g:i A') }}
+                        </td>
                     </tr>
                 @endif
             </tbody>
