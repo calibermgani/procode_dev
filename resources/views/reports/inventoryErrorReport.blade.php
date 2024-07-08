@@ -126,14 +126,7 @@
                                 pageLength: 20,
                                 scrollCollapse: true,
                                 scrollX: true,
-                                "initComplete": function(settings, json) {
-                                    $('body').find('.dataTables_scrollBody').addClass(
-                                        "scrollbar");
-                                    $('body').find('.dataTables_scrollBody').css(
-                                        "margin-top",
-                                        '-0.3rem',
-                                        'important');
-                                },
+                                order: [],  
                                 language: {
                                     "search": '',
                                     "searchPlaceholder": "   Search",
