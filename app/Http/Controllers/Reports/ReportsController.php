@@ -256,9 +256,9 @@ class ReportsController extends Controller
                             $query;
                         }
                     })
-                    ->orderBy('id', 'asc')
+                    ->orderBy('id', 'desc')
                     ->get();
-
+                    
                 $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
                 $body_info .= '<th>Date</th>';
                 $body_info .= '<th>Project Name</th>';
@@ -271,7 +271,7 @@ class ReportsController extends Controller
                     $decodedClientName = Helpers::projectName($data->project_id)->project_name;
                     $decodedsubProjectName = $data->sub_project_id == NULL ? '--' : Helpers::subProjectName($data->project_id, $data->sub_project_id)->sub_project_name;
                     $errorStatusCode = $data->error_status_code != NULL ? $data->error_status_code : '--';
-                    $errorDate =  $data->error_date != NULL ? date('m/d/Y', strtotime($data->error_date)) : '--';
+                    $errorDate =  $data->error_date != NULL ? date('m/d/Y g:i A', strtotime($data->error_date)) : '--';
                     $errorDescription = $data->error_description != NULL ? $data->error_description : '--';
                     $errorDescription = wordwrap($errorDescription, 120, '<br>');
                     $body_info .= '<tr>';
