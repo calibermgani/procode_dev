@@ -229,8 +229,8 @@ class ReportsController extends Controller
                 $searchDate  = explode("-", $request['error_date']);
 
                 if (count($searchDate) > 1) {
-                    $start_date  = date('Y-m-d', strtotime($searchDate[0]));
-                    $end_date    = date('Y-m-d', strtotime($searchDate[1]));
+                    $start_date  = date('Y-m-d 00:00:00', strtotime($searchDate[0]));
+                    $end_date    = date('Y-m-d 23:59:59', strtotime($searchDate[1]));
                 } else {
                     $start_date = "";
                     $end_date   = "";
