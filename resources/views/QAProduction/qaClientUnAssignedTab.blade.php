@@ -2448,7 +2448,7 @@
             // });
                  var previousValue;
                 $('#formConfiguration').on('focus', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
-                    previousValue = $(this).val();
+                    previousValue = $(this).val().trim();
                 }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
@@ -2463,9 +2463,9 @@
                         } else if ($(this).is('input[type="radio"]')) {
                             currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();console.log(currentValue,'currentValue',$(this).closest('label').text());
                         } else if ($(this).is('input[type="date"]')) {
-                            currentValue = $(this).val();
+                            currentValue = $(this).val().trim();
                         } else {
-                            currentValue = $(this).val();
+                            currentValue = $(this).val().trim();
                         }
                         if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {
                             var newLine =  formattedValue1 + currentValue;

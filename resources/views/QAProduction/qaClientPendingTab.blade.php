@@ -2067,7 +2067,7 @@
             var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
             var previousValue;
                 $('#pendingFormConfiguration').on('focus', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
-                    previousValue = $(this).val();
+                    previousValue = $(this).val().trim();
                 }).on('focusout', 'input:not(.exclude), select:not(.exclude), textarea:not(.exclude)', function() {
                     var fieldName = $(this).attr('name');
                     var trimmedFiled = $(this).attr('id') !== undefined ? $(this).attr('id') : $(this).attr('class');
@@ -2081,9 +2081,9 @@
                     } else if ($(this).is('input[type="radio"]')) {
                          currentValue = $(this).is(':checked') ? ' Checked '+$(this).closest('label').text().trim() : ' Unchecked '+$(this).closest('label').text().trim();console.log(currentValue,'currentValue',$(this).closest('label').text());
                      } else if ($(this).is('input[type="date"]')) {
-                        currentValue = $(this).val();
+                        currentValue = $(this).val().trim();
                     } else {
-                        currentValue = $(this).val();
+                        currentValue = $(this).val().trim();
                     }
                     var newLine = '';
                     if ($(this).is('input[type="checkbox"]') || $(this).is('input[type="radio"]')) {

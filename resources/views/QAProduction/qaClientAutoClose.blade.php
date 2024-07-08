@@ -2396,7 +2396,7 @@
             var excludedFields = ['QA_rework_comments', 'chart_status','coder_rework_status','coder_rework_reason','QA_status_code','QA_sub_status_code','qa_hold_reason','	ce_hold_reason'];
                  var previousValue;
                 $('#formConfiguration').on('focus', 'input, select, textarea', function() {
-                    previousValue = $(this).val();
+                    previousValue = $(this).val().trim();
                 }).on('focusout', 'input, select, textarea', function() {
                 //   var currentValue = $(this).val();
                         var fieldName = $(this).attr('name');
@@ -2411,9 +2411,9 @@
                         } else if ($(this).is('input[type="radio"]')) {
                             currentValue = $(`input[name="${fieldName}"]:checked`).val();
                         } else if ($(this).is('input[type="date"]')) {
-                            currentValue = $(this).val();
+                            currentValue = $(this).val().trim();
                         } else {
-                            currentValue = $(this).val();
+                            currentValue = $(this).val().trim();
                         }
                         var newLine = previousValue != '' ? formattedValue1 + ' '+previousValue + ' Changed to ' + currentValue : formattedValue1 + '  added ' + currentValue;
                         var textAreaValue = $('#QA_rework_comments').val();
