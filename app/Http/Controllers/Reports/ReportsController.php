@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use App\Models\InventoryErrorLogs;
 
 class ReportsController extends Controller
 {
@@ -168,7 +169,7 @@ class ReportsController extends Controller
                                 $data =isset($row->work_time) && !empty($row->work_time) ? $row->work_time : "--";
                         }
                         if (strpos($data, '_el_') !== false) {
-                              $data = str_replace('_el_', ' , ', $data);
+                            $data = str_replace('_el_', ' , ', $data);
                         } else {
                             $data = $data;
                         }
@@ -194,6 +195,96 @@ class ReportsController extends Controller
                 // } else {
                 //     $body_info = '<p>No data available</p>';
                 // }
+
+                return response()->json([
+                    'success' => true,
+                    'body_info' => $body_info,
+                ]);
+            } catch (Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/');
+        }
+    }
+    public function inventoryErrorReportList(Request $request)
+    {
+
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
+            try {
+
+                return view('reports.inventoryErrorReport');
+            } catch (\Exception $e) {
+                log::debug($e->getMessage());
+            }
+        } else {
+            return redirect('/');
+        }
+    }
+    public function inventoryErrorReport(Request $request)
+    {
+
+        if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
+            try {
+                $searchDate  = explode("-", $request['error_date']);
+
+                if (count($searchDate) > 1) {
+                    $start_date  = date('Y-m-d', strtotime($searchDate[0]));
+                    $end_date    = date('Y-m-d', strtotime($searchDate[1]));
+                } else {
+                    $start_date = "";
+                    $end_date   = "";
+                }
+                $error_data = InventoryErrorLogs::where(function ($query) use ($request) {
+                    if (isset($request['project_id']) && $request['project_id'] != '') {
+                        $query->where('project_id', $request['project_id']);
+                    } else {
+                        $query;
+                    }
+                })
+                    ->where(function ($query) use ($request) {
+                        if (isset($request['sub_project_id']) && $request['sub_project_id'] != '') {
+                            $query->where('sub_project_id', $request['sub_project_id']);
+                        } else {
+                            $query;
+                        }
+                    })
+                    ->where(function ($query) use ($request, $start_date, $end_date) {
+                        if (isset($request['error_date'])) {
+                            $query->whereBetween('error_date', [$start_date, $end_date]);
+                        } else {
+                            $query;
+                        }
+                    })
+                    ->orderBy('id', 'asc')
+                    ->get();
+
+                $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
+                $body_info .= '<th>Date</th>';
+                $body_info .= '<th>Project Name</th>';
+                $body_info .= '<th>Sub Project Name</th>';
+                $body_info .= '<th>Error</th>';
+                $body_info .= '<th>Status Code</th>';
+                $body_info .= '</tr></thead><tbody>';
+
+                foreach ($error_data as $data) {
+                    $decodedClientName = Helpers::projectName($data->project_id)->project_name;
+                    $decodedsubProjectName = $data->sub_project_id == NULL ? '--' : Helpers::subProjectName($data->project_id, $data->sub_project_id)->sub_project_name;
+                    $errorStatusCode = $data->error_status_code != NULL ? $data->error_status_code : '--';
+                    $errorDate =  $data->error_date != NULL ? date('m/d/Y', strtotime($data->error_date)) : '--';
+                    $errorDescription = $data->error_description != NULL ? $data->error_description : '--';
+                    $errorDescription = wordwrap($errorDescription, 120, '<br>');
+                    $body_info .= '<tr>';
+                    $body_info .= '<td>' . $errorDate . '</td>';
+                    $body_info .= '<td>' . $decodedClientName . '</td>';
+                    $body_info .= '<td>' . $decodedsubProjectName . '</td>';
+                    $body_info .= '<td>' . $errorDescription . '</td>';
+                    $body_info .= '<td>' . $errorStatusCode . '</td>';
+                    $body_info .= '</tr>';
+                }
+
+                $body_info .= '</tbody></table>';
+
 
                 return response()->json([
                     'success' => true,
