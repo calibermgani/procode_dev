@@ -502,12 +502,16 @@ class ProjectAutomationController extends Controller
                 if (class_exists($modelClass)) {
                     $currentCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->count();
                     $duplicateCount = $modelClassDuplicate::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->count();
+                    $assignedCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->whereNotNull('CE_emp_id')->count();
+                    $unAssignedCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                 }
                 $procodeProjectsCurrent = [];
                  if ($currentCount > 0) {
                     $procodeProjectsCurrent['project'] = $prjoectName;
                     $procodeProjectsCurrent['currentCount'] = $currentCount;
                     $procodeProjectsCurrent['duplicateCount'] = $duplicateCount;
+                    $procodeProjectsCurrent['assignedCount'] = $assignedCount;
+                    $procodeProjectsCurrent['unAssignedCount'] = $unAssignedCount;
                     $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'inventory exe file to mail id')->first();
                     $toMailId = explode(",", $toMail->cc_emails);
                     // $toMailId = "mgani@caliberfocus.com";

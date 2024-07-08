@@ -47,6 +47,12 @@
                     @if ($mailBody['duplicateCount'] > 0)
                         <th style="text-align: left;padding: 5px;">Duplicate Count</th>
                     @endif
+                    @if ($mailBody['assignedCount'] > 0)
+                        <th style="text-align: left;padding: 5px;">Default Assigned Count</th>
+                    @endif
+                    @if ($mailBody['unAssignedCount'] > 0)
+                        <th style="text-align: left;padding: 5px;">UnAssigned Count</th>
+                    @endif
                     <th style="text-align: left;padding: 5px;">Inventory Upload Date & Time</th>
                 </tr>
             </thead>
@@ -58,6 +64,12 @@
                             {{ $mailBody['currentCount'] == 0 ? 0 : $mailBody['currentCount'] }}</td>
                         @if ($mailBody['duplicateCount'] > 0)
                             <td>{{ $mailBody['duplicateCount'] == 0 ? 0 : $mailBody['duplicateCount'] }}</td>
+                        @endif
+                        @if ($mailBody['assignedCount'] > 0)
+                            <td>{{ $mailBody['assignedCount'] == 0 ? 0 : $mailBody['assignedCount'] }}</td>
+                        @endif
+                        @if ($mailBody['unAssignedCount'] > 0)
+                            <td>{{ $mailBody['unAssignedCount'] == 0 ? 0 : $mailBody['unAssignedCount'] }}</td>
                         @endif
                         <td style="text-align: left;padding: 5px;">{{ Carbon\Carbon::now()->format('m/d/Y g:i A') }}
                         </td>

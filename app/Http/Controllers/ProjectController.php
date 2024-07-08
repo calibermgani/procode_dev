@@ -376,7 +376,7 @@ class ProjectController extends Controller
             $project_information["error_date"] = now()->format('Y-m-d H:i:s');
             InventoryErrorLogs::create($project_information);
             $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            $ccMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["mgani@caliberfocus.com"];
             if (isset($toMailId) && !empty($toMailId)) {
                 Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectError($mailHeader, $fileStatus, $error_description));
             }
