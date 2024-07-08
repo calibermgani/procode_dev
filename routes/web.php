@@ -126,6 +126,11 @@ Route::group(['prefix' => 'qa_production'], function () {
         Route::any('user_grand_page_permission', 'MenuPermissionController@page_permission_store');
         Route::any('side_menu_list', 'MenuPermissionController@SideMenuList');
     });
+
+    Route::group(['prefix' => 'report'], function () {
+        Route::any('inventory_error_report_list', 'App\Http\Controllers\Reports\ReportsController@inventoryErrorReportList');
+        Route::any('inventory_error_report', 'App\Http\Controllers\Reports\ReportsController@inventoryErrorReport');
+    });
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
