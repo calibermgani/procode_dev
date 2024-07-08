@@ -506,43 +506,6 @@
                                                                     @endif
                                                                     <div class="row mt-4">
                                                                         <div class="col-md-6">
-                                                                            <div class="form-group row">
-                                                                                <label class="col-md-12 required">
-                                                                                    Client
-                                                                                </label>
-                                                                                <div class="col-md-10">
-                                                                                    {!! Form::textarea('client_inf', null, ['class' => 'text-black form-control white-smoke client_inf','rows' => 3]) !!}
-                                                                    
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <div class="form-group row">
-                                                                                <label class="col-md-12 required">
-                                                                                    Annexmed
-                                                                                </label>
-                                                                                <div class="col-md-10">
-                                                                                    {!! Form::textarea('annex_inf', null, ['class' => 'text-black form-control white-smoke annex_inf','rows' => 3,]) !!}
-                                                                    
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mt-4">
-                                                                        <div class="col-md-12">
-                                                                            <div class="form-group row">
-                                                                                <label class="col-md-12 required">
-                                                                                    Coder Auto Notes
-                                                                                </label>
-                                                                                <div class="col-md-11">
-                                                                                    {!! Form::textarea('annex_auto_notes', null, ['class' => 'text-black form-control white-smoke annex_auto_notes','rows' => 3]) !!}
-                                                                    
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mt-4">
-                                                                        <div class="col-md-6">
                                                                             <input type="hidden" name="invoke_date">
                                                                             <input type="hidden" name="CE_emp_id">
                                                                             <div class="form-group row">
@@ -1579,60 +1542,6 @@
                        $('#ce_hold_reason').val('');
                     }
             })
-            $('.annex_inf').on('blur', function () {
-                var clientInf = $('.client_inf').val().split(','); // e.g., 123,456
-                var annexInf = $('.annex_inf').val().split(','); // e.g., 1234,4567,4567
-                var notesMap = {};
-                var notes = '';
-
-                var annexInfMap = {};
-                annexInf.forEach(function (value, index) {
-                    annexInfMap[value] = (annexInfMap[value] || 0) + 1;
-                });
-
-                // Handle changes and removals
-                for (var i = 0; i < clientInf.length; i++) {
-                    if (annexInf[i] !== undefined && annexInf[i] !== '') {
-                        if (clientInf[i] !== annexInf[i]) {
-                            notesMap[clientInf[i]] = 'Value changed from ' + clientInf[i] + ' to ' + annexInf[i];
-                        }
-                        if (annexInfMap[annexInf[i]] > 0) {
-                            annexInfMap[annexInf[i]]--;
-                            if (annexInfMap[annexInf[i]] === 0) {
-                                delete annexInfMap[annexInf[i]];
-                            }
-                        }
-                    } else {
-                        notesMap[clientInf[i]] = 'Value ' + clientInf[i] + ' removed';
-                    }
-                }
-
-                // Handle additions
-                for (var key in annexInfMap) {
-                    if (annexInfMap.hasOwnProperty(key) && annexInfMap[key] > 0) {
-                        notesMap[key] = 'Value ' + key + ' added';
-                    }
-                }
-
-                // Convert notesMap to a single string in the order of clientInf
-                clientInf.forEach(function (value) {
-                    if (notesMap[value]) {
-                        notes += notesMap[value] + '\n';
-                        delete notesMap[value];
-                    }
-                });
-
-                // Add remaining notes for new additions
-                for (var key in notesMap) {
-                    if (notesMap.hasOwnProperty(key)) {
-                        notes += notesMap[key] + '\n';
-                    }
-                }
-
-                // Update the annex_auto_notes
-                $('.annex_auto_notes').val(notes.trim());
-           });
-
         })
 
         function updateTime() {
