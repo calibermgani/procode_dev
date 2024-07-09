@@ -263,7 +263,7 @@ class ReportsController extends Controller
                 $body_info .= '<th>Date</th>';
                 $body_info .= '<th>Project Name</th>';
                 $body_info .= '<th>Sub Project Name</th>';
-                $body_info .= '<th>Error</th>';
+                $body_info .= '<th>Description</th>';
                 $body_info .= '<th>Status Code</th>';
                 $body_info .= '</tr></thead><tbody>';
 
@@ -272,7 +272,7 @@ class ReportsController extends Controller
                     $decodedsubProjectName = $data->sub_project_id == NULL ? '--' : Helpers::subProjectName($data->project_id, $data->sub_project_id)->sub_project_name;
                     $errorStatusCode = $data->error_status_code != NULL ? $data->error_status_code : '--';
                     $errorDate =  $data->error_date != NULL ? date('m/d/Y g:i A', strtotime($data->error_date)) : '--';
-                    $errorDescription = $data->error_description != NULL ? $data->error_description : '--';
+                    $errorDescription = $data->error_description != NULL ? nl2br(e( $data->error_description))  : '--';
                     $errorDescription = wordwrap($errorDescription, 120, '<br>');
                     $body_info .= '<tr>';
                     $body_info .= '<td>' . $errorDate . '</td>';
