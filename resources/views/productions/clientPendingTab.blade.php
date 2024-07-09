@@ -1549,8 +1549,14 @@
 
                         }).then(function(result) {
                             if (result.value == true) {
+                                KTApp.block('#myModal_status', {
+                                    overlayColor: '#000000',
+                                    state: 'danger',
+                                    opacity: 0.1,
+                                    message: 'Fetching...',
+                                });
                                 document.querySelector('#pendingFormConfiguration').submit();
-
+                                KTApp.unblock('#myModal_status');
                             } else {
                                 //   location.reload();
                             }

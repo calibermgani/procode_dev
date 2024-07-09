@@ -2000,7 +2000,14 @@
                             if (result.value == true) {
                                 $('#qa_status').prop('disabled', false);
                                 $('#qa_sub_status').prop('disabled', false);
+                                KTApp.block('#myModal_status', {
+                                    overlayColor: '#000000',
+                                    state: 'danger',
+                                    opacity: 0.1,
+                                    message: 'Fetching...',
+                                });
                             document.querySelector('#revokeFormConfiguration').submit();
+                                KTApp.unblock('#myModal_status');
 
                             } else {
                                 //   location.reload();

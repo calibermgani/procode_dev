@@ -1646,7 +1646,14 @@
                 }
                 $(document).on('change', '#qa_status', function() {
                     var status_code_id = $(this).val();
+                    KTApp.block('#myModal_status', {
+                        overlayColor: '#000000',
+                        state: 'danger',
+                        opacity: 0.1,
+                        message: 'Fetching...',
+                    });
                     subStatus(status_code_id,'');
+                    KTApp.unblock('#myModal_status');
                 });
             $(document).on('click', '.clickable-view', function(e) {
                 $('#myModal_status').modal('hide');
@@ -1998,7 +2005,14 @@
 
                         }).then(function(result) {
                             if (result.value == true) {
+                                KTApp.block('#myModal_status', {
+                                    overlayColor: '#000000',
+                                    state: 'danger',
+                                    opacity: 0.1,
+                                    message: 'Fetching...',
+                                });
                                 document.querySelector('#pendingFormConfiguration').submit();
+                                KTApp.unblock('#myModal_status');
 
                             } else {
                                 //   location.reload();
