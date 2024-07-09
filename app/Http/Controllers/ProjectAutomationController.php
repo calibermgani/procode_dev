@@ -22,6 +22,7 @@ use GuzzleHttp\Client;
 use App\Models\CCEmailIds;
 use App\Mail\ProcodeInventoryExeFile;
 use App\Http\Helper\Admin\Helpers as Helpers;
+use App\Models\InventoryErrorLogs;
 
 class ProjectAutomationController extends Controller
 {
@@ -506,6 +507,7 @@ class ProjectAutomationController extends Controller
                     $unAssignedCount = $modelClass::where('invoke_date', $currentDate)->where('chart_status','CE_Assigned')->whereNull('CE_emp_id')->count();
                 }
                 $procodeProjectsCurrent = [];
+                Log::info($prjoectName." count is ".$currentCount);
                  if ($currentCount > 0) {
                     $procodeProjectsCurrent['project'] = $prjoectName;
                     $procodeProjectsCurrent['currentCount'] = $currentCount;
@@ -521,6 +523,12 @@ class ProjectAutomationController extends Controller
 
                     $mailDate = Carbon::now()->format('m/d/Y');
                     $mailHeader = $prjoectName . " - Inventory Upload Successful - " . $mailDate;
+                    $project_information["project_id"] = $attributes["project_id"];
+                    $project_information["sub_project_id"] = $attributes["sub_project_id"];
+                    $project_information["error_description"] = "Default Assigned Count: " . $procodeProjectsCurrent['assignedCount'] . PHP_EOL . " Inventory Uploaded Time: " . now()->format('m/d/Y g:i A');
+                    $project_information["error_status_code"] = 200;
+                    $project_information["error_date"] = now()->format('Y-m-d H:i:s');
+                    InventoryErrorLogs::create($project_information);
                     if (isset($toMailId) && !empty($toMailId)) {
                         Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeInventoryExeFile($mailHeader, $procodeProjectsCurrent));
                     }
