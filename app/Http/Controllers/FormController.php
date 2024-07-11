@@ -79,6 +79,7 @@ class FormController extends Controller
                     $requiredData['field_type_3'] = $data['field_type_3'][$i];
                     $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                     $requiredData['user_type'] = $data['user_type'][$i];
+                    $requiredData['input_type_editable'] = $data['input_type_editable'][$i];
                     formConfiguration::create($requiredData);
                     // $columnName = Str::lower(str_replace([' ', '/'], ['_'], $data['label_name'][$i]));
                     $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
@@ -377,6 +378,7 @@ class FormController extends Controller
                         $requiredData['field_type_3'] = $data['field_type_3'][$i];
                         $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];//dd($existingRecord,$requiredData);
                         $requiredData['user_type'] = $data['user_type'][$i];
+                        $requiredData['input_type_editable'] = $data['input_type_editable'][$i];
                         $existingRecord->update($requiredData);
                     } else {
                         $requiredData['project_id'] = $data['project_id_val'];
@@ -390,6 +392,7 @@ class FormController extends Controller
                         $requiredData['field_type_3'] = $data['field_type_3'][$i];
                         $requiredData['added_by'] = Session::get('loginDetails')['userInfo']['user_id'];
                         $requiredData['user_type'] = $data['user_type'][$i];
+                        $requiredData['input_type_editable'] = $data['input_type_editable'][$i];
                         formConfiguration::create($requiredData);
                        // $columnName = Str::lower(str_replace([' ', '/'], '_', $data['label_name'][$i]));
                         $columnName = Str::lower(str_replace([' ', '/'], ['_', '_else_'], $data['label_name'][$i]));
@@ -640,7 +643,7 @@ class FormController extends Controller
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
               try {
                     $data = $request->all();
-                    $projectName = $decodedClientName = Helpers::projectName($data['projectId'])->project_name;
+                    $projectName =  Helpers::projectName($data['projectId'])->project_name;
                     $subProjectName = $data['subProjectId'] != null ? Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name : 'project';
                     // $subProjectName = $data['subProjectId'] == null ? Helpers::projectName($data['projectId'])->project_name :Helpers::subProjectName($data['projectId'],$data['subProjectId'])->sub_project_name;
                     $table_name= Str::slug((Str::lower($projectName).'_'.Str::lower($subProjectName)),'_');

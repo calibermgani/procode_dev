@@ -392,6 +392,7 @@
                                                                              'rows' => 3,
                                                                              'id' => $columnName,
                                                                              $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                             ($data->input_type_editable == 1 || $data->input_type_editable == 3) ? '' : 'readonly'
                                                                          ]) !!}
                                                                      @else
                                                                          {!! Form::text($columnName . '[]', null, [
@@ -400,6 +401,7 @@
                                                                              'style' => 'cursor:pointer',
                                                                              'id' => $columnName,
                                                                              $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                             ($data->input_type_editable == 1 || $data->input_type_editable == 3) ? '' : 'readonly'
                                                                          ]) !!}
                                                                      @endif
                                                                  @else
@@ -407,7 +409,7 @@
                                                                          {!! Form::$inputType($columnName . '[]', ['' => '-- Select --'] + $associativeOptions, null, [
                                                                              'class' => 'form-control ' . $columnName . ' white-smoke pop-non-edt-val',
                                                                              'autocomplete' => 'none',
-                                                                             'style' => 'cursor:pointer',
+                                                                             'style' => 'cursor:pointer;' . (($data->input_type_editable == 1 || $data->input_type_editable == 3) ? '' : 'pointer-events: none;'),
                                                                              'id' => $columnName,
                                                                              $data->field_type_2 == 'mandatory' ? 'required' : '',
                                                                          ]) !!}
@@ -425,6 +427,7 @@
                                                                                                  'class' => $columnName,
                                                                                                  'id' => $columnName,
                                                                                                  $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                                                 'onclick' => $data->input_type_editable != 1 && $data->input_type_editable != 3 ? 'return false;' : '',
                                                                                              ]) !!}{{ $options[$i] }}
                                                                                              <span></span>
                                                                                          </label>
@@ -446,6 +449,7 @@
                                                                                                  'class' => $columnName,
                                                                                                  'id' => $columnName,
                                                                                                  $data->field_type_2 == 'mandatory' ? 'required' : '',
+                                                                                                 'disabled' => $data->input_type_editable != 1 && $data->input_type_editable != 3,
                                                                                              ]) !!}{{ $options[$i] }}
                                                                                              <span></span>
                                                                                          </label>
