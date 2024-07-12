@@ -428,7 +428,7 @@ class DashboardController extends Controller
             $subProjectsWithCount = [];
             if (count($subprojects) > 0) {
                 foreach ($subprojects as $key => $data) {
-                    $projectName = $clientDetails['client_name'];
+                    $projectName = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                     $table_name = Str::slug((Str::lower($projectName) . '_' . Str::lower($data['name'])), '_');
                     $modelName = Str::studly($table_name);
                     $modelClass = "App\\Models\\" . $modelName;
