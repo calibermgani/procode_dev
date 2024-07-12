@@ -154,7 +154,7 @@
                                                                 'user_hrdetails'
                                                             ]['current_designation']
                                                             : '';
-                                                    $projectName = $data['client_name'];
+                                                    $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;//$data['client_name'];
                                                     if (
                                                         isset($data['subprject_name']) &&
                                                         !empty($data['subprject_name'])
@@ -295,7 +295,7 @@
                                                                 'user_hrdetails'
                                                             ]['current_designation']
                                                             : '';
-                                                    $projectName = $data['client_name'];
+                                                            $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;// $data['client_name'];
                                                     if (
                                                         isset($data['subprject_name']) &&
                                                         !empty($data['subprject_name'])

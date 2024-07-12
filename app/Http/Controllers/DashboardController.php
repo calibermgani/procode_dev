@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-
+use App\Http\Helper\Admin\Helpers as Helpers;
 class DashboardController extends Controller
 {
     public function dashboard(Request $request)
@@ -56,6 +56,7 @@ class DashboardController extends Controller
                 $models = [];
                 $projectIds = [];
                 foreach ($projects as $project) {
+                    $project["client_name"] = Helpers::projectName($project["id"])->project_name;
                     if (count($project["subprject_name"]) > 0) {
                         foreach ($project["subprject_name"] as $key => $subProject) {
                             $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
@@ -257,6 +258,7 @@ class DashboardController extends Controller
                 $endDate = Carbon::now()->endOfDay()->toDateString();
                 $models = $projectIds = [];
                 foreach ($projects as $project) {
+                    $project["client_name"] = Helpers::projectName($project["id"])->project_name;
                     if (count($project["subprject_name"]) > 0) {
                         foreach ($project["subprject_name"] as $key => $subProject) {
                             $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
@@ -566,6 +568,7 @@ class DashboardController extends Controller
                 $models = [];
                 $projects = $this->getProjects();
                 foreach ($projects as $project) {
+                    $project["client_name"] = Helpers::projectName($project["id"])->project_name;
                     if (count($project["subprject_name"]) > 0) {
                         foreach ($project["subprject_name"] as $key => $subProject) {
                             $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');

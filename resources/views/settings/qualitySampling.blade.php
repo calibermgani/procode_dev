@@ -155,7 +155,7 @@
                                 @endphp
                                 <tr class="clickable-row" data-toggle="modal" style="cursor:pointer">
                                     <td><input type="hidden"
-                                            value={{ $data['project_id'] }}>{{  $projectName == '--' ? '--' : $projectName->project_name }}</td>
+                                            value={{ $data['project_id'] }}>{{  $projectName == '--' ? '--' : $projectName->aims_project_name }}</td>
                                     <td><input type="hidden"
                                             value={{ $data['sub_project_id'] != null ? $data['sub_project_id'] : null }}>{{ $subProjectName == '--' ? '--' : $subProjectName->sub_project_name }}
                                     </td>

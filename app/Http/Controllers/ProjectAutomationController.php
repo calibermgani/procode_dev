@@ -481,16 +481,17 @@ class ProjectAutomationController extends Controller
                 if (isset($request->project_id)) {
                     $projectId = $request->project_id;
                     $clientName = Helpers::projectName($projectId)->project_name;
+                    $aimsClientName = Helpers::projectName($projectId)->aims_project_name;
                     if (isset($request->sub_project_id) && $request->sub_project_id != "NULL" && $request->sub_project_id != NULL) {
                         $subProjectId = $request->sub_project_id;
                         $subProjectName = Helpers::subProjectName($projectId, $subProjectId)->sub_project_name;
                         $table_name = Str::slug((Str::lower($clientName) . '_' . Str::lower($subProjectName)), '_');
-                        $prjoectName = $clientName . ' - ' . $subProjectName;
+                        $prjoectName = $aimsClientName . ' - ' . $subProjectName;
                     } else {
                         $subProjectId = NULL;
                         $subProjectText = "project";
                         $table_name = Str::slug((Str::lower($clientName) . '_' . Str::lower($subProjectText)), '_');
-                        $prjoectName = $clientName;
+                        $prjoectName = $aimsClientName;
                     }
                 } else {
                     $projectId = NULL;

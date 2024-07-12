@@ -392,7 +392,7 @@
                                                 <div>
                                                     <h6 class="modal-title mb-0" id="myModalLabel"
                                                         style="color: #ffffff;">
-                                                        {{ ucfirst($clientName->project_name) }}
+                                                        {{ ucfirst($clientName->aims_project_name) }}
                                                     </h6>
                                                     @if ($practiceName != '')
                                                         <h6 style="color: #ffffff;font-size:1rem;">
@@ -957,7 +957,7 @@
                                     </div>&nbsp;&nbsp;
                                     <div>
                                         <h6 class="modal-title mb-0" id="myModalLabel" style="color: #ffffff;">
-                                            {{ ucfirst($clientName->project_name) }}
+                                            {{ ucfirst($clientName->aims_project_name) }}
                                         </h6>
                                         @if ($practiceName != '')
                                             <h6 style="color: #ffffff;font-size:1rem;">
