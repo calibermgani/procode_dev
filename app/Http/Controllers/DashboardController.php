@@ -452,7 +452,7 @@ class DashboardController extends Controller
                         $resourceData = $modelClass::whereIn('CE_emp_id', $resourceList)->select('CE_emp_id')->groupBy('CE_emp_id')->get()->toArray();
                         foreach ($resourceData as $resourceKey => $resourceDataVal) {
                             $subProjectsWithCount[$key][$resourceKey]['client_id'] = $clientDetails['id'];
-                            $subProjectsWithCount[$key][$resourceKey]['client_name'] = $clientDetails['client_name'];
+                            $subProjectsWithCount[$key][$resourceKey]['client_name'] = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                             $subProjectsWithCount[$key][$resourceKey]['sub_project_id'] = $data['id'];
                             $subProjectsWithCount[$key][$resourceKey]['sub_project_name'] = $data['name'];
                             $subProjectsWithCount[$key][$resourceKey]['resource_emp_id'] = $resourceDataVal["CE_emp_id"];
@@ -470,7 +470,7 @@ class DashboardController extends Controller
                         }
                     } else {
                         $subProjectsWithCount[$key][0]['client_id'] = $clientDetails['id'];
-                        $subProjectsWithCount[$key][0]['client_name'] = $clientDetails['client_name'];
+                        $subProjectsWithCount[$key][0]['client_name'] = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                         $subProjectsWithCount[$key][0]['sub_project_id'] = $data['id'];
                         $subProjectsWithCount[$key][0]['sub_project_name'] = $data['name'];
                         $subProjectsWithCount[$key][0]['assignedCount'] = '--';
@@ -481,7 +481,7 @@ class DashboardController extends Controller
                     }
                 }
             } else {
-                $projectName = $clientDetails['client_name'];
+                $projectName = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                 $table_name = Str::slug((Str::lower($projectName) . '_' . 'project'), '_');
                 $modelName = Str::studly($table_name);
                 $modelClass = "App\\Models\\" . $modelName;
@@ -506,7 +506,7 @@ class DashboardController extends Controller
                     $resourceData = $modelClass::whereIn('CE_emp_id', $resourceList)->select('CE_emp_id')->groupBy('CE_emp_id')->get()->toArray();
                     foreach ($resourceData as $resourceKey => $resourceDataVal) {
                         $subProjectsWithCount[$key][$resourceKey]['client_id'] = $clientDetails['id'];
-                        $subProjectsWithCount[$key][$resourceKey]['client_name'] = $clientDetails['client_name'];
+                        $subProjectsWithCount[$key][$resourceKey]['client_name'] = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                         $subProjectsWithCount[$key][$resourceKey]['sub_project_id'] = '--';
                         $subProjectsWithCount[$key][$resourceKey]['sub_project_name'] = '--';
                         $subProjectsWithCount[$key][$resourceKey]['resource_emp_id'] = $resourceDataVal["CE_emp_id"];
@@ -525,7 +525,7 @@ class DashboardController extends Controller
                 } else {
                     $key = 0;
                     $subProjectsWithCount[$key][0]['client_id'] = $clientDetails['id'];
-                    $subProjectsWithCount[$key][0]['client_name'] = $clientDetails['client_name'];
+                    $subProjectsWithCount[$key][0]['client_name'] = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                     $subProjectsWithCount[$key][0]['sub_project_id'] = '--';
                     $subProjectsWithCount[$key][0]['sub_project_name'] = '--';
                     $subProjectsWithCount[$key][0]['assignedCount'] = '--';
