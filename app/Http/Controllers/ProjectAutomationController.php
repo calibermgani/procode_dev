@@ -11,8 +11,8 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\SiouxlandMentalHealthCenterProject;
 use App\Models\SiouxlandMentalHealthCenterProjectDuplicates;
-use App\Models\SacoRiverMedicalGroupCoding;
-use App\Models\SacoRiverMedicalGroupCodingDuplicates;
+use App\Models\SrmgCoding;
+use App\Models\SrmgCodingDuplicates;
 use App\Models\CancerCareSpecialistsProject;
 use App\Models\CancerCareSpecialistsProjectDuplicates;
 use App\Models\ChestnutHealthSystemsClaimEdits;
@@ -272,9 +272,9 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
-            $existing = SacoRiverMedicalGroupCoding::where($attributes)->exists();
+            $existing = SrmgCoding::where($attributes)->exists();
             if (!$existing) {
-                SacoRiverMedicalGroupCoding::insert([
+                SrmgCoding::insert([
                     'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                     'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                     'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
@@ -299,9 +299,9 @@ class ProjectAutomationController extends Controller
                 ]);
                 return response()->json(['message' => 'Record Inserted Successfully']);
             } else {
-                $duplicateRecordExisting  =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->exists();
+                $duplicateRecordExisting  =  SrmgCodingDuplicates::where($attributes)->exists();
                 if (!$duplicateRecordExisting) {
-                    SacoRiverMedicalGroupCodingDuplicates::insert([
+                    SrmgCodingDuplicates::insert([
                         'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                         'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                         'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
@@ -326,7 +326,7 @@ class ProjectAutomationController extends Controller
                     ]);
                     return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
                 } else {
-                    $duplicateRecord =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord =  SrmgCodingDuplicates::where($attributes)->first();
                     $duplicateRecord->update([
                         'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                         'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
@@ -569,9 +569,9 @@ class ProjectAutomationController extends Controller
             ];
 
           
-                $duplicateRecordExisting  =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->exists();
+                $duplicateRecordExisting  =  SrmgCodingDuplicates::where($attributes)->exists();
                 if (!$duplicateRecordExisting) {
-                    SacoRiverMedicalGroupCodingDuplicates::insert([
+                    SrmgCodingDuplicates::insert([
                         'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                         'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                         'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
@@ -596,7 +596,7 @@ class ProjectAutomationController extends Controller
                     ]);
                     return response()->json(['message' => 'Saco Duplicate Record Inserted Successfully']);
                 } else {
-                    $duplicateRecord =  SacoRiverMedicalGroupCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord =  SrmgCodingDuplicates::where($attributes)->first();
                     $duplicateRecord->update([
                         'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                         'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
