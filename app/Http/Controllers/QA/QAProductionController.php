@@ -79,7 +79,7 @@ class QAProductionController extends Controller
             $subProjectsWithCount = [];
             foreach ($subprojects as $key => $data) {
                 $subProjectsWithCount[$key]['client_id'] = $clientDetails['id'];
-                $subProjectsWithCount[$key]['client_name'] = $clientDetails['client_name'];
+                $subProjectsWithCount[$key]['client_name'] = Helpers::projectName($clientDetails["id"])->project_name;//$clientDetails['client_name'];
                 $subProjectsWithCount[$key]['sub_project_id'] = $data['id'];
                 $subProjectsWithCount[$key]['sub_project_name'] = $data['name'];
                 $projectName = $subProjectsWithCount[$key]['client_name'];
