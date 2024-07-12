@@ -34,4 +34,5 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('inventory_exe_file', 'App\Http\Controllers\ProjectAutomationController@inventoryExeFile');
     Route::any('saco_river_medical_group_duplicate', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroupDuplicates');
     Route::any('project_error_mail', 'App\Http\Controllers\ProjectController@projectErrorMail');
+    Route::any('sioux_land_mental_health__duplicate', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealthDuplicates');
 });
