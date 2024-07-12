@@ -32,7 +32,7 @@ class ProjectAutomationController extends Controller
             $attributes = [
                 'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                 'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                 'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                 'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                 'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -49,7 +49,7 @@ class ProjectAutomationController extends Controller
                 'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                 'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                 'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                 'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                 'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                 'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -60,7 +60,7 @@ class ProjectAutomationController extends Controller
                 SmhcCodingEm::insert([
                     'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                     'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                    'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                    'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                     'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                     'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                     'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -77,7 +77,7 @@ class ProjectAutomationController extends Controller
                     'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                     'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                     'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                    'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                    'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                     'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                     'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                     'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -93,7 +93,7 @@ class ProjectAutomationController extends Controller
                     SmhcCodingEmDuplicates::insert([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                         'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                         'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                         'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -110,7 +110,7 @@ class ProjectAutomationController extends Controller
                         'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                         'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                         'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                        'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                        'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                         'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                         'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                         'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -125,7 +125,7 @@ class ProjectAutomationController extends Controller
                     $duplicateRecord->update([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                         'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                         'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                         'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -142,7 +142,7 @@ class ProjectAutomationController extends Controller
                         'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                         'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                         'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                        'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                        'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                         'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                         'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                         'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -634,7 +634,7 @@ class ProjectAutomationController extends Controller
             $attributes = [
                 'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                 'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                 'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                 'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                 'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -651,7 +651,7 @@ class ProjectAutomationController extends Controller
                 'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                 'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                 'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                 'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                 'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                 'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -663,7 +663,7 @@ class ProjectAutomationController extends Controller
                     SmhcCodingEmDuplicates::insert([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                         'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                         'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                         'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -680,7 +680,7 @@ class ProjectAutomationController extends Controller
                         'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                         'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                         'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                        'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                        'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                         'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                         'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                         'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
@@ -695,7 +695,7 @@ class ProjectAutomationController extends Controller
                     $duplicateRecord->update([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
-                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
                         'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
                         'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
                         'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
@@ -712,7 +712,7 @@ class ProjectAutomationController extends Controller
                         'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
                         'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
                         'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                        'billed' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                        'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
                         'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
                         'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
                         'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
