@@ -1420,7 +1420,7 @@
                               requiredFields[fieldType].push(fieldName);
                         });
 
-                    $('input[type="radio"][').each(function() {
+                    $('input[type="radio"]').each(function() {
                         var groupName = $(this).attr("name");
                         var mandatory = $(this).prop('required');
                          if ($('input[type="radio"][name="' + groupName + '"]:checked').length === 0 && mandatory === true) {
