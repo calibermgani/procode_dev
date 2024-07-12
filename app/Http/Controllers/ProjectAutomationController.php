@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ProjectWorkMail;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use App\Models\SiouxlandMentalHealthCenterProject;
-use App\Models\SiouxlandMentalHealthCenterProjectDuplicates;
+use App\Models\SmhcCodingEm;
+use App\Models\SmhcCodingEmDuplicates;
 use App\Models\SrmgCoding;
 use App\Models\SrmgCodingDuplicates;
 use App\Models\CancerCareSpecialistsProject;
@@ -55,9 +55,9 @@ class ProjectAutomationController extends Controller
                 'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
-            $existing = SiouxlandMentalHealthCenterProject::where($attributes)->exists();
+            $existing = SmhcCodingEm::where($attributes)->exists();
             if (!$existing) {
-                SiouxlandMentalHealthCenterProject::insert([
+                SmhcCodingEm::insert([
                     'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                     'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
                     'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
@@ -88,9 +88,9 @@ class ProjectAutomationController extends Controller
                 ]);
                 return response()->json(['message' => 'Record Inserted Successfully']);
             } else {
-                $duplicateRecordExisting =  SiouxlandMentalHealthCenterProjectDuplicates::where($attributes)->exists();
+                $duplicateRecordExisting =  SmhcCodingEmDuplicates::where($attributes)->exists();
                 if (!$duplicateRecordExisting) {
-                    SiouxlandMentalHealthCenterProjectDuplicates::insert([
+                    SmhcCodingEmDuplicates::insert([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
                         'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
@@ -121,7 +121,7 @@ class ProjectAutomationController extends Controller
                     ]);
                     return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
                 } else {
-                    $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where($attributes)->first();
+                    $duplicateRecord =  SmhcCodingEmDuplicates::where($attributes)->first();
                     $duplicateRecord->update([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
@@ -658,9 +658,9 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
             
-                $duplicateRecordExisting =  SiouxlandMentalHealthCenterProjectDuplicates::where($attributes)->exists();
+                $duplicateRecordExisting =  SmhcCodingEmDuplicates::where($attributes)->exists();
                 if (!$duplicateRecordExisting) {
-                    SiouxlandMentalHealthCenterProjectDuplicates::insert([
+                    SmhcCodingEmDuplicates::insert([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
                         'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
@@ -691,7 +691,7 @@ class ProjectAutomationController extends Controller
                     ]);
                     return response()->json(['message' => 'Sioux Duplicate Record Inserted Successfully']);
                 } else {
-                    $duplicateRecord =  SiouxlandMentalHealthCenterProjectDuplicates::where($attributes)->first();
+                    $duplicateRecord =  SmhcCodingEmDuplicates::where($attributes)->first();
                     $duplicateRecord->update([
                         'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
                         'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
