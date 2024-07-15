@@ -36,4 +36,8 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('project_error_mail', 'App\Http\Controllers\ProjectController@projectErrorMail');
     Route::any('sioux_land_mental_health_duplicate', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealthDuplicates');
     Route::any('cancer_care_specialist_ip_duplicate', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistIPDuplicates');
+    Route::any('cancer_care_specialist_op', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistOP');
+    Route::any('cancer_care_specialist_op_duplicate', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistOPDuplicates');
+    Route::any('cancer_care_specialist_pic', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistPIC');
+    Route::any('cancer_care_specialist_pic_duplicate', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistPICDuplicates');
 });

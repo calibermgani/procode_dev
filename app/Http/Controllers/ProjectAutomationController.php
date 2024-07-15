@@ -23,7 +23,10 @@ use App\Models\CCEmailIds;
 use App\Mail\ProcodeInventoryExeFile;
 use App\Http\Helper\Admin\Helpers as Helpers;
 use App\Models\InventoryErrorLogs;
-
+use App\Models\CcsOp;
+use App\Models\CcsOpDuplicates;
+use App\Models\CcsPic;
+use App\Models\CcsPicDuplicates;
 class ProjectAutomationController extends Controller
 {
     public function siouxlandMentalHealth(Request $request)
@@ -797,4 +800,323 @@ class ProjectAutomationController extends Controller
             $e->getMessage();
         }
     }
+
+    public function cancerCareSpecialistOP(Request $request)
+    {
+        try {
+            $attributes = [
+                'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                // 'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                // 'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                // 'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                // 'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                // 'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                // 'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                // 'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                // 'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                // 'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                // 'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = CcsOp::where($attributes)->exists();
+            if (!$existing) {
+                CcsOp::insert([
+                    'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                    'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                    'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                    'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                    'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                    'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                    'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                    'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                    'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                    'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting = CcsOpDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    CcsOpDuplicates::insert([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  CcsOpDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function cancerCareSpecialistOPDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                // 'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                // 'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                // 'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                // 'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                // 'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                // 'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                // 'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                // 'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                // 'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                // 'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+          
+                $duplicateRecordExisting =  CcsOpDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    CcsOpDuplicates::insert([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  CcsOpDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function cancerCareSpecialistPIC(Request $request)
+    {
+        try {
+            $attributes = [
+                'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                // 'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                // 'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                // 'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                // 'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                // 'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                // 'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                // 'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                // 'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                // 'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                // 'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = CcsPic::where($attributes)->exists();
+            if (!$existing) {
+                CcsPic::insert([
+                    'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                    'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                    'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                    'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                    'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                    'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                    'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                    'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                    'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                    'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting =  CcsPicDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    CcsPicDuplicates::insert([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  CcsPicDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function cancerCareSpecialistPICDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                // 'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                // 'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                // 'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                // 'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                // 'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                // 'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                // 'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                // 'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                // 'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                // 'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+          
+                $duplicateRecordExisting = CcsPicDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    CcsPicDuplicates::insert([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  CcsPicDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'encounter' => isset($request->encounter) && $request->encounter != "NULL" ? $request->encounter : NULL,
+                        'charge_code' => isset($request->charge_code) && $request->charge_code != "NULL" ? $request->charge_code : NULL,
+                        'patient' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
+                        'rule' => isset($request->rule) && $request->rule != "NULL" ? $request->rule : NULL,
+                        'date_of_service_range' =>  isset($request->date_of_service_range) && $request->date_of_service_range != "NULL" ? $request->date_of_service_range : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'facility' => isset($request->facility) && $request->facility != "NULL" ? $request->facility : NULL,
+                        'primary_policy' => isset($request->primary_policy) && $request->primary_policy != "NULL" ? $request->primary_policy : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'supporting_providers' => isset($request->supporting_providers) && $request->supporting_providers != "NULL" ? $request->supporting_providers : NULL,
+                        'modifiers' => isset($request->modifiers) && $request->modifiers != "NULL" ? $request->modifiers : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
 }
