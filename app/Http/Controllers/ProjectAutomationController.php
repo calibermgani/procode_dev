@@ -31,28 +31,28 @@ class ProjectAutomationController extends Controller
         try {
             $attributes = [
                 'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
-                'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
+                // 'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
                 'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
-                'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
-                'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
-                'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
-                'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != "NULL"  ? $request->primary_insurance : NULL,
-                'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != "NULL" ? $request->secondary_insurance : NULL,
-                'rev_code' => isset($request->rev_code) && $request->rev_code != "NULL" ? $request->rev_code : NULL, //Rev. Code
-                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
-                'm1' => isset($request->m1) && $request->m1 != "NULL"  ? $request->m1 : NULL,
-                'm2' => isset($request->m2) && $request->m2 != "NULL" ? $request->m2 : NULL,
-                'm3' => isset($request->m3) && $request->m3 != "NULL"  ? $request->m3 : NULL,
-                'm4' => isset($request->m4) && $request->m4 != "NULL"  ? $request->m4 : NULL,
-                'dx1' => isset($request->dx1) && $request->dx1 != "NULL"  ? $request->dx1 : NULL,
-                'dx2' => isset($request->dx2) && $request->dx2 != "NULL" ? $request->dx2 : NULL,
-                'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
-                'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
-                'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
-                'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
-                'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
-                'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
+                // 'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
+                // 'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
+                // 'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
+                // 'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != "NULL"  ? $request->primary_insurance : NULL,
+                // 'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != "NULL" ? $request->secondary_insurance : NULL,
+                // 'rev_code' => isset($request->rev_code) && $request->rev_code != "NULL" ? $request->rev_code : NULL, //Rev. Code
+                // 'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                // 'm1' => isset($request->m1) && $request->m1 != "NULL"  ? $request->m1 : NULL,
+                // 'm2' => isset($request->m2) && $request->m2 != "NULL" ? $request->m2 : NULL,
+                // 'm3' => isset($request->m3) && $request->m3 != "NULL"  ? $request->m3 : NULL,
+                // 'm4' => isset($request->m4) && $request->m4 != "NULL"  ? $request->m4 : NULL,
+                // 'dx1' => isset($request->dx1) && $request->dx1 != "NULL"  ? $request->dx1 : NULL,
+                // 'dx2' => isset($request->dx2) && $request->dx2 != "NULL" ? $request->dx2 : NULL,
+                // 'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
+                // 'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
+                // 'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
+                // 'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                // 'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
+                // 'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
+                // 'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
             $existing = SmhcCodingEm::where($attributes)->exists();
@@ -252,23 +252,23 @@ class ProjectAutomationController extends Controller
     {
         try {
             $attributes = [
-                'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
+                // 'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                 'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                 'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
                 'patient_id' => isset($request->patient_id) && $request->patient_id != "NULL" ? $request->patient_id : NULL,
-                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
-                'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
-                'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
-                'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
-                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
-                'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
-                'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
-                'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
-                'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
-                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
-                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
-                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
-                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
+                // 'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                // 'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
+                // 'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
+                // 'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
+                // 'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
+                // 'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
+                // 'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
+                // 'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
+                // 'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
+                // 'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                // 'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                // 'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
+                // 'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
@@ -548,23 +548,23 @@ class ProjectAutomationController extends Controller
     {
         try {
             $attributes = [
-                'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
+                // 'slip' => isset($request->slip) && $request->slip != "NULL" ? $request->slip : NULL,
                 'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                 'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
                 'patient_id' => isset($request->patient_id) && $request->patient_id != "NULL" ? $request->patient_id : NULL,
-                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
-                'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
-                'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
-                'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
-                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
-                'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
-                'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
-                'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
-                'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
-                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
-                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
-                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
-                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
+                // 'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                // 'department' => isset($request->department) && $request->department != "NULL" ? $request->department : NULL,
+                // 'appointment_type' => isset($request->appointment_type) && $request->appointment_type != "NULL" ? $request->appointment_type : NULL,
+                // 'day_of_week' => isset($request->day_of_week) && $request->day_of_week != "NULL" ? $request->day_of_week : NULL,
+                // 'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,
+                // 'appointment_status' => isset($request->appointment_status) && $request->appointment_status != "NULL" ? $request->appointment_status : NULL,
+                // 'encounter_status' => isset($request->encounter_status) && $request->encounter_status != "NULL" ? $request->encounter_status : NULL,
+                // 'provider_review' => isset($request->provider_review) && $request->provider_review != "NULL" ? $request->provider_review : NULL,
+                // 'charge_entry_status' => isset($request->charge_entry_status) && $request->charge_entry_status != "NULL" ? $request->charge_entry_status : NULL,
+                // 'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                // 'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                // 'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,
+                // 'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
@@ -633,28 +633,28 @@ class ProjectAutomationController extends Controller
         try {
             $attributes = [
                 'claim_no' => isset($request->claim_no) && $request->claim_no != "NULL" ? $request->claim_no : NULL, //Claim #
-                'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
+                // 'mrn' => isset($request->mrn) && $request->mrn != "NULL" ? $request->mrn : NULL,
                 'patient_name' => isset($request->patient) && $request->patient != "NULL"  ? $request->patient : NULL,
-                'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
-                'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
-                'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
-                'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != "NULL"  ? $request->primary_insurance : NULL,
-                'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != "NULL" ? $request->secondary_insurance : NULL,
-                'rev_code' => isset($request->rev_code) && $request->rev_code != "NULL" ? $request->rev_code : NULL, //Rev. Code
-                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
-                'm1' => isset($request->m1) && $request->m1 != "NULL"  ? $request->m1 : NULL,
-                'm2' => isset($request->m2) && $request->m2 != "NULL" ? $request->m2 : NULL,
-                'm3' => isset($request->m3) && $request->m3 != "NULL"  ? $request->m3 : NULL,
-                'm4' => isset($request->m4) && $request->m4 != "NULL"  ? $request->m4 : NULL,
-                'dx1' => isset($request->dx1) && $request->dx1 != "NULL"  ? $request->dx1 : NULL,
-                'dx2' => isset($request->dx2) && $request->dx2 != "NULL" ? $request->dx2 : NULL,
-                'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
-                'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
-                'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
-                'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
-                'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
-                'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
-                'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
+                // 'dob' => isset($request->dob) && $request->dob != "NULL" ? $request->dob : NULL,
+                // 'visit_date' => isset($request->visit_date) && $request->visit_date != "NULL" ? $request->visit_date : NULL,
+                // 'dx_codes' => isset($request->dx_codes) && $request->dx_codes != "NULL" ? $request->dx_codes : NULL,
+                // 'primary_insurance' => isset($request->primary_insurance) && $request->primary_insurance != "NULL"  ? $request->primary_insurance : NULL,
+                // 'secondary_insurance' => isset($request->secondary_insurance) && $request->secondary_insurance != "NULL" ? $request->secondary_insurance : NULL,
+                // 'rev_code' => isset($request->rev_code) && $request->rev_code != "NULL" ? $request->rev_code : NULL, //Rev. Code
+                // 'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                // 'm1' => isset($request->m1) && $request->m1 != "NULL"  ? $request->m1 : NULL,
+                // 'm2' => isset($request->m2) && $request->m2 != "NULL" ? $request->m2 : NULL,
+                // 'm3' => isset($request->m3) && $request->m3 != "NULL"  ? $request->m3 : NULL,
+                // 'm4' => isset($request->m4) && $request->m4 != "NULL"  ? $request->m4 : NULL,
+                // 'dx1' => isset($request->dx1) && $request->dx1 != "NULL"  ? $request->dx1 : NULL,
+                // 'dx2' => isset($request->dx2) && $request->dx2 != "NULL" ? $request->dx2 : NULL,
+                // 'dx3' => isset($request->dx3) && $request->dx3 != "NULL" ? $request->dx3 : NULL,
+                // 'dx4' => isset($request->dx4) && $request->dx4 != "NULL"  ? $request->dx4 : NULL,
+                // 'units' => isset($request->units) && $request->units != "NULL" ? $request->units : NULL,
+                // 'billed_$' => isset($request->billed) && $request->billed != "NULL" ? $request->billed : NULL, //Billed($)
+                // 'provider' => isset($request->provider) && $request->provider != "NULL"  ? $request->provider : NULL,
+                // 'service_provider' => isset($request->service_provider) && $request->service_provider != "NULL"  ? $request->service_provider : NULL,
+                // 'place_of_service' => isset($request->place_of_service) && $request->place_of_service != "NULL"  ? $request->place_of_service : NULL,
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
             
