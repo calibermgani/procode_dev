@@ -534,10 +534,16 @@ class ProjectAutomationController extends Controller
                     $project_information["error_date"] = now()->format('Y-m-d H:i:s');
                     InventoryErrorLogs::create($project_information);
                     if (isset($toMailId) && !empty($toMailId)) {
-                        Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeInventoryExeFile($mailHeader, $procodeProjectsCurrent));
+                        try {
+                            Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeInventoryExeFile($mailHeader, $procodeProjectsCurrent));
+                            Log::info($prjoectName."mail sent ");
+                        } catch (\Exception $e) {
+                            Log::error('Mail sending failed: ' . $e->getMessage());
+                        }
+                        
                     }
                     return response()->json(['message' => 'Inventory File Inserted Successfully']);
-                 }
+                  }
                 return response()->json(['message' => 'Inventory mail was not sent because the count is zero']);
             } else {
                 return response()->json(['message' => 'Inventory File already exists']);
