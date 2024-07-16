@@ -27,6 +27,8 @@ use App\Models\CcsOp;
 use App\Models\CcsOpDuplicates;
 use App\Models\CcsPic;
 use App\Models\CcsPicDuplicates;
+use App\Models\TocClaimEdits;
+use App\Models\TocClaimEditsDuplicates;
 class ProjectAutomationController extends Controller
 {
     public function siouxlandMentalHealth(Request $request)
@@ -1124,5 +1126,217 @@ class ProjectAutomationController extends Controller
             $e->getMessage();
         }
     }
+    public function TallahasseeOrthopedicClinicClaimEdits(Request $request)
+    {
+        try {
+            $attributes = [
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL"  ? $request->patient_name : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
 
+            $existing = TocClaimEdits::where($attributes)->exists();
+            if (!$existing) {
+                TocClaimEdits::insert([
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                    'username' => isset($request->username) && $request->username != "NULL" ? $request->username : NULL,
+                    'worklist_status' => isset($request->worklist_status) && $request->worklist_status != "NULL"  ? $request->worklist_status : NULL,
+                    'pend_effective' => isset($request->pend_effective) && $request->pend_effective != "NULL" ? $request->pend_effective : NULL,
+                    'pend_expires' =>  isset($request->pend_expires) && $request->pend_expires != "NULL" ? $request->pend_expires : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'custom_insurance_group' => isset($request->custom_insurance_group) && $request->custom_insurance_group != "NULL" ? $request->custom_insurance_group : NULL,
+                    'insurance_package' => isset($request->insurance_package) && $request->insurance_package != "NULL" ? $request->insurance_package : NULL,
+                    'outstanding_amount' => isset($request->outstanding_amount) && $request->outstanding_amount != "NULL" ? $request->outstanding_amount : NULL,
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'diagnosis_codes' => isset($request->diagnosis_codes) && $request->diagnosis_codes != "NULL" ? $request->supporting_providers : NULL,
+                    'procedure_code' => isset($request->procedure_code) && $request->procedure_code != "NULL" ? $request->procedure_code : NULL,
+                    'hold_reason' => isset($request->hold_reason) && $request->hold_reason != "NULL" ? $request->hold_reason : NULL,
+                    'hold_date' => isset($request->hold_date) && $request->hold_date != "NULL" ? $request->hold_date : NULL,
+                    'days_in_status' => isset($request->days_in_status) && $request->days_in_status != "NULL" ? $request->days_in_status : NULL,
+                    'primary_department' => isset($request->primary_department) && $request->primary_department != "NULL" ? $request->primary_department : NULL,
+                    'patient_department' => isset($request->patient_department) && $request->patient_department != "NULL" ? $request->patient_department : NULL,
+                    'service_department' => isset($request->service_department) && $request->service_department != "NULL" ? $request->service_department : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                    'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'worklist' => isset($request->worklist) && $request->worklist != "NULL" ? $request->worklist : NULL,
+                    'last_claim_note' => isset($request->last_claim_note) && $request->last_claim_note != "NULL" ? $request->last_claim_note : NULL,
+                    'claim_status' => isset($request->claim_status) && $request->claim_status != "NULL" ? $request->claim_status : NULL,
+                    'specialty' => isset($request->specialty) && $request->specialty != "NULL" ? $request->specialty : NULL,
+                    'escalated_on' => isset($request->escalated_on) && $request->escalated_on != "NULL" ? $request->escalated_on : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting =  TocClaimEditsDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    TocClaimEditsDuplicates::insert([
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                        'username' => isset($request->username) && $request->username != "NULL" ? $request->username : NULL,
+                        'worklist_status' => isset($request->worklist_status) && $request->worklist_status != "NULL"  ? $request->worklist_status : NULL,
+                        'pend_effective' => isset($request->pend_effective) && $request->pend_effective != "NULL" ? $request->pend_effective : NULL,
+                        'pend_expires' =>  isset($request->pend_expires) && $request->pend_expires != "NULL" ? $request->pend_expires : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'custom_insurance_group' => isset($request->custom_insurance_group) && $request->custom_insurance_group != "NULL" ? $request->custom_insurance_group : NULL,
+                        'insurance_package' => isset($request->insurance_package) && $request->insurance_package != "NULL" ? $request->insurance_package : NULL,
+                        'outstanding_amount' => isset($request->outstanding_amount) && $request->outstanding_amount != "NULL" ? $request->outstanding_amount : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'diagnosis_codes' => isset($request->diagnosis_codes) && $request->diagnosis_codes != "NULL" ? $request->supporting_providers : NULL,
+                        'procedure_code' => isset($request->procedure_code) && $request->procedure_code != "NULL" ? $request->procedure_code : NULL,
+                        'hold_reason' => isset($request->hold_reason) && $request->hold_reason != "NULL" ? $request->hold_reason : NULL,
+                        'hold_date' => isset($request->hold_date) && $request->hold_date != "NULL" ? $request->hold_date : NULL,
+                        'days_in_status' => isset($request->days_in_status) && $request->days_in_status != "NULL" ? $request->days_in_status : NULL,
+                        'primary_department' => isset($request->primary_department) && $request->primary_department != "NULL" ? $request->primary_department : NULL,
+                        'patient_department' => isset($request->patient_department) && $request->patient_department != "NULL" ? $request->patient_department : NULL,
+                        'service_department' => isset($request->service_department) && $request->service_department != "NULL" ? $request->service_department : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'worklist' => isset($request->worklist) && $request->worklist != "NULL" ? $request->worklist : NULL,
+                        'last_claim_note' => isset($request->last_claim_note) && $request->last_claim_note != "NULL" ? $request->last_claim_note : NULL,
+                        'claim_status' => isset($request->claim_status) && $request->claim_status != "NULL" ? $request->claim_status : NULL,
+                        'specialty' => isset($request->specialty) && $request->specialty != "NULL" ? $request->specialty : NULL,
+                        'escalated_on' => isset($request->escalated_on) && $request->escalated_on != "NULL" ? $request->escalated_on : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  TocClaimEditsDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                       'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                        'username' => isset($request->username) && $request->username != "NULL" ? $request->username : NULL,
+                        'worklist_status' => isset($request->worklist_status) && $request->worklist_status != "NULL"  ? $request->worklist_status : NULL,
+                        'pend_effective' => isset($request->pend_effective) && $request->pend_effective != "NULL" ? $request->pend_effective : NULL,
+                        'pend_expires' =>  isset($request->pend_expires) && $request->pend_expires != "NULL" ? $request->pend_expires : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'custom_insurance_group' => isset($request->custom_insurance_group) && $request->custom_insurance_group != "NULL" ? $request->custom_insurance_group : NULL,
+                        'insurance_package' => isset($request->insurance_package) && $request->insurance_package != "NULL" ? $request->insurance_package : NULL,
+                        'outstanding_amount' => isset($request->outstanding_amount) && $request->outstanding_amount != "NULL" ? $request->outstanding_amount : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'diagnosis_codes' => isset($request->diagnosis_codes) && $request->diagnosis_codes != "NULL" ? $request->supporting_providers : NULL,
+                        'procedure_code' => isset($request->procedure_code) && $request->procedure_code != "NULL" ? $request->procedure_code : NULL,
+                        'hold_reason' => isset($request->hold_reason) && $request->hold_reason != "NULL" ? $request->hold_reason : NULL,
+                        'hold_date' => isset($request->hold_date) && $request->hold_date != "NULL" ? $request->hold_date : NULL,
+                        'days_in_status' => isset($request->days_in_status) && $request->days_in_status != "NULL" ? $request->days_in_status : NULL,
+                        'primary_department' => isset($request->primary_department) && $request->primary_department != "NULL" ? $request->primary_department : NULL,
+                        'patient_department' => isset($request->patient_department) && $request->patient_department != "NULL" ? $request->patient_department : NULL,
+                        'service_department' => isset($request->service_department) && $request->service_department != "NULL" ? $request->service_department : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'worklist' => isset($request->worklist) && $request->worklist != "NULL" ? $request->worklist : NULL,
+                        'last_claim_note' => isset($request->last_claim_note) && $request->last_claim_note != "NULL" ? $request->last_claim_note : NULL,
+                        'claim_status' => isset($request->claim_status) && $request->claim_status != "NULL" ? $request->claim_status : NULL,
+                        'specialty' => isset($request->specialty) && $request->specialty != "NULL" ? $request->specialty : NULL,
+                        'escalated_on' => isset($request->escalated_on) && $request->escalated_on != "NULL" ? $request->escalated_on : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function TallahasseeOrthopedicClinicClaimEditsDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL"  ? $request->patient_name : NULL,
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+          
+                $duplicateRecordExisting = TocClaimEditsDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    TocClaimEditsDuplicates::insert([
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                        'username' => isset($request->username) && $request->username != "NULL" ? $request->username : NULL,
+                        'worklist_status' => isset($request->worklist_status) && $request->worklist_status != "NULL"  ? $request->worklist_status : NULL,
+                        'pend_effective' => isset($request->pend_effective) && $request->pend_effective != "NULL" ? $request->pend_effective : NULL,
+                        'pend_expires' =>  isset($request->pend_expires) && $request->pend_expires != "NULL" ? $request->pend_expires : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'custom_insurance_group' => isset($request->custom_insurance_group) && $request->custom_insurance_group != "NULL" ? $request->custom_insurance_group : NULL,
+                        'insurance_package' => isset($request->insurance_package) && $request->insurance_package != "NULL" ? $request->insurance_package : NULL,
+                        'outstanding_amount' => isset($request->outstanding_amount) && $request->outstanding_amount != "NULL" ? $request->outstanding_amount : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'diagnosis_codes' => isset($request->diagnosis_codes) && $request->diagnosis_codes != "NULL" ? $request->supporting_providers : NULL,
+                        'procedure_code' => isset($request->procedure_code) && $request->procedure_code != "NULL" ? $request->procedure_code : NULL,
+                        'hold_reason' => isset($request->hold_reason) && $request->hold_reason != "NULL" ? $request->hold_reason : NULL,
+                        'hold_date' => isset($request->hold_date) && $request->hold_date != "NULL" ? $request->hold_date : NULL,
+                        'days_in_status' => isset($request->days_in_status) && $request->days_in_status != "NULL" ? $request->days_in_status : NULL,
+                        'primary_department' => isset($request->primary_department) && $request->primary_department != "NULL" ? $request->primary_department : NULL,
+                        'patient_department' => isset($request->patient_department) && $request->patient_department != "NULL" ? $request->patient_department : NULL,
+                        'service_department' => isset($request->service_department) && $request->service_department != "NULL" ? $request->service_department : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'worklist' => isset($request->worklist) && $request->worklist != "NULL" ? $request->worklist : NULL,
+                        'last_claim_note' => isset($request->last_claim_note) && $request->last_claim_note != "NULL" ? $request->last_claim_note : NULL,
+                        'claim_status' => isset($request->claim_status) && $request->claim_status != "NULL" ? $request->claim_status : NULL,
+                        'specialty' => isset($request->specialty) && $request->specialty != "NULL" ? $request->specialty : NULL,
+                        'escalated_on' => isset($request->escalated_on) && $request->escalated_on != "NULL" ? $request->escalated_on : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord =  TocClaimEditsDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
+                        'username' => isset($request->username) && $request->username != "NULL" ? $request->username : NULL,
+                        'worklist_status' => isset($request->worklist_status) && $request->worklist_status != "NULL"  ? $request->worklist_status : NULL,
+                        'pend_effective' => isset($request->pend_effective) && $request->pend_effective != "NULL" ? $request->pend_effective : NULL,
+                        'pend_expires' =>  isset($request->pend_expires) && $request->pend_expires != "NULL" ? $request->pend_expires : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'custom_insurance_group' => isset($request->custom_insurance_group) && $request->custom_insurance_group != "NULL" ? $request->custom_insurance_group : NULL,
+                        'insurance_package' => isset($request->insurance_package) && $request->insurance_package != "NULL" ? $request->insurance_package : NULL,
+                        'outstanding_amount' => isset($request->outstanding_amount) && $request->outstanding_amount != "NULL" ? $request->outstanding_amount : NULL,
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'diagnosis_codes' => isset($request->diagnosis_codes) && $request->diagnosis_codes != "NULL" ? $request->supporting_providers : NULL,
+                        'procedure_code' => isset($request->procedure_code) && $request->procedure_code != "NULL" ? $request->procedure_code : NULL,
+                        'hold_reason' => isset($request->hold_reason) && $request->hold_reason != "NULL" ? $request->hold_reason : NULL,
+                        'hold_date' => isset($request->hold_date) && $request->hold_date != "NULL" ? $request->hold_date : NULL,
+                        'days_in_status' => isset($request->days_in_status) && $request->days_in_status != "NULL" ? $request->days_in_status : NULL,
+                        'primary_department' => isset($request->primary_department) && $request->primary_department != "NULL" ? $request->primary_department : NULL,
+                        'patient_department' => isset($request->patient_department) && $request->patient_department != "NULL" ? $request->patient_department : NULL,
+                        'service_department' => isset($request->service_department) && $request->service_department != "NULL" ? $request->service_department : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'rendering_provider' => isset($request->rendering_provider) && $request->rendering_provider != "NULL" ? $request->rendering_provider : NULL,
+                        'referring_provider' => isset($request->referring_provider) && $request->referring_provider != "NULL" ? $request->referring_provider : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'worklist' => isset($request->worklist) && $request->worklist != "NULL" ? $request->worklist : NULL,
+                        'last_claim_note' => isset($request->last_claim_note) && $request->last_claim_note != "NULL" ? $request->last_claim_note : NULL,
+                        'claim_status' => isset($request->claim_status) && $request->claim_status != "NULL" ? $request->claim_status : NULL,
+                        'specialty' => isset($request->specialty) && $request->specialty != "NULL" ? $request->specialty : NULL,
+                        'escalated_on' => isset($request->escalated_on) && $request->escalated_on != "NULL" ? $request->escalated_on : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL"? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
 }
