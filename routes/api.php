@@ -42,4 +42,6 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('cancer_care_specialist_pic_duplicate', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistPICDuplicates');
     Route::any('tallahassee_orthopedic_clinic_claim_edits', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicClaimEdits');
     Route::any('tallahassee_orthopedic_clinic_claim_edits_duplicate', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicClaimEditsDuplicates');
+    Route::any('tallahassee_orthopedic_clinic_denial', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicDenail');
+    Route::any('tallahassee_orthopedic_clinic_denial_duplicate', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicDenialDuplicates');
 });
