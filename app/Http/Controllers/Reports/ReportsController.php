@@ -268,7 +268,7 @@ class ReportsController extends Controller
                 $body_info .= '</tr></thead><tbody>';
 
                 foreach ($error_data as $data) {
-                    $decodedClientName = Helpers::projectName($data->project_id)->project_name;
+                    $decodedClientName = Helpers::projectName($data->project_id)->aims_project_name;
                     $decodedsubProjectName = $data->sub_project_id == NULL ? '--' : Helpers::subProjectName($data->project_id, $data->sub_project_id)->sub_project_name;
                     $errorStatusCode = $data->error_status_code != NULL ? $data->error_status_code : '--';
                     $errorDate =  $data->error_date != NULL ? date('m/d/Y g:i A', strtotime($data->error_date)) : '--';
