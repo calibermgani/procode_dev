@@ -30,7 +30,6 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('sioux_land_mental_health', 'App\Http\Controllers\ProjectAutomationController@siouxlandMentalHealth');
     Route::any('saco_river_medical_group', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroup');
     Route::any('cancer_care_specialist_ip', 'App\Http\Controllers\ProjectAutomationController@cancerCareSpecialistIP');
-    Route::any('chestnut_health_systems', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystems');
     Route::any('inventory_exe_file', 'App\Http\Controllers\ProjectAutomationController@inventoryExeFile');
     Route::any('saco_river_medical_group_duplicate', 'App\Http\Controllers\ProjectAutomationController@sacoRiverMedicalGroupDuplicates');
     Route::any('project_error_mail', 'App\Http\Controllers\ProjectController@projectErrorMail');
@@ -44,4 +43,6 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('tallahassee_orthopedic_clinic_claim_edits_duplicate', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicClaimEditsDuplicates');
     Route::any('tallahassee_orthopedic_clinic_denial', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicDenail');
     Route::any('tallahassee_orthopedic_clinic_denial_duplicate', 'App\Http\Controllers\ProjectAutomationController@TallahasseeOrthopedicClinicDenialDuplicates');
+    Route::any('chestnut_health_systems_inc', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystemsIncEmOp');
+    Route::any('chestnut_health_systems_inc_duplicates', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystemsIncEmOpDuplicates');
 });
