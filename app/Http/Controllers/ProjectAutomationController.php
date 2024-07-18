@@ -1351,7 +1351,7 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
-            $existing = TocDenial::where($attributes)->exists();dd($existing,$request->all());
+            $existing = TocDenial::where($attributes)->exists();
             if (!$existing) {
                 TocDenial::insert([
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
@@ -1386,6 +1386,7 @@ class ProjectAutomationController extends Controller
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
                     'chart_status' => "CE_Assigned"
                 ]);
+                dd($existing,$request->all());
                 return response()->json(['message' => 'Record Inserted Successfully']);
             } else {
                 $duplicateRecordExisting =  TocDenialDuplicates::where($attributes)->exists();
