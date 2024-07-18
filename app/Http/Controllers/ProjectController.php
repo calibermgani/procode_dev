@@ -18,7 +18,7 @@ use App\Mail\ProcodeProjectFile;
 use App\Mail\ProcodeProjectInventory;
 use App\Mail\ProcodeProjectError;
 use App\Models\InventoryErrorLogs;
-
+use App\Http\Helper\Admin\Helpers as Helpers;
 class ProjectController extends Controller
 {
     public function clientTableUpdate()
@@ -101,8 +101,12 @@ class ProjectController extends Controller
         try {
             Log::info('Executing ProjectWorkMail logic.');
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
-            $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
-            $ccMailId = ["mgani@caliberfocus.com"];
+            // $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
+            // $ccMailId = ["mgani@caliberfocus.com"];
+            $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail to mail id')->first();
+            $toMailId = explode(",", $toMail->cc_emails);
+            $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail cc mail id')->first();
+            $ccMailId = explode(",", $ccMail->cc_emails);
             // $toMailId = ["vijayalaxmi@caliberfocus.com"];
             // $ccMailId = ["mgani@caliberfocus.com"];
             $yesterday = Carbon::yesterday();
@@ -119,9 +123,11 @@ class ProjectController extends Controller
             // $yesterDayEndDate = "2024-06-07 23:59:59";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
+                $prjName = Helpers::projectName($project["id"])->project_name;
                 if (count($project["subprject_name"]) > 0) {
                     foreach ($project["subprject_name"] as $key => $subProject) {
-                        $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
                         $modelName = Str::studly($table_name);
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
@@ -129,7 +135,7 @@ class ProjectController extends Controller
                     }
                 } else {
                     $subProjectText = "project";
-                    $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
+                    $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
                     $modelName = Str::studly($table_name);
                     $modelClass = "App\\Models\\" . $modelName;
                     $models[] = $modelClass;
