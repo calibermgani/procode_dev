@@ -198,9 +198,11 @@ class ProjectController extends Controller
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
+                $prjName = Helpers::projectName($project["id"])->project_name;
                 if (count($project["subprject_name"]) > 0) {
                     foreach ($project["subprject_name"] as $key => $subProject) {
-                        $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                        $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
                         $modelName = Str::studly($table_name);
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
@@ -209,7 +211,7 @@ class ProjectController extends Controller
                     }
                 } else {
                     $subProjectText = "project";
-                    $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
+                    $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
                     $modelName = Str::studly($table_name);
                     $modelClass = "App\\Models\\" . $modelName;
                     $models[] = $modelClass;
