@@ -1351,7 +1351,7 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
-            $existing = TocDenial::where($attributes)->exists();
+            $existing = TocDenial::where($attributes)->exists();dd($existing,$request->all());
             if (!$existing) {
                 TocDenial::insert([
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,
