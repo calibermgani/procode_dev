@@ -306,7 +306,9 @@ class ProjectController extends Controller
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             $client = new Client();
             $currentDate = Carbon::now()->format('Y-m-d');
-            $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
+            // $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
+            $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'procode project inventory to mail')->first();
+            $toMailId = explode(",", $toMail->cc_emails);
             $ccMailId = ["mgani@caliberfocus.com"];
             $mailDate =  Carbon::now()->format('m/d/Y');
             $mailHeader = "ProCode - Inventory Upload Successful - " . $mailDate;

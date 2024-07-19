@@ -23,6 +23,7 @@ use App\Models\QualitySampling;
 use App\Models\QASubStatus;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerRebuttalMail;
+use App\Models\CCEmailIds;
 
 ini_set('memory_limit', '1024M');
 class QAProductionController extends Controller
@@ -736,7 +737,9 @@ class QAProductionController extends Controller
                     $toMailId = $apiData['people_email'];
                     $reportingPerson = $apiData['reprting_person'];
                     // $toMailId = ["prabaharan@annexmed.net","rajeswari@annexmed.net","ram@annexmed.net"];
-                    $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
+                    // $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
+                    $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'manager rebuttal')->first();
+                    $ccMailId = explode(",", $ccMail->cc_emails);
                     //$mailHeader = $decodedClientName." Rebuttal Mail";
                     $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
@@ -831,7 +834,9 @@ class QAProductionController extends Controller
                     }
                     $toMailId = $apiData['people_email'];
                     $reportingPerson = $apiData['reprting_person'];
-                    $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
+                    // $ccMailId = ["vijayalaxmi@caliberfocus.com","mgani@caliberfocus.com","elan@caliberfocus.com"];
+                    $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'manager rebuttal')->first();
+                    $ccMailId = explode(",", $ccMail->cc_emails);
                     $mailHeader = "Assistance Needed: ".$decodedClientName." Audit Rebuttal";
                     $mailBody = $record;
                     if(isset($toMailId) && !empty($toMailId)) {
