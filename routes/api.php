@@ -47,4 +47,6 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('chestnut_health_systems_inc_em_op_duplicates', 'App\Http\Controllers\ProjectAutomationController@chestnutHealthSystemsIncEmOpDuplicates');
     Route::any('restoration_healthcare_em_op', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareEmOp');
     Route::any('restoration_healthcare_em_op_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareEmOpDuplicates');
+    Route::any('restoration_healthcare_op_denial', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpDenial');
+    Route::any('restoration_healthcare_op_denial_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpDenialDuplicates');
 });
