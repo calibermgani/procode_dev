@@ -32,6 +32,8 @@ use App\Models\TocDenial;
 use App\Models\TocDenialDuplicates;
 use App\Models\RhEmOp;
 use App\Models\RhEmOpDuplicates;
+use App\Models\RhInfusion;
+use App\Models\RhInfusionDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -1766,7 +1768,7 @@ class ProjectAutomationController extends Controller
         }
     }
 
-    public function restorationHealthcareOpDenial(Request $request)
+    public function restorationHealthcareIvInfusion(Request $request)
     {
         try {
             $attributes = [
@@ -1775,9 +1777,9 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
-            $existing = RhOpDenial::where($attributes)->exists();
+            $existing = RhInfusion::where($attributes)->exists();
             if (!$existing) {
-                RhOpDenial::insert([
+                RhInfusion::insert([
                     'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
                     'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
@@ -1812,9 +1814,9 @@ class ProjectAutomationController extends Controller
                 ]);
                 return response()->json(['message' => 'Record Inserted Successfully']);
             } else {
-                $duplicateRecordExisting  =  RhOpDenialDuplicates::where($attributes)->exists();
+                $duplicateRecordExisting  =  RhInfusionDuplicates::where($attributes)->exists();
                 if (!$duplicateRecordExisting) {
-                    RhOpDenialDuplicates::insert([
+                    RhInfusionDuplicates::insert([
                         'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                         'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
                         'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
@@ -1849,7 +1851,7 @@ class ProjectAutomationController extends Controller
                     ]);
                     return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
                 } else {
-                    $duplicateRecord  =  RhOpDenialDuplicates::where($attributes)->first();
+                    $duplicateRecord  =  RhInfusionDuplicates::where($attributes)->first();
                     $duplicateRecord->update([
                         'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                         'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
@@ -1890,7 +1892,7 @@ class ProjectAutomationController extends Controller
             $e->getMessage();
         }
     }
-    public function restorationHealthcareOpDenialDuplicates(Request $request)
+    public function restorationHealthcareIvInfusionDuplicates(Request $request)
     {
         try {
             $attributes = [
@@ -1899,9 +1901,9 @@ class ProjectAutomationController extends Controller
                 'invoke_date' => carbon::now()->format('Y-m-d')
             ];
 
-            $duplicateRecordExisting  =  RhOpDenialDuplicates::where($attributes)->exists();
+            $duplicateRecordExisting  =  RhInfusionDuplicates::where($attributes)->exists();
             if (!$duplicateRecordExisting) {
-                RhOpDenialDuplicates::insert([
+                RhInfusionDuplicates::insert([
                     'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
                     'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
@@ -1936,7 +1938,7 @@ class ProjectAutomationController extends Controller
                 ]);
                 return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
             } else {
-                $duplicateRecord  =  RhOpDenialDuplicates::where($attributes)->first();
+                $duplicateRecord  =  RhInfusionDuplicates::where($attributes)->first();
                 $duplicateRecord->update([
                     'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
