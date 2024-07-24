@@ -51,4 +51,8 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('restoration_healthcare_iv_infusion_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvInfusionDuplicates');
     Route::any('ashe_memorial_hospital_ancillary', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalAncillary');
     Route::any('ashe_memorial_hospital_ancillary_duplicates', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalAncillaryDuplicates');
+    Route::any('ashe_memorial_hospital_ed', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalEd');
+    Route::any('ashe_memorial_hospital_ed_duplicates', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalEdDuplicates');
+    Route::any('ashe_memorial_hospital_sds', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalSds');
+    Route::any('ashe_memorial_hospital_sds_duplicates', 'App\Http\Controllers\ProjectAutomationController@asheMemorialHospitalSdsDuplicates');
 });

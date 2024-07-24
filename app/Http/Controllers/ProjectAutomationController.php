@@ -36,6 +36,10 @@ use App\Models\RhInfusion;
 use App\Models\RhInfusionDuplicates;
 use App\Models\AmhAncillary;
 use App\Models\AmhAncillaryDuplicates;
+use App\Models\AmhEd;
+use App\Models\AmhEdDuplicates;
+use App\Models\AmhSds;
+use App\Models\AmhSdsDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -2072,6 +2076,228 @@ class ProjectAutomationController extends Controller
                 return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
             } else {
                 $duplicateRecord  =  AmhAncillaryDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function asheMemorialHospitalEd(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = AmhEd::where($attributes)->exists();
+            if (!$existing) {
+                AmhEd::insert([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  AmhEdDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    AmhEdDuplicates::insert([
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                        'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                        'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                        'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                        'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                        'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  AmhEdDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                        'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                        'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                        'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                        'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                        'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function asheMemorialHospitalEdDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  AmhEdDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                AmhEdDuplicates::insert([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  AmhEdDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function asheMemorialHospitalSds(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = AmhSds::where($attributes)->exists();
+            if (!$existing) {
+                AmhSds::insert([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  AmhSdsDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    AmhSdsDuplicates::insert([
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                        'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                        'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                        'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                        'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                        'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  AmhSdsDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                        'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                        'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                        'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                        'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                        'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function asheMemorialHospitalSdsDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  AmhSdsDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                AmhSdsDuplicates::insert([
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                    'unit_number' => isset($request->unit_number) && $request->unit_number != "NULL" ? $request->unit_number : NULL,
+                    'admit_date' => isset($request->admit_date) && $request->admit_date != "NULL" ? $request->admit_date : NULL,
+                    'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
+                    'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
+                    'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  AmhSdsDuplicates::where($attributes)->first();
                 $duplicateRecord->update([
                     'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
                     'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
