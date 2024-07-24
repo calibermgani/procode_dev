@@ -40,6 +40,8 @@ use App\Models\AmhEd;
 use App\Models\AmhEdDuplicates;
 use App\Models\AmhSds;
 use App\Models\AmhSdsDuplicates;
+use App\Models\KpaPathology;
+use App\Models\KpaPathologyDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -2306,6 +2308,105 @@ class ProjectAutomationController extends Controller
                     'discharge' => isset($request->discharge) && $request->discharge != "NULL" ? $request->discharge : NULL,
                     'patient_type' => isset($request->patient_type) && $request->patient_type != "NULL" ? $request->patient_type : NULL,
                     'location' => isset($request->location) && $request->location != "NULL" ? $request->location : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function KwbPathologyAssociatesPathology(Request $request)
+    {
+        try {
+            $attributes = [
+                'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = KpaPathology::where($attributes)->exists();
+            if (!$existing) {
+                KpaPathology::insert([
+                    'client_name' => isset($request->client_name) && $request->client_name != "NULL" ? $request->client_name : NULL,
+                    'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
+                    'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  KpaPathologyDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    KpaPathologyDuplicates::insert([
+                        'client_name' => isset($request->client_name) && $request->client_name != "NULL" ? $request->client_name : NULL,
+                        'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
+                        'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  KpaPathologyDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'client_name' => isset($request->client_name) && $request->client_name != "NULL" ? $request->client_name : NULL,
+                        'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
+                        'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function KwbPathologyAssociatesPathologyDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  KpaPathologyDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                KpaPathologyDuplicates::insert([
+                    'client_name' => isset($request->client_name) && $request->client_name != "NULL" ? $request->client_name : NULL,
+                    'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
+                    'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  KpaPathologyDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'client_name' => isset($request->client_name) && $request->client_name != "NULL" ? $request->client_name : NULL,
+                    'accession_no' => isset($request->accession_no) && $request->accession_no != "NULL" ? $request->accession_no : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
+                    'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
