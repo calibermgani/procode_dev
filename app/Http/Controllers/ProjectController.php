@@ -390,8 +390,12 @@ class ProjectController extends Controller
             $current_time = Carbon::now();
             if ($current_time->hour >= 11) {
                 InventoryErrorLogs::create($project_information);
-                $toMailId = ["vijayalaxmi@caliberfocus.com"];
-                $ccMailId = ["mgani@caliberfocus.com"];
+                // $toMailId = ["vijayalaxmi@caliberfocus.com"];
+                // $ccMailId = ["mgani@caliberfocus.com"];
+                $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project error mail to mail id')->first();
+                $toMailId = explode(",", $toMail->cc_emails);
+                $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project error mail cc mail id')->first();
+                $ccMailId = explode(",", $ccMail->cc_emails);
                 if (isset($toMailId) && !empty($toMailId)) {
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectError($mailHeader, $fileStatus, $error_description));
                 }
