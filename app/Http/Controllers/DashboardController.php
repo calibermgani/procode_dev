@@ -672,6 +672,9 @@ class DashboardController extends Controller
                     // $days =  Carbon::now()->daysInMonth;
                     $startDate = Carbon::now()->startOfMonth()->toDateString();
                     $endDate = Carbon::now()->endOfMonth()->toDateString();
+                } else {
+                    $startDate = Carbon::now()->startOfDay()->toDateString();
+                    $endDate = Carbon::now()->endOfDay()->toDateString();
                 }
                 // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateString();
                 // $endDate = Carbon::now()->endOfDay()->toDateString();
@@ -695,7 +698,7 @@ class DashboardController extends Controller
                             Session::get('loginDetails')['userDetail']['emp_id'] != null
                             ? Session::get('loginDetails')['userDetail']['emp_id']
                             : '';
-                        $projectName = $data['client_name'];
+                        $projectName = Helpers::projectName($data["id"])->project_name;//$data['client_name'];
                         if (isset($data['subprject_name']) && !empty($data['subprject_name'])) {
                             $subproject_name = $data['subprject_name'];
                             $model_name = collect($subproject_name)
@@ -808,6 +811,9 @@ class DashboardController extends Controller
                     // $days =  Carbon::now()->daysInMonth;
                     $startDate = Carbon::now()->startOfMonth()->toDateString();
                     $endDate = Carbon::now()->endOfMonth()->toDateString();
+                } else {
+                    $startDate = Carbon::now()->startOfDay()->toDateString();
+                    $endDate = Carbon::now()->endOfDay()->toDateString();
                 }
                 // $startDate = Carbon::now()->subDays($days)->startOfDay()->toDateString();
                 // $endDate = Carbon::now()->endOfDay()->toDateString();
@@ -825,7 +831,7 @@ class DashboardController extends Controller
                 <tbody>';
                 if (isset($projects) && count($projects) > 0) {
                     foreach ($projects as $data) {
-                        $projectName = $data['client_name'];
+                        $projectName = Helpers::projectName($data["id"])->project_name;//$data['client_name'];
                         if (isset($data['subprject_name']) && !empty($data['subprject_name'])) {
                             $subproject_name = $data['subprject_name'];
                             $model_name = collect($subproject_name)
