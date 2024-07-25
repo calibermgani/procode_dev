@@ -61,4 +61,8 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('prine_health_em_op_duplicates', 'App\Http\Controllers\ProjectAutomationController@prineHealthEmOpDuplicates');
     Route::any('prine_health_surgery', 'App\Http\Controllers\ProjectAutomationController@prineHealthSurgery');
     Route::any('prine_health_surgery_duplicates', 'App\Http\Controllers\ProjectAutomationController@prineHealthSurgeryDuplicates');
+    Route::any('restoration_healthcare_op_denial', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpDenial');
+    Route::any('restoration_healthcare_op_denial_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpDenialDuplicates');
+    Route::any('restoration_healthcare_op_rejection', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpRejection');
+    Route::any('restoration_healthcare_op_rejection_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpRejectionDuplicates');
 });
