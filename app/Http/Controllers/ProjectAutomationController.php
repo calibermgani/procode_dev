@@ -42,6 +42,10 @@ use App\Models\AmhSds;
 use App\Models\AmhSdsDuplicates;
 use App\Models\KpaPathology;
 use App\Models\KpaPathologyDuplicates;
+use App\Models\PhEmOp;
+use App\Models\PhEmOpDuplicates;
+use App\Models\PhSurgery;
+use App\Models\PhSurgeryDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -2407,6 +2411,228 @@ class ProjectAutomationController extends Controller
                     'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
                     'acct_no' => isset($request->acct_no) && $request->acct_no != "NULL" ? $request->acct_no : NULL,
                     'financial_class' => isset($request->financial_class) && $request->financial_class != "NULL" ? $request->financial_class : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function prineHealthEmOp(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,     
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = PhEmOp::where($attributes)->exists();
+            if (!$existing) {
+                PhEmOp::insert([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  PhEmOpDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    PhEmOpDuplicates::insert([
+                        'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                        'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  PhEmOpDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                        'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function prineHealthEmOpDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,     
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  PhEmOpDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                PhEmOpDuplicates::insert([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  PhEmOpDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function prineHealthSurgery(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,     
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = PhSurgery::where($attributes)->exists();
+            if (!$existing) {
+                PhSurgery::insert([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  PhSurgeryDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    PhSurgeryDuplicates::insert([
+                        'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                        'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  PhSurgeryDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                        'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                        'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                        'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                        'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function prineHealthSurgeryDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,     
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  PhSurgeryDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                PhSurgeryDuplicates::insert([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  PhSurgeryDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'queue_type' => isset($request->queue_type) && $request->queue_type != "NULL" ? $request->queue_type : NULL,
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'account_number' => isset($request->account_number) && $request->account_number != "NULL" ? $request->account_number : NULL,
+                    'patient_name' => isset($request->acct_no) && $request->patient_name != "NULL" ? $request->patient_name : NULL,
+                    'payer' => isset($request->payer) && $request->payer != "NULL" ? $request->payer : NULL,
+                    'physician_name' => isset($request->physician_name) && $request->physician_name != "NULL" ? $request->physician_name : NULL,
+                    'visit_type' => isset($request->visit_type) && $request->visit_type != "NULL" ? $request->visit_type : NULL,
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
