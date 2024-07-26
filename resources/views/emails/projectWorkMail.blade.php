@@ -45,6 +45,7 @@
                 <tr>
                     <th style="text-align: left;padding: 5px;">Project</th>
                     {{-- <th style="text-align: left;padding: 5px;">Chats</th> --}}
+                    <th style="text-align: left;padding: 5px;">Inventory Uploaded</th>
                     <th style="text-align: left;padding: 5px;">Coder</th>
                     <th style="text-align: left;padding: 5px;">QA</th>
                     {{-- <th style="text-align: left;padding: 5px;">Balance</th> --}}
@@ -56,7 +57,7 @@
                     @foreach ($mailBody as $data)
                         <tr>
                             <td style="text-align: left;padding: 5px;">{{ $data['project'] }}</td>
-                            {{-- <td style="text-align: left;padding: 5px;">{{ $data['Chats'] == 0 ? 'No Activity' : $data['Chats'] }}</td> --}}
+                            <td style="text-align: left;padding: 5px;">{{ $data['Chats'] == 0 ? 'No' : 'Yes' }}</td>
                             <td style="text-align: left;padding: 5px;">{{ $data['Coder'] == 0 ? 'No Activity' : $data['Coder']}}</td>
                             <td style="text-align: left;padding: 5px;">{{ $data['QA'] == 0 ? 'No Activity' : $data['QA']}}</td>
                             {{-- <td style="text-align: left;padding: 5px;">{{ $data['Balance'] }}</td> --}}
