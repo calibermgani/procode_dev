@@ -50,6 +50,10 @@ use App\Models\RhOpDenial;
 use App\Models\RhOpDenialDuplicates;
 use App\Models\RhOpRejection;
 use App\Models\RhOpRejectionDuplicates;
+use App\Models\RhIvDenial;
+use App\Models\RhIvDenialDuplicates;
+use App\Models\RhIvRejection;
+use App\Models\RhIvRejectionDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -3031,6 +3035,428 @@ class ProjectAutomationController extends Controller
                 return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
             } else {
                 $duplicateRecord  =  RhOpRejectionDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function restorationHealthcareIvDenial(Request $request)
+    {
+        try {
+            $attributes = [
+                'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = RhIvDenial::where($attributes)->exists();
+            if (!$existing) {
+                RhIvDenial::insert([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  RhIvDenialDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    RhIvDenialDuplicates::insert([
+                        'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                        'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                        'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                        'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                        'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                        'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                        'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                        'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                        'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                        'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                        'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                        'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                        'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                        'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                        'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                        'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                        'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                        'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                        'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  RhIvDenialDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                        'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                        'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                        'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                        'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                        'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                        'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                        'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                        'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                        'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                        'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                        'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                        'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                        'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                        'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                        'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                        'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                        'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                        'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,    
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function restorationHealthcareIvDenialDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  RhIvDenialDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                RhIvDenialDuplicates::insert([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  RhIvDenialDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function restorationHealthcareIvRejection(Request $request)
+    {
+        try {
+            $attributes = [
+                'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $existing = RhIvRejection::where($attributes)->exists();
+            if (!$existing) {
+                RhIvRejection::insert([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  RhIvRejectionDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    RhIvRejectionDuplicates::insert([
+                        'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                        'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                        'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                        'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                        'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                        'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                        'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                        'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                        'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                        'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                        'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                        'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                        'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                        'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                        'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                        'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                        'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                        'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                        'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  RhIvRejectionDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                        'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                        'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                        'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                        'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                        'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                        'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                        'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                        'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                        'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                        'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                        'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                        'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                        'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                        'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                        'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                        'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                        'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                        'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                        'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                        'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                        'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                        'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                        'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,    
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function restorationHealthcareIvRejectionDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  RhIvRejectionDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                RhIvRejectionDuplicates::insert([
+                    'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
+                    'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     
+                    'date_of_service' => isset($request->date_of_service) && $request->date_of_service != "NULL" ? $request->date_of_service : NULL,
+                    'office' => isset($request->office) && $request->office != "NULL" ? $request->office : NULL,
+                    'exam_room' => isset($request->exam_room) && $request->exam_room != "NULL" ? $request->exam_room : NULL,
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,
+                    'supervising_provider' => isset($request->supervising_provider) && $request->supervising_provider != "NULL" ? $request->supervising_provider : NULL,
+                    'appt_profile' => isset($request->appt_profile) && $request->appt_profile != "NULL" ? $request->appt_profile : NULL,
+                    'appt_status' => isset($request->appt_status) && $request->appt_status != "NULL" ? $request->appt_status : NULL,
+                    'reason' => isset($request->reason) && $request->reason != "NULL" ? $request->reason : NULL,
+                    'billed_time' => isset($request->billed_time) && $request->billed_time != "NULL" ? $request->billed_time : NULL,
+                    'billing_status' => isset($request->billing_status) && $request->billing_status != "NULL" ? $request->billing_status : NULL,
+                    'copay_method' => isset($request->copay_method) && $request->copay_method != "NULL" ? $request->copay_method : NULL,
+                    'total_billed' => isset($request->total_billed) && $request->total_billed != "NULL" ? $request->total_billed : NULL,
+                    'total_allowed' => isset($request->total_allowed) && $request->total_allowed != "NULL" ? $request->total_allowed : NULL,
+                    'total_adjustment' => isset($request->total_adjustment) && $request->total_adjustment != "NULL" ? $request->total_adjustment : NULL,
+                    'primary_insurer_name' => isset($request->primary_insurer_name) && $request->primary_insurer_name != "NULL" ? $request->primary_insurer_name : NULL,
+                    'secondary_insurer_name' => isset($request->secondary_insurer_name) && $request->secondary_insurer_name != "NULL" ? $request->secondary_insurer_name : NULL,
+                    'total_primary_insurer_paid' => isset($request->total_primary_insurer_paid) && $request->total_primary_insurer_paid != "NULL" ? $request->total_primary_insurer_paid : NULL,
+                    'total_secondary_insurer_paid' => isset($request->total_secondary_insurer_paid) && $request->total_secondary_insurer_paid != "NULL" ? $request->total_secondary_insurer_paid : NULL,
+                    'primary_insurer_status' => isset($request->primary_insurer_status) && $request->primary_insurer_status != "NULL" ? $request->primary_insurer_status : NULL,
+                    'secondary_insurer_status' => isset($request->secondary_insurer_status) && $request->secondary_insurer_status != "NULL" ? $request->secondary_insurer_status : NULL,
+                    'total_patient_paid' => isset($request->total_patient_paid) && $request->total_patient_paid != "NULL" ? $request->total_patient_paid : NULL,
+                    'total_insurance_balance' => isset($request->total_insurance_balance) && $request->total_insurance_balance != "NULL" ? $request->total_insurance_balance : NULL,
+                    'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  RhIvRejectionDuplicates::where($attributes)->first();
                 $duplicateRecord->update([
                     'full_name' => isset($request->full_name) && $request->full_name != "NULL" ? $request->full_name : NULL,
                     'claim_id' => isset($request->claim_id) && $request->claim_id != "NULL" ? $request->claim_id : NULL,     

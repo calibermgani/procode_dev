@@ -65,4 +65,8 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('restoration_healthcare_op_denial_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpDenialDuplicates');
     Route::any('restoration_healthcare_op_rejection', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpRejection');
     Route::any('restoration_healthcare_op_rejection_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareOpRejectionDuplicates');
+    Route::any('restoration_healthcare_iv_denial', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvDenial');
+    Route::any('restoration_healthcare_iv_denial_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvDenialDuplicates');
+    Route::any('restoration_healthcare_iv_rejection', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvRejection');
+    Route::any('restoration_healthcare_iv_rejection_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvRejectionDuplicates');
 });
