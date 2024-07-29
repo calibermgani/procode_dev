@@ -309,7 +309,8 @@ class ProjectController extends Controller
             // $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
             $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'procode project inventory to mail')->first();
             $toMailId = explode(",", $toMail->cc_emails);
-            $ccMailId = ["mgani@caliberfocus.com"];
+            $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'procode project inventory cc mail')->first();
+            $ccMailId = explode(",", $ccMail->cc_emails);
             $mailDate =  Carbon::now()->format('m/d/Y');
             $mailHeader = "ProCode - Inventory Upload Successful - " . $mailDate;
             $projects = $this->getProjects();
@@ -388,7 +389,8 @@ class ProjectController extends Controller
             $error_description = $project_information['error_description'];
             $project_information["error_date"] = now()->format('Y-m-d H:i:s');
             $current_time = Carbon::now();
-            if ($current_time->hour >= 11) {
+            $today = Carbon::today();
+            if ($current_time->hour >= 11 && $today->isSaturday() ==  false  && $today->isSunday() ==  false ) {
                 InventoryErrorLogs::create($project_information);
                 // $toMailId = ["vijayalaxmi@caliberfocus.com"];
                 // $ccMailId = ["mgani@caliberfocus.com"];
