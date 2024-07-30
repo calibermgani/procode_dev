@@ -250,7 +250,7 @@
                             var columns = res.columnsHeader;
                             var $modalRow = $('#headers_row');
                             $modalRow.empty();
-                            var $selectAllCheckbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" value="all" id="select_all_columns">Select All<span></span></label></div></div>');
+                            var $selectAllCheckbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" value="all" id="select_all_columns" checked>Select All<span></span></label></div></div>');
                             $modalRow.append($selectAllCheckbox);
                             $.each(columns, function(index, columnName) {
                                 if (columnName !== 'id') {
@@ -261,7 +261,7 @@
                                             return word.charAt(0).toUpperCase() + word.slice(1);
                                         }).join(' ');
                                    }
-                                    var $checkbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" name="project_columns" value="' + columnName + '">' + displayName + '<span></span></label></div></div>');
+                                    var $checkbox = $('<div class="col-md-3 my-3 header_columns"><div class="checkbox-inline"><label class="checkbox checkbox-primary"><input type="checkbox" name="project_columns" value="' + columnName + '" checked>' + displayName + '<span></span></label></div></div>');
                                     $modalRow.append($checkbox);
                                 }
                             });
@@ -309,7 +309,7 @@
                 var checkedValues = [];
                 $('.header_columns').find('input[type="checkbox"]:checked').each(function() {
                     checkedValues.push($(this).val());
-                });
+                });console.log(checkedValues,'checkedValues');
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
