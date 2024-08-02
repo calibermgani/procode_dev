@@ -268,7 +268,8 @@ class ProjectController extends Controller
     {
         $project_information = $request->all();
         $current_time = Carbon::now();
-        if ($current_time->hour >= 11) {
+        $today = Carbon::today();
+        if ($current_time->hour >= 11 && $today->isSaturday() ==  false  && $today->isSunday() ==  false ) {
             $fileStatus = "The " . $project_information['project_name'] . " inventory is not in the specified location. Could you please check and place the inventory files for today as soon as possible. This will help avoid delays in production.";
             $mailHeader = $project_information['project_name'] . " File not in Specific folder";
             $client = new Client();
@@ -350,29 +351,12 @@ class ProjectController extends Controller
                 'client_id' => $projectsIds
             ];
             if (!empty($procodeProjectsCurrent)) {
-                // $response = $client->request('POST', 'https://aims.officeos.in/api/v1_users/get_details_above_tl_level', [
-                //     'json' => $payload
-                // ]);
-                // if ($response->getStatusCode() == 200) {
-                //     $apiData = json_decode($response->getBody(), true);
-                // } else {
-                //     return response()->json(['error' => 'API request failed'], $response->getStatusCode());
-                // }
-                // $projectsHolding = $apiData['people_details'];
-                // foreach($projectsHolding as $data) {
-                //     $clientIds = $data['client_ids'];
                 $mailBody = $procodeProjectsCurrent;
-                // if($data["email_id"] != null) {
-                // $toMailId = $data["email_id"];
-                // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module','project hold records')->first();
-                // $ccMailId = explode(",",$ccMail->cc_emails);
                 $current_time = Carbon::now();
                 if ($current_time->hour >= 12) {
                     Mail::to($toMailId)->cc($ccMailId)->send(new ProcodeProjectInventory($mailHeader, $mailBody));
                     Log::info('Procode Project Inventory Mail executed successfully.');
                 }
-                // }
-                // }
             }
         } catch (\Exception $e) {
             Log::error('Error in Project Inventory Mail: ' . $e->getMessage());
