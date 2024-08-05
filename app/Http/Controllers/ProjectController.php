@@ -103,12 +103,12 @@ class ProjectController extends Controller
             $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
             // $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
             // $ccMailId = ["mgani@caliberfocus.com"];
-            $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail to mail id')->first();
-            $toMailId = explode(",", $toMail->cc_emails);
-            $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail cc mail id')->first();
-            $ccMailId = explode(",", $ccMail->cc_emails);
-            // $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            // $ccMailId = ["mgani@caliberfocus.com"];
+            // $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail to mail id')->first();
+            // $toMailId = explode(",", $toMail->cc_emails);
+            // $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail cc mail id')->first();
+            // $ccMailId = explode(",", $ccMail->cc_emails);
+            $toMailId = ["vijayalaxmi@caliberfocus.com"];
+            $ccMailId = ["mgani@caliberfocus.com"];
             $yesterday = Carbon::yesterday();
             if ($yesterday->isSaturday()) {
                 $yesterday = $yesterday->subDay(1); // Friday

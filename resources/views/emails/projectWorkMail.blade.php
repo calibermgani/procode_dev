@@ -63,6 +63,8 @@
                             {{-- <td style="text-align: left;padding: 5px;">{{ $data['Balance'] }}</td> --}}
                         </tr>
                     @endforeach
+                @else
+                <tr>--No Records--</tr>
                 @endif
 
             </tbody>
