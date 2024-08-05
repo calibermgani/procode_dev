@@ -123,7 +123,10 @@ class ProjectController extends Controller
             // $yesterDayEndDate = "2024-06-07 23:59:59";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
-                $prjName = Helpers::projectName($project["id"])->project_name;
+                $prjName =  Helpers::projectName($project["id"]) != null ? Helpers::projectName($project["id"])->project_name : null;//dd($prjName);
+                if ($prjName !== null) {
+                    
+               
                 if (count($project["subprject_name"]) > 0) {
                     foreach ($project["subprject_name"] as $key => $subProject) {
                         // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
@@ -160,6 +163,7 @@ class ProjectController extends Controller
             $mailBody = $prjoectsPending;
             Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody, $yesterday));
             Log::info('ProjectWorkMail executed successfully.');
+        }
         } catch (\Exception $e) {
             Log::error('Error in ProjectWorkMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
@@ -198,26 +202,28 @@ class ProjectController extends Controller
             $mailHeader = "Procode - Project Hold Charges reminder";
             $projects = $this->getProjects();
             foreach ($projects as $project) {
-                $prjName = Helpers::projectName($project["id"])->project_name;
-                if (count($project["subprject_name"]) > 0) {
-                    foreach ($project["subprject_name"] as $key => $subProject) {
-                        // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
-                        $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
-                        $modelName = Str::studly($table_name);
-                        $modelClass = "App\\Models\\" . $modelName;
-                        $models[] = $modelClass;
-                        $prjoectName[] = $project["client_name"] . '-' . $subProject;
-                        $projectId[] = $project["id"];
+                $prjName =  Helpers::projectName($project["id"]) != null ? Helpers::projectName($project["id"])->project_name : null;//dd($prjName);
+                    if ($prjName !== null) {
+                        if (count($project["subprject_name"]) > 0) {
+                            foreach ($project["subprject_name"] as $key => $subProject) {
+                                // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                                $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
+                                $modelName = Str::studly($table_name);
+                                $modelClass = "App\\Models\\" . $modelName;
+                                $models[] = $modelClass;
+                                $prjoectName[] = $project["client_name"] . '-' . $subProject;
+                                $projectId[] = $project["id"];
+                            }
+                        } else {
+                            $subProjectText = "project";
+                            $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
+                            $modelName = Str::studly($table_name);
+                            $modelClass = "App\\Models\\" . $modelName;
+                            $models[] = $modelClass;
+                            $prjoectName[] = $project["client_name"];
+                            $projectId[] = $project["id"];
+                        }
                     }
-                } else {
-                    $subProjectText = "project";
-                    $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
-                    $modelName = Str::studly($table_name);
-                    $modelClass = "App\\Models\\" . $modelName;
-                    $models[] = $modelClass;
-                    $prjoectName[] = $project["client_name"];
-                    $projectId[] = $project["id"];
-                }
             }
             $procodeProjectsHolding = $projectsIds = [];
             foreach ($models as $key => $model) {

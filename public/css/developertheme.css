@@ -816,3 +816,12 @@ font-size: 10px;
     background-color: #b8eaf3;
     border-color: transparent;
 }
+.readonly-input-type {
+    pointer-events: none;
+   
+}
+.wrap-text {
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 400px;
+}

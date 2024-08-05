@@ -186,7 +186,7 @@ class ReportsController extends Controller
                         } else if ($header === 'coder_work_date') {
                             $data =  '--';
                         }
-                        $body_info .= '<td>' . $data . '</td>';
+                        $body_info .= '<td class="wrap-text">' . $data . '</td>';
                     }
                     $body_info .= '</tr>';
                 }
