@@ -64,7 +64,9 @@
                         </tr>
                     @endforeach
                 @else
-                <tr>--No Records--</tr>
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 5px;">--No Records--</td>
+                </tr>
                 @endif
 
             </tbody>
