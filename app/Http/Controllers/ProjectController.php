@@ -108,7 +108,7 @@ class ProjectController extends Controller
             $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail cc mail id')->first();
             $ccMailId = explode(",", $ccMail->cc_emails);
             // $toMailId = ["vijayalaxmi@caliberfocus.com"];
-            // $ccMailId = ["mgani@caliberfocus.com"];
+            // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $yesterday = Carbon::yesterday();
             if ($yesterday->isSaturday()) {
                 $yesterday = $yesterday->subDay(1); // Friday
@@ -125,45 +125,42 @@ class ProjectController extends Controller
             foreach ($projects as $project) {
                 $prjName =  Helpers::projectName($project["id"]) != null ? Helpers::projectName($project["id"])->project_name : null;//dd($prjName);
                 if ($prjName !== null) {
-                    
-               
-                if (count($project["subprject_name"]) > 0) {
-                    foreach ($project["subprject_name"] as $key => $subProject) {
-                        // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
-                        $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
+                    if (count($project["subprject_name"]) > 0) {
+                        foreach ($project["subprject_name"] as $key => $subProject) {
+                            // $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProject)), '_');
+                            $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProject)), '_');
+                            $modelName = Str::studly($table_name);
+                            $modelClass = "App\\Models\\" . $modelName;
+                            $models[] = $modelClass;
+                            $prjoectName[] = $project["client_name"] . '-' . $subProject;
+                        }
+                    } else {
+                        $subProjectText = "project";
+                        $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
                         $modelName = Str::studly($table_name);
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
-                        $prjoectName[] = $project["client_name"] . '-' . $subProject;
+                        $prjoectName[] = $project["client_name"];
                     }
-                } else {
-                    $subProjectText = "project";
-                    $table_name = Str::slug((Str::lower($prjName) . '_' . Str::lower($subProjectText)), '_');
-                    $modelName = Str::studly($table_name);
-                    $modelClass = "App\\Models\\" . $modelName;
-                    $models[] = $modelClass;
-                    $prjoectName[] = $project["client_name"];
                 }
-            }
-            $assignedCounts = $coderCompleteCounts = $pendingCounts = $QACounts  = $prjoectsPending = [];
-            foreach ($models as $key => $model) {
-                if (class_exists($model)) {
-                    $aCount = $model::whereBetween('created_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Assigned')->count();
-                    $cCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Completed')->count();
-                    $qCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'QA_Completed')->count();
-                    // $pCount = $aCount - $cCount;
-                    $prjoectsPending[$key]['project'] = $prjoectName[$key];
-                    $prjoectsPending[$key]['Chats'] = $aCount;
-                    $prjoectsPending[$key]['Coder'] = $cCount;
-                    $prjoectsPending[$key]['QA'] = $qCount;
-                    // $prjoectsPending[$key]['Balance'] = $pCount;
-                }
-            }
-
+                $assignedCounts = $coderCompleteCounts = $pendingCounts = $QACounts  = $prjoectsPending = [];
+                foreach ($models as $key => $model) {
+                    if (class_exists($model)) {
+                        $aCount = $model::whereBetween('created_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Assigned')->count();
+                        $cCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'CE_Completed')->count();
+                        $qCount = $model::whereBetween('updated_at', [$yesterDayStartDate, $yesterDayEndDate])->where('chart_status', 'QA_Completed')->count();
+                        // $pCount = $aCount - $cCount;
+                        $prjoectsPending[$key]['project'] = $prjoectName[$key];
+                        $prjoectsPending[$key]['Chats'] = $aCount;
+                        $prjoectsPending[$key]['Coder'] = $cCount;
+                        $prjoectsPending[$key]['QA'] = $qCount;
+                        // $prjoectsPending[$key]['Balance'] = $pCount;
+                    }
+                }           
+           }
             $mailBody = $prjoectsPending;
             Mail::to($toMailId)->cc($ccMailId)->send(new ProjectWorkMail($mailHeader, $mailBody, $yesterday));
             Log::info('ProjectWorkMail executed successfully.');
-        }
         } catch (\Exception $e) {
             Log::error('Error in ProjectWorkMail: ' . $e->getMessage());
             Log::debug($e->getMessage());
