@@ -256,6 +256,12 @@
                                 if (columnName !== 'id') {
                                     if(columnName === "chart_status") {
                                         var displayName = "Charge Status";
+                                    } else if(columnName === "coder_cpt_trends") {
+                                        var displayName = "CPT trends";
+                                    } else if(columnName === "coder_icd_trends") {
+                                        var displayName = "ICD trends";
+                                    } else if(columnName === "coder_modifiers") {
+                                        var displayName = "Modifiers";
                                     } else {console.log(columnName,'if else');
                                         var displayName = columnName.split('_').map(function(word) {
                                             return word.charAt(0).toUpperCase() + word.slice(1);

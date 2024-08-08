@@ -279,6 +279,7 @@
                                                         'coder_rework_status',
                                                         'QA_status_code',
                                                         'QA_sub_status_code',
+                                                        'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
                                                         'created_at',
                                                         'updated_at',
                                                         'deleted_at',

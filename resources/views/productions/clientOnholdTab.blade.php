@@ -207,7 +207,9 @@
                                                         </td>
                                                         @foreach ($data->getAttributes() as $columnName => $columnValue)
                                                             @php
-                                                                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','created_at', 'updated_at', 'deleted_at'];
+                                                                $columnsToExclude = ['QA_emp_id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                                                                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                                                                'created_at', 'updated_at', 'deleted_at'];
                                                             @endphp
                                                             @if (!in_array($columnName, $columnsToExclude))
                                                                     @if ($columnName != 'id')
@@ -496,6 +498,19 @@
                                                  @endif
                                                      @endforeach
                                                  @endif
+                                                 {{-- <div class="row mt-4 trends_div">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="col-md-12">
+                                                                Coder Trends
+                                                            </label>
+                                                            <div class="col-md-11">
+                                                                {!!Form::textarea('annex_coder_trends',  null, ['class' => 'text-black form-control white-smoke annex_coder_trends','rows' => 6,'readonly']) !!}
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> --}}
                                                  <div class="row mt-4">
                                                     <div class="col-md-6">
                                                         <input type="hidden" name="invoke_date">
@@ -804,7 +819,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script>
-         var start = moment().startOf('month')
+        var start = moment().startOf('month')
         var end = moment().endOf('month');
         $('.date_range').attr("autocomplete", "off");
         $('.date_range').daterangepicker({
@@ -1069,6 +1084,15 @@
 
                         $.each(headers, function(index, header) {
                             value = clientData[header];
+                            // if (header == 'annex_coder_trends') {
+                            //     if (/_el_/.test(value)) {
+                            //         var commentsValues = value.split('_el_');
+                            //         var commentsText = commentsValues.join('\n');
+                            //         $('textarea[name="annex_coder_trends"]').val(commentsText);
+                            //     } else {
+                            //         $('textarea[name="annex_coder_trends"]').val(value);
+                            //     }
+                            // }
                             $('label[id="' + header + '"]').html("");
                             $('input[name="' + header + '[]"]').html("");
                             $('textarea[id="ce_hold_reason_editable"]').val(clientData['ce_hold_reason']);
@@ -1616,6 +1640,196 @@
                         // $('#ce_hold_reason_editable').val('');
                         }
                 })
+                
+                // function handleBlurEvent(clientClass, annexClass) {
+                //     var clientInf = $(clientClass).val().split(',').map(value => value.trim()); // Trimming spaces
+                //     var annexInf = $(annexClass).val().split(',').map(value => value.trim()); // Trimming spaces
+                //     let notesMap = {};
+                //     var previousValue = [];
+                //     var processedText = clientClass.replace('.', '').toUpperCase();
+                //     var annexInfMap = {};
+                //     var notes = $('.annex_coder_trends').val().trim();
+
+                //     annexInf.forEach(function (value, index) {
+                //         annexInfMap[value] = (annexInfMap[value] || 0)+1 ;
+                //     });
+                
+                //     for (var i = 0; i < clientInf.length; i++) {
+                //         if (annexInf[i] !== undefined && annexInf[i] !== '') {console.log(clientInf,'clientInf');
+                //             if (clientInf[0] !== '' && clientInf[i] !== annexInf[i]) {
+                //                 if (clientInf[i].includes('-') && annexInf[i].includes('-')) {
+                //                     var clientParts = clientInf[i].split('-');
+                //                     var annexParts = annexInf[i].split('-');
+                //                     const clientPart0 = clientParts[0].trim(); 
+                //                     const annexPart0 = annexParts[0].trim(); 
+                //                     const part1 = clientParts[1].trim(); 
+                //                     const part2 = annexParts[1].trim(); console.log(part1, part2,'changed to',clientInf[0]);
+                //                     if(part1 != part2) {
+                //                         notesMap[part1] = processedText + ' - modifier ' +  part1 + ' changed to ' +  part2 + ' belongs to ' +  clientPart0;
+                //                     } else {
+                //                         var noteLines =  notes.split('\n');
+                //                         for (var j = 0; j < noteLines.length; j++) {
+                //                                 if(noteLines[j].includes(processedText)){
+                //                                     if(noteLines[j].includes(processedText + ' - ' + part1)) {
+                //                                     } else {
+                //                                         noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                //                                         notes = noteLines;                                         
+                //                                     }                                   
+                //                                 }
+                //                         }
+                //                     }
+                //                     if(clientPart0 != annexPart0) {
+                //                         notesMap[clientInf[i]] = processedText + ' - ' + clientPart0 + ' changed to ' + annexPart0;
+                //                     }
+                //                 } else  if (clientInf[i].includes('-') && !annexInf[i].includes('-')) {
+                //                     var clientParts = clientInf[i].split('-');
+                //                     const client1 = clientParts[0].trim(); 
+                //                     const annex1 =annexInf[i].trim(); 
+                //                     const cpart1 = clientParts[1].trim(); 
+                //                     notesMap[cpart1] = processedText + ' - modifier ' +  cpart1 + ' removed belongs to ' + client1;
+                //                     if(client1 != annex1) {
+                //                         notesMap[clientInf[i]] = processedText + ' - ' + client1 + ' changed to ' + annex1;
+                //                     }
+                //                 } else if (!clientInf[i].includes('-') && annexInf[i].includes('-')) {
+                //                     var parts = annexInf[i].split('-');
+                //                     const client2 = clientInf[i].trim(); 
+                //                     const annex2 = parts[0].trim();
+                //                     const apart1 = parts[0].trim(); 
+                //                     const apart2 = parts[1].trim(); 
+                //                     notesMap[apart1] = processedText + ' - modifier ' +  parts[1] + ' added to ' +  client2;
+                //                     if(client2 != annex2) {
+                //                         notesMap[clientInf[i]] = processedText + ' - ' + client2 + ' changed to ' + annex2;
+                //                     }
+                //                 } else {
+                //                     notesMap[clientInf[i]] = processedText + ' - ' + clientInf[i] + ' changed to ' + annexInf[i];
+                //                 }
+                //                 previousValue[clientInf[i]] = processedText + ' - ' + clientInf[i];
+                //                 var noteLines =  notes.split('\n');
+                //                 for (var j = 0; j < noteLines.length; j++) {
+                //                         if(noteLines[j].includes(processedText)){
+                //                             if(noteLines[j].includes(processedText + ' - ' + clientInf[i])) {
+                //                             } else {
+                //                                 noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                //                                 notes = noteLines;
+                                            
+                //                             }
+                //                             // if(noteLines[j].includes(processedText + ' - ' + annexInf[i]) + 'added') {
+                                            
+                //                             // } else {
+                                        
+                //                             //     noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                //                             //     notes = noteLines;
+                                            
+                //                             // }
+
+                //                         }
+                //                 }
+                //             } else {
+                //                 var lines = notes.split('\n');
+                //                 var matchedLine = lines.find(line => line.includes(processedText + ' - ' + annexInf[i]));
+                //                 if (matchedLine) {
+                //                     notes = lines.filter(line => line !== matchedLine).join('\n');
+                //                 }
+                //                 var noteLines =  notes.split('\n');
+                //                 for (var j = 0; j < noteLines.length; j++) {
+                //                         if(noteLines[j].includes(processedText)){
+                //                             if(noteLines[j].includes(processedText + ' - ' + clientInf[i])) {
+                //                             } else {
+                //                                 noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                //                                 notes = noteLines;
+                                            
+                //                             }
+                //                         }
+                //                 }
+                //             }
+                //             if (annexInfMap[annexInf[i]] > 0) {
+                //                 annexInfMap[annexInf[i]]--;
+                //                 if (annexInfMap[annexInf[i]] === 0) {
+                //                     delete annexInfMap[annexInf[i]];
+                //                 }
+                //             }
+                        
+                //         } else {
+                //             if(annexInf.length > 1 && annexInf[0] == ''){
+                //                 notesMap[clientInf[i]] = processedText + ' - ' + clientInf[i] + ' removed';
+                //             } else if(annexInf[0] !== '') {
+                //                 notesMap[clientInf[i]] = processedText + ' - ' + clientInf[i] + ' removed';
+                //             } else {
+                //                 var lines = notes.split('\n');
+                //                 for (var j = 0; j < lines.length; j++) {
+                //                     var matchedLine = lines.find(line => line.includes(processedText )); 
+                //                         notes = lines.filter(line => line !== matchedLine).join('\n');
+                //                 }
+                //             }
+                //             previousValue[clientInf[i]] = processedText + ' - ' + clientInf[i];
+                        
+                //         }
+                //     }
+                
+                //     for (var key in annexInfMap) {
+                //         if (annexInfMap.hasOwnProperty(key) && annexInfMap[key] > 0) {
+                //             if(key && (clientInf[0] !== '')) {
+                //                 notesMap[key] = processedText + ' - ' + key + ' added';
+                //                 var lines = notes.split('\n');
+                //                 var matchedLine = lines.find(line => line.includes(notesMap[key]));
+                //                 if (matchedLine) {
+                //                     notes = lines.filter(line => line !== matchedLine).join('\n');
+                //                 }
+                //             }
+                //         } 
+                //     }
+
+                //     // Convert notesMap to a single string in the order of clientInf
+                //     clientInf.forEach(function (value) {
+                //         if (notesMap[value]) {
+                //             if (notes.includes(previousValue[value])) {
+                //                 var lines = notes.split('\n');
+                //                 var matchedLine = lines.find(line => line.includes(previousValue[value]));
+                //                 if (matchedLine !== undefined) {
+                //                     notes = notes.replace(matchedLine, notesMap[value]);
+                //                 } else {
+                //                     notes += '\n' + notesMap[value];
+                //                 }
+                //             } else {
+                //                 if (notes === "") {
+                //                     notes += notesMap[value];
+                //                 } else {
+                //                     notes += '\n' + notesMap[value];
+                //                 }
+                //             }
+                //             delete notesMap[value];
+                //         }
+                //     });
+
+                //     // Add remaining notes for new additions
+                //     for (var key in notesMap) {
+                //         if (notesMap.hasOwnProperty(key)) {
+                //             notes += '\n' + notesMap[key];
+                //         }
+                //     }
+                
+                //     let noteLines1 = notes.trim().split('\n');
+                //     let uniqueNotes = Array.from(new Set(noteLines1));
+                //     let finalNotes = uniqueNotes.join('\n');
+                //     $('.annex_coder_trends').val(finalNotes);
+                // }
+
+                // $('.am_cpt').on('blur', function () {
+                //     handleBlurEvent('.cpt', '.am_cpt');
+                // });
+
+                // $('.am_icd').on('blur', function () {
+                //     handleBlurEvent('.icd', '.am_icd');
+                // });
+                // function toggleCoderTrends() {
+                //     var hasAMFields = $('.am_cpt').length > 0 || $('.am_icd').length > 0;
+                //     if (hasAMFields) {
+                //         $('.trends_div').show();
+                //     } else {
+                //         $('.trends_div').hide();
+                //     }
+                // }
+                // toggleCoderTrends();
         })
 
              function updateTime() {

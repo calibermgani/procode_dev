@@ -215,6 +215,7 @@
                                                                     $columnsToExclude = [
                                                                         'QA_emp_id',
                                                                         'ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_status','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_status_code','QA_sub_status_code','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                                                                        'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
                                                                         'created_at',
                                                                         'updated_at',
                                                                         'deleted_at',
@@ -508,6 +509,20 @@
                                                                     @endif
                                                                         @endforeach
                                                                     @endif
+                                                                    
+                                                                    <div class="row mt-4 trends_div">
+                                                                        <div class="col-md-12">
+                                                                            <div class="form-group row">
+                                                                                <label class="col-md-12">
+                                                                                    Coder Trends
+                                                                                </label>
+                                                                                <div class="col-md-11">
+                                                                                    {!!Form::textarea('annex_coder_trends',  null, ['class' => 'text-black form-control white-smoke annex_coder_trends','rows' => 6,'readonly']) !!}
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="row mt-4">
                                                                         <div class="col-md-6">
                                                                             <input type="hidden" name="invoke_date">
@@ -821,7 +836,7 @@
         var startTime_db;
         $(document).ready(function() {
             $("#expandButton").click(function() {
-                var modalContent = $(".modal-content");console.log(modalContent.width(),'modalContent');
+                var modalContent = $(".modal-content");
             if (modalContent.width() === 800) {
             modalContent.css("width", "120%");
             } else {
@@ -1010,7 +1025,6 @@
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-view', function(e) {
-                console.log('view');
                 $('#myModal_view').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
@@ -1053,7 +1067,6 @@
                         if (response.success == true) {
                              $('#myModal_status').modal('show');
                             startTime_db = response.startTimeVal;
-                            console.log(startTime_db, 'startTime_db');
                         } else {
                             $('#myModal_status').modal('hide');
                             js_notification('error', 'Something went wrong');
@@ -1074,7 +1087,7 @@
                 });
 
                 $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
-                    var header = headers[index-1];console.log(headers,'headers',header);
+                    var header = headers[index-1];
                     var value = $(this).text().trim();
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
@@ -1142,8 +1155,7 @@
                 });
             });
             $(document).on('click', '.sop_click', function(e) {
-                console.log('sop modal');
-                $('#myModal_sop').modal('show');
+                 $('#myModal_sop').modal('show');
             });
 
             $(document).ready(function () {
@@ -1260,7 +1272,6 @@
                                 inclass.each(function(element) {
 
                                     var label_id = $(this).attr('id');
-                                     console.log(label_id, 'label_id',$('#' + label_id).val(),$(this).val());
                                     if ($(this).val() == '') {
                                         if ($(this).val() == '') {
                                             e.preventDefault();
@@ -1388,7 +1399,7 @@
                 } else {
                     $("#ckbCheckAll").prop('checked', false);
                 }
-                console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
+                //console.log(allCheckboxesChecked, 'allCheckboxesChecked', anyCheckboxChecked);
                 $('#assigneeDropdown').prop('disabled', !(anyCheckboxChecked || allCheckboxesChecked));
                 if ($(this).prop('checked') == true) {
                   assigneeDropdown();
@@ -1427,7 +1438,6 @@
                         clientName: clientName,
                     },
                     success: function(response) {
-                        console.log(response, 'response');
                        var sla_options = '<option value="">-- Select --</option>';
                         $.each(response.assignedDropDown, function(key, value) {
                             sla_options += '<option value="' + key + '">' + value +
@@ -1480,7 +1490,6 @@
                                 subProjectName: subProjectName
                             },
                             success: function(response) {
-                                console.log(response, 'response', response.success);
                                 if (response.success == true) {
                                     js_notification('success',
                                         'Assignee Updated Successfully');
@@ -1553,6 +1562,347 @@
                        $('#ce_hold_reason').val('');
                     }
             })
+
+            
+                    function handleBlurEvent(clientClass, annexClass) {
+                        var clientInf = $(clientClass).val().split(',').map(value => value.trim()); 
+                           clientInf = clientInf.filter(function(item) {
+                                return item && item.trim();
+                            });
+                        var annexInf = $(annexClass).val().split(',').map(value => value.trim()); 
+                        annexInf = annexInf.filter(function(item) {
+                                return item && item.trim();
+                            });
+                        let notesMap = {};
+                        var previousValue = [];
+                        var processedText = clientClass.replace('.', '').toUpperCase();
+                        var annexInfMap = {};
+                        var notes = $('.annex_coder_trends').val().trim();
+
+                        annexInf.forEach(function (value, index) {
+                            annexInfMap[value] = (annexInfMap[value] || 0)+1 ;
+                        });
+                                 
+                        for (var i = 0; i < clientInf.length; i++) {
+                            if (annexInf[i] !== undefined && annexInf[i] !== '') {
+                                if (clientInf[0] !== '' && clientInf[i] !== annexInf[i]) {                                    
+                                    if (clientInf[i].includes('-') && annexInf[i].includes('-')) {
+                                        var clientParts = clientInf[i].split('-');
+                                        var annexParts = annexInf[i].split('-');
+                                        const clientPart0 = clientParts[0].trim(); 
+                                        const annexPart0 = annexParts[0].trim(); 
+                                        const part1 = clientParts[1].trim(); 
+                                        const part2 = annexParts[1].trim(); 
+                                        if(part1 != part2) {
+                                            notesMap[part1] = processedText + ' - modifier ' +  part1 + ' changed to ' +  part2 + ' belongs to ' +  clientPart0;
+                                            previousValue[part1] = processedText + ' - ' + part1;
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - modifier ' +  part1)) {
+                                                // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                // notes = noteLines;
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');      
+
+                                                var lines = notes.split('\n');
+                                                var matchedLine = lines.find(lines => lines.includes(processedText + ' - modifier ' +  part1));
+                                                if (matchedLine) {
+                                                    notes = lines.filter(lines => lines !== matchedLine).join('\n');
+                                                }             
+                                            }
+                                        }
+                                        if(clientPart0 != annexPart0) {
+                                            notesMap[clientPart0] = processedText + ' - ' + clientPart0 + ' changed to ' + annexPart0;
+                                            previousValue[clientPart0] = processedText + ' - ' + clientPart0;                                          
+                                        }
+                                        var lines1 = notes.split('\n');
+                                         var matchedLine = lines1.find(lines => lines.includes(processedText + ' - ' + clientPart0));
+                                         if (matchedLine) {
+                                            notes = lines1.filter(lines => lines !== matchedLine).join('\n');
+                                         }
+
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                                if(noteLines[j].includes(processedText + ' - ' + clientPart0)){
+                                                    // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                    // notes = noteLines;   
+                                                    noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                    notes = noteLines.join('\n');                                
+                                                }
+                                        }
+                                    } else if (clientInf[i].includes('-') && !annexInf[i].includes('-')) {
+                                        var clientParts = clientInf[i].split('-');
+                                        const client1 = clientParts[0].trim(); 
+                                        const annex1 =annexInf[i].trim(); 
+                                        const cpart1 = clientParts[1].trim();
+                                        notesMap[cpart1] = processedText + ' - modifier ' +  cpart1 + ' removed belongs to ' + client1;
+                                        previousValue[cpart1] = processedText + ' - ' + cpart1;
+
+                                        var lines = notes.split('\n');
+                                        var matchedLine = lines.find(lines => lines.includes(processedText + ' - modifier ' +  cpart1));
+                                        if (matchedLine) {
+                                            notes = lines.filter(lines => lines !== matchedLine).join('\n');
+                                        } 
+                                        if(client1 !== annex1) {
+                                            notesMap[i] = processedText + ' - ' + client1 + ' changed to ' + annex1;//console.log('else if',client1,annex1,notesMap,notes);
+                                            previousValue[client1] = processedText + ' - ' + client1;
+                                        }
+
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - ' + client1)){
+                                                // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                // notes = noteLines;    
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                                                                       
+                                            }
+                                        }
+                                    } else if (!clientInf[i].includes('-') && annexInf[i].includes('-')) {
+                                        var parts = annexInf[i].split('-');
+                                        const client2 = clientInf[i].trim(); 
+                                        const annex2 = parts[0].trim();
+                                        const apart1 = parts[0].trim(); 
+                                        const apart2 = parts[1].trim(); 
+                                        notesMap[apart1] = processedText + ' - modifier ' +  parts[1] + ' added to ' +  client2;
+                                        previousValue[client2] = processedText + ' - ' + client2;
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - modifier ')){
+                                                // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                // notes = noteLines;
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                      
+                                            }
+                                        }
+                                        var lines = notes.split('\n');
+                                        var matchedLine = lines.find(lines => lines.includes(processedText + ' - modifier '));
+                                        if (matchedLine) {
+                                            notes = lines.filter(lines => lines !== matchedLine).join('\n');
+                                        }
+                                        if(client2 != annex2) {
+                                            notesMap[i] = processedText + ' - ' + client2 + ' changed to ' + annex2;
+                                            previousValue[clientInf[i]] = processedText + ' - ' + clientInf[i];
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                                if(noteLines[j].includes(processedText + ' - ' + client2)){
+                                                    // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                    // notes = noteLines; 
+                                                    noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                    notes = noteLines.join('\n');                                    
+                                                }
+                                        }//console.log('else if1',client2,annex2,notesMap,notes);
+                                    } else {
+                                        notesMap[i] = processedText + ' - ' + clientInf[i] + ' changed to ' + annexInf[i];
+                                        previousValue[clientInf[i]] = processedText + ' - ' + clientInf[i];
+                                        var lines =  notes.split('\n');
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientInf[i]));
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ') && line.includes(clientInf[i]) );
+                                    
+                                        if (matchedLine || matchedLine1) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1);
+                                            notes = lines.join('\n');
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - ' + clientInf[i])){
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                               
+                                            }
+                                        }
+                                    }
+                                        var lines =  notes.split('\n');
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientInf[i]));
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ') && line.includes(clientInf[i]));
+                                    
+                                        if (matchedLine || matchedLine1) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1);
+                                            notes = lines.join('\n');
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - ' + clientInf[i])){
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                               
+                                            }
+                                        }                             
+                                } else {
+                                    var lines = notes.split('\n');
+                                    if (clientInf[i].includes('-')) {
+                                        var clientParts = clientInf[i].split('-');
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientParts[0]));// console.log(annexInf[i],'annexInf[i]',matchedLine,lines);
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ' + clientParts[1])); //console.log(annexInf[i],'annexInf[i]',matchedLine1,lines);
+                                        var matchedLine2 = lines.find(line => line.includes(processedText + ' - ' + clientParts[0] + ' changed to '));// console.log(annexInf[i],'annexInf[i]',matchedLine2,lines);
+                                   
+                                        if (matchedLine || matchedLine1 || matchedLine2) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1  && line !== matchedLine2);
+                                            notes = lines.join('\n');
+                                        }
+                                    } else {
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientInf[i]));
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ') && line.includes(clientInf[i]));
+                                        if (matchedLine || matchedLine1) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1);
+                                            notes = lines.join('\n');
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - ' + clientInf[i])){
+                                                // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                // notes = noteLines;  
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                                
+                                            }
+                                        }      
+                                   }                       
+                                                              
+                                }
+                                if (annexInfMap[annexInf[i]] > 0) {
+                                    annexInfMap[annexInf[i]]--;
+                                    if (annexInfMap[annexInf[i]] === 0) {
+                                        delete annexInfMap[annexInf[i]];
+                                    }
+                                }
+                            
+                            } else {
+                                if(annexInf.length > 1 && annexInf[0] == ''){
+                                    notesMap[clientInf[i]] = processedText + ' - ' + clientInf[i] + ' removed';
+                                } else if(annexInf[0] !== '') {
+                                    notesMap[clientInf[i]] = processedText + ' - ' + clientInf[i] + ' removed';
+                                } else {
+                                      var lines = notes.split('\n');
+                                       if (clientInf[i].includes('-')) {
+                                        var clientParts = clientInf[i].split('-');
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientParts[0])); //console.log('else no -', matchedLine, clientParts[0],lines);
+                                        var matchedLine2 = lines.find(line => line.includes(processedText + ' - ' + clientParts[0] + ' changed to ')); //console.log('else no -', matchedLine2, clientParts[0],lines);
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ' + clientParts[1])); //console.log('else no -', matchedLine1,clientParts[1]);
+                                        if (matchedLine || matchedLine1 || matchedLine2) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1 && line !== matchedLine2);
+                                            notes = lines.join('\n');
+                                        }
+                                    } else {
+                                        var matchedLine = lines.find(line => line.includes(processedText + ' - ' + clientInf[i]));
+                                        var matchedLine1 = lines.find(line => line.includes(processedText + ' - modifier ') && line.includes(clientInf[i]));
+                                        if (matchedLine || matchedLine1) {
+                                            lines = lines.filter(line => line !== matchedLine && line !== matchedLine1);
+                                            notes = lines.join('\n');
+                                        }
+                                        var noteLines =  notes.split('\n');
+                                        for (var j = 0; j < noteLines.length; j++) {
+                                            if(noteLines[j].includes(processedText + ' - ' + clientInf[i])){
+                                                // noteLines = noteLines.filter((item, index) => index !== j).join('\n');
+                                                // notes = noteLines;  
+                                                noteLines = noteLines.filter(line => line !== noteLines[j]);
+                                                notes = noteLines.join('\n');                                                    
+                                            }
+                                        }      
+                                   }               
+                                }
+                                previousValue[clientInf[i]] = processedText + ' - ' + clientInf[i];                            
+                            }
+                        }
+                      
+                        for (var key in annexInfMap) {
+                            if (annexInfMap.hasOwnProperty(key) && annexInfMap[key] > 0) {
+                                if(key && (clientInf[0] !== '')) {
+                                    notesMap[key] = processedText + ' - ' + key + ' added';
+                                    var lines = notes.split('\n');
+                                    var matchedLine = lines.find(line => line.includes(notesMap[key]));
+                                    if (matchedLine) {
+                                        notes = lines.filter(line => line !== matchedLine).join('\n');
+                                    }
+                                }
+                            } 
+                        }
+                         clientInf.forEach(function (value) {
+                            if (notesMap[value]) { 
+                                var lines = notes.split('\n');
+                                if (lines.includes(previousValue[value])) {
+                                     var matchedLine = lines.find(line => line.includes(previousValue[value]));
+                                    if (matchedLine !== undefined) {
+                                        notes = notes.replace(matchedLine, notesMap[value]);
+                                    } else {
+                                        notes += '\n' + notesMap[value];
+                                    }
+                                } else {                                    
+                                    if (notes === "") {
+                                        notes += notesMap[value];
+                                    } else {
+                                        notes += '\n' + notesMap[value];
+                                    }
+                                }
+                                delete notesMap[value];
+                            }
+                        });
+
+                        // Add remaining notes for new additions
+                        for (var key in notesMap) {
+                            var lines = notes.split('\n');
+                            if (notesMap.hasOwnProperty(key)) {
+                                notes += '\n' + notesMap[key];
+                            }
+                        }
+                            var notes1 = notes.split('\n').filter(line => line.trim() !== '');
+                            var matchedLine = notes1.find(line => line.includes(processedText + ' - ') && line.includes(' added') );//console.log(annexInf,annexInf.length,notes,'modifiedString',matchedLine,notes1);
+                            if (matchedLine !== undefined && !matchedLine.includes(' added to')) {
+                                let modifiedString = matchedLine.replace(processedText + ' - ', '').replace(' added', '');//console.log(modifiedString,'matchedLine',matchedLine,notes1);
+                                if (!annexInf.includes(modifiedString)) {
+                                    notes1 = notes1.filter(line => line !== matchedLine);
+                                    notes = notes1.join('\n');
+                                }                        
+                            }
+                                     
+                            var noteLines11 =  notes.split('\n').filter(line => line.trim() !== '');
+                            var filteredNoteLines = [];
+                            for (var q = 0; q < noteLines11.length; q++) { 
+                              
+                                if(noteLines11[q].includes(processedText + ' - ') && noteLines11[q].includes(' added') && !noteLines11[q].includes(' added to')){                                  
+                                    let modifiedString = noteLines11[q].replace(processedText + ' - ', '').replace(' added', '');//console.log(modifiedString,'noteLines11[q]',noteLines11[q],noteLines11);
+                                    if (!annexInf.includes(modifiedString)) {
+                                        noteLines11 = noteLines11.filter(line => line !== noteLines11[q]);
+                                        notes = noteLines11.join('\n');  
+                                    }                                           
+                                }
+                                // if(annexInf.length == 0 && noteLines11[q].includes(processedText + ' - ')) {
+                                //     console.log(noteLines11[q],'q',q,noteLines11.length);   
+                                //     noteLines11 = noteLines11.filter(line => line !== noteLines11[q]);
+                                //     notes = noteLines11.join('\n');  
+                                // }   
+                                    if (annexInf.length == 0 && noteLines11[q].includes(processedText + ' - ')) {
+                                    } else {
+                                        filteredNoteLines.push(noteLines11[q]);
+                                    }
+                            }      
+                            noteLines11 = filteredNoteLines;
+                            notes = noteLines11.join('\n');
+
+                        let noteLines1 = notes.trim().split('\n');
+                        let uniqueNotes = Array.from(new Set(noteLines1));
+                        let finalNotes = uniqueNotes.join('\n');
+                        $('.annex_coder_trends').val(finalNotes);
+                    }
+                   
+                    $('.am_cpt').on('blur', function () {
+                        handleBlurEvent('.cpt', '.am_cpt');
+                    });
+
+                    $('.am_icd').on('blur', function () {
+                        handleBlurEvent('.icd', '.am_icd');
+                    });
+
+            function toggleCoderTrends() {
+                var hasAMFields = $('.am_cpt').length > 0 && $('.am_icd').length > 0;
+                if (hasAMFields) {
+                    $('.trends_div').show();
+                } else {
+                    $('.trends_div').hide();
+                }
+            }
+
+            // Call function on page load
+            toggleCoderTrends();
+
         })
 
         function updateTime() {

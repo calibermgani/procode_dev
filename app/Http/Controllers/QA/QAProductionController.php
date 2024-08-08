@@ -142,7 +142,9 @@ class QAProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                    'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                    'updated_at', 'created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -249,7 +251,9 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -324,7 +328,9 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 
+                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -399,7 +405,9 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -472,7 +480,9 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -530,7 +540,9 @@ class QAProductionController extends Controller
                 $table_name = Str::slug((Str::lower($decodedClientName) . '_' . Str::lower($decodedsubProjectName)), '_');
                 $column_names = DB::select("DESCRIBE $table_name");
                 $columns = array_column($column_names, 'Field');
-                $columnsToExclude = ['id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                $columnsToExclude = ['id', 'duplicate_status','ce_hold_reason','qa_hold_reason','qa_work_status','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                'updated_at', 'created_at', 'deleted_at'];
                 $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                     return !in_array($column, $columnsToExclude);
                 });
@@ -680,6 +692,7 @@ class QAProductionController extends Controller
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 $record = $originalModelClass::where('id', $data['parent_id'])->first();
                 $data['QA_rework_comments']=$data['QA_rework_comments'] != null ? str_replace("\r\n", '_el_', $data['QA_rework_comments']) : $data['QA_rework_comments'];
+                $data['QA_rework_comments'] = preg_replace('/(_el_){2,}/', '_el_', $data['QA_rework_comments']);
                 $data['QA_comments_count'] = $data['QA_rework_comments'] != null ? count(explode('_el_', $data['QA_rework_comments'])) : 0;
                 if($data['chart_status'] == "QA_Completed") {
                     $data['qa_work_date'] = Carbon::now()->format('Y-m-d');
@@ -711,8 +724,32 @@ class QAProductionController extends Controller
                 } else {
                     $data['tl_error_count'] = $datasRecord['tl_error_count'];
                 }
-
-                //dd($data);
+                if(isset($data['annex_coder_trends']) && $data['annex_coder_trends'] != null) {
+                  $data['annex_coder_trends'] = isset($data['annex_coder_trends']) && $data['annex_coder_trends'] != null ? str_replace("\r\n", '_el_', $data['annex_coder_trends']) : null;
+                }
+                if(isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null) {
+                   $annex_qa_trends = isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null ?  explode('_el_',str_replace("\r\n", '_el_', $data['annex_qa_trends'])) : null;
+                }
+                   // $data['annex_qa_trends_count'] = $data['annex_qa_trends'] != null ? count(explode('_el_', $data['annex_qa_trends'])) : 0;
+                if(isset($annex_qa_trends) && $annex_qa_trends != null) {
+                    foreach( $annex_qa_trends as $trend){
+                        if (str_contains($trend, 'CPT -') && !str_contains($trend, 'modifier')) {
+                            $array[]= $trend;
+                            $data['qa_cpt_trends'] = implode('_el_', $array);
+                        }
+                        if (str_contains($trend, 'ICD -') && !str_contains($trend, 'modifier')) {
+                            $a1[]= $trend;
+                            $data['qa_icd_trends'] =implode('_el_', $a1);
+                        }
+                        if (str_contains($trend, 'modifier ')) {
+                            $a2[]= $trend;
+                            $data['qa_modifiers'] = implode('_el_', $a2);
+                        }
+                    }
+               }
+                if(isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null) {
+                    $data['annex_qa_trends'] = $data['annex_qa_trends'] != null ?  str_replace("\r\n", '_el_', $data['annex_qa_trends']) : null;      
+                }// dd($data);
                 if($datasRecord != null) {
                     $datasRecord->update($data);
                     $record->update( ['chart_status' => $data['chart_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code'],'QA_comments_count' => $data['QA_comments_count']]);
@@ -791,6 +828,7 @@ class QAProductionController extends Controller
                 $data['parent_id'] = $data['parentId'];
                 $datasRecord = $modelClass::where('parent_id', $data['parent_id'])->orderBy('id','desc')->first();
                 $data['QA_rework_comments']=$data['QA_rework_comments'] != null ? str_replace("\r\n", '_el_', $data['QA_rework_comments']) : $data['QA_rework_comments'];
+                $data['QA_rework_comments'] = preg_replace('/(_el_){2,}/', '_el_', $data['QA_rework_comments']);
                 $data['QA_comments_count'] = $data['QA_rework_comments'] != null ? count(explode('_el_', $data['QA_rework_comments'])) : 0;
                 if($data['chart_status'] == "QA_Completed") {
                     $data['qa_work_date'] = Carbon::now()->format('Y-m-d');
@@ -808,7 +846,46 @@ class QAProductionController extends Controller
                 } else {
                     $data['tl_error_count'] = $datasRecord['tl_error_count'];
                 }
+                if(isset($data['annex_coder_trends']) && $data['annex_coder_trends'] != null) {
+                    $data['annex_coder_trends'] = isset($data['annex_coder_trends']) && $data['annex_coder_trends'] != null ? str_replace("\r\n", '_el_', $data['annex_coder_trends']) : null ;
+                 }  
+                if(isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null) {
+                  $annex_qa_trends = isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null ?  explode('_el_',str_replace("\r\n", '_el_', $data['annex_qa_trends'])) : null ;
+                }
+                //$data['annex_qa_trends_count'] = isset($data['annex_qa_trends_count']) && $data['annex_qa_trends'] != null ?? count(explode('_el_', $data['annex_qa_trends'])) ;
+               
+                if(isset($annex_qa_trends)  && $annex_qa_trends != null) {
+                    foreach( $annex_qa_trends as $trend){
+                        if (str_contains($trend, 'CPT -') && !str_contains($trend, 'modifier')) {
+                            $array[]= $trend;
+                            $data['qa_cpt_trends'] = implode('_el_', $array);
+                        }
+                        if (str_contains($trend, 'ICD -') && !str_contains($trend, 'modifier')) {
+                            $a1[]= $trend;
+                            $data['qa_icd_trends'] =implode('_el_', $a1);
+                        }
+                        if (str_contains($trend, 'modifier ')) {
+                            $a2[]= $trend;
+                            $data['qa_modifiers'] = implode('_el_', $a2);
+                        }
+                    }
+               }
+               if(isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null) {
+                 $data['annex_qa_trends'] = isset($data['annex_qa_trends']) && $data['annex_qa_trends'] != null ?  str_replace("\r\n", '_el_', $data['annex_qa_trends']) : null ;//dd($data);
+               }
                 if($datasRecord != null) {
+                    $fieldsToExclude = [
+                        'annex_coder_trends',
+                        'coder_cpt_trends',
+                        'coder_icd_trends',
+                        'coder_modifiers',
+                        'qa_cpt_trends',
+                        'qa_icd_trends',
+                        'qa_modifiers',
+                        'annex_qa_trends',
+                    ];
+                    
+                    $data = array_diff_key($data, array_flip($fieldsToExclude));
                   $datasRecord->update($data);
                   $record = $originalModelClass::where('id', $data['parent_id'])->first();
                   $record->update( ['chart_status' => $data['chart_status'],'qa_hold_reason' => $data['qa_hold_reason'],'QA_rework_comments' => $data['QA_rework_comments'],'qa_error_count' => $data['qa_error_count'],'tl_error_count' => $data['tl_error_count'],'QA_status_code' => $data['QA_status_code'],'QA_sub_status_code' => $data['QA_sub_status_code'],'QA_comments_count' => $data['QA_comments_count']]);
@@ -899,7 +976,9 @@ class QAProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'coder_rework_status','QA_status_code','QA_sub_status_code','updated_at', 'created_at', 'deleted_at'];
+                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date', 'coder_rework_status','QA_status_code','QA_sub_status_code',
+                    'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                    'updated_at', 'created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });
@@ -1043,7 +1122,9 @@ class QAProductionController extends Controller
                 if (Schema::hasTable($table_name)) {
                     $column_names = DB::select("DESCRIBE $table_name");
                     $columns = array_column($column_names, 'Field');
-                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at', 'created_at', 'deleted_at'];
+                    $columnsToExclude = ['ce_hold_reason','qa_hold_reason','qa_work_status','QA_rework_comments','QA_required_sampling','QA_rework_comments','coder_rework_reason','coder_error_count','qa_error_count','tl_error_count','tl_comments','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date',
+                    'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
+                    'updated_at', 'created_at', 'deleted_at'];
                     $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                         return !in_array($column, $columnsToExclude);
                     });

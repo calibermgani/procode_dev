@@ -214,6 +214,7 @@
                                                         'CE_status_code',
                                                         'CE_sub_status_code',
                                                         'CE_followup_date',
+                                                        'coder_cpt_trends','coder_icd_trends','coder_modifiers','qa_cpt_trends','qa_icd_trends','qa_modifiers',
                                                         'created_at',
                                                         'updated_at',
                                                         'deleted_at',

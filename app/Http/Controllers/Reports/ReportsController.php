@@ -42,14 +42,14 @@ class ReportsController extends Controller
                     if ($decodedsubProjectName == 'project' && count($subProject) == 1) {
                         $column_names = DB::select("DESCRIBE $table_name");
                         $columns = array_column($column_names, 'Field');
-                        $columnsToExclude = ['QA_required_sampling', 'QA_followup_date', 'CE_status_code', 'CE_sub_status_code', 'CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
+                        $columnsToExclude = ['QA_required_sampling', 'QA_followup_date', 'annex_coder_trends', 'annex_qa_trends', 'qa_cpt_trends', 'qa_icd_trends', 'qa_modifiers', 'CE_status_code', 'CE_sub_status_code', 'CE_followup_date', 'updated_at', 'created_at', 'deleted_at'];
                         $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                             return !in_array($column, $columnsToExclude);
                         });
                     } else if ($decodedsubProjectName !== 'project') {
                         $column_names = DB::select("DESCRIBE $table_name");
                         $columns = array_column($column_names, 'Field');
-                        $columnsToExclude = ['QA_required_sampling','QA_followup_date','CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
+                        $columnsToExclude = ['QA_required_sampling','QA_followup_date', 'annex_coder_trends', 'annex_qa_trends','qa_cpt_trends', 'qa_icd_trends', 'qa_modifiers', 'CE_status_code','CE_sub_status_code','CE_followup_date','updated_at','created_at', 'deleted_at'];
                         $columnsHeader = array_filter($columns, function ($column) use ($columnsToExclude) {
                             return !in_array($column, $columnsToExclude);
                         });
@@ -90,12 +90,29 @@ class ReportsController extends Controller
                         $checkedValues = $request->checkedValues;
                     }
                     $columnsHeader = implode(',', $checkedValues);
+                    $columns = [
+                        DB::raw($columnsHeader),
+                        "caller_charts_work_logs.work_time",
+                        "caller_charts_work_logs.record_status"
+                    ];
+                    
+                    // Check if the columns exist in the table
+                    if (Schema::hasColumn($table_name, 'qa_cpt_trends')) {
+                        $columns[] = 'qa_cpt_trends';
+                    }
+                    if (Schema::hasColumn($table_name, 'qa_icd_trends')) {
+                        $columns[] = 'qa_icd_trends';
+                    }
+                    if (Schema::hasColumn($table_name, 'qa_modifiers')) {
+                        $columns[] = 'qa_modifiers';
+                    }
                     $client_data = DB::table($table_name)
-                        ->select([
-                            DB::raw($columnsHeader),
-                            "caller_charts_work_logs.work_time","caller_charts_work_logs.record_status",
-                            // DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
-                        ])
+                        // ->select([
+                        //     DB::raw($columnsHeader),
+                        //     "caller_charts_work_logs.work_time","caller_charts_work_logs.record_status",'qa_cpt_trends', 'qa_icd_trends', 'qa_modifiers'
+                        //     // DB::raw("TIME_FORMAT(SEC_TO_TIME(TIMESTAMPDIFF(SECOND, caller_charts_work_logs.start_time, caller_charts_work_logs.end_time)), '%H:%i:%s') AS work_hours")
+                        // ])
+                        ->select($columns)
                         ->where('caller_charts_work_logs.project_id', '=', $request->project_id)
                         ->where('caller_charts_work_logs.sub_project_id', '=', $request->sub_project_id)
                         ->join('caller_charts_work_logs', 'caller_charts_work_logs.record_id', '=', $table_name . '.parent_id')
@@ -126,13 +143,19 @@ class ReportsController extends Controller
                         ->get();
                 } else {
                     $client_data = [];
-                }
+                }//dd($client_data);
                 // if (count($client_data) > 0) {
                 $body_info = '<table class="table table-separate table-head-custom no-footer dtr-column clients_list_filter" id="report_list"><thead><tr>';
                 $checkedValues[] = 'work_hours';
                 foreach ($checkedValues as $key => $header) {
                     if ($header == 'chart_status') {
                         $body_info .= '<th>Charge Status </th>';
+                    } else if ($header == 'coder_cpt_trends') {
+                        $body_info .= '<th>CPT Trends </th>';
+                    } else if ($header == 'coder_icd_trends') {
+                        $body_info .= '<th>ICD Trends </th>';
+                    } else if ($header == 'coder_modifiers') {
+                        $body_info .= '<th>Modifiers </th>';
                     } else {
                         $body_info .= '<th>' . ucwords(str_replace(['_else_', '_'], ['/', ' '], $header)) . '</th>';
                     }
@@ -186,6 +209,39 @@ class ReportsController extends Controller
                         } else if ($header === 'coder_work_date') {
                             $data =  '--';
                         }
+                        if ($header === 'coder_cpt_trends' && ($row->{'qa_cpt_trends'} == NULL)) {
+                            $data = $data ;
+                        } else if ($header === 'coder_cpt_trends' && ($row->{'qa_cpt_trends'} != NULL)) {
+                            $data = isset($row->{'qa_cpt_trends'}) && !empty($row->{'qa_cpt_trends'}) ? $row->{'qa_cpt_trends'} : "--";
+                            if (strpos($data, '_el_') !== false) {
+                                $data = str_replace('_el_', ' , ', $data);
+                            } else {
+                                $data = $data;
+                            }
+                        }
+
+                        if ($header === 'coder_icd_trends' && ($row->{'qa_icd_trends'} == NULL)) {
+                            $data = $data ;
+                        } else if ($header === 'coder_icd_trends' && ($row->{'qa_icd_trends'} != NULL)) {
+                            $data = isset($row->{'qa_icd_trends'}) && !empty($row->{'qa_icd_trends'}) ? $row->{'qa_icd_trends'} : "--";
+                            if (strpos($data, '_el_') !== false) {
+                                $data = str_replace('_el_', ' , ', $data);
+                            } else {
+                                $data = $data;
+                            }
+                        }
+
+                        if ($header === 'coder_modifiers' && ($row->{'qa_modifiers'} == NULL)) {
+                            $data = $data ;
+                        } else if ($header === 'coder_modifiers' && ($row->{'qa_modifiers'} != NULL)) {
+                            $data = isset($row->{'qa_modifiers'}) && !empty($row->{'qa_modifiers'}) ? $row->{'qa_modifiers'} : "--";
+                            if (strpos($data, '_el_') !== false) {
+                                $data = str_replace('_el_', ' , ', $data);
+                            } else {
+                                $data = $data;
+                            }
+                        }
+                       
                         $body_info .= '<td class="wrap-text">' . $data . '</td>';
                     }
                     $body_info .= '</tr>';
