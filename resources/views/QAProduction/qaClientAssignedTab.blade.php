@@ -639,7 +639,7 @@
                                                                 QA Trends
                                                             </label>
                                                             <div class="col-md-11">
-                                                                {!!Form::textarea('annex_qa_trends',  null, ['class' => 'text-black form-control white-smoke annex_qa_trends','rows' => 6,]) !!}
+                                                                {!!Form::textarea('annex_qa_trends',  null, ['class' => 'text-black form-control white-smoke annex_qa_trends','rows' => 6,'readonly']) !!}
     
                                                             </div>
                                                         </div>
