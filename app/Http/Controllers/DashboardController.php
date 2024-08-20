@@ -167,7 +167,7 @@ class DashboardController extends Controller
                     if (allValuesAreZero($subArray)) {
                         unset($agingCount[$key]);
                     }
-                }
+                }dd($totalAssignedCount);
                 return view('Dashboard/userDashboard', compact('projects', 'totalAssignedCount', 'totalCompleteCount', 'totalPendingCount', 'totalHoldCount', 'totalReworkCount', 'totalCount', 'agingHeader', 'agingCount'));
             } catch (\Exception $e) {
                 Log::debug($e->getMessage());
