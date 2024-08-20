@@ -68,14 +68,14 @@ class DashboardController extends Controller
                             $projectIds[] = $project["client_name"];
                         }
                     } else {
-                        $subProjectText = "project";
+                        $subProjectText = "project";dd($project["client_name"]);
                         $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
                         $modelName = Str::studly($table_name);
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
                         $projectIds[] = $project["client_name"];
                     }
-                }dd($models);
+                }
                 $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = [];
                 foreach ($models as $modelKey => $model) {
                     if (class_exists($model)) {
