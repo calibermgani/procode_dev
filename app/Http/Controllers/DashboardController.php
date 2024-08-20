@@ -74,8 +74,8 @@ class DashboardController extends Controller
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
                         $projectIds[] = $project["client_name"];
-                    }dd($models,$projectIds);
-                }
+                    }
+                }dd($models,$projectIds);
                 $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = [];
                 foreach ($models as $modelKey => $model) {
                     if (class_exists($model)) {
