@@ -26,10 +26,11 @@ class DashboardController extends Controller
                 //     ],
                 // ]);
                 // $body = json_decode((string) $response->getBody());
-                dd($loginEmpId,$empDesignation, strpos($empDesignation, 'Manager') );
+               
                 if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     return $this->procodeManagerDashboard();
                 } else {
+                    dd($loginEmpId,$empDesignation, strpos($empDesignation, 'Manager') );
                     return $this->procodeUserDashboard();
                 }
                 // return view('Dashboard/dashboard');
