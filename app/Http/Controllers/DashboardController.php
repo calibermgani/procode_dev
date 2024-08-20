@@ -73,8 +73,8 @@ class DashboardController extends Controller
                         $modelName = Str::studly($table_name);
                         $modelClass = "App\\Models\\" . $modelName;
                         $models[] = $modelClass;
-                        $projectIds[] = $project["client_name"];dd($models,$projectIds);
-                    }
+                        $projectIds[] = $project["client_name"];
+                    }dd($models,$projectIds);
                 }
                 $assignedCounts = $completeCounts = $pendingCounts = $holdCounts = $reworkCounts = $totalCounts = $agingArr1 = $agingArr2 = $agingCount = [];
                 foreach ($models as $modelKey => $model) {
