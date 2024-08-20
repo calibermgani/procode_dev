@@ -30,7 +30,7 @@ class DashboardController extends Controller
                 if ($loginEmpId && ($loginEmpId == "Admin" || strpos($empDesignation, 'Manager') !== false || strpos($empDesignation, 'VP') !== false || strpos($empDesignation, 'Leader') !== false || strpos($empDesignation, 'Team Lead') !== false || strpos($empDesignation, 'CEO') !== false || strpos($empDesignation, 'Vice') !== false)) {
                     return $this->procodeManagerDashboard();
                 } else {
-                    dd($loginEmpId,$empDesignation, strpos($empDesignation, 'Manager') );
+                  
                     return $this->procodeUserDashboard();
                 }
                 // return view('Dashboard/dashboard');
@@ -48,7 +48,7 @@ class DashboardController extends Controller
     public function procodeUserDashboard()
     {
         if (Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null) {
-            try {
+            try {dd('hi');
                 $loginEmpId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] != null ? Session::get('loginDetails')['userDetail']['emp_id'] : "";
                 $userId = Session::get('loginDetails') && Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] != null ? Session::get('loginDetails')['userDetail']['id'] : "";
                 $agingHeader = Aging::select('days','days_range')->get()->toArray();
