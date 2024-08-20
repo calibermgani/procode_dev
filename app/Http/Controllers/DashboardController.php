@@ -56,7 +56,7 @@ class DashboardController extends Controller
                 $startDate = Carbon::now()->startOfDay()->toDateString();
                 $endDate = Carbon::now()->endOfDay()->toDateString();
                 $models = [];
-                $projectIds = [];dd($projects);
+                $projectIds = [];
                 foreach ($projects as $project) {
                     $project["client_name"] = Helpers::projectName($project["id"])->project_name;
                     if (count($project["subprject_name"]) > 0) {
@@ -66,7 +66,7 @@ class DashboardController extends Controller
                             $modelClass = "App\\Models\\" . $modelName;
                             $models[] = $modelClass;
                             $projectIds[] = $project["client_name"];
-                        }
+                        }dd($models);
                     } else {
                         $subProjectText = "project";
                         $table_name = Str::slug((Str::lower($project["client_name"]) . '_' . Str::lower($subProjectText)), '_');
