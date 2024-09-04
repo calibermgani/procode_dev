@@ -580,7 +580,7 @@
                                                                             <path
                                                                                 d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3" />
                                                                         </svg>
-                                                                    </span><span id="elapsedTime" class="timer_2"></span>
+                                                                    </span><span id="elapsedTime" class="timer_2">Time</span>
                                                                 </p>
 
                                                                 <button type="submit" class="btn1" id="project_assign_save" style="margin-right: -2rem">Submit</button>
@@ -1904,28 +1904,28 @@
             toggleCoderTrends();
 
         })
-        document.addEventListener("DOMContentLoaded", function() {
-            function updateTime() {
-                var now = new Date();
-                var hours = now.getHours();
-                var minutes = now.getMinutes();
-                var seconds = now.getSeconds();
-                var startTime = new Date(startTime_db).getTime();
-                var elapsedTimeMs = new Date().getTime() - startTime;
-                var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
-                var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
-                elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
-                remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
-                var elapsedTimeElement =document.querySelector('#elapsedTime');
-                console.log(elapsedTimeElement,'elapsedTimeElement');
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     function updateTime() {
+        //         var now = new Date();
+        //         var hours = now.getHours();
+        //         var minutes = now.getMinutes();
+        //         var seconds = now.getSeconds();
+        //         var startTime = new Date(startTime_db).getTime();
+        //         var elapsedTimeMs = new Date().getTime() - startTime;
+        //         var elapsedHours = Math.floor(elapsedTimeMs / (1000 * 60 * 60));
+        //         var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
+        //         elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
+        //         remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
+        //         var elapsedTimeElement =document.querySelector('#elapsedTime');
+        //         console.log(elapsedTimeElement,'elapsedTimeElement');
                 
-                if (elapsedTimeElement) {
-                    elapsedTimeElement.innerHTML = elapsedHours + " : " + remainingMinutes;
-                }
+        //         if (elapsedTimeElement) {
+        //             elapsedTimeElement.innerHTML = elapsedHours + " : " + remainingMinutes;
+        //         }
                 
-                setTimeout(updateTime, 10000);
-            }        
-            updateTime();
-        });
+        //         setTimeout(updateTime, 10000);
+        //     }        
+        //     updateTime();
+        // });
     </script>
 @endpush
