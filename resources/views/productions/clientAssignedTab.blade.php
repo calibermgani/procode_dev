@@ -1917,9 +1917,9 @@
             elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
             remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
             console.log(document.getElementById("elapsedTime"),'elapsed', elapsedHours + " : " + remainingMinutes);
-            if (document.getElementById("elapsedTime") !== null) {
+            // if (document.getElementById("elapsedTime") !== null) {
               document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
-            }
+            // }
             setTimeout(updateTime, 1000);
         }
         updateTime();
