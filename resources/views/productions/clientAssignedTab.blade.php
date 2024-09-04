@@ -1025,6 +1025,7 @@
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-view', function(e) {
+                console.log('Clickable view clicked'); 
                 $('#myModal_view').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
@@ -1045,6 +1046,7 @@
                 });
             });
             $(document).on('click', '.clickable-row', function(e) {
+                console.log('Clickable row clicked'); 
                 // var record_id = $(this).closest('tr').find('td:eq(0)').text();
                 // var record_id = $(this).closest('tr').find('td:eq(1)').text();
                 var record_id =  $(this).closest('tr').find('#table_id').text();
@@ -1064,8 +1066,6 @@
                         subProjectName: subProjectName
                     },
                     success: function(response) {
-                        console.log(response,'response');
-                        
                         if (response.success == true) {
                              $('#myModal_status').modal('show');
                             startTime_db = response.startTimeVal;
