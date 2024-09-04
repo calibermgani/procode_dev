@@ -1916,7 +1916,7 @@
             var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
             elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
             remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
-            console.log(document.getElementById("elapsedTime"),'elapsed');
+            console.log(document.getElementById("elapsedTime"),'elapsed', elapsedHours + " : " + remainingMinutes);
             if (document.getElementById("elapsedTime") !== null) {
               document.getElementById("elapsedTime").innerHTML = elapsedHours + " : " + remainingMinutes;
             }
