@@ -1916,14 +1916,12 @@
                 var remainingMinutes = Math.floor((elapsedTimeMs % (1000 * 60 * 60)) / (1000 * 60));
                 elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
                 remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
-                var elapsedTimeElement = document.querySelector('#elapsedTime');
+                var elapsedTimeElement = document.getElementById("elapsedTime");
                 if (elapsedTimeElement) {
                     elapsedTimeElement.innerHTML = elapsedHours + " : " + remainingMinutes;
                 }
                 
-                setTimeout(function() {
-    console.log(document.getElementById("elapsedTime"));
-}, 3000);
+                setTimeout(updateTime, 10000);
             }        
             updateTime();
         });
