@@ -1025,7 +1025,6 @@
             var clientName = $('#clientName').val();
             var subProjectName = $('#subProjectName').val();
             $(document).on('click', '.clickable-view', function(e) {
-                console.log('Clickable view clicked'); 
                 $('#myModal_view').modal('show');
                 var $row = $(this).closest('tr');
                 var tdCount = $row.find('td').length;
@@ -1068,7 +1067,7 @@
                     success: function(response) {
                         if (response.success == true) {
                              $('#myModal_status').modal('show');
-                            startTime_db = response.startTimeVal;console.log("row");
+                            startTime_db = response.startTimeVal;
                             
                         } else {
                             $('#myModal_status').modal('hide');
@@ -1091,7 +1090,7 @@
 
                 $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
                     var header = headers[index-1];
-                    var value = $(this).text().trim();console.log(header,value,'value',headers);
+                    var value = $(this).text().trim();
                     
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
@@ -1921,7 +1920,6 @@
             elapsedHours = (elapsedHours < 10 ? "0" : "") + elapsedHours;
             remainingMinutes = (remainingMinutes < 10 ? "0" : "") + remainingMinutes;
             var elapsedTimeElement = document.getElementById("elapsedTime");
-            console.log(elapsedTimeElement, 'elapsed', elapsedHours + " : " + remainingMinutes);
             if (elapsedTimeElement) {
                 elapsedTimeElement.innerHTML = elapsedHours + " : " + remainingMinutes;
             }
