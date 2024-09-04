@@ -1064,6 +1064,8 @@
                         subProjectName: subProjectName
                     },
                     success: function(response) {
+                        console.log(response,'response');
+                        
                         if (response.success == true) {
                              $('#myModal_status').modal('show');
                             startTime_db = response.startTimeVal;
