@@ -1046,7 +1046,7 @@
                 });
             });
             $(document).on('click', '.clickable-row', function(e) {
-                console.log('Clickable row clicked'); 
+              
                 // var record_id = $(this).closest('tr').find('td:eq(0)').text();
                 // var record_id = $(this).closest('tr').find('td:eq(1)').text();
                 var record_id =  $(this).closest('tr').find('#table_id').text();
@@ -1068,7 +1068,8 @@
                     success: function(response) {
                         if (response.success == true) {
                              $('#myModal_status').modal('show');
-                            startTime_db = response.startTimeVal;
+                            startTime_db = response.startTimeVal;console.log("row");
+                            
                         } else {
                             $('#myModal_status').modal('hide');
                             js_notification('error', 'Something went wrong');
@@ -1090,7 +1091,8 @@
 
                 $row.find('td:not(:eq(' + tdCount + '))').each(function(index) {
                     var header = headers[index-1];
-                    var value = $(this).text().trim();
+                    var value = $(this).text().trim();console.log(header,value,'value',headers);
+                    
                     if (header == 'id') {
                         $('input[name="idValue"]').val(value);
                     }
