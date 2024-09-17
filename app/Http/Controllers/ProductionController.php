@@ -552,7 +552,8 @@ class ProductionController extends Controller
                 $popupEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->whereIn('user_type',[3,$dept])->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $popupQAEditableFields = formConfiguration::where('project_id', $decodedProjectName)->where('sub_project_id', $subProjectId)->where('user_type',  10)->where('field_type', 'editable')->where('field_type_3', 'popup_visible')->get();
                 $qaSubStatusListVal = Helpers::qaSubStatusList();
-                 return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','existingCallerChartsWorkLogs','popUpHeader','popupNonEditableFields','popupEditableFields','popupQAEditableFields','qaSubStatusListVal','unAssignedCount'));
+                $qaStatusList = Helpers::qaStatusList();
+                 return view('productions/clientReworkTab',compact('revokeProjectDetails','columnsHeader','clientName','subProjectName','modelClass','assignedCount','completedCount','pendingCount','holdCount','reworkCount','duplicateCount','existingCallerChartsWorkLogs','popUpHeader','popupNonEditableFields','popupEditableFields','popupQAEditableFields','qaSubStatusListVal','unAssignedCount','qaStatusList'));
 
            } catch (\Exception $e) {
                log::debug($e->getMessage());
@@ -861,7 +862,7 @@ class ProductionController extends Controller
                 // $existingRecordId = CallerChartsWorkLogs::where('record_id',$data['record_id'])->where('record_status',"CE_Assigned")->first();
                 $existingRecordId = CallerChartsWorkLogs::where('project_id', $data['project_id'])->where('sub_project_id',$data['sub_project_id'])->where('record_id',$data['record_id'])->where('record_status',$data['record_status'])->where('end_time',NULL)->first();
 
-                if(empty($existingRecordId)) {
+                if(empty($existingRecordId) || !isset($existingRecordId->start_time) || $existingRecordId->start_time == null) {
                     $startTimeVal = $data['start_time'];
                     $save_flag = CallerChartsWorkLogs::create($data);
                 } else {
