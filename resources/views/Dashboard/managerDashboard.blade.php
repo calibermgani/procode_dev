@@ -656,9 +656,12 @@
                     console.error('encodedclientname is undefined or empty');
                     return;
                 }
-
-                var url = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + btoa(
-                    subProjectName);
+                if(subProjectName == '--') {
+                    decodeSubProjectName = subProjectName;
+                } else {
+                    decodeSubProjectName = btoa(subProjectName);
+                }
+                var url = baseUrl + 'projects_assigned/' + btoa(clientName) + '/' + decodeSubProjectName;
                 var params = {
                     parent: getUrlVars()["parent"],
                     child: getUrlVars()["child"],
@@ -770,11 +773,15 @@
                     console.error('encodedclientname is undefined or empty');
                     return;
                 }
+                if(subProjectName == '--') {
+                    decodeSubProjectName = subProjectName;
+                } else {
+                    decodeSubProjectName = btoa(subProjectName);
+                }
                 // window.location.href = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + btoa(
                 //         subProjectName) + "?parent=" +
                 //     getUrlVars()["parent"] + "&child=" + getUrlVars()["child"];
-                    var url = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + btoa(
-                    subProjectName);
+                    var url = baseUrl + 'projects_hold/' + btoa(clientName) + '/' + decodeSubProjectName;
                     var params = {
                         parent: getUrlVars()["parent"],
                         child: getUrlVars()["child"],
