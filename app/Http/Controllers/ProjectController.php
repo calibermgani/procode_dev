@@ -104,9 +104,9 @@ class ProjectController extends Controller
             // $toMailId = ["elanchezhian@annexmed.net", "fabian@annexmed.com", "ushashree@annexmed.com"];
             // $ccMailId = ["mgani@caliberfocus.com"];
             $toMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail to mail id')->first();
-            $toMailId = explode(",", $toMail->cc_emails);
+            $toMailId = $toMail != null ? explode(",", $toMail->cc_emails) : null;
             $ccMail = CCEmailIds::select('cc_emails')->where('cc_module', 'project work mail cc mail id')->first();
-            $ccMailId = explode(",", $ccMail->cc_emails);
+            $ccMailId = $ccMail != null ? explode(",", $ccMail->cc_emails) : null;
             // $toMailId = ["vijayalaxmi@caliberfocus.com"];
             // $ccMailId = ["vijayalaxmi@caliberfocus.com"];
             $yesterday = Carbon::yesterday();
