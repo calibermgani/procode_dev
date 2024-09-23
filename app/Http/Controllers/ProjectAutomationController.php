@@ -54,6 +54,8 @@ use App\Models\RhIvDenial;
 use App\Models\RhIvDenialDuplicates;
 use App\Models\RhIvRejection;
 use App\Models\RhIvRejectionDuplicates;
+use App\Models\RocIpSurgeryCoding;
+use App\Models\RocIpSurgeryCodingDuplicates;
 class ProjectAutomationController extends Controller
 {
 
@@ -3485,6 +3487,112 @@ class ProjectAutomationController extends Controller
                     'total_patient_balance' => isset($request->total_patient_balance) && $request->total_patient_balance != "NULL" ? $request->total_patient_balance : NULL,
                     'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,
                     'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function RenoOrthopedicCenterIpSurgeryCoding(Request $request)
+    {
+        try {
+            $attributes = [
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+            
+            $existing = RocIpSurgeryCoding::where($attributes)->exists();
+            if (!$existing) {
+                RocIpSurgeryCoding::insert([
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  RocIpSurgeryCodingDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    RocIpSurgeryCodingDuplicates::insert([
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  RocIpSurgeryCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function RenoOrthopedicCenterIpSurgeryCodingDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  RocIpSurgeryCodingDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                RocIpSurgeryCodingDuplicates::insert([
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  RocIpSurgeryCodingDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
