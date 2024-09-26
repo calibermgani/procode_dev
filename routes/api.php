@@ -71,4 +71,8 @@ Route::group(['prefix' => 'projects'], function() {
     Route::any('restoration_healthcare_iv_rejection_duplicates', 'App\Http\Controllers\ProjectAutomationController@restorationHealthcareIvRejectionDuplicates');
     Route::any('reno_orthopedic_center_ip_surgery_coding', 'App\Http\Controllers\ProjectAutomationController@RenoOrthopedicCenterIpSurgeryCoding');
     Route::any('reno_orthopedic_center_ip_surgery_coding_duplicates', 'App\Http\Controllers\ProjectAutomationController@RenoOrthopedicCenterIpSurgeryCodingDuplicates');
+    Route::any('msa_em_ipop_coding', 'App\Http\Controllers\ProjectAutomationController@MidlandSurgicalAssociatesIpopCoding');
+    Route::any('msa_em_ipop_coding_duplicates', 'App\Http\Controllers\ProjectAutomationController@MidlandSurgicalAssociatesIpopCodingDuplicates');
+    Route::any('msa_surgery_coding', 'App\Http\Controllers\ProjectAutomationController@MidlandSurgicalAssociatesSurgeryCoding');
+    Route::any('msa_surgery_coding_duplicates', 'App\Http\Controllers\ProjectAutomationController@MidlandSurgicalAssociatesSurgeryCodingDuplicates');
 });

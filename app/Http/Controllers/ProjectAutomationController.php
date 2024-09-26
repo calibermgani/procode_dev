@@ -56,6 +56,11 @@ use App\Models\RhIvRejection;
 use App\Models\RhIvRejectionDuplicates;
 use App\Models\RocIpSurgeryCoding;
 use App\Models\RocIpSurgeryCodingDuplicates;
+use App\Models\MsaEmIpopCoding;
+use App\Models\MsaEmIpopCodingDuplicates;
+use App\Models\MsaSurgeryCoding;
+use App\Models\MsaSurgeryCodingDuplicates;
+
 class ProjectAutomationController extends Controller
 {
 
@@ -3593,6 +3598,443 @@ class ProjectAutomationController extends Controller
                     'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,     
                     'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
                     'pos_name' => isset($request->pos_name) && $request->pos_name != "NULL" ? $request->pos_name : NULL,   
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function MidlandSurgicalAssociatesIpopCoding(Request $request)
+    {
+        try {
+            $attributes = [
+                'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+            
+            $existing = MsaEmIpopCoding::where($attributes)->exists();
+            if (!$existing) {
+                MsaEmIpopCoding::insert([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,     
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  MsaEmIpopCodingDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    MsaEmIpopCodingDuplicates::insert([
+                        'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                        'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                        'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                        'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                        'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                        'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                        'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                        'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                        'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                        'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                        'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  MsaEmIpopCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                        'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                        'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                        'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                        'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                        'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                        'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                        'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                        'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                        'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                        'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function MidlandSurgicalAssociatesIpopCodingDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,   
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  MsaEmIpopCodingDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                MsaEmIpopCodingDuplicates::insert([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  MsaEmIpopCodingDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+
+    public function MidlandSurgicalAssociatesSurgeryCoding(Request $request)
+    {
+        try {
+            $attributes = [
+                'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+            
+            $existing = MsaSurgeryCoding::where($attributes)->exists();
+            if (!$existing) {
+                MsaSurgeryCoding::insert([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Record Inserted Successfully']);
+            } else {
+                $duplicateRecordExisting  =  MsaSurgeryCodingDuplicates::where($attributes)->exists();
+                if (!$duplicateRecordExisting) {
+                    MsaSurgeryCodingDuplicates::insert([
+                        'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                        'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                        'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                        'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                        'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                        'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                        'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                        'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                        'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                        'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                        'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+                } else {
+                    $duplicateRecord  =  MsaSurgeryCodingDuplicates::where($attributes)->first();
+                    $duplicateRecord->update([
+                        'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                        'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                        'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                        'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                        'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                        'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                        'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                        'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                        'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                        'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                        'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                        'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                        'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                        'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                        'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                        'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                        'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                        'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                        'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                        'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                        'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                        'invoke_date' => carbon::now()->format('Y-m-d'),
+                        'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                        'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                        'chart_status' => "CE_Assigned"
+                    ]);
+                    return response()->json(['message' => 'Duplicate Record Updated Successfully']);
+                }
+            }
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
+    }
+    public function MidlandSurgicalAssociatesSurgeryCodingDuplicates(Request $request)
+    {
+        try {
+            $attributes = [
+                'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,     
+                'invoke_date' => carbon::now()->format('Y-m-d')
+            ];
+
+            $duplicateRecordExisting  =  MsaSurgeryCodingDuplicates::where($attributes)->exists();
+            if (!$duplicateRecordExisting) {
+                MsaSurgeryCodingDuplicates::insert([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,  
+                    'invoke_date' => carbon::now()->format('Y-m-d'),
+                    'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
+                    'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
+                    'chart_status' => "CE_Assigned"
+                ]);
+                return response()->json(['message' => 'Duplicate Record Inserted Successfully']);
+            } else {
+                $duplicateRecord  =  MsaSurgeryCodingDuplicates::where($attributes)->first();
+                $duplicateRecord->update([
+                    'acct_number' => isset($request->acct_number) && $request->acct_number != "NULL" ? $request->acct_number : NULL,
+                    'patient_name' => isset($request->patient_name) && $request->patient_name != "NULL" ? $request->patient_name : NULL,   
+                    'dos' => isset($request->dos) && $request->dos != "NULL" ? $request->dos : NULL,     
+                    'pos' => isset($request->pos) && $request->pos != "NULL" ? $request->pos : NULL,   
+                    'facility_name' => isset($request->facility_name) && $request->facility_name != "NULL" ? $request->facility_name : NULL,   
+                    'insurance' => isset($request->insurance) && $request->insurance != "NULL" ? $request->insurance : NULL,   
+                    'provider' => isset($request->provider) && $request->provider != "NULL" ? $request->provider : NULL,   
+                    'coding_type' => isset($request->coding_type) && $request->coding_type != "NULL" ? $request->coding_type : NULL,   
+                    'status' => isset($request->status) && $request->status != "NULL" ? $request->status : NULL,   
+                    'pending_category' => isset($request->pending_category) && $request->pending_category != "NULL" ? $request->pending_category : NULL,   
+                    'coder_comments' => isset($request->coder_comments) && $request->coder_comments != "NULL" ? $request->coder_comments : NULL,   
+                    'cpt' => isset($request->cpt) && $request->cpt != "NULL" ? $request->cpt : NULL,   
+                    'am_cpt' => isset($request->am_cpt) && $request->am_cpt != "NULL" ? $request->am_cpt : NULL,   
+                    'icd' => isset($request->icd) && $request->icd != "NULL" ? $request->icd : NULL,   
+                    'am_icd' => isset($request->am_icd) && $request->am_icd != "NULL" ? $request->am_icd : NULL,   
+                    'process' => isset($request->process) && $request->process != "NULL" ? $request->process : NULL,   
+                    'qa_comments' => isset($request->qa_comments) && $request->qa_comments != "NULL" ? $request->qa_comments : NULL,   
+                    'available_points' => isset($request->available_points) && $request->available_points != "NULL" ? $request->available_points : NULL,   
+                    'earned_points' => isset($request->earned_points) && $request->earned_points != "NULL" ? $request->earned_points : NULL,   
+                    'errors' => isset($request->errors) && $request->errors != "NULL" ? $request->errors : NULL,   
+                    'accuracy' => isset($request->accuracy) && $request->accuracy != "NULL" ? $request->accuracy : NULL,   
                     'invoke_date' => carbon::now()->format('Y-m-d'),
                     'CE_emp_id' => isset($request->CE_emp_id) && $request->CE_emp_id != '-' && $request->CE_emp_id != "NULL" ? $request->CE_emp_id : NULL,
                     'QA_emp_id' => isset($request->QA_emp_id) && $request->QA_emp_id != '-' && $request->QA_emp_id != "NULL" ? $request->QA_emp_id : NULL,
