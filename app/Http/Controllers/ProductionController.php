@@ -44,7 +44,7 @@ class ProductionController extends Controller
                     'token' => '1a32e71a46317b9cc6feb7388238c95d',
                     'user_id' => $userId
                 ];
-                $client = new Client();
+                $client = new Client(['verify' => false]);
                 $response = $client->request('POST',  config("constants.PRO_CODE_URL").'/api/v1_users/get_clients_on_user', [
                     'json' => $payload
                 ]);
@@ -70,7 +70,7 @@ class ProductionController extends Controller
                 'token' => '1a32e71a46317b9cc6feb7388238c95d',
                 'client_id' => $request->project_id
             ];
-            $client = new Client();
+            $client = new Client(['verify' => false]);
             $response = $client->request('POST', config("constants.PRO_CODE_URL").'/api/v1_users/get_practice_on_client', [
                 'json' => $payload
             ]);
@@ -175,7 +175,7 @@ class ProductionController extends Controller
     public function clientAssignedTab($clientName,$subProjectName) {
 
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
-           $client = new Client();
+           $client = new Client(['verify' => false]);
            try {
                $resourceName = request('resourceName') != null ? Helpers::encodeAndDecodeID(request('resourceName'), 'decode') : null;
                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
@@ -1236,7 +1236,7 @@ class ProductionController extends Controller
     public function clientUnAssignedTab($clientName,$subProjectName) {
 
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
-           $client = new Client();
+           $client = new Client(['verify' => false]);
            try {
                $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
                $loginEmpId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null ? Session::get('loginDetails')['userDetail']['emp_id']:"";
@@ -1323,7 +1323,7 @@ class ProductionController extends Controller
 
    public function assigneeDropdown(Request $request) {
         if (Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['emp_id'] !=null) {
-            $client = new Client();
+            $client = new Client(['verify' => false]);
             try {
                 $userId = Session::get('loginDetails') &&  Session::get('loginDetails')['userDetail'] && Session::get('loginDetails')['userDetail']['id'] !=null ? Session::get('loginDetails')['userDetail']['id']:"";
                 $decodedProjectName = Helpers::encodeAndDecodeID($request->clientName, 'decode');
