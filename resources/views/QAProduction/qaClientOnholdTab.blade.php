@@ -1903,15 +1903,15 @@
                                     inputTypeValue = 0;
                                 }
                             }
-                            if(labelName.substring(0, 3).toLowerCase() == "icd") {
-                                var textValue = input.value;
-                                if(textValue.length < 3) {
-                                    inputTypeValue = 1;
-                                    js_notification('error', "The ICD value must be at least 3 characters long" );
-                                } else {
-                                    inputTypeValue = 0;
-                                }
-                            }
+                            // if(labelName.substring(0, 3).toLowerCase() == "icd") {
+                            //     var textValue = input.value;
+                            //     if(textValue.length < 3) {
+                            //         inputTypeValue = 1;
+                            //         js_notification('error', "The ICD value must be at least 3 characters long" );
+                            //     } else {
+                            //         inputTypeValue = 0;
+                            //     }
+                            // }
                             return inputTypeValue;
                     });
                     var fieldNames = $('#holdFormConfiguration').serializeArray().map(function(input) {
