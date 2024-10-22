@@ -869,8 +869,7 @@ class DashboardController extends Controller
 
                             if (class_exists($modelClass)) {
                                 $assignedCount = $modelClass
-                                    ::where('chart_status', 'CE_Assigned')
-                                    ->whereNotNull('CE_emp_id')
+                                    ::whereNotNull('CE_emp_id')
                                     ->whereBetween('invoke_date', [$startDate, $endDate])
                                     ->count();
                                 $completedCount = $modelClass
