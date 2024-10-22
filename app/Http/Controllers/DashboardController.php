@@ -215,6 +215,10 @@ class DashboardController extends Controller
                     $days =  Carbon::now()->daysInMonth;
                     $startDate = Carbon::now()->startOfMonth()->toDateString();
                     $endDate = Carbon::now()->endOfMonth()->toDateString();
+                } else if ($calendarId == "hold") {
+                    $days = Carbon::now()->daysInYear;
+                    $startDate = Carbon::now()->startOfYear()->toDateString();
+                    $endDate = Carbon::now()->endOfYear()->toDateString();
                 } else {
                     $days = 0;
                     $startDate = Carbon::now()->startOfDay()->toDateString();
@@ -226,14 +230,14 @@ class DashboardController extends Controller
                     $subProjectsWithCount[$key]['assignedCount'] = $modelClass::where('chart_status', 'CE_Assigned')->where('CE_emp_id', $loginEmpId)->whereBetween('invoke_date', [$startDate, $endDate])->count();
                     $subProjectsWithCount[$key]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('CE_emp_id', $loginEmpId)->whereBetween('invoke_date', [$startDate, $endDate])->count();
                     $subProjectsWithCount[$key]['PendingCount'] = $modelClass::where('chart_status', 'CE_Pending')->where('CE_emp_id', $loginEmpId)->whereBetween('invoke_date', [$startDate, $endDate])->count();
-                    $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $loginEmpId)
-                        ->where(function ($query) use ($startDate, $endDate, $days) {
-                            if ($days == 0) {
-                                $query;
-                            } else {
-                                $query->whereBetween('invoke_date', [$startDate, $endDate]);
-                            }
-                        })->count();
+                    $subProjectsWithCount[$key]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $loginEmpId)->whereBetween('invoke_date', [$startDate, $endDate])->count();
+                        // ->where(function ($query) use ($startDate, $endDate, $days) {
+                        //     if ($days == 0) {
+                        //         $query;
+                        //     } else {
+                        //         $query->whereBetween('invoke_date', [$startDate, $endDate]);
+                        //     }
+                        // })->count();
                 } else {
                     $subProjectsWithCount[$key]['assignedCount'] = '--';
                     $subProjectsWithCount[$key]['CompletedCount'] = '--';
