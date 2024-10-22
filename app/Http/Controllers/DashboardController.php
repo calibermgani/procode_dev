@@ -443,6 +443,10 @@ class DashboardController extends Controller
                         $days =  Carbon::now()->daysInMonth;
                         $startDate = Carbon::now()->startOfMonth()->toDateString();
                         $endDate = Carbon::now()->endOfMonth()->toDateString();
+                    } else if ($calendarId == "hold") {
+                        $startDate = Carbon::now()->startOfYear()->toDateString();
+                        $endDate = Carbon::now()->endOfYear()->toDateString();
+                        $days = Carbon::now()->daysInYear;
                     } else {
                         $startDate = Carbon::now()->startOfDay()->toDateString();
                         $endDate = Carbon::now()->endOfDay()->toDateString();
@@ -496,6 +500,10 @@ class DashboardController extends Controller
                     $days =  Carbon::now()->daysInMonth;
                     $startDate = Carbon::now()->startOfMonth()->toDateString();
                     $endDate = Carbon::now()->endOfMonth()->toDateString();
+                } else if ($calendarId == "hold") {
+                    $startDate = Carbon::now()->startOfYear()->toDateString();
+                    $endDate = Carbon::now()->endOfYear()->toDateString();
+                    $days = Carbon::now()->daysInYear;
                 } else {
                     $days = 0;
                     $startDate = Carbon::now()->startOfDay()->toDateString();
