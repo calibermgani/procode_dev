@@ -461,14 +461,14 @@ class DashboardController extends Controller
                             $subProjectsWithCount[$key][$resourceKey]['assignedCount'] = $modelClass::whereNotNull('CE_emp_id')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('invoke_date', [$startDate, $endDate])->count();
                             $subProjectsWithCount[$key][$resourceKey]['CompletedCount'] = $modelClass::where('chart_status', 'CE_Completed')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('invoke_date', [$startDate, $endDate])->count();
                             $subProjectsWithCount[$key][$resourceKey]['PendingCount'] = $modelClass::where('chart_status', 'CE_Pending')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('invoke_date', [$startDate, $endDate])->count();
-                            $subProjectsWithCount[$key][$resourceKey]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])
-                                ->where(function ($query) use ($startDate, $endDate, $days) {
-                                    if ($days == 0) {
-                                        $query;
-                                    } else {
-                                        $query->whereBetween('invoke_date', [$startDate, $endDate]);
-                                    }
-                                })->count();
+                            $subProjectsWithCount[$key][$resourceKey]['holdCount'] = $modelClass::where('chart_status', 'CE_Hold')->where('CE_emp_id', $resourceDataVal["CE_emp_id"])->whereBetween('invoke_date', [$startDate, $endDate])->count();
+                                // ->where(function ($query) use ($startDate, $endDate, $days) {
+                                //     if ($days == 0) {
+                                //         $query;
+                                //     } else {
+                                //         $query->whereBetween('invoke_date', [$startDate, $endDate]);
+                                //     }
+                                // })->count();
                         }
                     } else {
                         $subProjectsWithCount[$key][0]['client_id'] = $clientDetails['id'];
