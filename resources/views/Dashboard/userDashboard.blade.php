@@ -206,8 +206,7 @@
                                                         $modelFlag = 0;
                                                         if (class_exists($modelClass) == true) {
                                                             $assignedCount = $modelClass
-                                                                ::where('chart_status', 'CE_Assigned')
-                                                                ->whereBetween('invoke_date', [$startDate, $endDate])
+                                                                ::whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->where('CE_emp_id', $loginEmpId)
                                                                 ->count();
                                                             $completedCount = $modelClass
