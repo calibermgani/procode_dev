@@ -138,6 +138,7 @@
                                         @if (isset($projects) && count($projects) > 0)
                                             @foreach ($projects as $data)
                                                 @php
+                                          
                                                     $loginEmpId =
                                                         Session::get('loginDetails') &&
                                                         Session::get('loginDetails')['userDetail'] &&
@@ -154,7 +155,7 @@
                                                                 'user_hrdetails'
                                                             ]['current_designation']
                                                             : '';
-                                                    $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;//$data['client_name'];
+                                                    $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;      dd($projects,$loginEmpId);
                                                     if (
                                                         isset($data['subprject_name']) &&
                                                         !empty($data['subprject_name'])
