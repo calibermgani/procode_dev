@@ -155,7 +155,7 @@
                                                                 'user_hrdetails'
                                                             ]['current_designation']
                                                             : '';
-                                                    $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;      dd($projects,$loginEmpId);
+                                                    $projectName = App\Http\Helper\Admin\Helpers::projectName($data["id"])->project_name;//$data['client_name'];
                                                     if (
                                                         isset($data['subprject_name']) &&
                                                         !empty($data['subprject_name'])
