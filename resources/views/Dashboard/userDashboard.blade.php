@@ -205,7 +205,7 @@
                                                         $pendingCount = 0;
                                                         $holdCount = 0;
                                                         $modelFlag = 0;
-                                                        if (class_exists($modelClass) == true) {
+                                                        if (class_exists($modelClass)) {
                                                             $assignedCount = $modelClass
                                                                 ::whereBetween('invoke_date', [$startDate, $endDate])
                                                                 ->where('CE_emp_id', $loginEmpId)
