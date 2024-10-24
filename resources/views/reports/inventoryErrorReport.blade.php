@@ -159,6 +159,12 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
+                KTApp.block('#reportTable', {
+                    overlayColor: '#000000',
+                    state: 'danger',
+                    opacity: 0.1,
+                    message: 'Fetching...',
+                });
                 $.ajax({
                     type: "GET",
                     url: "{{ url('sub_project_list') }}",
@@ -176,6 +182,7 @@
                         });
                         $("#sub_project_id").html(sla_options);
                         $('select[name="sub_project_id"]').html(sla_options);
+                        KTApp.unblock('#reportTable');
                     },
                     error: function(jqXHR, exception) {}
                 });
