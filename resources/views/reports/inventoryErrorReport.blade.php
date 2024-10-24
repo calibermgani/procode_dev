@@ -159,7 +159,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-                KTApp.block('#reportTable', {
+                KTApp.block('#listData', {
                     overlayColor: '#000000',
                     state: 'danger',
                     opacity: 0.1,
@@ -182,7 +182,7 @@
                         });
                         $("#sub_project_id").html(sla_options);
                         $('select[name="sub_project_id"]').html(sla_options);
-                        KTApp.unblock('#reportTable');
+                        KTApp.unblock('#listData');
                     },
                     error: function(jqXHR, exception) {}
                 });
