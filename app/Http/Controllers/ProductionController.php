@@ -790,16 +790,27 @@ class ProductionController extends Controller
                 // $record = $originalModelClass::where('id', $data['parent_id'])->first();//dd($record);
                 // $record->update( ['chart_status' => $data['chart_status']] );
                 $currentTime = Carbon::now();
-                $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
+                // $callChartWorkLogExistingRecord = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
+                // ->where('project_id', $decodedProjectName)
+                // ->where('sub_project_id', $decodedPracticeName)
+                // ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->where('end_time',NULL)->first();//dd($callChartWorkLogExistingRecord,$decodedProjectName,$decodedPracticeName, $currentTime->format('Y-m-d H:i:s'));
+                // if($callChartWorkLogExistingRecord && $callChartWorkLogExistingRecord != null) {
+                //     $start_time = Carbon::parse($callChartWorkLogExistingRecord->start_time);
+                //     $time_difference = $currentTime->diff($start_time);//dd(  $time_difference,$time_difference->format('%H:%I:%S'),$time_difference->h.":".$time_difference->i.":".$time_difference->s );
+                //     $work_time = $currentTime->diff($start_time)->format('%H:%I:%S');
+                //     $callChartWorkLogExistingRecord->update( ['record_status' => $data['chart_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
+                // }
+                $callChartWorkLogExistingRecords = CallerChartsWorkLogs::where('record_id', $data['parent_id'])
                 ->where('project_id', $decodedProjectName)
                 ->where('sub_project_id', $decodedPracticeName)
-                ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->where('end_time',NULL)->first();//dd($callChartWorkLogExistingRecord,$decodedProjectName,$decodedPracticeName, $currentTime->format('Y-m-d H:i:s'));
-                if($callChartWorkLogExistingRecord && $callChartWorkLogExistingRecord != null) {
-                    $start_time = Carbon::parse($callChartWorkLogExistingRecord->start_time);
-                    $time_difference = $currentTime->diff($start_time);//dd(  $time_difference,$time_difference->format('%H:%I:%S'),$time_difference->h.":".$time_difference->i.":".$time_difference->s );
-                    $work_time = $currentTime->diff($start_time)->format('%H:%I:%S');
-                    $callChartWorkLogExistingRecord->update( ['record_status' => $data['chart_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
-                }
+                ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->where('end_time',NULL)->get();
+                    if ($callChartWorkLogExistingRecords->isNotEmpty()) {
+                        foreach ($callChartWorkLogExistingRecords as $callChartWorkLog) {
+                            $start_time = Carbon::parse($callChartWorkLog->start_time);
+                            $work_time = $currentTime->diff($start_time)->format('%H:%I:%S');
+                            $callChartWorkLog->update( ['record_status' => $data['chart_status'],'end_time' => $currentTime->format('Y-m-d H:i:s'),'work_time' => $work_time] );
+                        }
+                   }
                 return redirect('/projects_assigned/'.$clientName.'/'.$subProjectName);
             } catch (\Exception $e) {
                 log::debug($e->getMessage());
