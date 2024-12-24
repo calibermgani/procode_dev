@@ -432,7 +432,7 @@
                                             <h6 class="title-h6">Basic Information</h6>&nbsp;&nbsp;
                                             <input type="hidden" name="idValue">
                                             <input type="hidden" name="parentId">
-                                            <input type="hidden" name="record_old_status">
+                                            <input type="text" name="record_old_status">
                                             @if (count($popupNonEditableFields) > 0)
                                                 @php $count = 0; @endphp
                                                 @foreach ($popupNonEditableFields as $data)
