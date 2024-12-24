@@ -915,7 +915,7 @@ class QAProductionController extends Controller
                     ->where('record_status',$data['record_old_status'])
                     ->where('project_id', $decodedProjectName)
                     ->where('sub_project_id', $decodedPracticeName)
-                    ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->where('end_time',NULL)->get();
+                    ->where('emp_id', Session::get('loginDetails')['userDetail']['emp_id'])->where('end_time',NULL)->get();dd($data,$callChartWorkLogExistingRecords);
                         if ($callChartWorkLogExistingRecords->isNotEmpty()) {
                             foreach ($callChartWorkLogExistingRecords as $callChartWorkLog) {
                                 $start_time = Carbon::parse($callChartWorkLog->start_time);
